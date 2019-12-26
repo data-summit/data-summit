@@ -34,7 +34,7 @@
     "moment": "^2.24.0",
     "ngx-bootstrap": "^3.3.0",
     "node": "^8.11.3",
-    "npm": "^6.13.2",
+    "npm": "^6.13.4",
     "oidc-client": "^1.8.2",
     "primeicons": "^1.0.0",
     "primeng": "^6.0.3",
