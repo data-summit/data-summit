@@ -1,0 +1,6 @@
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\bin\Debug\DataSummitDB.dacpac
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\bin\Debug\DataSummitDB.dll
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\bin\Debug\DataSummitDB.pdb
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\obj\Debug\DataSummitDB.dll
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\obj\Debug\DataSummitDB.pdb
+C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitDB\obj\Debug\DataSummitDB.sqlprojAssemblyReference.cache

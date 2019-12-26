@@ -1,0 +1,206 @@
+<div class="container">
+    <section class="mb-5">
+      <table>
+        <tr style="width: 100%;">
+          <td style="width: 30%;">
+              <h2 class="h1 py-5 font-weight-bold">Profile/Template Attributes</h2>
+            </td>
+            <td style="width: 60%;"></td>
+            <td style="width: 30%;">
+            <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info" (click)="mapAttributes()" mdbWavesEffect>Map Attributes</button>
+          </tr>
+      </table>
+      <table mdbTable striped="true" *ngIf="headers && headers.length > 0">
+          <thead> 
+            <tr>
+              <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" mdbTableCol *ngFor="let pa of profileAttributes">
+              <td align="Left">{{pa.StandardAttribute.Name}}</td>
+              <td align="Left">{{pa.Name}}</td>
+              <td>{{pa.NameX}}</td>
+              <td>{{pa.NameY}}</td>
+              <td>{{pa.NameWidth}}</td>
+              <td>{{pa.NameHeight}}</td>
+              <td>{{pa.CreatedDate | date: 'd-MMM-yyyy'}}</td>
+              <td class="text-center">
+                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pa.Name" (click)="addOrEditProfileAttribute(pa)"></i>
+                 | 
+                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pa.Name" (click)="deleteProfileAttribute(pa)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+  <div mdbModal #profileAttributeModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" *ngIf="selectedProfileAttribute">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="profileAttributeModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" *ngIf="selectedProfileAttribute.profileVersionId" id="myModalLabel">New Profile Attribute Details</h4>
+          <h4 class="modal-title w-100" *ngIf="!selectedProfileAttribute.profileVersionId" id="myModalLabel">Edit: '{{selectedProfileAttribute.Name}}' attribute </h4>
+        </div>
+        <div class="modal-body">
+          <form class="border border-light p-3" #profileAttributeForm>
+            <!-- Name -->
+            <!-- <div *ngIf="AttributeName.hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Required</small>
+              </div>
+            </div> -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name:</h6>
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <input type="text" name="AttributeName" placeholder="Attribute Name" style="width: 90%; margin-right: 5px;"
+                      [(ngModel)]="selectedProfileAttribute.Name" #AttributeName
+                      [ngClass]="{
+                      'form-control is-valid': AttributeName.valid,
+                      'form-control is-invalid': !AttributeName.valid }">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <i *ngIf="AttributeName.valid" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+              </div>
+            </div>
+            <!-- Name X -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name X:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="NameX" placeholder="Name X" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.NameX" #NameX>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Name Y -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name Y:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="NameY" placeholder="Name Y" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.NameY" #NameY>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Name Width -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name Width:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="NameWidth" placeholder="Name Width" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.NameWidth" #NameWidth>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Name Height -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name Height:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="NameHeight" placeholder="Name Height" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.NameHeight" #NameHeight>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Standard Attribute Name -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Standard Attribute:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="StandardAttributeName" placeholder="Standard Attribute" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute?.StandardAttribute.Name" #StandardAttributeName>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Paper Size -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Paper Size:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="PaperSize" placeholder="Paper Size" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.PaperSize.Name" #PaperSize>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Block Position -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Block Position:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="BlockPosition" placeholder="Block Position" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.BlockPosition.Name" #BlockPosition>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Created date -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Created date:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="CreatedDate" placeholder="CreatedDate" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.CreatedDate" #CreatedDate>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Value -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Value:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="Value" placeholder="Value" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.Value" #Value>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Value X -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Value X:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="ValueX" placeholder="Value X" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.ValueX" #ValueX>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Value Y -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Value Y:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="ValueY" placeholder="Value Y" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.ValueY" #ValueY>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Value Width -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Value Width:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="ValueWidth" placeholder="Value Width" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.ValueWidth" #ValueWidth>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Value Height -->
+            <div class="form-row mb-2">
+              <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Value Height:</h6>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" name="ValueHeight" placeholder="Value Height" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileAttribute.ValueHeight" #ValueHeight>
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light" 
+            [disabled]="!profileAttributeForm.dirty || !profileAttributeForm.valid" (click)="saveProfileAttribute()" mdbWavesEffect>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

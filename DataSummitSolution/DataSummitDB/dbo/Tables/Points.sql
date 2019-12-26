@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Points]
+(
+	[PointId]	UNIQUEIDENTIFIER	NOT NULL, 
+	[X]			BIGINT				NOT NULL,
+	[Y]			BIGINT				NOT NULL,
+	CONSTRAINT [PK_PointId] PRIMARY KEY CLUSTERED ([PointId] ASC)
+)

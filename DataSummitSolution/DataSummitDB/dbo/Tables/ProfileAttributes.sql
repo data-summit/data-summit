@@ -1,0 +1,25 @@
+﻿CREATE TABLE [dbo].[ProfileAttributes] (
+    [ProfileAttributeId]	BIGINT         IDENTITY (1, 1) NOT NULL,
+    [Name]					NVARCHAR (255) NOT NULL,
+    [NameX]					INT            NOT NULL,
+    [NameY]					INT            NOT NULL,
+    [NameWidth]				SMALLINT       NOT NULL,
+    [NameHeight]			SMALLINT       NOT NULL,
+    [PaperSizeId]			TINYINT        NOT NULL,
+    [BlockPositionId]		TINYINT        NOT NULL,
+    [ProfileVersionId]		INT            NOT NULL,
+    [CreatedDate]			DATETIME       NULL,
+    [UserId]				BIGINT         NULL,
+    [Value]					NVARCHAR (MAX) NULL,
+    [ValueX]				INT            NULL,
+    [ValueY]				INT            NULL,
+    [ValueWidth]			SMALLINT       NULL,
+    [ValueHeight]			SMALLINT       NULL,
+	[StandardAttributeId]	SMALLINT	   NULL,
+    CONSTRAINT [PK_ProfileAttributes] PRIMARY KEY CLUSTERED ([ProfileAttributeId] ASC),
+    CONSTRAINT [FK_ProfileAttributes_BlockPositions] FOREIGN KEY ([BlockPositionId]) REFERENCES [dbo].[BlockPositions] ([BlockPositionId]) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT [FK_ProfileAttributes_PaperSizes] FOREIGN KEY ([PaperSizeId]) REFERENCES [dbo].[PaperSizes] ([PaperSizeId]) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT [FK_ProfileAttributes_ProfileVersions] FOREIGN KEY ([ProfileVersionId]) REFERENCES [dbo].[ProfileVersions] ([ProfileVersionId]) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_ProfileAttributes_StandardAttributes] FOREIGN KEY ([StandardAttributeId]) REFERENCES [dbo].[StandardAttributes] ([StandardAttributeId]) 
+);
+

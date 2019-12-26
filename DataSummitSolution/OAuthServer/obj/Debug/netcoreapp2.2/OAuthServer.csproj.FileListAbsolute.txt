@@ -1,0 +1,3 @@
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\OAuthServer\obj\Debug\netcoreapp2.2\OAuthServer.csproj.CoreCompileInputs.cache
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\OAuthServer\obj\Debug\netcoreapp2.2\OAuthServer.AssemblyInfoInputs.cache
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\OAuthServer\obj\Debug\netcoreapp2.2\OAuthServer.AssemblyInfo.cs

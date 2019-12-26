@@ -1,0 +1,146 @@
+﻿<div class="container">
+    <section class="pb-5">
+        <h2 class="h1 pt-5 pb-2 font-weight-bold">Documents for collection</h2>
+        <p>Please estimate using the dropdowns the number of documents you have:</p>
+        <!-- <div class="row">
+            <div class="row">
+                <div class="col col-md-3 text-center">
+                    <strong>No. Documents</strong>
+                </div>
+                <div class="col text-center">
+                    <strong>Page Size</strong>
+                </div>
+                <div class="col text-center">
+                    <strong>Container Type</strong>
+                </div>
+                <div class="col text-center">
+                    <strong>Urgency</strong>
+                </div>
+            </div>
+            <div class="col-12" *ngFor="let order of orders">
+                <div class="col-3">
+                    <input type="text" [(ngModel)]="order.count" id="defaultContactFormName" mdbInputDirective class="form-control mb-4"
+                        placeholder="Number">
+                </div>
+                <div class="col-3">
+                    <select [(ngModel)]="order.pageSize" class="browser-default custom-select mb-4">
+                        <option value="0" selected>-- please select --</option>
+                        <option value="1">A4</option>
+                        <option value="2">A3</option>
+                        <option value="3">A2</option>
+                        <option value="4">A1</option>
+                        <option value="4">A0</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select [(ngModel)]="order.containerType" class="browser-default custom-select mb-4">
+                        <option value="0" selected>-- please select --</option>
+                        <option value="1">Folder</option>
+                        <option value="2">Box</option>
+                        <option value="3">Crate</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <select [(ngModel)]="order.urgency" class="browser-default custom-select mb-4">
+                        <option value="0" selected>-- please select --</option>
+                        <option value="1">Next day</option>
+                        <option value="2">3 business days</option>
+                        <option value="3">1 Week</option>
+                        <option value="3">2 Weeks</option>
+                        <option value="3">1 Month</option>
+                    </select>
+                </div>
+            </div>
+        </div> -->
+        
+        <div class="row">
+            <table mdbTable striped="true">
+                <thead>
+                    <tr>
+                        <th class="text-center" *ngFor="let head of headers" scope="col">{{head}} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="text-center" mdbTableCol *ngFor="let order of orders">
+                        <td>
+                            <input type="number" [(ngModel)]="order.count" id="defaultContactFormName" class="form-control"
+                                placeholder="Number">
+                        </td>
+                        <td>
+                            <select [(ngModel)]="order.pageSize" class="browser-default custom-select">
+                                <option value="0" selected>-- please select --</option>
+                                <option value="1">A4</option>
+                                <option value="2">A3</option>
+                                <option value="3">A2</option>
+                                <option value="4">A1</option>
+                                <option value="4">A0</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select [(ngModel)]="order.containerType" class="browser-default custom-select">
+                                <option value="0" selected>-- please select --</option>
+                                <option value="1">Folder</option>
+                                <option value="2">Box</option>
+                                <option value="3">Crate</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select [(ngModel)]="order.urgency" class="browser-default custom-select">
+                                <option value="0" selected>-- please select --</option>
+                                <option value="1">Next day</option>
+                                <option value="2">3 business days</option>
+                                <option value="3">1 Week</option>
+                                <option value="3">2 Weeks</option>
+                                <option value="3">1 Month</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <button mdbBtn class="btn btn-sm btn-info" style="float: right" (click)="addLine()">Add Documents</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <p>
+                Limit your spending on this order by setting a maximum number of documents to be scanned for a given time period, or by choosing a maximum spend.
+            </p>
+            <div class="col col-md-4">
+                <label>Limitation method:</label>
+                <select [(ngModel)]="limitationMethod" class="browser-default custom-select">
+                    <option value="0" selected>-- please select --</option>
+                    <option value="1">Number of Documents</option>
+                    <option value="2">Maximum Spend per period</option>
+                </select>
+            </div>
+            <div class="col col-md-4">
+                <label *ngIf="limitationMethod == 0">-- select a limitation method --</label>
+                <label *ngIf="limitationMethod == 1">No. Documents:</label>
+                <label *ngIf="limitationMethod == 2">Max Spend Amount (£):</label>
+                <input type="number" [(ngModel)]="limitationQuantity" class="form-control">
+            </div>
+            <div class="col col-md-4">
+                <label>Limitation Period</label>
+                <select [(ngModel)]="limitationFrequency" class="browser-default custom-select">
+                    <option value="0" selected>-- please select --</option>
+                    <option value="1">Daily</option>
+                    <option value="2">Weekly</option>
+                    <option value="3">Monthly</option>
+                    <option value="4">Quarterly</option>
+                    <option value="5">Bi-annual</option>
+                    <option value="6">Annual</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col">
+                <button mdbBtn class="btn btn-sm btn-info" style="float: right" (click)="order()">Submit Order</button>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "DBModelsMigration": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MSBuildProjectExtensionsPath": "C:\\Program Files\\dotnet\\sdk\\2.1.802\\Current",
+        "MSBuildSDKsPath": "C:\\Program Files\\dotnet\\sdk\\2.1.802\\Sdks"
+      }
+    }
+  }
+}

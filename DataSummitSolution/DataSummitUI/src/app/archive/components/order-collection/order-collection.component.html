@@ -1,0 +1,45 @@
+<div class="container">
+  <span class="h3 mr-5">Order A Collection</span>
+  <hr>
+  <strong>Disclosing your address, time, and person of contact</strong>
+  <p>Please type the address, time and person from which the document's should be picked up from</p>
+  
+  <div class="col-md-8 col-xs-12 mt-3 pl-0">
+    <form class="border border-light p-3" [formGroup]="collectionForm">
+  
+      <p class="h4 mb-4">Contact Details</p>
+  
+      <div class="row">
+        <div class="col-xs-12 col-md-6">
+          <!-- Line 1 -->
+          <input type="text" class="form-control" formControlName="line1" placeholder="Address Line 1">
+          <!-- Line 2 -->
+          <input type="text" class="form-control" formControlName="line2" placeholder="Address Line 2">
+          <!-- Town/City -->
+          <input type="text" class="form-control" formControlName="city" placeholder="Town / City">
+          <!-- County -->
+          <input type="text" class="form-control" formControlName="county" placeholder="County">
+          <!-- Postcode -->
+          <input type="text" class="form-control" formControlName="postcode" placeholder="Postcode">
+        </div>
+  
+        <div class="col-xs-12 col-md-6">
+          <!-- Time -->
+          <input type="text" class="form-control" formControlName="time" placeholder="Time (hh:mm)">
+          <!-- Date -->
+          <input type="text" class="form-control" formControlName="date" placeholder="Date (dd/mm/yyyy)">
+  
+          <hr>
+          <!-- Name -->
+          <input type="text" class="form-control" formControlName="name" placeholder="Full Name">
+          <!-- Role -->
+          <input type="text" class="form-control" formControlName="role" placeholder="Role">
+        </div>
+      </div>
+  
+      <!-- Submit button -->
+      <button mdbBtn block="true" [color]="industryInfo.colour" class="my-4 stylish-color-dark btn-sm btn-block" type="submit" (click)="submitForm()">Submit Details</button>
+  
+    </form>
+  </div>
+</div>

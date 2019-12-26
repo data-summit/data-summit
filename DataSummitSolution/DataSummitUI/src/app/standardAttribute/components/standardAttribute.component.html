@@ -1,0 +1,56 @@
+<div class="container">
+    <section class="mb-5">
+      <table>
+          <tr>
+            <td width="30%">
+              <h2 class="h1 py-5 font-weight-bold">Templates Standard Attribute Mapping</h2>
+            </td>
+          </tr>
+      </table>
+      <table mdbTable striped="true" *ngIf="headers && headers.length > 0">
+          <thead> 
+            <tr>
+              <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" mdbTableCol *ngFor="let sa of standardAttributes">
+              <td>{{sa.Name}}</td>
+              <td>{{sa.Value}}</td>
+              <td (click)="goToAttributes(sa)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + sa.Name + ' attributes'"></i></td>
+              <td class="text-center">
+                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + sa.Name" (click)="addOrEditStandardAttribute(sa)"></i>
+                 | 
+                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + sa.Name" (click)="deleteStandardAttribute(sa)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+    <div mdbModal #standardAttributeModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+          aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" *ngIf="selectedStandardAttribute">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="standardAttributeModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" *ngIf="selectedStandardAttribute.standardAttributeId ==null" id="myModalLabel">New Profile / Template</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedStandardAttribute.standardAttributeId != null" id="myModalLabel">Edit: '{{selectedStandardAttribute.Name}}' template</h4>
+        </div>
+        <div class="modal-body">
+          <form class="border border-light p-3" #standardAttributeForm>
+            <!-- Insert comboboxes for standard attibute mapping -->
+            
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light" 
+            [disabled]="!standardAttributeForm.dirty || !standardAttributeForm.valid" (click)="saveStandardAttribute()" mdbWavesEffect>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

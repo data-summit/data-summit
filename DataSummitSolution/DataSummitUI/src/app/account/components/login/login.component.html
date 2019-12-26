@@ -1,0 +1,36 @@
+﻿<div class="container">
+  <div class="col-xs-12 col-md-6 offset-md-3 mt-5">
+      <!-- Default form login -->
+      <form [formGroup]="signInForm" class="text-center border border-light p-5">
+      
+        <p class="h4 mb-4">Sign in</p>
+      
+        <!-- Email -->
+        <input type="email" id="email" formControlName="username" class="form-control mb-4" placeholder="E-mail">
+      
+        <!-- Password -->
+        <input type="password" id="password" formControlName="password" class="form-control mb-4" placeholder="Password">
+      
+        <div class="d-flex justify-content-around">
+          <div>
+            <!-- Remember me -->
+            <mdb-checkbox [default]="true">Remember me</mdb-checkbox>
+          </div>
+          <div>
+            <!-- Forgot password -->
+            <a href="">Forgot password?</a>
+          </div>
+        </div>
+      
+        <!-- Sign in button -->
+        <button mdbBtn color="info" block="true" class="btn mx-0 my-4 btn-sm btn-block" type="submit" (click)="signIn()">Sign in</button>
+        <!-- <button mdbBtn color="info" block="true" class="btn mx-0 my-4 btn-sm btn-block" type="submit" (click)="testLoggedIn()">Test</button> -->
+      
+        <!-- Register -->
+        <p>Not a member?
+          <a [routerLink]="['/account/register']" routerLinkActive="active" >Register</a>
+        </p>
+      </form>
+      <!-- Default form login -->
+  </div>
+</div>

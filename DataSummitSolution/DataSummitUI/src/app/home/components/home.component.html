@@ -1,0 +1,199 @@
+<div class="container">
+  <div class="jumbotron blue-grey lighten-5 py-3">
+    <strong>
+      <h1>WEBSITE UNDER CONSTRUCTION</h1>
+    </strong>
+    <!-- <h2>Your data belongs to you</h2> -->
+    <h3>What does your data amount too?</h3>
+  </div>
+  
+  <div class="row">
+    <div class="col-xs-12 col-md-8">
+      <!--Carousel Wrapper-->
+      <mdb-carousel #carouselEl [isControls]="controls" [interval]="interval" class="carousel slide" [animation]="'slide'">
+        <!--First slide-->
+        <mdb-carousel-item>
+          <!-- <div class="view w-100" style="height: 25em">
+            <img class="d-block w-100" src="../../../images/current.png" alt="First slide">
+            <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
+          </div>
+          <div class="carousel-caption">
+            <h3 class="h3-responsive">Data Summit</h3>
+          </div> -->
+          <video class="video-fluid" #videoEl controls preload 
+            autoplay [muted]="muted" (ended)="onVideoEnd()" 
+            (pause)="onVideoPaused()" (play)="onVideoPlayed()">
+            <source src="../../../images/DS_Video.mp4" type="video/mp4" />
+          </video>
+        </mdb-carousel-item>
+        <!--/First slide-->
+        <!--Second slide-->
+        <mdb-carousel-item>
+          <div class="view w-100" style="height: 25em">
+            <img class="mb-1" src="../../../images/unordered.png" alt="">
+          </div>
+          <div class="carousel-caption">
+            <h3 class="h3-responsive">Archive easily</h3>
+            <div style="padding: 0 15%">
+              One tap and a van comes directly to you.
+              Paper transferred – it goes to the associated
+              scanning centre. And when it gets there,
+              it’s scanned and archived online. Payment
+              is completely seamless.
+            </div>
+          </div>
+        </mdb-carousel-item>
+        <!--/Second slide-->
+        <!--Third slide-->
+        <mdb-carousel-item>
+          <div class="view w-100" style="height: 25em">
+            <img class="mb-1" src="../../../images/ordered.png" alt="">
+          </div>
+          <div class="carousel-caption">
+            <h3>Any amount, any format</h3>
+            <div style="padding: 0 15%">
+              Construction drawings. Quantity
+              take-offs. End-of-year accounts.
+              Leases. Whatever the data, count on
+              Data Summit – no reservations required.
+            </div>
+          </div>
+        </mdb-carousel-item>
+        <!--/Third slide-->
+        <!--Fourth slide-->
+        <mdb-carousel-item>
+          <div class="view w-100" style="height: 25em">
+            <img class="mb-1" src="../../../images/servers.png" alt="">
+          </div>
+          <div class="carousel-caption">
+            <h3>Single to several servers</h3>
+            <div style="padding: 0 15%">
+              Depending on your needs we can
+              create a searchable environment for
+              your data in any of the large cloud
+              providers
+              .
+            </div>
+          </div>
+        </mdb-carousel-item>
+        <!--/Fourth slide-->
+      </mdb-carousel>
+    </div>
+    <div class="col-xs-12 col-md-4">
+      <div class="border border-light p-2">
+        <div class="btn-group btn-block w-100 mx-auto mb-2">
+          <label disabled mdbTooltip="Coming Soon" style="cursor: not-allowed !important;" class="btn btn-sm btn-info w-50"
+            mdbBtn [(ngModel)]="roleType" mdbRadio="Scanner" mdbWavesEffect>
+            Scan
+          </label>
+          <label class="btn btn-sm btn-info w-50 active" mdbBtn color="primary" [(ngModel)]="roleType" mdbRadio="Archivist"
+            mdbWavesEffect>
+            Archive
+          </label>
+        </div>
+        <form [formGroup]="applicationForm">
+          <p class="h4 mb-2" *ngIf="roleType == 'Scanner'">Become a Scanner</p>
+          <p class="h4 mb-2" *ngIf="roleType == 'Archivist'">Become an Archivist</p>
+
+          <div class="form-row mb-2">
+            <div class="col">
+              <!-- First name -->
+              <input type="text" formControlName="firstName" id="firstName" class="form-control" placeholder="First name">
+            </div>
+            <div class="col">
+              <!-- Last name -->
+              <input type="text" formControlName="lastName" id="lastName" class="form-control" placeholder="Last name">
+            </div>
+          </div>
+
+          <!-- E-mail -->
+          <input type="email" formControlName="email" id="email" class="form-control mb-2" placeholder="E-mail">
+
+          <!-- Phone number -->
+          <div class="form-row mb-2">
+            <div class="col-4">
+                <!--Coutry code-->
+                <select class="form-control" formControlName="telCode" id="telCode" >
+                    <option *ngFor="let type of allCodes" [ngValue]="type">+{{type.phonecode}} ({{type.SentenceCaseName}})</option>
+                </select>
+            </div>
+            <div class="col-8">
+              <!-- <input type="text" formControlName="phone" id="phone" class="form-control" placeholder="Phone number" aria-describedby="phoneHelp"> -->
+              <input type="text" appPhoneMask formControlName="phone" id="phone" class="form-control" placeholder="Phone number"
+               aria-describedby="phoneHelp">
+            </div>
+          </div>
+          <small id="phoneHelp" class="form-text text-muted mb-2">
+            Used for two factor authentication (2FA)
+          </small>
+
+          <!-- Password -->
+          <input type="password" formControlName="password" id="pass" class="form-control" placeholder="Password">
+          <!-- Confirm Password -->
+          <input type="password" formControlName="confirmPassword" id="confirmPass" class="form-control mb-2" placeholder="Confirm Password">
+
+          <!--Register Button-->
+          <button mdbBtn *ngIf="roleType == 'Scanner'" class="btn btn-info btn-sm btn-block waves-light" type="button"
+                  mdbWavesEffect>
+            Become a scanner
+          </button>
+          <button mdbBtn *ngIf="roleType == 'Archivist'" class="btn btn-info btn-sm btn-block waves-light" [disabled]='!applicationForm.valid'
+                  type="submit" (click)="submitForm()" mdbWavesEffect>
+            Register
+          </button>
+        </form>
+      </div>
+  
+  
+      <!-- <form >
+        <div class="row">
+          <div class="col-md-6">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="text" formControlName="firstName" class="form-control" id="firstName" name="firstName">
+              <label for="firstName">First Name*</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="text" formControlName="lastName" class="form-control" id="lastName" name="lastName">
+              <label for="lastName">Last Name*</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="email" id="email" class="form-control" name="email" formControlName="email">
+              <label for="email">Email*</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="number" id="phone" class="form-control" name="phone" formControlName="phone">
+              <label for="phone">Phone Number</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="password" id="pass1" class="form-control" name="pass1" formControlName="password">
+              <label for="pass1">Password</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="md-form mt-0">
+              <input mdbInputDirective type="password" id="pass2" class="form-control" name="pass2" formControlName="confirmPassword">
+              <label for="pass2">Confirm Password</label>
+            </div>
+          </div>
+        </div>
+        <hr class="mb-4">
+        <button mdbBtn *ngIf="roleType == 'Scanner'" class="btn btn-info btn-sm btn-block waves-light" type="button"
+          mdbWavesEffect>
+          Become a scanner
+        </button>
+        <button mdbBtn *ngIf="roleType == 'Archivist'" class="btn btn-info btn-sm btn-block waves-light" [disabled]='!applicationForm.valid'
+          type="submit" (click)="submitForm()">
+          Become an archivist
+        </button>
+      </form> -->
+    </div>
+  </div>
+</div>

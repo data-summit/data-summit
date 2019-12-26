@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DataSummitUI\**" />
+    <Compile Remove="dist\**" />
+    <Compile Remove="node_modules\**" />
+    <Compile Remove="src-TJTraining\**" />
+    <EmbeddedResource Remove="DataSummitUI\**" />
+    <EmbeddedResource Remove="dist\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <EmbeddedResource Remove="src-TJTraining\**" />
+    <None Remove="DataSummitUI\**" />
+    <None Remove="dist\**" />
+    <None Remove="node_modules\**" />
+    <None Remove="src-TJTraining\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\app\archive\components\archive-details\" />
+    <Folder Include="src\app\archive\components\order-collection\" />
+    <Folder Include="src\app\home\components\terms-and-conditions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>System</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition">
+      <HintPath>System.ComponentModel.Composition</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>System.ComponentModel.DataAnnotations</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>System.Data</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

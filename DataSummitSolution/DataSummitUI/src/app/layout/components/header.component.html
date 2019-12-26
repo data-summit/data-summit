@@ -1,0 +1,71 @@
+<mdb-navbar SideClass="navbar fixed-top navbar-expand-lg stylish-color-dark navbar-dark scrolling-navbar ie-nav py-0" [containerInside]="false">
+  <mdb-navbar-brand>
+    <a class="logo navbar-brand" routerLink=""></a>
+  </mdb-navbar-brand>
+  <links>
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item waves-light" mdbWavesEffect routerLink="/home" routerLinkActive="active">
+        <a class="nav-item nav-link">Home</a>
+      </li>
+      <li class="nav-item waves-light" mdbWavesEffect routerLink="/scan" routerLinkActive="active">
+        <a class="nav-item nav-link">Scan</a>
+      </li>
+      <li class="nav-item waves-light" mdbWavesEffect routerLink="/archive" routerLinkActive="active">
+        <a class="nav-item nav-link">Archive</a>
+      </li>
+      <li class="nav-item waves-light" mdbWavesEffect routerLink="/aboutus" routerLinkActive="active">
+        <a class="nav-item nav-link">About Us</a>
+      </li>
+      <!-- <li class="nav-item waves-light" mdbWavesEffect routerLink="/pricing" routerLinkActive="active">
+        <a class="nav-item nav-link">Pricing</a>
+      </li> -->
+      <li class="nav-item waves-light" mdbWavesEffect routerLink="/companies" routerLinkActive="active">
+        <a class="nav-item nav-link">Companies</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+        <a class="nav-item nav-link" *ngIf="!isLoggedIn()" routerLink="/account/login" routerLinkActive="active">Log In</a>
+        <a class="nav-item nav-link" *ngIf="isLoggedIn()" (click)="logout()" routerLinkActive="active">Sign Out</a>
+        <a class="nav-item nav-link" routerLink="/help" routerLinkActive="active">Help</a>
+        <a class="nav-item nav-link" target="_blank"><i class="fa fa-map-marker"></i></a>
+    </ul>
+  </links>
+</mdb-navbar>
+<!--Navbar-->
+<!-- <nav class="navbar navbar-expand-lg navbar-dark stylish-color mb-5">
+
+
+  <a class="logo" routerLink=""></a>
+  <span style="color: #fff">|</span>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="basicExampleNav">
+
+
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLink="/home" routerLinkActive="active">
+        <a class="nav-item nav-link">Home</a>
+      </li>
+      <li class="nav-item" routerLink="/scan" routerLinkActive="active">
+        <a class="nav-item nav-link">Scan</a>
+      </li>
+      <li class="nav-item" routerLink="/archive" routerLinkActive="active">
+        <a class="nav-item nav-link">Archive</a>
+      </li>
+    </ul>
+    <div class="navbar-expand ml-auto navbar-nav">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" routerLink="/account" routerLinkActive="active">Sign In</a>
+        <a class="nav-item nav-link" routerLink="/help" routerLinkActive="active">Help</a>
+        <a class="nav-item nav-link" target="_blank"><i class="fa fa-map-marker"></i></a>
+      </div>
+    </div>
+  </div>
+
+
+</nav> -->
+<!--/.Navbar-->

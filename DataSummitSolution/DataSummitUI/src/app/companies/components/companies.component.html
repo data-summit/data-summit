@@ -1,0 +1,138 @@
+<div class="container">
+  <section class="mb-5">
+    <table>
+      <tr style="width: 100%;">
+        <td style="width: 30%;">
+            <h2 class="h1 py-5 font-weight-bold">Companies</h2>
+          </td>
+          <td style="width: 60%;"></td>
+          <td style="width: 30%;">
+            <button type="button" style="width: 170px" mdbBtn color="secondary" class="btn btn-info" (click)="addOrEditCompany(company)" mdbWavesEffect>Add Company</button>
+            <!-- <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info" (click)="addTemplate()" mdbWavesEffect>Add Template</button> -->
+          </td>
+        </tr>
+    </table>
+    <table mdbTable striped="true" *ngIf="headers && headers.length > 0">
+        <thead>
+          <tr>
+            <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr class="text-center" mdbTableCol *ngFor="let company of companies">
+          <!-- <th scope="row">{{company.companyId}}</th> -->
+          <td>{{company.Name}}</td>
+          <td (click)="goToTemplates(company)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + company.Name + ' templates'"></i></td>
+          <td (click)="goToProjects(company)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + company.Name + ' projects'"></i></td>
+          <td>{{company.CompanyNumber}}</td>
+          <td class="text-center">
+            <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + company.Name" (click)="addOrEditCompany(company)"></i>
+              | 
+            <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + company.Name" (click)="deleteCompany(company)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <div mdbModal #companyModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" *ngIf="selectedCompany">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="companyModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" *ngIf="!selectedCompany.CompanyId">New Company Details</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedCompany.CompanyId">Edit: {{selectedCompany.Name}}</h4>
+        </div>
+        <div class="modal-body">
+          <form class="border border-light p-3" #companyForm>
+            <div class="form-row mb-2">
+              <input type="text" name="CompanyName" placeholder="Company Name" style="width: 90%; margin-right: 5px;" 
+                      [(ngModel)]="selectedCompany.Name" #CompanyName="ngModel"
+                      [ngClass]="{
+                      'is-valid': CompanyName.valid,
+                      'is-invalid': CompanyName.invalid}" required="true">
+              <!-- <div *ngIf="CompanyName.errors.required" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Required</small>
+                </div>
+              </div> -->
+              <i *ngIf="CompanyName && CompanyName.valid" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+            <!-- <div *ngIf="companyForm.CompanyNumber.required" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Required</small>
+              </div>
+            </div> -->
+            <!-- <div *ngIf="CompanyNumber.errors.minlength" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Minimum 9 chars</small>
+                </div>
+            </div> -->
+            <!-- <div *ngIf="companyForm.CompanyNumber.hasError('maxlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Maximun 9 chars</small>
+              </div>
+            </div>  
+            <div *ngIf="companyForm.CompanyNumber.hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Invalid Company Number</small>
+              </div>
+            </div> -->
+            <div class="form-row mb-2">
+              <input type="text" name="CompanyNumber" placeholder="Company Number" style="width: 90%; margin-right: 5px;"
+                    [(ngModel)]="selectedCompany.CompanyNumber" #CompanyNumber="ngModel"
+                    [ngClass]="{
+                        'form-control is-valid': CompanyNumber.valid, 
+                        'form-control is-invalid': !CompanyNumber.valid }" > <!--required minlength="=9" maxlength="=9"> -->
+                <i *ngIf="CompanyNumber.valid" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+            <!-- <div *ngIf="companyForm.Website.hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Invalid URL</small>
+              </div>
+            </div> -->
+            <div class="form-row mb-2">
+              <input type="url" id="website" name="Website" placeholder="Website" style="width: 90%; margin-right: 5px;" 
+                      [(ngModel)]="selectedCompany.Website" url #Website="ngModel"
+                      [ngClass]="{
+                        'form-control is-valid': Website.valid === true, 
+                        'form-control is-invalid': Website.valid === false}">
+                <i *ngIf="Website.valid && Website.value !== ''" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+            <!-- <div *ngIf="companyForm.Vatnumber.hasError('minlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Minimum 9 chars</small>
+                </div>
+            </div> -->
+            <!-- <div  *ngIf="companyForm.Vatnumber.hasError('maxlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Maximun 9 chars</small>
+              </div>
+            </div> -->
+            <!-- <div *ngIf="companyForm.Vatnumber.hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Invalid VAT Number</small>
+              </div>
+            </div> -->
+            <div class="form-row mb-2">
+              <input type="text" id="vat" name="Vatnumber" placeholder="VAT Number" style="width: 90%; margin-right: 5px;"
+                      [(ngModel)]="selectedCompany.Vatnumber" #Vatnumber="ngModel"
+                      [ngClass]="{
+                        'form-control': Vatnumber.value === undefined,
+                        'form-control is-valid': Vatnumber.valid === true,
+                        'form-control is-invalid': Vatnumber.valid === false}">
+                <i *ngIf="Vatnumber.valid && Vatnumber.value !== ''" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light" [disabled]="!companyForm.dirty || !companyForm.valid" (click)="saveCompany()" mdbWavesEffect>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

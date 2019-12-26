@@ -1,0 +1,136 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2024
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitWeb", "DataSummitWeb\DataSummitWeb.csproj", "{1B085E6A-8D7C-46AA-A1F4-C521749791CB}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DataSummitDB", "DataSummitDB\DataSummitDB.sqlproj", "{75400E0A-9AF2-43A9-9FDA-99052688B582}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitTests", "DataSummitTests\DataSummitTests.csproj", "{030A88C1-358C-4159-BB76-1F4DCD53146A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitHelper", "DataSummitHelper\DataSummitHelper.csproj", "{4A8145D0-76DD-4969-AAB3-3A046A3D088C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitUI", "DataSummitUI\DataSummitUI.csproj", "{9EA299F1-3FC3-4561-9BC4-CE8FEF0A51B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitModels", "DataSummitModels\DataSummitModels.csproj", "{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitFunctions", "DataSummitFunctions\DataSummitFunctions.csproj", "{578A8167-393A-4B26-8DFA-A57582D00060}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitREST", "DataSummitRESTClient\DataSummitREST.csproj", "{BEA20FD9-9424-4477-9189-2FCAAE283804}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitOAuthServer", "DataSummitOAuthServer\DataSummitOAuthServer.csproj", "{4CF460DD-6379-4220-95E5-76B78E3EA472}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B085E6A-8D7C-46AA-A1F4-C521749791CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B085E6A-8D7C-46AA-A1F4-C521749791CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B085E6A-8D7C-46AA-A1F4-C521749791CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B085E6A-8D7C-46AA-A1F4-C521749791CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75400E0A-9AF2-43A9-9FDA-99052688B582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75400E0A-9AF2-43A9-9FDA-99052688B582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75400E0A-9AF2-43A9-9FDA-99052688B582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75400E0A-9AF2-43A9-9FDA-99052688B582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75400E0A-9AF2-43A9-9FDA-99052688B582}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{030A88C1-358C-4159-BB76-1F4DCD53146A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{030A88C1-358C-4159-BB76-1F4DCD53146A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{030A88C1-358C-4159-BB76-1F4DCD53146A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{030A88C1-358C-4159-BB76-1F4DCD53146A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A8145D0-76DD-4969-AAB3-3A046A3D088C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A8145D0-76DD-4969-AAB3-3A046A3D088C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A8145D0-76DD-4969-AAB3-3A046A3D088C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A8145D0-76DD-4969-AAB3-3A046A3D088C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EA299F1-3FC3-4561-9BC4-CE8FEF0A51B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EA299F1-3FC3-4561-9BC4-CE8FEF0A51B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EA299F1-3FC3-4561-9BC4-CE8FEF0A51B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EA299F1-3FC3-4561-9BC4-CE8FEF0A51B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{578A8167-393A-4B26-8DFA-A57582D00060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E251939F-54F7-48F5-98E0-31AC99EAEFEC}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/datasummit
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DataSummitWeb\\DataSummitWeb.csproj
+		SccProjectName1 = DataSummitWeb
+		SccLocalPath1 = DataSummitWeb
+		SccProjectUniqueName2 = DataSummitDB\\DataSummitDB.sqlproj
+		SccProjectName2 = DataSummitDB
+		SccLocalPath2 = DataSummitDB
+		SccProjectUniqueName3 = DataSummitTests\\DataSummitTests.csproj
+		SccProjectName3 = DataSummitTests
+		SccLocalPath3 = DataSummitTests
+		SccProjectUniqueName4 = DataSummitHelper\\DataSummitHelper.csproj
+		SccProjectName4 = DataSummitHelper
+		SccLocalPath4 = DataSummitHelper
+		SccProjectUniqueName5 = DataSummitUI\\DataSummitUI.csproj
+		SccProjectName5 = DataSummitUI
+		SccLocalPath5 = DataSummitUI
+		SccProjectUniqueName6 = DataSummitModels\\DataSummitModels.csproj
+		SccProjectName6 = DataSummitModels
+		SccLocalPath6 = DataSummitModels
+		SccProjectUniqueName7 = DataSummitFunctions\\DataSummitFunctions.csproj
+		SccProjectName7 = DataSummitFunctions
+		SccLocalPath7 = DataSummitFunctions
+		SccProjectUniqueName8 = DataSummitRESTClient\\DataSummitREST.csproj
+		SccProjectName8 = DataSummitRESTClient
+		SccLocalPath8 = DataSummitRESTClient
+		SccProjectUniqueName9 = DataSummitOAuthServer\\DataSummitOAuthServer.csproj
+		SccProjectName9 = DataSummitOAuthServer
+		SccLocalPath9 = DataSummitOAuthServer
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 10
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/datasummit
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DataSummitWeb\\DataSummitWeb.csproj
+		SccProjectName1 = DataSummitWeb
+		SccLocalPath1 = DataSummitWeb
+		SccProjectUniqueName2 = DataSummitDB\\DataSummitDB.sqlproj
+		SccProjectName2 = DataSummitDB
+		SccLocalPath2 = DataSummitDB
+		SccProjectUniqueName3 = DataSummitTests\\DataSummitTests.csproj
+		SccProjectName3 = DataSummitTests
+		SccLocalPath3 = DataSummitTests
+		SccProjectUniqueName4 = DataSummitHelper\\DataSummitHelper.csproj
+		SccProjectName4 = DataSummitHelper
+		SccLocalPath4 = DataSummitHelper
+		SccProjectUniqueName5 = DataSummitUI\\DataSummitUI.csproj
+		SccProjectName5 = DataSummitUI
+		SccLocalPath5 = DataSummitUI
+		SccProjectUniqueName6 = DataSummitModels\\DataSummitModels.csproj
+		SccProjectName6 = DataSummitModels
+		SccLocalPath6 = DataSummitModels
+		SccProjectUniqueName7 = DataSummitFunctions\\DataSummitFunctions.csproj
+		SccProjectName7 = DataSummitFunctions
+		SccLocalPath7 = DataSummitFunctions
+		SccProjectUniqueName8 = DataSummitOAuthServer\\DataSummitOAuthServer.csproj
+		SccProjectName8 = DataSummitOAuthServer
+		SccLocalPath8 = DataSummitOAuthServer
+	EndGlobalSection
+EndGlobal

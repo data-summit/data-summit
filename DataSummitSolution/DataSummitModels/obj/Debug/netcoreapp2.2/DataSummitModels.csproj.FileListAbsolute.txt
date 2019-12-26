@@ -1,0 +1,11 @@
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\bin\Debug\netcoreapp2.2\DataSummitModels.deps.json
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\bin\Debug\netcoreapp2.2\DataSummitModels.runtimeconfig.json
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\bin\Debug\netcoreapp2.2\DataSummitModels.runtimeconfig.dev.json
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\bin\Debug\netcoreapp2.2\DataSummitModels.dll
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\bin\Debug\netcoreapp2.2\DataSummitModels.pdb
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.csproj.CoreCompileInputs.cache
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.AssemblyInfoInputs.cache
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.AssemblyInfo.cs
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.dll
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.pdb
+C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitModels\obj\Debug\netcoreapp2.2\DataSummitModels.csprojAssemblyReference.cache

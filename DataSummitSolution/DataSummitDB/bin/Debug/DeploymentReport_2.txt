@@ -1,0 +1,123 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[AspNetUsers]
+       [dbo].[AspNetUserTokens]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[AspNetUsers].[DateOfBirth] on table [dbo].[AspNetUsers] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[AspNetUsers].[FirstName] on table [dbo].[AspNetUsers] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[AspNetUsers].[PositionTitle] on table [dbo].[AspNetUsers] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[AspNetUsers].[Surname] on table [dbo].[AspNetUsers] must be added, but the column has no default value
+         and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must
+         either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults
+         as a deployment option.
+       The type for column Id in table [dbo].[AspNetUsers] is currently  NVARCHAR (150) NOT NULL but is being changed to 
+         BIGINT IDENTITY (1, 1) NOT NULL. Data loss could occur.
+
+** User actions
+     Table rebuild
+       [dbo].[AspNetUsers] (Table)
+       [dbo].[AspNetUserTokens] (Table)
+     Create
+       [dbo].[Address] (Table)
+       [dbo].[AzureCompanyResourceUrl] (Table)
+       [dbo].[BlockPosition] (Table)
+       [dbo].[Category] (Table)
+       [dbo].[Company] (Table)
+       [dbo].[Country] (Table)
+       [dbo].[Currency] (Table)
+       [dbo].[Drawing] (Table)
+       [dbo].[DrawingFeature] (Table)
+       [dbo].[DrawingLayer] (Table)
+       [dbo].[Employee] (Table)
+       [dbo].[EmployeeTerritory] (Table)
+       [dbo].[Gender] (Table)
+       [dbo].[GoogleLanguage] (Table)
+       [dbo].[ImageGrid] (Table)
+       [dbo].[Order] (Table)
+       [dbo].[OrderDetail] (Table)
+       [dbo].[PaperOrientation] (Table)
+       [dbo].[PaperSize] (Table)
+       [dbo].[Point] (Table)
+       [dbo].[Product] (Table)
+       [dbo].[ProfileAttribute] (Table)
+       [dbo].[ProfileVersion] (Table)
+       [dbo].[Project] (Table)
+       [dbo].[Property] (Table)
+       [dbo].[Rectangle] (Table)
+       [dbo].[Sentence] (Table)
+       [dbo].[StandardAttribute] (Table)
+       [dbo].[TaskDuration] (Table)
+       [dbo].[User] (Table)
+       [dbo].[UserInfo] (Table)
+       [dbo].[UserInfoType] (Table)
+       [dbo].[UserType] (Table)
+       [dbo].[DF_Orders_Freight] (Default Constraint)
+       [dbo].[DF_Order_Details_UnitPrice] (Default Constraint)
+       [dbo].[DF_Order_Details_Quantity] (Default Constraint)
+       [dbo].[DF_Order_Details_Discount] (Default Constraint)
+       [dbo].[FK_Address_Company] (Foreign Key)
+       [dbo].[FK_Address_User] (Foreign Key)
+       [dbo].[FK_Address_Country] (Foreign Key)
+       [dbo].[FK_Address_Project] (Foreign Key)
+       [dbo].[FK_AzureCompanyResourceUrl_Company] (Foreign Key)
+       [dbo].[FK_Drawing_Project] (Foreign Key)
+       [dbo].[FK_Drawing_PaperSize] (Foreign Key)
+       [dbo].[FK_Drawing_PaperOrientation] (Foreign Key)
+       [dbo].[FK_DrawingFeature_Drawing] (Foreign Key)
+       [dbo].[FK_DrawingLayer_Drawing] (Foreign Key)
+       [dbo].[FK_Employee_Gender] (Foreign Key)
+       [dbo].[FK_ImageGrid_Drawing] (Foreign Key)
+       [dbo].[FK_Order_Companies] (Foreign Key)
+       [dbo].[FK_OrderDetail_Order] (Foreign Key)
+       [dbo].[FK_Center_DrawingFeature] (Foreign Key)
+       [dbo].[FK_ProfileAttribute_BlockPosition] (Foreign Key)
+       [dbo].[FK_ProfileAttribute_PaperSize] (Foreign Key)
+       [dbo].[FK_ProfileAttribute_ProfileVersion] (Foreign Key)
+       [dbo].[FK_ProfileAttribute_StandardAttribute] (Foreign Key)
+       [dbo].[FK_ProfileVersion_Project] (Foreign Key)
+       [dbo].[FK_Project_Company] (Foreign Key)
+       [dbo].[FK_Property_ProfileAttribute] (Foreign Key)
+       [dbo].[FK_Property_Sentence] (Foreign Key)
+       [dbo].[FK_Rectangle_Sentence] (Foreign Key)
+       [dbo].[FK_Sentence_Drawing] (Foreign Key)
+       [dbo].[FK_TaskDuration_Drawing] (Foreign Key)
+       [dbo].[FK_User_AspNetUser] (Foreign Key)
+       [dbo].[FK_User_Company] (Foreign Key)
+       [dbo].[FK_User_UserType] (Foreign Key)
+       [dbo].[FK_User_Gender] (Foreign Key)
+       [dbo].[FK_UserInfo_UserInfoType] (Foreign Key)
+       [dbo].[FK_UserInfo_User] (Foreign Key)
+       [dbo].[FK_AspNetRoleClaim_AspNetRole_RoleId] (Foreign Key)
+       [dbo].[FK_AspNetUserClaim_AspNetUser_UserId] (Foreign Key)
+       [dbo].[FK_AspNetUserLogin_AspNetUser_UserId] (Foreign Key)
+       [dbo].[FK_AspNetUserRole_AspNetRole_RoleId] (Foreign Key)
+       [dbo].[FK_AspNetUserRole_AspNetUser_UserId] (Foreign Key)
+       [dbo].[CK_Birthdate] (Check Constraint)
+       [dbo].[CK_Discount] (Check Constraint)
+       [dbo].[CK_Quantity] (Check Constraint)
+       [dbo].[CK_UnitPrice] (Check Constraint)
+
+** Supporting actions
+     Create
+       [dbo].[AspNetUsers].[EmailIndex] (Index)
+       [dbo].[AspNetUsers].[UserNameIndex] (Index)
+
+The column [dbo].[AspNetUsers].[DateOfBirth] on table [dbo].[AspNetUsers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[AspNetUsers].[FirstName] on table [dbo].[AspNetUsers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[AspNetUsers].[PositionTitle] on table [dbo].[AspNetUsers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[AspNetUsers].[Surname] on table [dbo].[AspNetUsers] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column Id in table [dbo].[AspNetUsers] is currently  NVARCHAR (150) NOT NULL but is being changed to  BIGINT IDENTITY (1, 1) NOT NULL. Data loss could occur.
+

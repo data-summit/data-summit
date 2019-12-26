@@ -1,0 +1,148 @@
+<div class="container">
+    <section class="mb-5">
+      <table>
+        <tr style="width: 100%;">
+          <td style="width: 60%;">
+              <h2 class="h1 py-5 font-weight-bold">Drawing Profile/Templates</h2>
+            </td>
+            <td style="width: 40%;"></td>
+            <td style="width: 30%;">
+              <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info" (click)="createProfileVersion()" mdbWavesEffect>Add Template</button>
+            </td>
+          </tr>
+      </table>
+      <table mdbTable striped="true" *ngIf="headers && headers.length > 0">
+          <thead> 
+            <tr>
+              <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" mdbTableCol *ngFor="let pv of profileVersions">
+              <td>{{pv.Name}}</td>
+              <td (click)="goToAttributes(pv)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + pv.Name + ' attributes'"></i></td>
+              <td>{{pv.HeightOriginal}}</td>
+              <td>{{pv.WidthOriginal}}</td>
+              <td>{{pv.CreatedDate | date: 'd-MMM-yyyy'}}</td>
+              <td class="text-center">
+                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pv.Name" (click)="addOrEditProfileVersion(pv)"></i>
+                 | 
+                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pv.Name" (click)="deleteProfileVersion(pv)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+    <div mdbModal #profileVersionModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+          aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content" *ngIf="selectedProfileVersion">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="profileVersionModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" *ngIf="selectedProfileVersion.profileVersionId === null" id="myModalLabel">New Profile / Template</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProfileVersion.profileVersionId !== null" id="myModalLabel">Edit: '{{selectedProfileVersion.Name}}' template</h4>
+        </div>
+        <div class="modal-body">
+          <form class="border border-light p-3" #profileVersionForm>
+            <!-- Name -->
+            <div *ngIf="profileVersionForm.get('Name').hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Required</small>
+              </div>
+            </div>
+            <div class="form-row mb-2">
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name:</div>
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <input type="text" id="name" name="Name" placeholder="ProfileAttribute Name" style="width: 90%; margin-right: 5px;" 
+                     [ngClass]="{
+                      'form-control is-valid': profileVersionForm.get('Name').valid === true,
+                      'form-control is-invalid': profileVersionForm.get('Name').valid === false}" 
+                     [(ngModel)]="selectedProfileVersion.Name">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <i *ngIf="profileVersionForm.get('Name').valid === true" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+              </div>
+            </div>
+            <!-- Width -->
+            <div class="form-row mb-2">
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Width:</div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="width" name="Width" placeholder="Width" style="padding-right: 5px; text-align: right;"
+                    [(ngModel)]="selectedProfileVersion.Width">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Height -->
+            <div class="form-row mb-2">
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Height:</div>
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="height" name="Height" placeholder="Height" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileVersion.Height">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Width Original -->
+            <div class="form-row mb-2">
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Width Original:</div>
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="widthoriginal" name="WidthOriginal" placeholder="WidthOriginal" style="padding-right: 5px; text-align: right;"
+                    [(ngModel)]="selectedProfileVersion.WidthOriginal">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Height Original -->
+            <div class="form-row mb-2">
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Height Original:</div>
+                <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="heightoriginal" name="HeightOriginal" placeholder="HeightOriginal" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileVersion.HeightOriginal">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- X -->
+            <div class="form-row mb-2">
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">X:</div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="x" name="X" placeholder="X" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileVersion.X">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Y -->
+            <div class="form-row mb-2">
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Y:</div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="y" name="Y" placeholder="Y" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileVersion.Y">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 10%"><small>pixels</small></div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+            <!-- Created date -->
+            <div class="form-row mb-2">
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Created date:</div>
+              <div class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">
+                <input type="text" id="createddate" name="CreatedDate" placeholder="CreatedDate" style="padding-right: 5px; text-align: right;"
+                      [(ngModel)]="selectedProfileVersion.CreatedDate">
+              </div>
+              <div class="col-sm-3" style="height: 25%; width: 70%"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light" 
+            [disabled]="!profileVersionForm.dirty || !profileVersionForm.valid" (click)="saveProfileVersion()" mdbWavesEffect>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

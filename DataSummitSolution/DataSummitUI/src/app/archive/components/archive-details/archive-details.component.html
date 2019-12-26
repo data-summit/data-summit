@@ -1,0 +1,81 @@
+<div *ngIf="registerLoading" class="container">
+  <loading-spinner [loading]="registerLoading" [message]="'Registering User'"></loading-spinner>
+</div>
+<div *ngIf="!registerLoading" class="container">
+  <span class="h3 mr-5">{{industryInfo.text}}</span><i class="fa fa-3x" [ngClass]="industryInfo.icon"></i>
+  <hr>
+  <!-- Default form register -->
+  <div class="row">
+    <div class="col-md-8 col-xs-12 mt-3 pl-0">
+      <form class="border border-light p-3" [formGroup]="detailsForm">
+  
+        <p class="h4 mb-4">Your Details</p>
+        <p>Please fill out the following & select a form of ID for verification purposes.</p>
+  
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <!-- Line 1 -->
+            <input type="text" class="form-control" formControlName="street" placeholder="Address Line 1">
+            <!-- Line 2 -->
+            <input type="text" class="form-control" formControlName="street2" placeholder="Address Line 2">
+            <!-- Town/City -->
+            <input type="text" class="form-control" formControlName="townCity" placeholder="Town / City">
+            <!-- County -->
+            <input type="text" class="form-control" formControlName="county" placeholder="County">
+            <!-- Postcode -->
+            <input type="text" class="form-control" formControlName="postCode" placeholder="Postcode">
+          </div>
+  
+          <div class="col-xs-12 col-md-6">
+            <!-- Date -->
+            <input type="text" class="form-control" formControlName="doB" placeholder="Date of Birth (dd/mm/yyyy)">
+  
+            <hr>
+            <!-- Company -->
+            <input type="text" class="form-control" formControlName="company" placeholder="Company">
+            <!-- Role -->
+            <input type="text" class="form-control" formControlName="jobRole" placeholder="Job Role">
+          </div>
+        </div>
+  
+        <!-- Submit button -->
+        <button mdbBtn [color]="industryInfo.colour" block="true" class="my-4 btn-sm btn-block" type="submit" (click)="submitForm()">Submit
+          Details</button>
+  
+      </form>
+    </div>
+  
+    <div class="col-md-4 col-xs-12 mt-3 pr-0">
+      <div class="border border-light p-3">
+        <p class="h4 mb-4">Additional Verification</p>
+        <p>We may require an additional form of identification such as a passport or drivers license.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Default form register -->
+  
+  <div mdbModal #termsModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg termsDialog" role="document">
+      <div class="modal-content" >
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="termsModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" id="myModalLabel">Terms and Conditions</h4>
+        </div>
+        <div class="modal-body">
+          <a target="_blank" [routerLink]="['/terms-and-conditions']" routerLinkActive="router-link-active">Open in full screen</a>
+          (opens in a new tab)
+          <hr>
+          <ds-terms-and-conditions-text></ds-terms-and-conditions-text>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="termsModal.hide()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light"  (click)="termsModal.hide(); acceptTerms()" mdbWavesEffect>Accept</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
