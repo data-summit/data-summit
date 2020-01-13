@@ -1,9 +1,0 @@
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\bin\Release\netcoreapp2.2\DataSummitREST.deps.json
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\bin\Release\netcoreapp2.2\DataSummitREST.dll
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\bin\Release\netcoreapp2.2\DataSummitREST.pdb
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.csprojAssemblyReference.cache
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.csproj.CoreCompileInputs.cache
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.AssemblyInfoInputs.cache
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.AssemblyInfo.cs
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.dll
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitRESTClient\obj\Release\netcoreapp2.2\DataSummitREST.pdb
