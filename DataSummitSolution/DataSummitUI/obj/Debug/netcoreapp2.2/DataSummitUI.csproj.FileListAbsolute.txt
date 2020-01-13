@@ -1,9 +1,0 @@
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\bin\Debug\netcoreapp2.2\DataSummitUI.deps.json
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\bin\Debug\netcoreapp2.2\DataSummitUI.dll
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\bin\Debug\netcoreapp2.2\DataSummitUI.pdb
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.csproj.CoreCompileInputs.cache
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.AssemblyInfoInputs.cache
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.AssemblyInfo.cs
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.dll
-C:\Users\robert.blankson\Source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.pdb
-C:\Users\robert.blankson\source\Workspaces\DataSummit\DataSummit\DataSummitSolution\DataSummitUI\obj\Debug\netcoreapp2.2\DataSummitUI.csprojAssemblyReference.cache
