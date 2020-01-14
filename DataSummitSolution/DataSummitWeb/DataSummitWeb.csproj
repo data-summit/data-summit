@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup Label="Globals">
     <SccProjectName>SAK</SccProjectName>
@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataSummitFunctions\DataSummitFunctions.csproj" />
     <ProjectReference Include="..\DataSummitHelper\DataSummitHelper.csproj" />
     <ProjectReference Include="..\DataSummitRESTClient\DataSummitREST.csproj" />
   </ItemGroup>
