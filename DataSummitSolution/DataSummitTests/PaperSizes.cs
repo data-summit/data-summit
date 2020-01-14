@@ -1,17 +1,15 @@
-using DataSummitHelper;
 using DataSummitModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace DataSummitTests
 {
     [TestClass]
-    public class ProjectTests
+    public class PaperSizesTests
     {
         [TestMethod]
         public void Create_new_project()

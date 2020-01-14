@@ -143,7 +143,7 @@ namespace DataSummitFunctions
                     //Remove all confirmed deletes
                 }
                 lMerged = results.Sentences.Intersect(lToBeDeleted.Select(s => s)).ToList();
-                Methods.PostProcessing.MultipleVendors.lResults.AddRange(lToBeAdded);
+                // Methods.PostProcessing.MultipleVendors.lResults.AddRange(lToBeAdded);
             }
             catch (Exception ae)
             {
@@ -265,12 +265,12 @@ namespace DataSummitFunctions
             {
                 if (sCur.Words.IndexOf(sTarget.Words) == 0)
                 {
-                    Methods.PostProcessing.MultipleVendors.lResults.Add(sCur);
+                    //Methods.PostProcessing.MultipleVendors.lResults.Add(sCur);
                     return true;
                 }
                 if (sTarget.Words.IndexOf(sCur.Words) == 0)
                 {
-                    Methods.PostProcessing.MultipleVendors.lResults.Add(sTarget);
+                    //Methods.PostProcessing.MultipleVendors.lResults.Add(sTarget);
                     return true;
                 }
             }

@@ -21,7 +21,7 @@ namespace DataSummitTests
                 SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Confidence = (decimal)0.1,
                 DrawingId = 1,
-                RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
+                //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                 IsUsed = true,
                 Vendor = "Test",
                 Words = "0001"
@@ -66,7 +66,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Confidence = (decimal)0.1,
                     DrawingId = 1,
-                    RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
+                    //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                     IsUsed = true,
                     Vendor = "Test",
                     Words = "0001"
@@ -76,7 +76,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Confidence = (decimal)0.2,
                     DrawingId = 2,
-                    RectangleId = Guid.Parse("00000000-0000-0000-0000-200000000000"),
+                    //RectangleId = Guid.Parse("00000000-0000-0000-0000-200000000000"),
                     IsUsed = true,
                     Vendor = "Test",
                     Words = "0002"
@@ -86,7 +86,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Confidence = (decimal)0.3,
                     DrawingId = 3,
-                    RectangleId = Guid.Parse("00000000-0000-0000-0000-300000000000"),
+                    //RectangleId = Guid.Parse("00000000-0000-0000-0000-300000000000"),
                     IsUsed = true,
                     Vendor = "Test",
                     Words = "0003"
