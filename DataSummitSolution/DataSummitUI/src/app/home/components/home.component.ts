@@ -5,7 +5,6 @@ import { HttpClient } from 'selenium-webdriver/http';
 import { Router } from '@angular/router';
 import { TelephoneCodeService } from '../../shared/datasets/telephone-codes';
 import { TelephoneCode } from 'src/app/shared/models/telephone-codes';
-import { EMAIL_VALIDATOR, EmailValidator } from '@angular/forms/src/directives/validators';
 import { RegisterFormService } from 'src/app/shared/services/register-form.service';
 import { CarouselComponent } from 'angular-bootstrap-md';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -28,8 +27,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   canPlay = new BehaviorSubject<boolean>(false);
   sub: Subscription;
 
-  @ViewChild('carouselEl') carouselEl: CarouselComponent
-  @ViewChild('videoEl') videoEl: any
+  @ViewChild('carouselEl', { static: false }) carouselEl: CarouselComponent
+  @ViewChild('videoEl', { static: false }) videoEl: any
 
   constructor(private fb: FormBuilder,
       private router: Router,

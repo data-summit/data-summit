@@ -17,9 +17,9 @@ const archiveRoutes: Routes = [
   { path: ":companyId/profileversions/:profileVersionId/profileAttributes", component: ProfileAttributesComponent },
   { path: ":companyId/profileversions/:profileVersionId/standardAttributes", component: StandardAttributeComponent },
   { path: ":companyId/profileversions/create", component: CreateProfileVersionComponent},
-  { path: ":companyId/projects", component: ProjectsComponent }, //loadChildren: "./projects/projects.module#ProjectsModule",  canActivate: [AuthGuardService] }
-  { path: ":companyId/projects/:projectId/drawings", component: DrawingsComponent },// loadChildren: "./projects/projects.module#ProjectsModule",  canActivate: [AuthGuardService] }
-  { path: ":companyId/projects/:projectId/drawings/:drawingId/Properties", component: PropertiesComponent }//, loadChildren: "./projects/projects.module#ProjectsModule",  canActivate: [AuthGuardService] }
+  { path: ":companyId/projects", component: ProjectsComponent },
+  { path: ":companyId/projects/:projectId/drawings", component: DrawingsComponent },
+  { path: ":companyId/projects/:projectId/drawings/:drawingId/Properties", component: PropertiesComponent }
 ];
 
 @NgModule({

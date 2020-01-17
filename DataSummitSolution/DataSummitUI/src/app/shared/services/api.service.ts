@@ -4,11 +4,9 @@ import {throwError as observableThrowError,  Observable ,  Subject } from 'rxjs'
 import {finalize, catchError} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { environment } from "../../../environments/environment";
-
-import { URLSearchParams } from '@angular/http';
 
 export class ApiOptions {
   method: string;

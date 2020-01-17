@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class PropertiesComponent implements OnInit {
     
-    @ViewChild('propertyModal') propertyModal
+    @ViewChild('propertyModal', { static: false }) propertyModal
 
     @Input() companyId: number;
     drawingId: number;

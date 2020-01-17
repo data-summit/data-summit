@@ -15,8 +15,8 @@ import { ProfileVersion } from '../../profileVersion/models/profileVersion'
 
 export class DrawingsComponent implements OnInit {
 
-    @ViewChild('drawingModal') drawingModal;
-    @ViewChild('uploadControl') uploadControl: FileUpload
+    @ViewChild('drawingModal', { static: false }) drawingModal;
+    @ViewChild('uploadControl', { static: false }) uploadControl: FileUpload
 
     companyId: number;
     projectId: number;
