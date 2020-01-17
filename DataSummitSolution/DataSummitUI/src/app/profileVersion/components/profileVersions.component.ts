@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class ProfileVersionsComponent implements OnInit {
     
-    @ViewChild('profileVersionModal') profileVersionModal
+    @ViewChild('profileVersionModal', { static: false }) profileVersionModal
 
     @Input() companyId: number;
     profileVersionId: number;

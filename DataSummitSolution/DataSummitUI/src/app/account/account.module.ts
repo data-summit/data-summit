@@ -6,7 +6,7 @@ import { AccountRoutingModule } from './account.routing';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { CheckboxModule, ButtonsModule, CardsFreeModule } from 'angular-bootstrap-md';
+import { CheckboxModule, ButtonsModule, CardsModule } from 'angular-bootstrap-md';
 import { ApiService } from '../shared/services/api.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -21,7 +21,7 @@ import { VerifyAccountComponent } from './components/verify/verify-account.compo
         AccountRoutingModule,
         CheckboxModule,
         ButtonsModule,
-        CardsFreeModule
+        CardsModule
     ],
     exports: [],
     declarations: [

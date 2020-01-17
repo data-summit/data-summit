@@ -1,5 +1,4 @@
 ﻿import { Component, OnInit, ViewChild, AfterViewInit, Input } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { ApiService } from '../../../shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -10,9 +9,7 @@ import { NotifyService } from '../../../shared/services/notify.service';
 import { ProfileVersion } from '../../../profileVersion/models/profileVersion';
 import { ProfileAttribute } from '../../../profileAttributes/models/profileAttribute';
 import { Rectangle } from '../models/rectangle';
-import { format } from 'url';
-import { Point } from '../models/point';
-import { ArrayBuffer } from '@angular/http/src/static_request';
+
 import { StandardAttribute } from 'src/app/standardAttribute/models/standardAttribute';
 
 declare const fabric: any;
@@ -25,8 +22,8 @@ declare const fabric: any;
 
 export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('canvasContainer') canvasContainer
-  @ViewChild('templateNameModal') templateNameModal
+  @ViewChild('canvasContainer', { static: false }) canvasContainer
+  @ViewChild('templateNameModal', { static: false }) templateNameModal
 
   @Input() companyId: number;
   template: ProfileVersion = new ProfileVersion();;
@@ -166,7 +163,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
     this.api.post('api/profileversions', this.template)
         .pipe(take(1))
-        .subscribe(result => {
+        .subscribe(() => {
                 this.router.navigate([`companies/${this.companyId}/profileversions`])
                 console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
@@ -206,8 +203,8 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     });
 
     this.canvas.on({
-      'object:moving': (e) => { },
-      'object:modified': (e) => { },
+      'object:moving': () => { },
+      'object:modified': () => { },
       'object:selected': (e) => {
 
         let selectedObject = e.target;
@@ -247,7 +244,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
           }
         }
       },
-      'selection:cleared': (e) => {
+      'selection:cleared': () => {
         this.selected = null;
         this.resetPanels();
       }
@@ -269,7 +266,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
   imageString: string
 
-  onUpload(event) {
+  onUpload() {
 
   }
 
@@ -515,7 +512,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     }
   }
 
-  removeWhite(url) {
+  removeWhite() {
     this.url = '';
     this.canvas.setBackgroundColor({ source: this.url, repeat: 'no-repeat' }, () => {
       // self.props.canvasFill = '';
@@ -606,7 +603,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
   }
 
   setCanvasImage(url) {
-    let self = this;
     if (url) {
       let image = new Image()
       image.src = url
@@ -671,8 +667,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
   }
 
   clone() {
-    let activeObject = this.canvas.getActiveObject(),
-      activeGroup = this.canvas.getActiveGroup();
+    let activeObject = this.canvas.getActiveObject();
 
     if (activeObject) {
       let clone;

@@ -4,8 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Project } from '../models/project';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { validateConfig } from '@angular/router/src/config';
-import { projection } from '@angular/core/src/render3/instructions';
 
 @Component({
     selector: 'ds-projects',
@@ -13,7 +11,7 @@ import { projection } from '@angular/core/src/render3/instructions';
 })
 export class ProjectsComponent implements OnInit {
 
-    @ViewChild('projectModal') projectModal
+    @ViewChild('projectModal', { static: false }) projectModal
     
     @Input() companyId: number;
     projects: Project[];

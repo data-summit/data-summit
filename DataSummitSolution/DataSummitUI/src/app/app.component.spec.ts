@@ -17,10 +17,10 @@ describe('AppComponent', () => {
         RouterTestingModule.withRoutes([
           { path: "", redirectTo: "/home", pathMatch: "full" },
           { path: "home", component: MockHomeComponent },
-          { path: "scan", loadChildren: "./scan/scan.module#ScanModule" },
-          { path: "archive", loadChildren: "./archive/archive.module#ArchiveModule" },
-          { path: "account", loadChildren: "./account/account.module#AccountModule" },
-          { path: "help", loadChildren: "./help/help.module#HelpModule" },
+          { path: "scan", loadChildren: () => import('./scan/scan.module').then(m => m.ScanModule)},
+          { path: "archive", loadChildren: () => import('./archive/archive.module').then(m => m.ArchiveModule)},
+          { path: "account", loadChildren: () => import('./account/account.module').then(m => m.AccountModule)},
+          { path: "help", loadChildren: () => import('./help/help.module').then(m => m.HelpModule)}
       ])
       ]
     }).compileComponents();

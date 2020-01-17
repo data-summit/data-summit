@@ -14,7 +14,7 @@ const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 })
 export class CompaniesComponent implements OnInit {
 
-    @ViewChild('companyModal') companyModal
+    @ViewChild('companyModal', { static: false }) companyModal
 
     companies: Company[];
     selectedCompany: Company;
