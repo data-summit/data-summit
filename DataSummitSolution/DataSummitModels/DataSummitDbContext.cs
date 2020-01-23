@@ -5,7 +5,7 @@ namespace DataSummitModels
 {
     public class DataSummitDbContext : DbContext
     {
-        private string connDevString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Integrated Security=True";
+        //private string connDevString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Integrated Security=True";
         private string connProdString = @"Server=tcp:datasummit.database.windows.net,1433;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=TomJames;Password=!Aa1234567;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         private bool OnConfigureIsProductionDb = false;
 
@@ -32,7 +32,7 @@ namespace DataSummitModels
                 optionsBuilder.UseSqlServer(connProdString);
             }
             else
-            { optionsBuilder.UseSqlServer(connDevString); }
+            { optionsBuilder.UseSqlServer(connProdString); }
 
         }
 
@@ -45,7 +45,7 @@ namespace DataSummitModels
                 if (OnConfigureIsProductionDb)
                 { optionsBuilder.UseSqlServer(connProdString); }
                 else
-                { optionsBuilder.UseSqlServer(connDevString); }
+                { optionsBuilder.UseSqlServer(connProdString); }
             }
         }
 
