@@ -63,18 +63,28 @@ namespace DataSummitWeb
             })
             .AddCookie("Cookies");
 
-            //services.AddCors(options =>
-            //{
-            //    // this defines a CORS policy called "default"
-            //    options.AddPolicy("default", policy =>
-            //    {
-            //        //policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-            //        policy.WithOrigins("http://localhost:55837", "http://localhost:56156", "http://localhost:4200");
-            //        //policy.WithOrigins("https://oauth.data-summit.co.uk", "https://ui.data-summit.co.uk", "https://data-summit.co.uk")
-            //        //    .AllowAnyHeader()
-            //        //    .AllowAnyMethod();
-            //    });
-            //});
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                // CORS has been added to IIS
+                    // <repo_path>\DataSummit\data-summit\DataSummitSolution\.vs\DataSummit\config\applicationhost.config
+                    //
+                    //< customHeaders >
+                    //  < clear />
+                    //  < add name = "X-Powered-By" value = "ASP.NET" />
+                    //         < add name = "Access-Control-Allow-Origin" value = "*" />
+                    //            < add name = "Access-Control-Allow-Headers" value = "Content-Type" />
+                    //               < add name = "Access-Control-Allow-Methods" value = "GET, POST, PUT, DELETE, OPTIONS" />
+                    //                </ customHeaders >
+                options.AddPolicy("default", policy =>
+                    {
+                        //        //policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                        //        policy.WithOrigins("http://localhost:55837", "http://localhost:56156", "http://localhost:4200",
+                        //"https://oauth.data-summit.co.uk", "https://ui.data-summit.co.uk", "https://data-summit.co.uk")
+                        //        //    .AllowAnyHeader()
+                        //        //    .AllowAnyMethod();
+                    });
+            });
 
             services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
 

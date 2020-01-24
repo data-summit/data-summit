@@ -47,8 +47,8 @@ namespace DataSummitOAuthServer
                 .AddInMemoryIdentityResources(AuthConfig.GetIdentityResources())
                 .AddInMemoryApiResources(AuthConfig.GetApiResources())
                 .AddInMemoryClients(AuthConfig.GetClients())
-                //.AddAspNetIdentity<DataSummitUser>(); // Get users from database
-                .AddTestUsers(AuthConfig.GetTestUsers()); /**** TESTING Auth with test user names and passwords without DB****/
+                .AddAspNetIdentity<DataSummitUser>(); // Get users from database
+                //.AddTestUsers(AuthConfig.GetTestUsers()); /**** TESTING Auth with test user names and passwords without DB****/
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -61,11 +61,18 @@ namespace DataSummitOAuthServer
             {
                 options.AddPolicy("default", policy =>
                 {
-                    policy//.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                    //policy.WithOrigins("http://localhost:55837", "http://localhost:56156", "http://localhost:4200")
-                    //policy.WithOrigins("https://oauth.data-summit.co.uk", "https://ui.data-summit.co.uk", "https://data-summit.co.uk")
+                    // No CORS Required on the OAuth Server if CORS added to IIS
+                    // <repo_path>\DataSummit\data-summit\DataSummitSolution\.vs\DataSummit\config\applicationhost.config
+                    //
+                    //< customHeaders >
+                    //  < clear />
+                    //  < add name = "X-Powered-By" value = "ASP.NET" />
+                    //         < add name = "Access-Control-Allow-Origin" value = "*" />
+                    //            < add name = "Access-Control-Allow-Headers" value = "Content-Type" />
+                    //               < add name = "Access-Control-Allow-Methods" value = "GET, POST, PUT, DELETE, OPTIONS" />
+                    //                </ customHeaders >
+                    //policy.WithOrigins("http://localhost:55837", "http://localhost:56156", "http://localhost:4200",
+                    //    "https://oauth.data-summit.co.uk", "https://ui.data-summit.co.uk", "https://data-summit.co.uk")
                     //    .AllowAnyHeader()
                     //    .AllowAnyMethod();
                 });
