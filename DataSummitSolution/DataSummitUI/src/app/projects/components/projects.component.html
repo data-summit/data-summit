@@ -41,8 +41,8 @@
           <button type="button" class="close pull-right" aria-label="Close" (click)="projectModal.hide()">
             <span aria-hidden="true">×</span>
           </button>
-          <h4 class="modal-title w-100" *ngIf="selectedProject.projectId == null" id="myModalLabel">New Project Name</h4>
-          <h4 class="modal-title w-100" *ngIf="selectedProject.projectId != null" id="myModalLabel">Edit: {{selectedProject.Name}}</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProject.ProjectId == null" id="myModalLabel">New Project Name</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProject.ProjectId != null" id="myModalLabel">Edit: {{selectedProject.Name}}</h4>
         </div>
         <div class="modal-body">
           <form class="border border-light p-3" #projectForm>
