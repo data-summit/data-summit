@@ -24,6 +24,11 @@ export class AuthService {
         })
     };
 
+    httpPostJsonOptions = {
+      headers: new HttpHeaders({
+          'Content-Type': 'application/json'
+      })
+  };
 
     constructor(private router: Router,
         private http: HttpClient) { }
@@ -40,28 +45,34 @@ export class AuthService {
             }
         });
 
-        this.http.post(environment.authority + "connect/token", params, this.httpOptions).pipe(take(1))
+        // this.navigateToTwoFactorRoute(); return; // TODO - remove after debugging
+
+        this.http.post(environment.authority + 'connect/token', params, this.httpOptions).pipe(take(1))
             .subscribe((result: any) => {
-                console.log(result)
-                this.setSession(result)
-                this.navigateToReturnRoute()
+                console.log(result);
+                this.setSessionToken(result);
+                this.navigateToTwoFactorRoute();
             }, error => {
-                console.log("Problem logging in")
-                console.log(error)
-            })
+                console.log('Problem logging in');
+                console.log(error);
+            });
     }
 
-    private setSession(authResult) {
-        const expiresAt = moment().add(authResult.expires_in,'second');
+    loginFromTwoFactor(username: string, password: string) {
+        this.navigateToReturnRoute();
+    }
+
+    private setSessionToken(authResult) {
+        const expiresAt = moment().add(authResult.expires_in, 'second');
 
         sessionStorage.setItem('access_token', authResult.access_token);
-        sessionStorage.setItem("expires_at", JSON.stringify(expiresAt.valueOf()) );
-    }   
+        sessionStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()) );
+    }
 
     logout() {
-        sessionStorage.removeItem("access_token")
-        sessionStorage.removeItem("expires_at")
-        this.router.navigate(['/'])
+        sessionStorage.removeItem('access_token');
+        sessionStorage.removeItem('expires_at');
+        this.router.navigate(['/']);
     }
 
     public isLoggedIn() {
@@ -73,21 +84,56 @@ export class AuthService {
     }
 
     getExpiration() {
-        const expiration = sessionStorage.getItem("expires_at");
+        const expiration = sessionStorage.getItem('expires_at');
         const expiresAt = JSON.parse(expiration);
         return moment(expiresAt);
     }
 
     storeRoute(urlSegment) {
-        localStorage.setItem('returnRoute', urlSegment)
+        localStorage.setItem('returnRoute', urlSegment);
     }
 
     navigateToReturnRoute() {
-        let url = localStorage.getItem('returnRoute') 
-        if(url) {
-            this.router.navigate([url])
-        } else {
-            this.router.navigate(['/'])
-        }
+        const returnRoute = localStorage.getItem('returnRoute');
+        const url = returnRoute ? returnRoute : '/';
+
+        this.router.navigate([url]);
+    }
+
+    navigateToTwoFactorRoute() {
+      this.router.navigate(['/account/two-factor']);
+    }
+
+  getTwoFactorCodes(username: string, secret: string, setQrCode) {
+      const params = JSON.stringify({ Username: username, Secret: secret });
+
+    let codes: string;
+    this.http.post(environment.authority + 'api/twofactorauthentication/getcodes', params, this.httpPostJsonOptions).pipe(take(1))
+        .subscribe((result: any) => {
+          console.log(result);
+          codes = result;
+
+          setQrCode(codes);
+          return codes;
+        }, error => {
+          console.log('Problem getting 2FA codes');
+          console.log(error);
+        });
+    }
+
+    validateUserCode(code: string, secret: string) {
+      const params = JSON.stringify({ TwoFactorAuthCode: code, AccountSecretKey: secret });
+
+      this.http.post(environment.authority + 'api/twofactorauthentication/validate', params, this.httpPostJsonOptions).pipe(take(1))
+        .subscribe((result: any) => {
+          console.log(result);
+
+          if (result) {
+            this.navigateToReturnRoute();
+          }
+        }, error => {
+          console.log('Problem logging in');
+          console.log(error);
+        });
     }
 }

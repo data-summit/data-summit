@@ -41,12 +41,15 @@
           <button type="button" class="close pull-right" aria-label="Close" (click)="profileVersionModal.hide()">
             <span aria-hidden="true">×</span>
           </button>
-          <h4 class="modal-title w-100" *ngIf="selectedProperties.profileVersionId == null" id="myModalLabel">New Profile / Template</h4>
-          <h4 class="modal-title w-100" *ngIf="selectedProperties.profileVersionId != null" id="myModalLabel">Edit: {{selectedProperties.Name}}</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProperties.profileVersionId == null" id="myModalLabel">New
+            Profile / Template</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProperties.profileVersionId != null" id="myModalLabel">Edit:
+            {{selectedProperties.Name}}</h4>
         </div>
         <div class="modal-body">
           <form class="border border-light p-3" [formGroup]="profileVersionForm">
-            <div *ngIf="profileVersionForm.get('Name').hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+            <div *ngIf="profileVersionForm.get('Name').hasError('required')" class="form-row mb-2"
+              style="height: 25%; padding-bottom: 0%;">
               <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
                 <small>Required</small>
               </div>
@@ -130,7 +133,9 @@
         <div class="modal-footer justify-content-center">
           <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
             mdbWavesEffect>Close</button>
-          <button type="button" mdbBtn color="primary" class="relative waves-light" [disabled]="!profileVersionForm.dirty || !profileVersionForm.valid" (click)="saveProfileAttribute()" mdbWavesEffect>Save</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            [disabled]="!profileVersionForm.dirty || !profileVersionForm.valid" (click)="saveProfileAttribute()"
+            mdbWavesEffect>Save</button>
         </div>
       </div>
     </div>
