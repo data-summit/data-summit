@@ -1,43 +1,40 @@
 <div class="container">
-  <h4>Properties</h4>
-  <!--<section class="mb-5">
-     <table>
-      <tr>
-        <td width="30%">
-          <h2 class="h1 py-5 font-weight-bold">Drawing Profile/Templates</h2>
-        </td>
-        <td width="37%"></td>
-        <td width="40%" align="right">
-          <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info"
-            (click)="createProperties()" mdbWavesEffect>Add Template</button>
-        </td>
-      </tr>
-    </table>
-    <table mdbTable striped="true">
-      <thead>
-        <tr>
-          <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="text-center" mdbTableCol *ngFor="let pv of profileVersions">
-          <td>{{pv.Name}}</td>
-          <td (click)="goToAttributes(pv.PropertiesId)"><i class="fa fa-search pointer"
-              [mdbTooltip]="'View ' + pv.Name + ' attributes'"></i></td>
-          <td>{{pv.HeightOriginal}}</td>
-          <td>{{pv.WidthOriginal}}</td>
-          <td>{{pv.CreatedDate | date: 'd-MMM-yyyy'}}</td>
-          <td class="text-center">
-            <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pv.Name" (click)="addOrEditProperties(pv)"></i>
-            |
-            <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pv.Name" (click)="deleteProperties(pv)"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-  <div mdbModal #profileVersionModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog"
-    aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <section class="mb-5">
+      <table>
+          <tr>
+            <td width="30%">
+              <h2 class="h1 py-5 font-weight-bold">Drawing Profile/Templates</h2>
+            </td>
+            <td width="37%"></td>
+            <td width="40%" align="right">
+              <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info" (click)="createProperties()" mdbWavesEffect>Add Template</button>
+            </td>
+          </tr>
+      </table>
+      <table mdbTable striped="true">
+          <thead>
+            <tr>
+              <th class="text-center" *ngFor="let head of headers" scope="col">{{head}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="text-center" mdbTableCol *ngFor="let pv of profileVersions">
+              <td>{{pv.Name}}</td>
+              <td (click)="goToAttributes(pv.PropertiesId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + pv.Name + ' attributes'"></i></td>
+              <td>{{pv.HeightOriginal}}</td>
+              <td>{{pv.WidthOriginal}}</td>
+              <td>{{pv.CreatedDate | date: 'd-MMM-yyyy'}}</td>
+              <td class="text-center">
+                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pv.Name" (click)="addOrEditProperties(pv)"></i>
+                 |
+                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pv.Name" (click)="deleteProperties(pv)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </section>
+    <div mdbModal #profileVersionModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -57,7 +54,80 @@
                 <small>Required</small>
               </div>
             </div>
+            <!-- <div class="form-row mb-2">
+              <input type="text" id="name" formControlName="Name" placeholder="ProfileAttribute Name" style="width: 90%; margin-right: 5px;"
+                     [ngClass]="{
+                      'form-control is-valid': profileVersionForm.get('Name').valid === true,
+                      'form-control is-invalid': profileVersionForm.get('Name').valid === false}"
+                     [(ngModel)]="selectedProperties.Name">
+              <i *ngIf="profileVersionForm.get('Name').valid === true" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+            <div *ngIf="profileVersionForm.get('ProfileAttributeNumber').hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Required</small>
+                </div>
+              </div>
+            <div *ngIf="profileVersionForm.get('ProfileAttributeNumber').hasError('minlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Minimum 9 chars</small>
+                </div>
+            </div>
+            <div *ngIf="profileVersionForm.get('ProfileAttributeNumber').hasError('maxlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Maximun 9 chars</small>
+              </div>
+            </div>
+            <div *ngIf="profileVersionForm.get('ProfileAttributeNumber').hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Invalid ProfileAttribute Number</small>
+              </div>
+            </div>
+            <div class="form-row mb-2">
+              <input type="text" id="number" formControlName="ProfileAttributeNumber" placeholder="ProfileAttribute Number" style="width: 90%; margin-right: 5px;"
+                      [ngClass]="{
+                        'form-control is-valid': profileVersionForm.get('ProfileAttributeNumber').valid === true,
+                        'form-control is-invalid': profileVersionForm.get('ProfileAttributeNumber').valid === false}"
+                      [(ngModel)]="selectedProperties.ProfileAttributeNumber">
+                <i *ngIf="profileVersionForm.get('ProfileAttributeNumber').valid === true" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
+            <div *ngIf="profileVersionForm.get('Website').hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Invalid URL</small>
+              </div>
+            </div>
+            <div class="form-row mb-2">
+              <input type="url" id="website" formControlName="Website" placeholder="Website" style="width: 90%; margin-right: 5px;"
+                      [ngClass]="{
+                        'form-control is-valid': profileVersionForm.get('Website').valid === true,
+                        'form-control is-invalid': profileVersionForm.get('Website').valid === false}"
+                      [(ngModel)]="selectedProperties.Website" url>
+                <i *ngIf="profileVersionForm.get('Website').valid === true && profileVersionForm.get('Website').value !== ''" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div>
 
+            <div *ngIf="profileVersionForm.get('Vatnumber').hasError('minlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+                <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                  <small>Minimum 9 chars</small>
+                </div>
+            </div>
+            <div  *ngIf="profileVersionForm.get('Vatnumber').hasError('maxlength')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Maximun 9 chars</small>
+              </div>
+            </div>
+            <div *ngIf="profileVersionForm.get('Vatnumber').hasError('pattern')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
+              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
+                <small>Invalid VAT Number</small>
+              </div>
+            </div>
+            <div class="form-row mb-2">
+              <input type="text" id="vat" formControlName="Vatnumber" placeholder="VAT Number" style="width: 90%; margin-right: 5px;"
+                      [ngClass]="{
+                        'form-control': profileVersionForm.get('Vatnumber').value === undefined,
+                        'form-control is-valid': profileVersionForm.get('Vatnumber').valid === true,
+                        'form-control is-invalid': profileVersionForm.get('Vatnumber').valid === false}"
+                      [(ngModel)]="selectedProperties.Vatnumber">
+                <i *ngIf="profileVersionForm.get('Vatnumber').valid === true && profileVersionForm.get('Vatnumber').value !== ''" class="fas fa-check-circle fa-2x" style="color: green;"></i>
+            </div> -->
           </form>
         </div>
         <div class="modal-footer justify-content-center">
@@ -68,6 +138,6 @@
             mdbWavesEffect>Save</button>
         </div>
       </div>
-    </div> 
+    </div>
   </div> -->
 </div>
