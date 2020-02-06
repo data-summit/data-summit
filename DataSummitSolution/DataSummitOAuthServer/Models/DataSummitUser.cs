@@ -15,7 +15,7 @@ namespace DataSummitOAuthServer
         [Required]
         public bool IsTrial { get; set; }
         [Required]
-        public int GenderId { get; set; }
+        public byte GenderId { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
         [Required]

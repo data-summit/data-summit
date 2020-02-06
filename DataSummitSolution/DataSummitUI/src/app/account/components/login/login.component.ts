@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SimpleEmailValidator } from '../../../validators/simple-email.validator';
 import { take } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.initsignInForm()
+        this.initsignInForm();
     }
 
     initsignInForm() {
@@ -37,14 +37,19 @@ export class LoginComponent implements OnInit {
         this.apiService.get("api/values")
             .pipe(take(1))
             .subscribe(result => {
-                console.log(result)
+                console.log(result);
             }, error => {
-                console.log(error)
+                console.log(error);
             })
     }
 
     signIn() {
-        let signInParams: { username: string, password: string } = this.signInForm.getRawValue()
-        this.authService.login(signInParams.username, signInParams.password)
+        const signInParams: { username: string, password: string } = this.signInForm.getRawValue();
+        this.setSession(signInParams.username);
+        this.authService.login(signInParams.username, signInParams.password);
+    }
+
+    private setSession(email) {
+      sessionStorage.setItem('userEmail', email);
     }
 }

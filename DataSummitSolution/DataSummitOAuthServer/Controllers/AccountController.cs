@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Google.Authenticator;
 using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace IdentityServer4.Quickstart.UI
@@ -34,6 +36,21 @@ namespace IdentityServer4.Quickstart.UI
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
 
+        private readonly TwoFactorAuthenticator _twoFactorAuthenticator;
+        private const string _issuer = "DataSummit";
+        private const string _accountSecretKey = "DataSummitSecretKey";
+        private const int _qrCodeSizePixels = 300;
+
+        private SetupCode GetSetupCode(string userAccount = "user@example.com", string accountSecretKey = _accountSecretKey)
+        {
+            return _twoFactorAuthenticator.GenerateSetupCode(_issuer, userAccount, Encoding.ASCII.GetBytes(accountSecretKey), _qrCodeSizePixels);
+        }
+
+        private bool IsUserPinValid(string userTwoFactorCode)
+        {
+            return _twoFactorAuthenticator.ValidateTwoFactorPIN(_accountSecretKey, userTwoFactorCode);
+        }
+
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
@@ -49,6 +66,8 @@ namespace IdentityServer4.Quickstart.UI
             _clientStore = clientStore;
             _schemeProvider = schemeProvider;
             _events = events;
+
+            _twoFactorAuthenticator = new TwoFactorAuthenticator();
         }
 
         /// <summary>
@@ -76,6 +95,8 @@ namespace IdentityServer4.Quickstart.UI
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginInputModel model, string button)
         {
+            var isUserPinValid = IsUserPinValid(model.TwoFactorAuthCode);
+
             // check if we are in the context of an authorization request
             var context = await _interaction.GetAuthorizationContextAsync(model.ReturnUrl);
 
@@ -221,13 +242,13 @@ namespace IdentityServer4.Quickstart.UI
             return View("LoggedOut", vm);
         }
 
-
-
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
+            var setupCode = GetSetupCode();
+
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
             if (context?.IdP != null)
             {
@@ -239,6 +260,8 @@ namespace IdentityServer4.Quickstart.UI
                     EnableLocalLogin = local,
                     ReturnUrl = returnUrl,
                     Username = context?.LoginHint,
+                    QrCodeSetupImageUrl = setupCode.QrCodeSetupImageUrl,
+                    ManualEntryKey = setupCode.ManualEntryKey,
                 };
 
                 if (!local)
@@ -282,7 +305,9 @@ namespace IdentityServer4.Quickstart.UI
                 EnableLocalLogin = allowLocal && AccountOptions.AllowLocalLogin,
                 ReturnUrl = returnUrl,
                 Username = context?.LoginHint,
-                ExternalProviders = providers.ToArray()
+                ExternalProviders = providers.ToArray(),
+                QrCodeSetupImageUrl = setupCode.QrCodeSetupImageUrl,
+                ManualEntryKey = setupCode.ManualEntryKey,
             };
         }
 

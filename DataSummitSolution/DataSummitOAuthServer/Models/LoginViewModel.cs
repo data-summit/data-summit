@@ -18,5 +18,8 @@ namespace IdentityServer4.Quickstart.UI
 
         public bool IsExternalLoginOnly => EnableLocalLogin == false && ExternalProviders?.Count() == 1;
         public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+
+        public string QrCodeSetupImageUrl { get; set; }
+        public string ManualEntryKey { get; set; }
     }
 }

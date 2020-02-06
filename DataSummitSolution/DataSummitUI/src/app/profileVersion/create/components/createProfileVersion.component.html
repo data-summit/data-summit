@@ -79,11 +79,11 @@
                         <input type="text" name="templateName" placeholder="Template Name" 
                                 [(ngModel)]="templateName" #TemplateName
                                 [ngClass]="{
-                                'form-control is-valid': !TemplateName.value == '',
+                                'form-control is-valid': TemplateName.value != '',
                                 'form-control is-invalid': TemplateName.value == '' }">
                     </div>
                     <div class="col-sm-1 mb-3" style="padding-top: 5px; padding-right: 10px;">
-                        <i *ngIf="!TemplateName.value == ''"  class="fas fa-check-circle fa-2x" style="color: green;"></i>
+                        <i *ngIf="TemplateName.value != ''"  class="fas fa-check-circle fa-2x" style="color: green;"></i>
                     </div>
                 </div>
             </div>
