@@ -7,7 +7,9 @@ export class Property {
 	SentenceId: number;
 	ProfileAttributeId: number;
 	ProfileAttribute: ProfileAttribute;
-	Sentence: Sentence;
+  Sentence: Sentence;
+  // TODO fix this property
+  profileVersionId: any;
 
 	constructor(propertyId?: number, sentenceId?: number, profileAttributeId?: number,
 		profileAttribute?: ProfileAttribute, sentence?: Sentence)

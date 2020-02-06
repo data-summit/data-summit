@@ -26,7 +26,7 @@
             <td>{{proj.CreatedDate | date: 'dd/MM/yyyy'}}</td>
             <td class="text-center">
               <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + proj.Name" (click)="addOrEditProject(proj)"></i>
-               | 
+               |
               <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + proj.Name" (click)="deleteProject(proj)"></i>
             </td>
           </tr>
@@ -41,8 +41,8 @@
           <button type="button" class="close pull-right" aria-label="Close" (click)="projectModal.hide()">
             <span aria-hidden="true">×</span>
           </button>
-          <h4 class="modal-title w-100" *ngIf="selectedProject.projectId == null" id="myModalLabel">New Project Name</h4>
-          <h4 class="modal-title w-100" *ngIf="selectedProject.projectId != null" id="myModalLabel">Edit: {{selectedProject.Name}}</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProject.ProjectId == null" id="myModalLabel">New Project Name</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedProject.ProjectId != null" id="myModalLabel">Edit: {{selectedProject.Name}}</h4>
         </div>
         <div class="modal-body">
           <form class="border border-light p-3" #projectForm>
@@ -52,7 +52,7 @@
               </div>
             </div> -->
             <div class="form-row mb-2">
-              <input type="text" name="ProjectName" placeholder="Project Name" style="width: 90%; margin-right: 5px;" 
+              <input type="text" name="ProjectName" placeholder="Project Name" style="width: 90%; margin-right: 5px;"
                     [(ngModel)]="selectedProject.Name" #ProjectName="ngModel"
                      [ngClass]="{
                       'is-valid': ProjectName.valid,
