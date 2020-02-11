@@ -30,28 +30,21 @@ namespace DataSummitHelper
             return profileversions;
         }
 
-        //public List<DataSummitModels.ProfileVersions> GetAllProjectProfileVersions(int companyId, int projectId)
-        //{
-        //    List<DataSummitModels.ProfileVersions> profileversions = new List<DataSummitModels.ProfileVersions>();
-        //    try
-        //    {
-        //        if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-        //        foreach(DataSummitModels.Projects p in dataSummitDbContext.Projects)
-        //        {
-        //            if (p.CompanyId == companyId && p.ProjectId == projectId)
-        //            {
-        //                profileversions.Add(p) 
-        //                    }
-        //        }
-        //        profileversions = dataSummitDbContext.ProfileVersions
-        //                            .Where(e => e.Company.Projects.Where(f => f.ProjectId == projectId && f.CompanyId == companyId))
-        //    }
-        //    catch (Exception ae)
-        //    {
-        //        string strError = ae.Message.ToString();
-        //    }
-        //    return profileversions;
-        //}
+        public DataSummitModels.ProfileVersions GetProfileVersion(int profileVersionId)
+        {
+            DataSummitModels.ProfileVersions profileVersion = new DataSummitModels.ProfileVersions();
+            try
+            {
+                if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
+                profileVersion = dataSummitDbContext.ProfileVersions
+                                    .FirstOrDefault(e => e.ProfileVersionId == profileVersionId);
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+            }
+            return profileVersion;
+        }
 
         public int CreateProfileVersion(DataSummitModels.ProfileVersions profileVersion)
         {

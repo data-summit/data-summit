@@ -73,16 +73,18 @@ namespace DataSummitFunctions.Models.Consolidated
 
         public virtual object Clone()
         {
-            Sentences s = new Sentences();
-            s.SentenceId = Guid.NewGuid();
-            s.IsUsed = this.IsUsed;
-            s.Left = this.Left;
-            s.Top = this.Top;
-            s.Width = this.Width;
-            s.Height = this.Height;
-            s.Vendor = this.Vendor;
-            s.Words = this.Words;
-            s.SlendernessRatio = this.SlendernessRatio;
+            Sentences s = new Sentences
+            {
+                SentenceId = Guid.NewGuid(),
+                IsUsed = this.IsUsed,
+                Left = this.Left,
+                Top = this.Top,
+                Width = this.Width,
+                Height = this.Height,
+                Vendor = this.Vendor,
+                Words = this.Words,
+                SlendernessRatio = this.SlendernessRatio
+            };
             return s;
         }
     }

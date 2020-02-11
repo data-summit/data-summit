@@ -9,6 +9,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <PackageId>DataSummit.Models</PackageId>
+    <Authors>Tom James</Authors>
+    <Company>Data Summit</Company>
+    <Version>2020.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIconUrl>https://github.com/data-summit/data-summit/blob/master/Data%20Summit%20(300x300px).png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/data-summit/data-summit/tree/master/DataSummitSolution/DataSummitModels</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/data-summit/data-summit</RepositoryUrl>
+    <AssemblyVersion>2020.0.0.0</AssemblyVersion>
+    <FileVersion>2020.0.0.0</FileVersion>
+    <Copyright>Data Summit Ltd</Copyright>
+    <NeutralLanguage></NeutralLanguage>
+    <PackageLicenseUrl>https://github.com/data-summit/data-summit/blob/master/License.txt</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

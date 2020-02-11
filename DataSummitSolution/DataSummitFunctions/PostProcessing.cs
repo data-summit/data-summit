@@ -1,4 +1,3 @@
-using DataSummitFunctions.Models;
 using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Methods.PostProcessing;
 using Microsoft.Azure.WebJobs;
@@ -48,7 +47,7 @@ namespace DataSummitFunctions
                 { Content = new StringContent(JsonConvert.SerializeObject(ae), Encoding.UTF8, "application/json") };
             }
         }
-        private static Drawing OCRAnomalies(Models.Drawing results)
+        private static Models.Drawing OCRAnomalies(Models.Drawing results)
         {
             Models.Drawing reducedOCR = new Models.Drawing();
             try
@@ -79,7 +78,7 @@ namespace DataSummitFunctions
             return reducedOCR;
         }
 
-        private static Drawing MergeOverlaps(Models.Drawing results)
+        private static Models.Drawing MergeOverlaps(Models.Drawing results)
         {
             Models.Drawing c = new Models.Drawing();
             try
