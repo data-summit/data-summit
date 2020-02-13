@@ -14,7 +14,8 @@ namespace PDFTextAnalyticsNLP
             Form.Import i = new Form.Import();
             Form.Export e = new Form.Export();
 
-            string fInput = i.OpenPDF();
+            string sInit = @"C:\Users\TomJames_zyl8law\Data Summit Ltd\Data Summit Hub - Documents\Test PDFs\Document OCR Extraction\Sample";
+            string fInput = i.OpenPDF(sInit);
             fInput = fInput.Replace(".pdf", ".xlsx");
 
             Excel.App.Launch();

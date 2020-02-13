@@ -13,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DataSummitFunctions.Models.Recognition;
 
 namespace DataSummitFunctions
 {
@@ -27,14 +28,9 @@ namespace DataSummitFunctions
                 string jsonContent = await req.Content.ReadAsStringAsync();
                 dynamic data = JsonConvert.DeserializeObject<List<Sentences>>(jsonContent);
                 List<Sentences> lFeatures = (List<Sentences>)data;
-                List<Sentences> lResults = new List<Sentences>();
-                Dictionary<string, List<int>> dTallies = new Dictionary<string, List<int>>();
-
-                //short Tolerance = 15;
+                List<RectanglePairs> lResults = new List<RectanglePairs>();
                 
-                //TODO - List selecting 'IsUsed' results for each vendor
-                //needs various (and new) methods from below to filter, merge
-                //and select best results.
+
 
                 string jsonToReturn = JsonConvert.SerializeObject(lFeatures);
 

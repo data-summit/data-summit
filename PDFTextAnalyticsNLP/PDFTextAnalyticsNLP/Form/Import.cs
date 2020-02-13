@@ -9,15 +9,18 @@ namespace PDFTextAnalyticsNLP.Form
 {
     public class Import
     {
-        public string OpenPDF()
+        public string OpenPDF(string sInitial)
         {
             string sOut = "";
             try
             {
-                OpenFileDialog o = new OpenFileDialog();
-                o.Multiselect = false;
-                o.Title = "Open PDF Table";
-                o.Filter = "Adobe PDF Files (*.pdf)|*.pdf";
+                OpenFileDialog o = new OpenFileDialog
+                {
+                    InitialDirectory = sInitial,
+                    Multiselect = false,
+                    Title = "Open PDF Table",
+                    Filter = "Adobe PDF Files (*.pdf)|*.pdf"
+                };
 
                 if (o.ShowDialog() == DialogResult.OK)
                 {
