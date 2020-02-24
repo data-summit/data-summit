@@ -51,21 +51,21 @@ namespace DataSummitFunctions
                 List<Sentences> lSameRectAndWords = new List<Sentences>();
                 List<Sentences> lSameRectDifferentWords = new List<Sentences>();
 
-                foreach (Sentences ss in results.Sentences.ToList())
-                {
-                    if (lSameRectAndWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
-                                       s.Top == ss.Top && s.Width == ss.Width &&
-                                       s.Words == ss.Words) == 0)
-                    { lSameRectAndWords.Add(ss); }
-                    if (lSameRectDifferentWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
-                                       s.Top == ss.Top && s.Width == ss.Width &&
-                                       s.Words.ToString() != ss.Words.ToString()) == 0)
-                    { lSameRectDifferentWords.Add(ss); }
-                }
+                //foreach (Sentences ss in results.Sentences.ToList())
+                //{
+                //    if (lSameRectAndWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
+                //                       s.Top == ss.Top && s.Width == ss.Width &&
+                //                       s.Words == ss.Words) == 0)
+                //    { lSameRectAndWords.Add(ss); }
+                //    if (lSameRectDifferentWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
+                //                       s.Top == ss.Top && s.Width == ss.Width &&
+                //                       s.Words.ToString() != ss.Words.ToString()) == 0)
+                //    { lSameRectDifferentWords.Add(ss); }
+                //}
 
-                //Word anomalies, should be used for supervised learning
-                reducedOCR.Sentences = lSameRectAndWords.Except(lSameRectDifferentWords).ToList();
-                //reducedOCR.FileName = results.FileName;
+                ////Word anomalies, should be used for supervised learning
+                //reducedOCR.Sentences = lSameRectAndWords.Except(lSameRectDifferentWords).ToList();
+                ////reducedOCR.FileName = results.FileName;
             }
             catch (Exception ae)
             {

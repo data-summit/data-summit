@@ -55,7 +55,8 @@ namespace DataSummitHelper
             ImageToContainer = 2,
             DivideImage = 3,
             RecogniseTextAzure = 4,
-            PostProcessing = 5
+            PostProcessing = 5,
+            ExtractTitleBlock = 6
         }
     }
 }

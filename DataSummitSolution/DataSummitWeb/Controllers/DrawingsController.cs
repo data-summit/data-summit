@@ -255,6 +255,8 @@ namespace DataSummitWeb.Controllers
                 //Uri uriGoogleOCR = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.RecogniseTextGoogle);
                 //Post processing
                 Uri uriPostProcessing = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.PostProcessing);
+                //Extract title block properties
+                Uri uriExtractTitleBlock = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.ExtractTitleBlock);
 
                 if (drawData.Type == "PDF")
                 {
@@ -294,7 +296,7 @@ namespace DataSummitWeb.Controllers
 
                 //List<Task> tFunctions = new List<Task>();
 
-                //Upload, split and OCR each image
+                //Upload, split, OCR and list title block properties for each image
                 for (int i = 0; i < lFiles.Count; i++)
                 {
                     //tFunctions.Add(Task.Run(() =>
@@ -314,7 +316,9 @@ namespace DataSummitWeb.Controllers
                     lFiles[i] = respDivideImage;
 
                     ///Self cleaning occurs in all 3 OCR functions
-                    byte iAmazonIt = 0; byte iAzureIt = 0; byte iGoogleIh = 0;
+                    byte iAzureIt = 0;
+                    //byte iAmazonIt = 0; byte iGoogleIt = 0;
+
                     //Azure
                     while (iAzureIt < 10 && lFiles[i].SplitImages.Count(si => si.ProcessedAzure == false) > 0)
                     {
@@ -332,13 +336,14 @@ namespace DataSummitWeb.Controllers
                     //    ////Google OCR
                     //    //asyncI.Add(await StartPostProcessingAsync(uriGoogleOCR, lFiles[i]));
                     //}));
+
+                    //Extract title block properties
+                    lFiles[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, lFiles[i]);
+
                     ////Wait for all results
                     //Task.WaitAll(tOCRs.ToArray());
                 }
-                //Task.WaitAll(tFunctions.ToArray());
-
-                ///Cross vendor cleaning needs to occur here as a new and separate Azure Function
-
+                //Task.WaitAll(tFunctions.ToArray());                
 
                 //Convert ImageUpload object data to a Drawing object data
                 foreach (ImageUpload f in lFiles)
@@ -379,6 +384,26 @@ namespace DataSummitWeb.Controllers
             return imOut;
         }
 
+        private ImageUpload ExtractTitleBlockProperties(Uri uriExtractTitleBlock, ImageUpload im)
+        {
+            ImageUpload imOut = im;
+            try
+            {
+                //Extract title block properties from attributes and sentences
+                HttpResponseMessage httpExtractTitleBlock = API.ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
+                string sExtractTitleBlock = httpExtractTitleBlock.Content.ReadAsStringAsync().Result;
+                ImageUpload respExtractTitleBlock = JsonConvert.DeserializeObject<ImageUpload>(sExtractTitleBlock);
+                respExtractTitleBlock.Tasks = VerifyTaskList(respExtractTitleBlock.Tasks.ToList());
+                imOut = respExtractTitleBlock;
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+                if (ae.InnerException != null) strError = ae.InnerException.ToString();
+            }
+            return imOut;
+        }
+
         private async Task<ImageUpload> StartPostProcessingAsync(Uri uriPostProcessing, ImageUpload im)
         {
             ImageUpload imOut = im;
@@ -389,6 +414,26 @@ namespace DataSummitWeb.Controllers
                 string sPostProcessing = await httpPostProcessing.Content.ReadAsStringAsync();
                 ImageUpload respPostProcessing = JsonConvert.DeserializeObject<ImageUpload>(sPostProcessing);
                 imOut = respPostProcessing;
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+                if (ae.InnerException != null) strError = ae.InnerException.ToString();
+            }
+            return imOut;
+        }
+
+        private async Task<ImageUpload> ExtractTitleBlockPropertiesAsync(Uri uriExtractTitleBlock, ImageUpload im)
+        {
+            ImageUpload imOut = im;
+            try
+            {
+                //Extract title block properties from attributes and sentences
+                HttpResponseMessage httpExtractTitleBlock = API.ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
+                string sExtractTitleBlock = await httpExtractTitleBlock.Content.ReadAsStringAsync();
+                ImageUpload respExtractTitleBlock = JsonConvert.DeserializeObject<ImageUpload>(sExtractTitleBlock);
+                respExtractTitleBlock.Tasks = VerifyTaskList(respExtractTitleBlock.Tasks.ToList());
+                imOut = respExtractTitleBlock;
             }
             catch (Exception ae)
             {

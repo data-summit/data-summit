@@ -36,8 +36,18 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
+
                 profileVersion = dataSummitDbContext.ProfileVersions
                                     .FirstOrDefault(e => e.ProfileVersionId == profileVersionId);
+                profileVersion.ProfileAttributes = dataSummitDbContext.ProfileAttributes
+                                    .Where(e => e.ProfileVersionId == profileVersion.ProfileVersionId).ToList();
+
+                foreach (DataSummitModels.ProfileAttributes pa in profileVersion.ProfileAttributes)
+                {
+                    pa.StandardAttribute = dataSummitDbContext.StandardAttributes
+                                            .FirstOrDefault(e => e.StandardAttributeId == pa.StandardAttributeId);
+                    pa.ProfileVersion = null;
+                }
             }
             catch (Exception ae)
             {

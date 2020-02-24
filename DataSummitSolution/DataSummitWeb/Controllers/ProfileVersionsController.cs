@@ -21,8 +21,21 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            ProfileVersions profileVersions = profileVersionsService.GetProfileVersion(id);
+
+            var jss = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.All
+            };
+            return JsonConvert.SerializeObject(profileVersions, Formatting.Indented, jss);
+        }
+
+        // GET api/profileVersion/5
+        [HttpGet("{companyid}/profileversions/{id}")]
+        public string Get(int companyid, int id)
+        {
             List<ProfileVersions> lProfileVersions = profileVersionsService
-                                                        .GetAllCompanyProfileVersions(id);
+                                                        .GetAllCompanyProfileVersions(companyid);
             return JsonConvert.SerializeObject(lProfileVersions.ToArray());
         }
 
@@ -88,7 +101,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/profileVersion/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.ProfileVersions profileVersion)
+        public void Put(int id, [FromBody]ProfileVersions profileVersion)
         {
             //Update
             profileVersionsService.UpdateProfileVersion(id, profileVersion);
