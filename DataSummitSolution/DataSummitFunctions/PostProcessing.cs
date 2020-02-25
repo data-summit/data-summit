@@ -83,17 +83,20 @@ namespace DataSummitFunctions
                 List<Sentences> lToBeAdded = new List<Sentences>();
                 List<Sentences> lMerged = new List<Sentences>();
 
-                foreach (Sentences sen in results.Sentences.ToList())
+                foreach (Models.Consolidated.Sentences sen in results.Sentences.Select(s => s.ToModelConsolidated()).ToList())
                 {
-                    List<Sentences> ls2 = results.Sentences.Where(s => !s.Equals(sen)).ToList();
+                    List<Models.Consolidated.Sentences> ls2 = results.Sentences
+                                                                .Where(s => !s.Equals(sen))
+                                                                .Select(s => s.ToModelConsolidated())
+                                                                .ToList();
 
                     List<string> s2 = ls2.Select(s => s.Words).ToList();
                     string s1 = sen.Words;
                     string se = sen.Words.Substring(sen.Words.Length - 4, 3);
-                    List<Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
+                    List<Models.Consolidated.Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
                     if (s4.Count > 0)
                     {
-                        foreach (Sentences sen1 in s4)
+                        foreach (Models.Consolidated.Sentences sen1 in s4)
                         {
                             if (ExactSuffixOrPostfix(sen, sen1) == false)
                             {
@@ -137,7 +140,8 @@ namespace DataSummitFunctions
                     }
                     //Remove all confirmed deletes
                 }
-                lMerged = results.Sentences.Intersect(lToBeDeleted.Select(s => s)).ToList();
+                lMerged = results.Sentences.Select(s => s.ToModelConsolidated()).ToList()
+                                 .Intersect(lToBeDeleted.Select(s => s)).ToList();
                 // Methods.PostProcessing.MultipleVendors.lResults.AddRange(lToBeAdded);
             }
             catch (Exception ae)
@@ -254,7 +258,7 @@ namespace DataSummitFunctions
         /// <param name="sCur"></param>
         /// <param name="sTarget"></param>
         /// <returns></returns>
-        private static bool ExactSuffixOrPostfix(Sentences sCur, Sentences sTarget)
+        private static bool ExactSuffixOrPostfix(Models.Consolidated.Sentences sCur, Models.Consolidated.Sentences sTarget)
         {
             try
             {

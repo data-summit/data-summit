@@ -11,7 +11,7 @@ namespace DataSummitFunctions.Methods.PostProcessing
     public class Self
     {
         public List<int> TotalTally = new List<int>();
-        public List<Sentences> Clean(List<Sentences> transferOCR, short Tolerance = 9)
+        public List<Models.Consolidated.Sentences> Clean(List<Models.Consolidated.Sentences> transferOCR, short Tolerance = 9)
         {
             try
             {

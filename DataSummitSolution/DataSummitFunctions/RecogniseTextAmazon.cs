@@ -130,7 +130,9 @@ namespace DataSummitFunctions
                 }
 
                 Self self = new Self();
-                List<Models.Sentences> lResults = self.Clean(imgUp.Sentences);
+                List<Models.Sentences> lResults = self.Clean(imgUp
+                                            .Sentences.Select(s => s.ToModelConsolidated()).ToList())
+                                            .Select(s => s.ToModel()).ToList();
                 imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
 
                 //if (jsonSentencesBlob.Exists() == true)

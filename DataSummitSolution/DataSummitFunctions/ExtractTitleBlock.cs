@@ -26,9 +26,9 @@ namespace DataSummitFunctions
                 //dynamic data = JsonConvert.DeserializeObject<List<Sentences>>(jsonContent);
                 //List<Sentences> lFeatures = (List<Sentences>)data;
                 ImageUpload iu = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
-                int Tolerance = 5;
+                int Tolerance = 3;
 
-                foreach (ProfileAttributes pa in iu.ProfileAttibutes)
+                foreach (ProfileAttributes pa in iu.ProfileAttributes)
                 {
                     string name = pa.Name;
                     var instances = iu.Sentences.Count(b => 
@@ -44,7 +44,7 @@ namespace DataSummitFunctions
                     else if (instances > 1)
                     {
                         //Combine results for now
-                        pa.Value = string.Join(" ", sentences.Select(w => w.Words).ToList());
+                        pa.Value = string.Join(" ", sentences.Select(w => w.Words).ToList()).Trim();
                         // Additional tests for multiple results to determine containment
                         // or whether specific words are to be split
                     }
@@ -52,7 +52,7 @@ namespace DataSummitFunctions
                     { }
                 }
 
-                string jsonToReturn = ""; // JsonConvert.SerializeObject(lFeatures);
+                string jsonToReturn = JsonConvert.SerializeObject(iu);
 
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 { Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json") };
