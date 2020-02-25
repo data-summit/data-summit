@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,13 +21,13 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            List<DataSummitModels.Projects> lProjects = projectsService.GetAllCompanyProjects(id);
+            List<DataSummitModels.DB.Projects> lProjects = projectsService.GetAllCompanyProjects(id);
             return JsonConvert.SerializeObject(lProjects.ToArray());
         }
 
         // POST api/projects
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.Projects project)
+        public string Post([FromBody]DataSummitModels.DB.Projects project)
         {
             //Create
             return JsonConvert.SerializeObject(projectsService.CreateProject(project));
@@ -35,7 +35,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/projects/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.Projects project)
+        public void Put(int id, [FromBody]DataSummitModels.DB.Projects project)
         {
             //Update
             projectsService.UpdateProject(id, project);

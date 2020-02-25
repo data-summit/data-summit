@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.Projects> GetAllCompanyProjects(int companyId)
+        public List<DataSummitModels.DB.Projects> GetAllCompanyProjects(int companyId)
         {
-            List<DataSummitModels.Projects> Projects = new List<DataSummitModels.Projects>();
+            List<DataSummitModels.DB.Projects> Projects = new List<DataSummitModels.DB.Projects>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,9 +30,9 @@ namespace DataSummitHelper
             return Projects;
         }
 
-        public List<DataSummitModels.Projects> GetAllProjectsTemplates(int companyId, int projectId)
+        public List<DataSummitModels.DB.Projects> GetAllProjectsTemplates(int companyId, int projectId)
         {
-            List<DataSummitModels.Projects> Projects = new List<DataSummitModels.Projects>();
+            List<DataSummitModels.DB.Projects> Projects = new List<DataSummitModels.DB.Projects>();
             //try
             //{
             //    if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             return Projects;
         }
 
-        public long CreateProject(DataSummitModels.Projects project)
+        public long CreateProject(DataSummitModels.DB.Projects project)
         {
             long returnid = 0;
             try
@@ -62,7 +62,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateProject(int id, DataSummitModels.Projects project)
+        public void UpdateProject(int id, DataSummitModels.DB.Projects project)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Projects Projects = dataSummitDbContext.Projects.First(p => p.ProjectId == projectId);
+                DataSummitModels.DB.Projects Projects = dataSummitDbContext.Projects.First(p => p.ProjectId == projectId);
                 dataSummitDbContext.Projects.Remove(Projects);
                 dataSummitDbContext.SaveChanges();
             }

@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -26,7 +26,7 @@ namespace DataSummitWeb.Controllers
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.Properties properties)
+        public string Post([FromBody]DataSummitModels.DB.Properties properties)
         {
             //Create
             return JsonConvert.SerializeObject(propertiesService.CreateProperty(properties, Startup.IsProdEnvironment));
@@ -34,7 +34,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.Properties properties)
+        public void Put(int id, [FromBody]DataSummitModels.DB.Properties properties)
         {
             //Update
             propertiesService.UpdateProperty(id, properties, Startup.IsProdEnvironment);

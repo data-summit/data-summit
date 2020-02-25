@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.AzureCompanyResourceUrls> GetAllCompanyAzureCompanyResourceUrls(int companyId)
+        public List<DataSummitModels.DB.AzureCompanyResourceUrls> GetAllCompanyAzureCompanyResourceUrls(int companyId)
         {
-            List<DataSummitModels.AzureCompanyResourceUrls> AzureCompanyResourceUrls = new List<DataSummitModels.AzureCompanyResourceUrls>();
+            List<DataSummitModels.DB.AzureCompanyResourceUrls> AzureCompanyResourceUrls = new List<DataSummitModels.DB.AzureCompanyResourceUrls>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -37,7 +37,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.AzureCompanyResourceUrls res = dataSummitDbContext.AzureCompanyResourceUrls.First(
+                DataSummitModels.DB.AzureCompanyResourceUrls res = dataSummitDbContext.AzureCompanyResourceUrls.First(
                             e => e.CompanyId == companyId &&
                             e.Name == azureResource.ToString());
                 uri = new Uri(res.Url + "?code=" + res.Key);

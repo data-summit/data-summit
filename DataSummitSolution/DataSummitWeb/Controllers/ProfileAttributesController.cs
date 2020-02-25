@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -22,10 +22,10 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            List<DataSummitModels.ProfileAttributes> lProfileAttributes = profileAttributeService.GetAllProfileVersionProfileAttributes(id);
+            List<DataSummitModels.DB.ProfileAttributes> lProfileAttributes = profileAttributeService.GetAllProfileVersionProfileAttributes(id);
             try
             {                                                 
-                foreach (DataSummitModels.ProfileAttributes pa in lProfileAttributes)
+                foreach (DataSummitModels.DB.ProfileAttributes pa in lProfileAttributes)
                 {
                     pa.BlockPosition = blockPositionService.GetBlockPositionById(pa.BlockPositionId);
                     pa.PaperSize = paperSizeSerice.GetPaperSizesById(pa.PaperSizeId);
@@ -42,7 +42,7 @@ namespace DataSummitWeb.Controllers
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.ProfileAttributes profileAttribute)
+        public string Post([FromBody]DataSummitModels.DB.ProfileAttributes profileAttribute)
         {
             //Create
             return JsonConvert.SerializeObject(
@@ -51,7 +51,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/profileAttributes/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.ProfileAttributes profileAttribute)
+        public void Put(int id, [FromBody]DataSummitModels.DB.ProfileAttributes profileAttribute)
         {
             //Update
             profileAttributeService.UpdateProfileAttribute(id, profileAttribute);

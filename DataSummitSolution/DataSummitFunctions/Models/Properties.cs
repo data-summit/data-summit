@@ -12,5 +12,16 @@ namespace DataSummitFunctions.Models
 
         public virtual ProfileAttributes ProfileAttribute { get; set; }
         public virtual Sentences Sentence { get; set; }
+
+        public Consolidated.Properties ToModelConsolidated()
+        {
+            Consolidated.Properties p = new Consolidated.Properties();
+            p.ProfileAttributeId = ProfileAttributeId;
+            p.PropertyId = PropertyId;
+            p.Sentence = Sentence.ToModelConsolidated();
+            p.SentenceId = SentenceId;
+
+            return p;
+        }
     }
 }

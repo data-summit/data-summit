@@ -103,7 +103,8 @@ namespace DataSummitFunctions
                         Methods.OCRSources ocrMethods = new Methods.OCRSources();
                         sentences.AddRange(ocrMethods.FromAmazon(res.TextDetections, ig));
 
-                        if (ig.Sentences == null) ig.Sentences = new List<Models.Consolidated.Sentences>();
+                        if (ig.Sentences == null) ig.Sentences = new List<Models.Sentences>();
+                        //foreach(Sentences s in )
                         ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
 
                         imgUp.Tasks.Add(new Tasks("Amazon OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
@@ -121,7 +122,7 @@ namespace DataSummitFunctions
                 log.Info(imgUp.Tasks[imgUp.Tasks.Count - 1].Name + ":" + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString());
 
                 //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
-                if (imgUp.Sentences == null) imgUp.Sentences = new List<Sentences>();
+                if (imgUp.Sentences == null) imgUp.Sentences = new List<Models.Sentences>();
                 foreach (ImageGrid ig in imgUp.SplitImages)
                 {
                     imgUp.Sentences.AddRange(ig.Sentences);
@@ -129,7 +130,7 @@ namespace DataSummitFunctions
                 }
 
                 Self self = new Self();
-                List<Sentences> lResults = self.Clean(imgUp.Sentences);
+                List<Models.Sentences> lResults = self.Clean(imgUp.Sentences);
                 imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
 
                 //if (jsonSentencesBlob.Exists() == true)

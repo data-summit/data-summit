@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using DataSummitWeb.DTO;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,9 +47,9 @@ namespace DataSummitWeb.Controllers
             int id = 0;
             try
             {
-                DataSummitModels.ProfileVersions pv = null;
-                List<DataSummitModels.ProfileAttributes> lPa = new List<DataSummitModels.ProfileAttributes>();
-                pv = new DataSummitModels.ProfileVersions
+                DataSummitModels.DB.ProfileVersions pv = null;
+                List<DataSummitModels.DB.ProfileAttributes> lPa = new List<DataSummitModels.DB.ProfileAttributes>();
+                pv = new DataSummitModels.DB.ProfileVersions
                 {
                     CompanyId = profileVersion.CompanyId,
                     Name = profileVersion.Name,
@@ -69,7 +69,7 @@ namespace DataSummitWeb.Controllers
                 
                 foreach (ProfileAttributes pa in profileVersion.ProfileAttributes)
                 {
-                    DataSummitModels.ProfileAttributes npa = new DataSummitModels.ProfileAttributes
+                    DataSummitModels.DB.ProfileAttributes npa = new DataSummitModels.DB.ProfileAttributes
                     {
                         BlockPositionId = pa.BlockPositionId,
                         CreatedDate = DateTime.Now,

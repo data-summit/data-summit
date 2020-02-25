@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +16,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.Companies> GetAllCompanies(bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Companies> GetAllCompanies(bool IsProdEnvironment = false)
         {
-            List<DataSummitModels.Companies> companies = new List<DataSummitModels.Companies>();
+            List<DataSummitModels.DB.Companies> companies = new List<DataSummitModels.DB.Companies>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -31,9 +31,9 @@ namespace DataSummitHelper
             return companies;
         }
 
-        public DataSummitModels.Companies GetCompanyById(int companyId, bool IsProdEnvironment = false)
+        public DataSummitModels.DB.Companies GetCompanyById(int companyId, bool IsProdEnvironment = false)
         {
-            DataSummitModels.Companies company = new DataSummitModels.Companies();
+            DataSummitModels.DB.Companies company = new DataSummitModels.DB.Companies();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -46,7 +46,7 @@ namespace DataSummitHelper
             return company;
         }
 
-        public int CreateCompany(DataSummitModels.Companies company, bool IsProdEnvironment = false)
+        public int CreateCompany(DataSummitModels.DB.Companies company, bool IsProdEnvironment = false)
         {
             int returnid = 0;
             try
@@ -64,7 +64,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateCompany(DataSummitModels.Companies company)
+        public void UpdateCompany(DataSummitModels.DB.Companies company)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Companies company = dataSummitDbContext.Companies.First(p => p.CompanyId == companyId);
+                DataSummitModels.DB.Companies company = dataSummitDbContext.Companies.First(p => p.CompanyId == companyId);
                 dataSummitDbContext.Companies.Remove(company);
                 dataSummitDbContext.SaveChanges();
             }

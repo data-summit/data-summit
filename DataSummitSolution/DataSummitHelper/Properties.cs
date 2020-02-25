@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.Properties> GetAllDrawingProperties(int drawingId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Properties> GetAllDrawingProperties(int drawingId, bool IsProdEnvironment = false)
         {
-            List<DataSummitModels.Properties> properties = new List<DataSummitModels.Properties>();
+            List<DataSummitModels.DB.Properties> properties = new List<DataSummitModels.DB.Properties>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -32,7 +32,7 @@ namespace DataSummitHelper
             return properties;
         }
 
-        public long CreateProperty(DataSummitModels.Properties property, bool IsProdEnvironment = false)
+        public long CreateProperty(DataSummitModels.DB.Properties property, bool IsProdEnvironment = false)
         {
             long returnlong = long.MinValue;
             try
@@ -49,7 +49,7 @@ namespace DataSummitHelper
             return returnlong;
         }
 
-        public void UpdateProperty(int id, DataSummitModels.Properties property, bool IsProdEnvironment = false)
+        public void UpdateProperty(int id, DataSummitModels.DB.Properties property, bool IsProdEnvironment = false)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Properties property = dataSummitDbContext.Properties.First(
+                DataSummitModels.DB.Properties property = dataSummitDbContext.Properties.First(
                                                             p => p.PropertyId == propertyId);
                 dataSummitDbContext.Properties.Remove(property);
             }

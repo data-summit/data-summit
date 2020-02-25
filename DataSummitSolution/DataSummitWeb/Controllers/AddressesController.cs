@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -20,20 +20,20 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string CompanyGet(int id)
         {
-            List<DataSummitModels.Addresses> lAddresses = AddressesService.GetAllCompanyAddresses(id, Startup.IsProdEnvironment);
+            List<DataSummitModels.DB.Addresses> lAddresses = AddressesService.GetAllCompanyAddresses(id, Startup.IsProdEnvironment);
             return JsonConvert.SerializeObject(lAddresses.ToArray());
         }
 
         [HttpGet("{id}")]
         public string ProjectGet(int id)
         {
-            List<DataSummitModels.Addresses> lAddresses = AddressesService.GetAllProjectAddresses(id, Startup.IsProdEnvironment);
+            List<DataSummitModels.DB.Addresses> lAddresses = AddressesService.GetAllProjectAddresses(id, Startup.IsProdEnvironment);
             return JsonConvert.SerializeObject(lAddresses.ToArray());
         }
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.Addresses address)
+        public string Post([FromBody]DataSummitModels.DB.Addresses address)
         {
             //Create
             return JsonConvert.SerializeObject(AddressesService.CreateAddress(address, Startup.IsProdEnvironment));
@@ -41,7 +41,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.Addresses address)
+        public void Put(int id, [FromBody]DataSummitModels.DB.Addresses address)
         {
             //Update
             AddressesService.UpdateAddress(id, address, Startup.IsProdEnvironment);

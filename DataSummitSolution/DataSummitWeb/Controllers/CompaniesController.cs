@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -18,7 +18,7 @@ namespace DataSummitWeb.Controllers
         [HttpGet]
         public string Get()
         {
-            List<DataSummitModels.Companies> companies = companiesService.GetAllCompanies();
+            List<DataSummitModels.DB.Companies> companies = companiesService.GetAllCompanies();
             return JsonConvert.SerializeObject(companies.ToArray());
         }
 
@@ -26,20 +26,20 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            DataSummitModels.Companies company = companiesService.GetCompanyById(id);
+            DataSummitModels.DB.Companies company = companiesService.GetCompanyById(id);
             return JsonConvert.SerializeObject(company);
         }
 
         // POST api/Company
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.Companies company)
+        public string Post([FromBody]DataSummitModels.DB.Companies company)
         {
             return JsonConvert.SerializeObject(companiesService.CreateCompany(company));
         }
 
         // PUT api/Company/5
         [HttpPut("{id}")]
-        public void Put([FromBody]DataSummitModels.Companies company)
+        public void Put([FromBody]DataSummitModels.DB.Companies company)
         {
             companiesService.UpdateCompany(company);
         }

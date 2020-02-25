@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.Sentences> GetAllDrawingSentences(int drawingId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Sentences> GetAllDrawingSentences(int drawingId, bool IsProdEnvironment = false)
         {
-            List<DataSummitModels.Sentences> Sentences = new List<DataSummitModels.Sentences>();
+            List<DataSummitModels.DB.Sentences> Sentences = new List<DataSummitModels.DB.Sentences>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -32,7 +32,7 @@ namespace DataSummitHelper
             return Sentences;
         }
 
-        public Guid CreateSentence(DataSummitModels.Sentences sentence, bool IsProdEnvironment = false)
+        public Guid CreateSentence(DataSummitModels.DB.Sentences sentence, bool IsProdEnvironment = false)
         {
             Guid returnGuid = Guid.NewGuid();
             try
@@ -49,7 +49,7 @@ namespace DataSummitHelper
             return returnGuid;
         }
 
-        public void UpdateSentence(int id, DataSummitModels.Sentences sentence, bool IsProdEnvironment = false)
+        public void UpdateSentence(int id, DataSummitModels.DB.Sentences sentence, bool IsProdEnvironment = false)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Sentences sentence = dataSummitDbContext.Sentences.First(p => p.SentenceId == SentenceId);
+                DataSummitModels.DB.Sentences sentence = dataSummitDbContext.Sentences.First(p => p.SentenceId == SentenceId);
                 dataSummitDbContext.Sentences.Remove(sentence);
             }
             catch (Exception ae)

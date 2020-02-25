@@ -1,5 +1,5 @@
 using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -16,7 +16,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_profileVersion()
         {
-            DataSummitModels.ProfileVersions profileVersion = new DataSummitModels.ProfileVersions
+            DataSummitModels.DB.ProfileVersions profileVersion = new DataSummitModels.DB.ProfileVersions
             {
                 ProfileVersionId = 1,
                 Height = 100,
@@ -31,7 +31,7 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockProfileVersionsDbSet = new Mock<DbSet<DataSummitModels.ProfileVersions>>();
+            var mockProfileVersionsDbSet = new Mock<DbSet<DataSummitModels.DB.ProfileVersions>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
@@ -41,16 +41,16 @@ namespace DataSummitTests
 
             mockProfileVersions.CreateProfileVersion(profileVersion);
 
-            mockProfileVersionsDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.ProfileVersions>()), Times.Once());
+            mockProfileVersionsDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.ProfileVersions>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_profileVersion_by_id()
         {
-            var testProfileVersions = new List<DataSummitModels.ProfileVersions>
+            var testProfileVersions = new List<DataSummitModels.DB.ProfileVersions>
             {
-                new DataSummitModels.ProfileVersions
+                new DataSummitModels.DB.ProfileVersions
                 {
                     ProfileVersionId = 1,
                     Height = 100,
@@ -64,7 +64,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.ProfileVersions
+                new DataSummitModels.DB.ProfileVersions
                 {
                     ProfileVersionId = 2,
                     Height = 200,
@@ -78,7 +78,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.ProfileVersions
+                new DataSummitModels.DB.ProfileVersions
                 {
                     ProfileVersionId = 3,
                     Height = 300,
@@ -94,11 +94,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockProfileVersionDbSet = new Mock<DbSet<DataSummitModels.ProfileVersions>>();
-            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.ProfileVersions>>().Setup(m => m.Provider).Returns(testProfileVersions.Provider);
-            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.ProfileVersions>>().Setup(m => m.Expression).Returns(testProfileVersions.Expression);
-            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.ProfileVersions>>().Setup(m => m.ElementType).Returns(testProfileVersions.ElementType);
-            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.ProfileVersions>>().Setup(m => m.GetEnumerator()).Returns(testProfileVersions.GetEnumerator());
+            var mockProfileVersionDbSet = new Mock<DbSet<DataSummitModels.DB.ProfileVersions>>();
+            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.DB.ProfileVersions>>().Setup(m => m.Provider).Returns(testProfileVersions.Provider);
+            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.DB.ProfileVersions>>().Setup(m => m.Expression).Returns(testProfileVersions.Expression);
+            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.DB.ProfileVersions>>().Setup(m => m.ElementType).Returns(testProfileVersions.ElementType);
+            mockProfileVersionDbSet.As<IQueryable<DataSummitModels.DB.ProfileVersions>>().Setup(m => m.GetEnumerator()).Returns(testProfileVersions.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible

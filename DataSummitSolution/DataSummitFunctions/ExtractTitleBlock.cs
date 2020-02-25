@@ -28,20 +28,7 @@ namespace DataSummitFunctions
                 ImageUpload iu = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 int Tolerance = 5;
 
-                //Scale
-                var a1 = iu.Sentences.Count(bw => bw.Words.Contains("NTS"));
-                var b1 = iu.Sentences.Where(bw => bw.Words.Contains("NTS")).ToList();
-                //C
-                var a2 = iu.Sentences.Count(bw => bw.Words.Contains("PB"));
-                var b2 = iu.Sentences.Where(bw => bw.Words.Contains("PB")).ToList();
-                //Drawing Number
-                var a3 = iu.Sentences.Count(bw => bw.Words.Contains("101"));
-                var b3 = iu.Sentences.Where(bw => bw.Words.Contains("101")).ToList();
-                //Revision
-                var a4 = iu.Sentences.Count(bw => bw.Words.Contains("C1"));
-                var b4 = iu.Sentences.Where(bw => bw.Words.Contains("C1")).ToList();
-
-                foreach (ProfileAttributes pa in iu.ProfileVersion.ProfileAttributes)
+                foreach (ProfileAttributes pa in iu.ProfileAttibutes)
                 {
                     string name = pa.Name;
                     var instances = iu.Sentences.Count(b => 

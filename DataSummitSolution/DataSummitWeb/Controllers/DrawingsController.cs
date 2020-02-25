@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using DataSummitREST;
 using DataSummitWeb.DTO;
 //using Microsoft.AspNetCore.Authorization;
@@ -26,14 +26,14 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            List<DataSummitModels.Drawings> lDrawings = drawingsService.GetAllCompanyDrawings(id);
+            List<DataSummitModels.DB.Drawings> lDrawings = drawingsService.GetAllCompanyDrawings(id);
             return JsonConvert.SerializeObject(lDrawings.ToArray());
         }
 
         [HttpGet("templates/{id}")]
         public string GetTemplates(int companyId)
         {
-            List<DataSummitModels.ProfileVersions> lTemplates = templatesService.GetAllCompanyProfileVersions(companyId);
+            List<DataSummitModels.DB.ProfileVersions> lTemplates = templatesService.GetAllCompanyProfileVersions(companyId);
             return JsonConvert.SerializeObject(lTemplates.ToArray());
         }
 
@@ -202,9 +202,9 @@ namespace DataSummitWeb.Controllers
             return 0;
         }
 
-        private List<DataSummitModels.Drawings> ProcessPDF(ImageUpload drawData, Projects cProject)
+        private List<DataSummitModels.DB.Drawings> ProcessPDF(ImageUpload drawData, Projects cProject)
         {
-            List<DataSummitModels.Drawings> draws = new List<Drawings>();
+            List<DataSummitModels.DB.Drawings> draws = new List<Drawings>();
             try
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();

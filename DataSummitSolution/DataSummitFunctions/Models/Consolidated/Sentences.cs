@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Models.Consolidated
 {
@@ -86,6 +85,23 @@ namespace DataSummitFunctions.Models.Consolidated
                 SlendernessRatio = this.SlendernessRatio
             };
             return s;
+        }
+        public Models.Sentences ToModel()
+        {
+            Models.Sentences m = new Models.Sentences();
+            m.Confidence = Confidence;
+            m.Height = Height;
+            m.IsUsed = IsUsed;
+            m.Left = Left;
+            m.Properties = Properties.Select(p => p.ToModel()).ToList();
+            m.SentenceId = SentenceId;
+            m.SlendernessRatio = SlendernessRatio;
+            m.Top = Top;
+            m.Vendor = Vendor;
+            m.Width = Width;
+            m.Words = Words;
+
+            return m;
         }
     }
 }

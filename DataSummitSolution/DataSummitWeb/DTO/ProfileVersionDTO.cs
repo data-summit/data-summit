@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DataSummitWeb.DTO
 {
-    public class ProfileVersionDTO : DataSummitModels.ProfileVersions
+    public class ProfileVersionDTO : DataSummitModels.DB.ProfileVersions
     {
         public string ImageString { get; set; }
 

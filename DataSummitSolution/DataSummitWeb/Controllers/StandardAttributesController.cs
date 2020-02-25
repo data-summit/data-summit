@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataSummitModels;
 using Newtonsoft.Json;
+using DataSummitModels.DB;
 
 namespace DataSummitWeb.Controllers
 {
@@ -67,7 +68,7 @@ namespace DataSummitWeb.Controllers
         //}
 
         [HttpPost]
-        public string PostStandardAttributes(DataSummitModels.ProfileVersions profileVersion)
+        public string PostStandardAttributes(DataSummitModels.DB.ProfileVersions profileVersion)
         {
             return JsonConvert.SerializeObject(profileVersion);
         }
