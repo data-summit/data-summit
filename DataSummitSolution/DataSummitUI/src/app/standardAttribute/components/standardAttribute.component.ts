@@ -13,7 +13,7 @@ const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 })
 export class StandardAttributeComponent implements OnInit {
 
-    @ViewChild('standardAttributeModal') standardAttributeModal
+    @ViewChild('standardAttributeModal', { static: false }) standardAttributeModal
 
     standardAttributes: StandardAttribute[] = [];
     selectedStandardAttribute: StandardAttribute;

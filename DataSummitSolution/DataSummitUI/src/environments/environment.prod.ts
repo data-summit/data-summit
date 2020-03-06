@@ -1,8 +1,9 @@
 export const environment = {
   production: true,
   envName: "prod",
-  remoteServiceBaseUrl: "https://data-summit.co.uk/",
+  remoteServiceBaseUrl: "https://datasummit-web.azurewebsites.net/",
   appBaseUrl: "https://data-summit.co.uk/",
-  authority: "https://oauth.data-summit.co.uk/",
+  authority: "http://datasummit-oauth.azurewebsites.net/",
   bypassSecurity: false
 };
+

@@ -1,0 +1,565 @@
+This document contains the general terms and conditions for “Data Summit”. A copy of the standard Microsoft Cloud Agreement is also included at the end of this document.
+
+Version 1.0, released in November 2018, does not supersede any other versions. The version is in accordance with the General Data Protection Regulation (EU) 2016/679 (GDPR) to include, Annex A: Data Processing Agreement , and associated updates to Section 1, Definitions.
+
+On Direct General Terms and Conditions
+
+These general terms and conditions (“Terms”) and the other documents referred to govern your access to and use of the Services (as defined below). These Terms may be updated from time to time and the latest copy will be available on our website at www.data-summit.co.uk. 1 Definitions The following expressions have the following meanings:
+
+Expression Meaning...
+
+“Act” the Data Protection Act 1998
+
+"Billing Commencement Date" the inclusive date from which billing will start. For some services you may be charged in advance of this date where services require provisioning as part of the commissioning process.
+
+“Recurrence Period” the invoice frequency of Service (monthly, annually, etc.)
+
+“Content” any information, files, data or material uploaded by you including any text.
+
+"Hardware" any hardware provided by us to you as part of providing any Service.
+
+“Individual Information” any Content that contains personal data (as that term is defined in the Act).
+
+“Initial Term” the agreed minimum term for each Service, which shall start on the Billing Commencement Date on each relevant Services, excluding any free or trial period.
+
+“IPR” all copyright and related rights, rights in computer software, design rights, trade marks, database rights, patents, trade secrets, know-how, rights in confidential information and all other intellectual property rights.
+
+“Month” each consecutive period of one month commencing on the Billing Commencement Date and the same day of each subsequent calendar month.
+
+“Proposal Document” the accompanying document signed and accepted by you setting out details of the proposed solution and service provision should this be of a more bespoke nature and would therefore not be fully captured within the standard Service Agreement.
+
+“Service Agreement” the document signed and accepted by you setting out the Services, the Service Fees, the Initial Term, any product specific special terms which may override clauses in this document and other information relating to the Services and including these Terms and the SLA.
+
+“Service Fee” the fee payable by you to us, for the Services, which is made up of the Subscription Fee and any applicable Usage Fee.
+
+"SLA" our service level agreement(s) setting out information about the expected performance of the Services.
+
+“Services” the products and services we supply to you as detailed in the Service Agreement.
+
+“Subscription Fee” that regular part of the Service Fee (often payable in advance).
+
+“Supplier” any company we use to provide the Services to you.
+
+“Usage Measure” the unit of measurement for the Services as set out in the Service Agreement (e.g. Seconds, Gigabytes, etc.).
+
+“Usage Fee” that variable part of the Service Fee based on actual Usage for a period (may be charged current month or in arrears).
+
+“we”, “our” or “us” On Direct Business Services Limited (company number 04631034) trading as “Data Summit” whose registered office is at Barleys, Park View Road, Woldingham, Surrey, CR3 7DN.
+
+“you” or "your" the customer named in the Service Agreement.
+
+“Appropriate Technical and Organisational Measures" shall be interpreted in accordance with the Privacy Laws.
+
+“Customer Personal Data" means any Personal Data the Processing of which is subject to Privacy Laws, that is controlled by the Customer and its customers (where applicable) which the Processor Processes in the course of providing the Services under the Agreement, wherever the Processing takes place.
+
+“Data Controller" shall be interpreted in accordance with the Privacy Laws.
+
+“Data Processor" shall be interpreted in accordance with the Privacy Laws.
+
+“Data Subject" shall be interpreted in accordance with the Privacy Laws.
+
+“EU Data Protection Law" means all applicable EU data protection and privacy laws, including:
+
+(i) prior to 25 May 2018, the EU Data Protection Directive 95/46/EC and, on and after 25 May 2018, the General Data Protection Regulation 2016/679;
+
+(ii) the Privacy and Electronic Communications Directive 2002/58/ED; and
+
+(iii) any other European Union or EU Member State laws made under or pursuant to (i) or (ii), in each case as such laws may be amended or superseded from time to time.
+
+“GDPR" means the General Data Protection Regulation (EU) 2016/679.
+
+“Personal Data" shall be interpreted in accordance with the Privacy Laws.
+
+“Privacy Laws" means applicable laws serving to ensure the protection of Personal Data (including in connection with the Processing of Personal Data), and the protection of the rights and freedoms (in particular, their right to privacy) of Data Subjects relating to their Personal Data, including EU Data Protection Law and UK Data Protection Law, in each case as such laws may be amended or superseded from time to time.
+
+“Processing" shall be interpreted in accordance with the Privacy Laws (and “Process” shall be construed accordingly).
+
+“UK Data Protection Law" means all applicable UK data protection and privacy laws including any UK law which replaces EU Data Protection Law, or which implements or transposes EU Data Protection Law into UK law. 2 Our Obligations 2.1 We agree to:
+
+2.1.1 assist you in the set-up of the Services;
+
+2.1.2 provide the Services to the levels set out in the relevant SLA or as detailed in the supporting Proposal Document as applicable; and
+
+2.1.3 provide technical assistance and training (which may incur a reasonable additional charge depending on requirements) for the set-up and provision of the Services when reasonably requested to do so.
+
+2.1.4 If the Services include any project work that is time and materials charged, we will use reasonable endeavours to meet agreed dates and charges subject to clause 3.5.
+
+2.2 Notwithstanding clause 2.1, we reserve the right to suspend or vary the Services at any time to carry out maintenance and upgrades or to deal with any problem or error. 3 Your Obligations 3.1 You agree to:
+
+3.1.1 comply with the terms of any licence applicable to the Services;
+
+3.1.2 follow our instructions for the use of the Services which we may send to you from time to time;
+
+3.1.3 notify us immediately if you become aware of any problem with the Services;
+
+3.1.4 make available to us:
+
+3.1.4.1 employees with appropriate skills, knowledge and authority;
+
+3.1.4.2 access to your site(s) and facilities at your site(s); and
+
+3.1.4.3 information and materials as we may reasonably require to provide the Services
+
+3.1.5 comply with all applicable laws, legislation and regulations relating to the Services;
+
+3.1.6 keep all contact information provided to us up to date and correct in order to enable account management and technical notifications about your service. If the Services include VoIP services, you agree to keep us informed of any phone location changes in order to ensure details are correct for the use of 999 emergency services;
+
+3.1.7 co-operate with us in all matters relating to the Services;
+
+3.1.8 keep us up to date with any changes to the infrastructure or environment relating to the Services that might impact on the performance of the Services;
+
+3.1.9 maintain the Hardware in satisfactory condition and insure any rented or loaned Hardware against all risks for its full price on our behalf from the date of delivery;
+
+3.1.10 notify us as soon as reasonably practicable of any loss of or damage to rented or loaned Hardware (fair wear and tear excepted) and, on request, reimburse us for the price for any loss or damage to it;
+
+3.1.11 be responsible for monitoring your usage of the Service, and subsequent Usage Fees (and possible overage charges), incurred for the Services we provide;
+
+3.1.12 ensure that all Content (including any description, date or information relating to the Content but excluding any backup data) uploaded by you or by us on your behalf is accurate and up to date;
+
+3.1.13 establish, maintain and monitor adequate internal security measures for your access and use of the Services including the confidentiality and safe storage of all login details, user names and passwords and updating them regularly; and
+
+3.1.14 use the Services for your internal business purposes only. The Services are personal to you and may not be assigned, sublicensed, sold, resold, transferred, distributed or otherwise disposed of or commercially exploited in any way.
+
+3.2 You will not access or use the Services for any unlawful purpose, including:
+
+3.2.1 in any way which will or is likely to infringe the IPR of a third party;
+
+3.2.2 for the transmission, display, downloading or uploading of any Content which is or is likely to be construed as defamatory, threatening, offensive, abusive, obscene or which will or is likely to cause unnecessary anxiety or inconvenience to a third party or which is otherwise unlawful;
+
+3.2.3 to attempt to gain unauthorised access to the Services;
+
+3.2.4 to attempt to modify, distribute, reverse engineer or otherwise attempt to decipher any code in connection with the Services and/or any other aspect of our technology;
+
+3.2.5 in any way that will or is likely to cause damage or adversely affect the operation of our Services or interfere with or disrupt our website, other websites, servers or networks; and
+
+3.2.6 in any way that will or is likely to interfere with the use and enjoyment of the Services for other users.
+
+3.3 Unless we have appointed you as our partner or reseller you will not market, offer to sell or resell the Services to any third party.
+
+3.4 If the Services include any third party services, you agree to be bound by the third party terms and conditions applicable to such services (e.g. the Microsoft Agreement as attached to this agreement). If and to the extent that these Terms conflict with any third party terms and conditions, these Terms shall prevail.
+
+3.5 If the Services include any project work that is time and material charged, you accept that:
+
+3.5.1 Any failure by you to adhere to the terms of this Service Agreement that leads to delays, then target dates shall be extended so as to accommodate fully the effects of such delay.
+
+3.5.2 Any delay that is directly or indirectly caused by any act or omission by you, we shall reserve the right to charge you for the effects of such a delay on a time and materials basis at our standard published day billing rates. 4 Prices and Payment 4.1 In return for us agreeing to provide you the non-exclusive, non-transferable right for you to access and use the Services subject to these Terms, you agree to pay us the Service Fee.
+
+4.2 Where the Subscription Fee element of the Service Fee is charged in advance, the invoice must be paid before you access the Services.
+
+4.3 You may allow extra users to have access to existing and additional new Services. We therefore reserve the right to charge Subscription and Usage Fees based on your additional usage. This will be charged at the rate set out in the Service Agreement or, if no rate is specified, at our standard list price. It is your responsibility to request rates information.
+
+4.4 Usage Fees for some Services will be charged in arrears, based on actual Usage for the Month. Usage Fees for all other Services will be charged and invoiced in the Month of service based on a “snapshot” of data, which is taken during the Month, and is applied to the whole Month.
+
+4.5 We will not increase the Service Fees during the first 12 months of the agreement except to the extent that third party licensors (such as Microsoft) increase or pass on their charges to us.
+
+4.6 For support or managed service packages, we reserve the right to increase the price on an annual basis with effect from each anniversary of the Billing Commencement Date by up to 5%. The first such increase shall take effect at the beginning of second year.
+
+4.7 In the event of a Service Fee increase, should the annual percentage increase be more than 5 percentage points above the corresponding increase in Retail Price Index published by the Office for National Statistics (or is successor) for the 12-month period preceding price increase, and the increase is not acceptable to you, you may terminate the affected service by giving us written notice within 30 days of the price increase.
+
+4.8 Where the Services include training and consultancy services, our fees for any applicable travel or other expenses will be subject to a separate prior agreement between you and us.
+
+4.9 All charges are exclusive of value added tax (VAT), which will be charged at the current rate at the time of invoice.
+
+4.10 If you decide to pay your invoice(s) by a method other than Direct Debit we reserve the right to add an administration charge of £3 per customer per month.
+
+4.11 Invoices are due for payment in full without deduction or withholding, except as required by law, within 30 days of the date of the invoice. If you do not pay any invoice on time, we reserve the right to:
+
+4.11.1 charge you interest at the rate of 5% per annum above the then published base rate of HSBC UK PLC on a daily basis from the date of the invoice until the actual date of payment of the overdue amount, whether before or after judgement; and
+
+4.11.2 suspend the Services until you have paid all overdue invoices in full. You will continue to be responsible for the Service Fees during the period of suspension.
+
+4.12 Where the service commissioning process requires access to an available live service in advance of your planned Billing Commencement Date you may be charged for these specific services.
+
+4.13 If you wish to change the Services, you should contact us to agree with you any changes to the Service Fees resulting from the change, the likely timescale required to implement the change and any other impacts of the change before commencing the new Services. 5 Data Protection and Contact Details 5.1 You and we shall comply with the provisions of the Act and any related legislation so far as they relate to the Services or the data held by us.
+
+5.2 You agree that we may provide the Suppliers with your contact details for the purpose of delivering the Services.
+
+5.3 You will obtain all necessary consents to enable you to submit Individual Information to us (whether in the Content or otherwise).
+
+5.4 You will have in place appropriate technical and organisational measures against accidental or unlawful destruction or accidental loss, alteration, unauthorised disclosure of or access to any Content that contains Individual Information.
+
+5.5 You will have adequate security measures to ensure that unauthorised persons will not have access to the Individual Information and that any persons you authorise to have access to the Services will respect and maintain the confidentiality and security of the Individual Information.
+
+5.6 We will ensure that all processing of Individual Information that is carried out by us (or our approved partners) is carried out in accordance with the Act. 6 Warranties 6.1 Subject to your compliance with the Terms, we warrant the Services will be carried out with reasonable care and skill by personnel whose qualifications and experience will be appropriate for the tasks which are allocated to them.
+
+6.2 We do not warrant that the Services will be error free or uninterrupted.
+
+6.3 Except as set out in this clause 6, all warranties, conditions and other terms implied by statute or common law are, to the fullest extent permitted by law, excluded from these Terms. 7 Limitation of Liability 7.1 This clause sets out the limit of our liability to you for breach of our obligations under these Terms, any representation, misdeed (including negligence), breach of statutory duty or other wrongful act on our part.
+
+7.2 Neither party will exclude or reduce its liability under or in connection with these Terms nor otherwise to the extent that it arises in respect of any of the following matters:
+
+7.2.1 death or personal injury resulting from negligence;
+
+7.2.2 fraud or fraudulent misrepresentation; and
+
+7.2.3 any other matter for which it would be unlawful for either party to exclude or limit or attempt to exclude or limit its liability.
+
+7.3 Subject to clause 7.2:
+
+7.3.1 we will not be liable for:
+
+7.3.1.1 any indirect, consequential or special loss resulting from any of the acts as mentioned in clause 7.1; or
+
+7.3.1.2 any loss of profits, loss of goodwill, loss of contracts or loss of data;
+
+7.3.1.3 any loss resulting from corruption of data due to the introduction of a virus or arising as a result of a problem with the internet unless you can show that it is due to our negligence or default; and
+
+7.3.1.3 any direct or indirect 3rd party loss.
+
+7.3.2 our total liability to you in respect of direct damage to your physical property shall not exceed £2,000,000; and
+
+7.3.3 our total liability to you in respect of all other losses arising under or in connection with these Terms shall not exceed the total Service Fees paid by you during the period of 12 months immediately preceding the date on which the event giving rise to the claim occurred.
+
+7.4 You confirm that you have read and understood this clause and have adequate insurance, or other financial means, to cover for any losses beyond those set out in this clause.
+
+7.5 If you require us to take on any additional liability beyond that set out in this clause, then we will consider doing so upon agreement of an increase in the Service Fees to reflect such additional liability, which must be agreed in writing between you and us. 8 Confidentiality and Intellectual Property 8.1 Each party agrees to the other not to disclose to any person, except information required in order to perform the Services, all confidential information (written or oral) concerning the business and affairs of the other. This included information that has been obtained or received from the other party, with the exception of information which is:
+
+8.1.1 trivial or obvious;
+
+8.1.2 already in the possession of the receiving party other than as a result of a breach of this clause;
+
+8.1.3 in the public domain other than as a result of a breach of this clause;
+
+8.1.4 disclosed or used in accordance with the other party’s prior written approval;
+
+8.1.5 required to be disclosed by law, court order or any governmental or regulatory authority.
+
+8.2 Each party agrees that it will take any necessary steps to ensure compliance with this clause 8 by its employees, authorised agents and sub-contractors.
+
+8.3 Nothing in these Terms will transfer any IPR to you in the software, materials, documents or items we prepare, produce or supply in connection with the Services.
+
+8.4 This clause 8 will survive the termination of the Services Agreement howsoever caused.
+
+8.5 All IPR in the Services belong to us or our respective licensors and that you have no right, title or interest in or to such IPR other than as expressly set out in these Terms or as permitted by law.
+
+8.6 You shall indemnify and hold us harmless against any cost, losses, liabilities and expenses, including reasonable legal costs arising from any claim relating to or resulting directly or indirectly from your use of the Services including the infringement of any third party IPR or right of confidentiality, provided that:
+
+8.6.1 we give prompt notice of any such claim;
+
+8.6.2 we provide, at your expense, reasonable cooperation in the defence and settlement of the claim; and
+
+8.6.3 you have sole control of the defence and settlement of the claim.
+
+8.7 We will defend, or at our option settle, any claim or suit brought against that the Services infringe any third party’s IPR or right of confidentiality and we shall indemnify you against any award amounts awarded against you in judgement or settlement of such claims provided that:
+
+8.7.1 you give us prompt notice of any such claim;
+
+8.7.2 you provide, at our expense, reasonable cooperation in the defence and settlement of the claim; and
+
+8.7.3 we have sole control of the defence and settlement of the claim.
+
+8.8 In defence or settlement of any claim we may procure the right for you to continue using the Services, or replace or modify them so that they become non-infringing.
+
+8.9 This clause 8 sets out your entire remedies for infringement of any IPR or right of confidentiality. 9 Free Accounts 9.1 Where you use a free account or trial account, we allow you to use the Service free of charge up to the limitations specified on the package on offer. We reserve the right to terminate the account at any time, with or without notice. 10 Term and Termination 10.1 The Service Agreement will begin when you confirm your commitment to the Service Agreement and supporting Proposal Document if applicable. This commitment can be in the form of e-sign, purchase order or written confirmation including e-mail correspondence. The Services will become chargeable from the Billing Commencement Date subject to clause 4.12 above.
+
+10.2 For Services with a Monthly Recurrence Period:
+
+10.2.1 After the Initial Term, either party may terminate monthly recurring services whereupon the Service will be terminated at the end of the calendar month following the month in which the notice was served.
+
+10.3 For all other Services (e.g. annually billed services):
+
+10.3.1 The Service shall be automatically extended for a period of 12 months (“Extended Term”) at the end of the Initial Term and at the end of each Extended Term, unless and until either party gives written notice to the other party, not later than 60 days before the end of the Initial term or the relevant Extended Term, to terminate such Service at the end of the Initial Term or the relevant extended Term, as the case may be.
+
+10.4 We may terminate or suspend the Services immediately by giving written notice if:
+
+10.4.1 you fail to pay any amount on or before the due date for payment;
+
+10.4.2 your use of the Services is materially adversely affecting the operation of the Services for other users; or
+
+10.4.3 a technical emergency occurs (in which case we will let you know by telephone or e-mail if possible).
+
+10.5 Either party may terminate the Service Agreement immediately by giving written notice if the other party:
+
+10.5.1 commits any material breach of these Terms and (in the case of a breach capable of being remedied) fails to remedy it within 30 days of a written request to do so;
+
+10.5.2 has an encumbrancer takes possession or a receiver (or similar office holder) is appointed over any of its property or assets, makes any voluntary (or similar) arrangement with its creditors, has an administrator appointed or is subject to insolvency proceedings in any jurisdiction;
+
+10.5.3 goes into liquidation (except for the purposes of an amalgamation, reconstruction or other reorganisation and in such manner that the company resulting from the reorganisation effectively agrees to be bound by or to assume the obligations imposed on that other party under the Service Agreement); or
+
+10.5.4 ceases, or threatens to cease, to carry on business.
+
+10.6 Any notice of termination given by you will not be valid or effective until we have acknowledged receipt of the same in writing.
+
+10.7 Termination of any individual Service will not affect the continuation of any other Services.
+
+10.8 On termination of the Service Agreement:
+
+10.8.1 you shall immediately cease to use the Services, and deliver to us all software, hardware (in good working order), materials, documentation and items provided under this Agreement at your own cost; and
+
+10.8.2 data within the Service(s) will be unavailable to you and will be deleted.
+
+10.9 Clauses which expressly or by implication have effect after termination of this agreement shall continue in full force and effect. 11 Dispute resolution 11.1 If you have a complaint you should initially follow our ‘What to do if you have a complaint’ guide which is available on our website at the following link: https://www.data-summit.co.uk/legal/what-to-do-if-you-have-a-complaint/.
+
+11.2 A more comprehensive overview of our customer complaints code of practice is also available from our website or as a pdf download at the following link: https://www.data-summit.co.uk/legal/customer-complaints-code-of-practice/
+
+11.3 We are registered with Ombudsman Services, which is an OfCom-approved alternative dispute resolution body. Ombudsman Services will review your complaint and decide if it is justified. We will act on the Ombudsman Services decision and put things right for you. Ombudsman Services complaint submissions are free of charge. Ombudsman Services contact details are as follows:
+
+Ombudsman Services
+
+The Brew House
+
+Wilderspool Park
+
+Greenall’s Avenue
+
+Warrington
+
+WA4 6HL 12 General 12.1 For the avoidance of any doubt any conflicting terms will be decided in the following order: Special Terms agreed with you in advance (if any); Proposal Document (if any); this Service Agreement; SLA (if applicable).
+
+12.2 Neither party shall be liable for any delays in performing, or failure to perform, any of its responsibilities under these Terms if such delay or failure was due to any cause beyond its reasonable control, for as long as the situation exists.
+
+12.3 The Service Agreement may not be assigned by either party without the prior written consent of the other party, which shall not be unreasonably withheld or delayed.
+
+12.4 The Contracts (Rights of Third Parties) Act 1999 shall not apply to these Terms.
+
+12.5 No waiver by either party in respect of a breach of these Terms will operate as a waiver in respect of any subsequent breach.
+
+12.6 If any provision of these Terms is declared by any judicial or any other competent authority to be void, voidable, illegal or otherwise unenforceable, it shall be limited or eliminated to the minimum extent necessary so these Terms shall otherwise remain in full force and effect and enforceable.
+
+12.7 Any notice or other information required, or permitted to be given, under these Terms shall be validly given if served personally on that party or if sent by first class pre-paid post or email to the last known address of that party:
+
+12.7.1 If sent by first class pre-paid post, the notice will be treated as received 2 days after the date of posting; and
+
+12.7.2 If sent by email, the notice will be treated as received on the same day if sent during normal working hours, or on the next working day where sent outside such hours (provided in it is supported by a valid server delivery receipt).
+
+12.8 In the event of any conflict, the following order or precedence shall apply: the Service Agreement, these Terms, and finally the SLA. 13 Law 13.1 This Agreement shall be governed by and construed in accordance with English law and the parties agree to submit to the non-exclusive jurisdiction of the English courts. 14 Relationship of parties and subcontractors 14.1 We shall act at all times as an independent contractor.
+
+14.2 We may with your prior consent, use sub-contractors to perform services under this agreement. 15 Force Majeure 15.1 Neither party shall be liable for any loss suffered by the other party or deemed to be in default for any delays or failures in performance hereunder (other than in relation to payment) resulting from acts or causes beyond its reasonable control or from acts of God, acts or (if enacted after the date hereof), regulations of any governmental or supra-national authority. Microsoft Cloud Agreement – (only applicable to Microsoft Cloud Services) This Microsoft Cloud Agreement is entered into between the entity you represent, or, if you do not designate an entity in connection with a Subscription purchase or renewal, you individually (“Customer”), and Microsoft Ireland Operations Limited (“Microsoft”). It consists of the terms and conditions below, Use Rights, SLA, and all documents referenced within those documents (together, the “agreement”). It is effective on the date that your Reseller provisions your Subscription. Key terms are defined in Section 10. 1 Grants, rights and terms All rights granted under this agreement are non-exclusive and non-transferable and apply as long as neither Customer nor any of its Affiliates is in material breach of this agreement.
+
+(a) Software. Upon acceptance of each order, Microsoft grants Customer a limited right to use the Software in the quantities ordered.
+
+(i) Use Rights. The Use Rights in effect when Customer orders Software will apply to Customer’s use of the version of the Software that is current at the time. For future versions and new Software, the Use Rights in effect when those versions and Software are first released will apply. Changes Microsoft makes to the Use Rights for a particular version will not apply unless Customer chooses to have those changes apply.
+
+(ii) Temporary and perpetual licenses. Licenses available on a subscription basis are temporary. For all other licenses, the right to use Software becomes perpetual upon payment in full.
+
+(b) Online Services. Customer may use the Online Services as provided in this agreement.
+
+(i) Online Services Terms. The Online Services Terms in effect when Customer orders or renews a subscription to an Online Service will apply for the applicable subscription term. For Online Services that are billed periodically based on consumption, the Online Services Terms current at the start of each billing period will apply to usage during that period.
+
+(ii) Suspension. Microsoft may suspend use of an Online Service during Customer’s violation of the Acceptable Use Policy or failure to respond to a claim of alleged infringement. Microsoft will give Customer notice before suspending an Online Service when reasonable.
+
+(iii) End Users. Customer controls access by End Users, and is responsible for their use of the Product in accordance with this agreement. For example, Customer will ensure End Users comply with the Acceptable Use Policy.
+
+(iv) Customer Data. Customer is solely responsible for the content of all Customer Data. Customer will secure and maintain all rights in Customer Data necessary for Microsoft to provide the Online Services to Customer without violating the rights of any third party or otherwise obligating Microsoft to Customer or to any third party. Microsoft does not and will not assume any obligations with respect to Customer Data or to Customer’s use of the Product other than as expressly set forth in this agreement or as required by applicable law.
+
+(v) Responsibility for your accounts. Customer is responsible for maintaining the confidentiality of any non-public authentication credentials associated with Customer’s use of the Online Services. Customer must promptly notify customer support about any possible misuse of Customer’s accounts or authentication credentials or any security incident related to the Online Services.
+
+(c) Licence transfers. License transfers are not permitted, except that Customer may transfer only fully-paid perpetual licenses to (1) an Affiliate or (2) a third party, solely in connection with the transfer of hardware or employees to whom the licenses have been assigned to the third party as part of (a) a divestiture of all or part of an Affiliate or (b) a merger involving Customer or an Affiliate. Upon such transfer, Customer and its Affiliates must uninstall and discontinue using the licensed Product and render any copies unusable. Nothing in this agreement prohibits the transfer of Software to the extent allowed under applicable law if the distribution right has been exhausted.
+
+(d) Reservation of rights. Products are protected by copyright and other intellectual property rights laws and international treaties. Microsoft reserves all rights not expressly granted in this agreement. No rights will be granted or implied by waiver or estoppel. Rights to access or use Software on a device do not give Customer any right to implement Microsoft patents or other Microsoft intellectual property in the device itself or in any other software or devices.
+
+(e) Restrictions. Customer may use the Product only in accordance with this agreement. Customer may not (and is not licensed to): (1) reverse engineer, decompile or disassemble any Product or Fix, or attempt to do so; (2) install or use non-Microsoft software or technology in any way that would subject Microsoft’s intellectual property or technology to any other license terms; or (3) work around any technical limitations in a Product or Fix or restrictions in Product documentation. Customer may not disable, tamper with, or otherwise attempt to circumvent any billing mechanism that meters Customer’s use of the Online Services. Except as expressly permitted in this agreement or Product documentation, Customer may not distribute, sublicense, rent, lease, lend, resell or transfer and Products, in whole or in part, or use them to offer hosting services to a third party.
+
+(f) Preview releases. Microsoft may make Previews available. Previews are provided “as-is,” “with all faults,” and “as-available,” and are excluded from the SLA and all limited warranties provided in this agreement. Previews may not be covered by customer support. Previews may be subject to reduced or different security, compliance, and privacy commitments, as further explained in the Online Services Terms and any additional notices provided with the Preview. Microsoft may change or discontinue Previews at any time without notice. Microsoft also may choose not to release a Preview into “General Availability.”
+
+(g) Verifying compliance for Products.
+
+(i) Right to verify compliance. Customer must keep records relating to all use and distribution of Products by Customer and its Affiliates. Microsoft has the right, at its expense, to verify compliance with the Products’ license terms. Customer must promptly provide any information reasonably requested by the independent auditors retained by Microsoft in furtherance of the verification, including access to systems running the Products and evidence of licenses for Products that Customer hosts, sublicenses, or distributes to third parties. Customer agrees to complete Microsoft’s self-audit process, which Microsoft may request as an alternative to a third party audit.
+
+(ii) Remedies for non-compliance. If verification or self-audit reveals any unlicensed use of Products, then within 30 days (1) Customer must order sufficient licenses to cover its use, and (2) if unlicensed use is 5% or more, Customer must reimburse Microsoft for the costs Microsoft incurred in verification and acquire the necessary additional licenses at 125% of the price, based on the then-current price last and customer price level. The unlicensed use percentage is based on the total number of licenses purchased for current use compared to the actual installed base. If there is no unlicensed use, Microsoft will not subject Customer to another verification for at least one year. By exercising the rights and procedures described above, Microsoft does not waive its rights to enforce this agreement or to protect its intellectual property by any other legal means.
+
+(iii) Verification process. Microsoft will notify Customer at least 30 days in advance of its intent to verify Customers’ compliance with the license terms for the Products Customer and its Affiliates use or distribute. Microsoft will engage an independent auditor, which will be subject to a confidentiality obligation. Any information collected in the self-audit will be used solely for purposes of determining compliance. This verification will take place during normal business hours and in a manner that does not unreasonably interfere with Customer’s operations. 2 Subscriptions, ordering (a) Choosing a Reseller. Microsoft will notify Customer at least 30 days in advance of its intent to verify Customers’ compliance with the license terms for the Products Customer and its Affiliates use or distribute. Microsoft will engage an independent auditor, which will be subject to a confidentiality obligation. Any information collected in the self-audit will be used solely for purposes of determining compliance. This verification will take place during normal business hours and in a manner that does not unreasonably interfere with Customer’s operations.
+
+(b) Available Subscription offers. . The Subscription offers available to Customer will be established by its Reseller and generally can be categorized as one or a combination of the following:
+
+(i) Online Services Commitment Offering. Customer commits in advance to purchase a specific quantity of Online Services for use during a Term and to pay upfront or on a periodic basis for continued use of the Online Service.
+
+(ii) Consumption Offering (also called Pay-As-You-Go). Customer pays based on actual usage with no upfront commitment.
+
+(iii) Limited Offering. Customer receives a limited quantity of Online Services for a limited term without charge (for example, a free trial) or as part of another Microsoft offering (for example, MSDN). Provisions in this agreement with respect to the SLA and data retention may not apply.
+
+(iv) Software Commitment Offering. Customer commits in advance to purchase a specific quantity of Software for use during a Term and to pay upfront or on a periodic basis for continued use of the Software.
+
+(c) Ordering.
+
+(i) Orders must be placed through Customer’s designated Reseller. Customer may place orders for its Affiliates under this agreement and grant its Affiliates administrative rights to manage the Subscription, but, Affiliates may not place orders under this agreement. Customer also may assign the rights granted under Section 1.a and 1.b to a third party for use by that third party in Customer’s internal business. If Customer grants any rights to Affiliates or third parties with respect to Software or Customer’s Subscription, such Affiliates or third parties will be bound by this agreement and Customer agrees to be jointly and severally liable for any actions of such Affiliates or third parties related to their use of the Products.
+
+(ii) Customer’s Reseller may permit Customer to modify the quantity of Online Services ordered during the Term of a Subscription. Additional quantities of Online Services added to a Subscription will expire at the end of that Subscription.
+
+(d) Pricing and payment. Prices for each Product and any terms and conditions for invoicing and payment will be established by Customer’s Reseller.
+
+(e) Renewal.
+
+(i) Upon renewal of a Subscription, Customer may be required to sign a new agreement, a supplemental agreement or an amendment to this agreement.
+
+(ii) Customer’s Subscription will automatically renew unless Customer provides its Reseller with notice of its intent not to renew prior to the expiration of the Term.
+
+(f) Eligibility for Academic, Government and Nonprofit versions. Customer agrees that if it is purchasing an academic, government or nonprofit offer, Customer meets the respective eligibility requirements listed at the following sites:
+
+(i) For academic offers, the requirements for educational institutions (including administrative offices or boards of education, public libraries, or public museums) listed at http://go.microsoft.com/academic;
+
+(ii) For government offers, the requirements listed at http://go.microsoft.com/government; and
+
+(iii) For nonprofit offers, the requirements listed at http://go.microsoft.com/nonprofit. Microsoft reserves the right to verify eligibility at any time and suspend the Online Service if the eligibility requirements are not met.
+
+(g) Taxes. The parties are not liable for any of the taxes of the other party that the other party is legally obligated to pay and which are incurred or arise in connection with or related to the transactions contemplated under this agreement, and all such taxes will be the financial responsibility of the party who is obligated by operation of law to pay such tax. 3 Term, termination (a) Agreement term and termination. This agreement will remain in effect until the expiration or termination of Customer’s Subscription, whichever is earliest. Customer may terminate this agreement at any time by contacting its Reseller. The expiration or termination of this agreement will only terminate Customer’s right to place new orders for additional Products under this agreement.
+
+(b) Termination for cause. If either party breaches this Agreement, the other party may terminate the breached agreement (in whole or in part, including orders) upon notice. If the breach is curable within 30 days, then the terminating party must provide 30 days’ notice to the breaching party and an opportunity to cure the breach.
+
+(c) Cancel a Subscription. Customer’s Reseller will establish the terms and conditions, if any, upon which Customer may cancel a Subscription. 4 Security, privacy, and data protection (a) Reseller Administrator Access and Customer Data. Customer acknowledges and agrees that (i) once Customer has chosen a Reseller, that Reseller will be the primary administrator of the Online Services for the Term and will have administrative privileges and access to Customer Data, however, Customer may request additional administrator privileges from its Reseller; (ii) Customer can, at its sole discretion and at any time during the Term, terminate its Reseller’s administrative privileges; (iii) Reseller’s privacy practices with respect to Customer Data or any services provided by Reseller are subject to the terms of Customer’s agreement with its Reseller and may differ from Microsoft’s privacy practices; and (iv) Reseller may collect, use, transfer, disclose, and otherwise process Customer Data, including personal data. Customer consents to Microsoft providing Reseller with Customer Data and information that Customer provides to Microsoft for purposes of ordering, provisioning and administering the Online Services.
+
+(b) Customer consents to the processing of personal information by Microsoft and its agents to facilitate the subject matter of this agreement. Customer may choose to provide personal information to Microsoft on behalf of third parties (including your contacts, resellers, distributors, administrators, and employees) as part of this agreement. Customer will obtain all required consents from third parties under applicable privacy and data protection laws before providing personal information to Microsoft.
+
+(c) Additional privacy and security details are in the Online Services Terms. The commitments made in the Online Services Terms only apply to the Online Services purchased under this agreement and not to any services or products provided by a Reseller. If Customer uses software or services that are hosted by a Reseller, that use will be subject to Reseller’s privacy practices, which may differ from Microsoft’s.
+
+(d) As and to the extent required by law, Customer shall notify the individual users of the Online Services that their data may be processed for the purpose of disclosing it to law enforcement or other governmental authorities as directed by Reseller or as required by law, and Customer shall obtain the users’ consent to the same.
+
+(e) Customer appoints Reseller as its agent for purposes of interfacing with and providing instructions to Microsoft for purposes of this Section 4. 5 Warranties. (a) Limited warranty.
+
+(i) Software. Microsoft warrants that each version of the Software will perform substantially as described in the applicable Product documentation for one year from the date Customer is first licensed for that version. If it does not, and Customer notifies Microsoft within the warranty term, then Microsoft will, at its option, (1) return the price Customer paid for the Software license or (2) repair or replace the Software.
+
+(ii) Online Services. Microsoft warrants that each Online Service will perform in accordance with the applicable SLA during Customer’s use. Customer’s remedies for breach of this warranty are in the SLA.
+
+The remedies above are Customer’s sole remedies for breach of the warranties in this section. Customer waives any breach of warranty claims not made during the warranty period.
+
+(b) Exclusions. The warranties in this agreement do not apply to problems caused by accident, abuse or use inconsistent with this agreement, including failure to meet minimum system requirements. These warranties do not apply to free or trial products, Previews, Limited Offerings, or to components of Products that Customer is permitted to redistribute.
+
+(c) Disclaimer. Except for the limited warranties above, Microsoft provides no warranties or conditions for Products and disclaims any other express, implied, or statutory warranties for Products, including warranties of quality, title, non-infringement, merchantability and fitness for a particular purpose. 6 Defense of third party claims The parties will defend each other against the third-party claims described in this section and will pay the amount of any resulting adverse final judgment or approved settlement, but only if the defending party is promptly notified in writing of the claim and has the right to control the defense and any settlement of it. The party being defended must provide the defending party with all requested assistance, information, and authority. The defending party will reimburse the other party for reasonable out-of-pocket expenses it incurs in providing assistance. This section describes the parties’ sole remedies and entire liability for such claims.
+
+(a) By Microsoft. Microsoft will defend Customer against any third-party claim to the extent it alleges that a Product or Fix made available by Microsoft for a fee and used within the scope of the license granted under this agreement (unmodified from the form provided by Microsoft and not combined with anything else), misappropriates a trade secret or directly infringes a patent, copyright, trademark or other proprietary right of a third party. If Microsoft is unable to resolve a claim of infringement under commercially reasonable terms, it may, as its option, either: (1) modify or replace the Product or fix with a functional equivalent; or (2) terminate Customer’s license and refund any prepaid license fees (less depreciation on a five-year, straight-line basis) for perpetual licenses and any amount paid for Online Services for any usage period after the termination date. Microsoft will not be liable for any claims or damages due to Customer’s continued use of a Product or Fix after being notified to stop due to a third- party claim.
+
+(b) By Customer. To the extent permitted by applicable law, Customer will defend Microsoft against any third-party claim to the extent it alleges that: (1) any Customer Data or non- Microsoft software hosted in an Online Service by Microsoft on Customer’s behalf misappropriates a trade secret or directly infringes a patent, copyright, trademark, or other proprietary right of a third party; or (2) Customer’s use of any Product or Fix, alone or in combination with anything else, violates the law or harms a third party. 7 Limitation of liability For each Product, each party’s maximum, aggregate liability to the other under this agreement is limited to direct damages finally awarded in an amount not to exceed the amounts Customer was required to pay for the applicable Products during the term of this agreement, subject to the following:
+
+(a) Online Services. For Online Services, Microsoft’s maximum liability to Customer for any incident giving rise to a claim will not exceed the amount Customer paid for the Online Service during the 12 months before the incident; provided that in no event will Microsoft’s aggregate liability for any Online Service exceed the amount paid for that Online Service during the Subscription.
+
+(b) Free Products and distributable code. For Products provided free of charge and code that Customer is authorized to redistribute to third parties without separate payment to Microsoft, Microsoft’s liability is limited to direct damages finally awarded up to US$5,000.
+
+(c) Exclusions. In no event will either party be liable for loss of revenue or indirect, special, incidental, consequential, punitive, or exemplary damages, or damages for loss of use, lost profits, revenues, business interruption, or loss of business information, however caused or on any theory of liability.
+
+(d) Exceptions. The limits of liability in this section apply to the fullest extent permitted by applicable law, but do not apply to: (1) the parties’ obligations under section 6; or (2) violation of the other’s intellectual property rights. 8 Support and Professional Services Customer’s Reseller will provide details on support services available for Products purchased under this agreement. Support services may be performed by Reseller or its designee, which in some cases may be Microsoft. If Customer purchases Professional Services under this agreement, the performance of those Professional Services will be subject to the terms and conditions in the Use Rights. 9 Miscellaneous (a) Notices. You must send notices by mail, return receipt requested, to the address below. Notices should be sent to:
+
+Microsoft Ireland Operations Limited
+
+Atrium Block B
+
+Carmenhall Road
+
+Sandyford Industrial Estate
+
+Dublin 18, Ireland
+
+You agree to receive electronic notices from us, which will be sent by email to the account administrator(s) named for your Subscription. Notices are effective on the date on the return receipt or, for email, when sent. You are responsible for ensuring that the email address for the account administrator(s) named for your Subscription is accurate and current. Any email notice that we send to that email address will be effective when sent, whether or not you actually receive the email.
+
+(b) Assignment. You may not assign this agreement either in whole or in part. Microsoft may transfer this agreement without your consent, but only to one of Microsoft’s Affiliates. Any prohibited assignment is void.
+
+(c) Severability. If any part of this agreement is held unenforceable, the rest remains in full force and effect.
+
+(d) Waiver. Failure to enforce any provision of this agreement will not constitute a waiver.
+
+(e) No agency. This agreement does not create an agency, partnership, or joint venture.
+
+(f) No third-party beneficiaries. There are no third-party beneficiaries to this agreement.
+
+(g) Use of contractors. Microsoft may use contractors to perform services, but will be responsible for their performance, subject to the terms of this agreement.
+
+(h) Microsoft as an independent contractor. The parties are independent contractors. Customer and Microsoft each may develop products independently without using the other’s confidential information.
+
+(i) Agreement not exclusive. Customer is free to enter into agreements to license, use or promote non-Microsoft products or services.
+
+(j) Applicable law and venue. This agreement is governed by the laws of Ireland. If Microsoft brings an action to enforce this agreement, Microsoft will bring it in the jurisdiction where Customer has its headquarters. If Customer brings an action to enforce this agreement, Customer will bring it in Ireland. This choice of jurisdiction does not prevent either party from seeking injunctive relief in any appropriate jurisdiction with respect to violation of intellectual property rights.
+
+(k) This agreement is the entire agreement concerning its subject matter and supersedes any prior or concurrent communications. In the case of a conflict between any documents in this agreement that is not expressly resolved in those documents, their terms will control in the following order of descending priority: (1) this agreement, (2) the Product Terms, (3) the Online Services Terms, and (4) any other documents in this agreement.
+
+(l) Survival. All provisions survive termination of this agreement except those requiring performance only during the term of the agreement.
+
+(m) U.S. export jurisdiction. Products are subject to U.S. export jurisdiction. Customer must comply with all applicable international and national laws, including the U.S. Export Administration Regulations, the International Traffic in Arms Regulations, and end-user, end- use and destination restrictions issued by U.S. and other governments related to Microsoft products, services, and technologies.
+
+(n) Force majeure. Neither party will be liable for any failure in performance due to causes beyond that party’s reasonable control (such as fire, explosion, power blackout, earthquake, flood, severe storms, strike, embargo, labor disputes, acts of civil or military authority, war, terrorism (including cyber terrorism), acts of God, acts or omissions of Internet traffic carriers, actions or omissions of regulatory or governmental bodies (including the passage of laws or regulations or other acts of government that impact the delivery of Online Services)). This Section will not, however, apply to your payment obligations under this agreement.
+
+(o) Contracting authority. If you are an individual accepting these terms on behalf of an entity, you represent that you have the legal authority to enter into this agreement on that entity’s behalf.
+
+(p) Waiver of right to void online purchases. To the maximum extent permitted by applicable law, Customer waives its rights to void purchases under this agreement pursuant to any law governing distance selling or electronic or online agreements, as well as any right or obligation regarding prior information, subsequent confirmation, rights of withdrawal, or cooling-off periods. 10 Definitions Any reference in this agreement to “day” will be a calendar day.
+
+“Acceptable Use Policy” is set forth in the Online Services Terms.
+
+“Affiliate” means any legal entity that a party owns, that owns a party, or that is under common ownership with a party. “Ownership” means, for purposes of this definition, control of more than a 50% interest in an entity.
+
+“Consumption Offering”, “Commitment Offering”, or “Limited Offering” describe categories of Subscription offers and are defined in Section 2.
+
+“Customer Data” is defined in the Online Services Terms.
+
+“End User” means any person you permit to access Customer Data hosted in the Online Services or otherwise use the Online Services.
+
+“Fix” means a Product fix, modifications or enhancements, or their derivatives, that Microsoft either releases generally (such as Product service packs) or provides to Customer to address a specific issue.
+
+“Licensing Site” means http://www.microsoft.com/licensing/contracts or a successor site.
+
+“Non-Microsoft Product” is defined in the Online Services Terms.
+
+“Online Services” means any of the Microsoft-hosted online services subscribed to by Customer under this agreement, including Microsoft Dynamics Online Services, Office 365 Services, Microsoft Azure Services, or Microsoft Intune Online Services.
+
+“Online Services Terms” means the additional terms that apply to Customer’s use of Online Services published on the Licensing Site and updated from time to time.
+
+“Previews” means preview, beta, or other pre-release version or feature of the Online Services or Software offered by Microsoft to obtain customer feedback.
+
+“Product” means all products identified in the Product Terms, such as all Software, Online Services and other web-based services, including Previews.
+
+“Product Terms” means the document that provides information about Microsoft Products and Professional Services available through volume licensing. The Product Terms document is published on the Licensing Site and is updated from time to time.
+
+“Reseller” means an entity authorized by Microsoft to resell Software licenses and Online Service Subscriptions under this program and engaged by you to provide assistance with your Subscription.
+
+“SLA” means Service Level Agreement, which specifies the minimum service level for the Online Services and is published on the Licensing Site.
+
+“Software” means licensed copies of Microsoft software identified on the Product Terms. Software does not include Online Services, but Software may be a part of an Online Service.
+
+“Subscription” means an enrollment for Online Services for a defined Term as established by your Reseller.
+
+“Term” means the duration of a Subscription (e.g., 30 days or 12 months).
+
+“Use Rights” means the use rights or terms of service for each Product published on the Licensing Site and updated from time to time. The Use Rights supersede the terms of any end user license agreement that accompanies a Product. The Use Rights for Software are published by Microsoft in the Product Terms. The Use Rights for Online Services are published in the Online Services Terms.
+
+Annex A – Data Processing Agreement 1 DATA PROTECTION 1.1 The Processor agrees, in relation to the Customer Personal Data, that the Customer is the Data Controller (and therefore controls what happens to the Customer Personal Data) and the Processor is the Data Processor.
+
+1.2 The Processor acknowledges and agrees that nothing in this agreement relieves the Processor from its responsibilities and liabilities under the Privacy Laws.
+
+1.3 The purpose of the Processing is the performance of the Services and the Processing will be carried out until the date that the Processor ceases to provide the Services to the Customer. Details as to the nature and purpose of the Processing, the types of Personal Data and the categories of Data Subjects are set out in Schedule 1 to this agreement.
+
+1.4 When the Processor Processes Customer Personal Data in the course of providing the Services, the Processor will:
+
+1.4.1 Process the Customer Personal Data only in accordance with written instructions from the Customer, including with regard to transfers of Customer Personal Data to a third country or international organisation except where required to do so by law. If the Processor is required by law to Process the Customer Personal Data for any other purpose, the Processor will inform the Customer of this requirement before the Processing, unless that law prohibits this on important grounds of public interest. If the Customer issues a direction to the Processor which requires the Processor to do something that is inconsistent with the terms of the Service Agreement, the Processor may wish to make a reasonable charge, in which case that charge will be as agreed in writing between the parties.
+
+1.4.2 take reasonable steps to ensure the reliability and competence of the Processor personnel who have access to the Customer Personal Data;
+
+1.4.3 ensure that the personnel required to Process the Customer Personal Data:
+
+(a) are informed of the confidential nature of the Customer Personal Data;
+
+(b) are subject to appropriate obligations of confidentiality; and
+
+(c) do not publish, disclose or divulge any of the Customer Personal Data to any third party unless directed in writing to do so by the Customer;
+
+1.4.4 implement and maintain Appropriate Technical and Organisational Measures to protect the Customer Personal Data against unauthorised or unlawful processing and against accidental loss, destruction, damage, theft, alteration or disclosure;
+
+(a) by taking Appropriate Technical and Organisational Measures and in so far as it is possible, in fulfilling the Customer’s obligations to respond to requests from Data Subjects exercising their rights; and
+
+(b) in ensuring compliance with the obligations pursuant to Articles 32 to 36 of the GDPR or equivalent provisions in the Privacy Laws, and the Customer shall notify the Integrated Management Systems Team by email (ims@data-summit.co.uk) of any requests from Data Subjects;
+
+1.4.7 make available to the Customer all information necessary to demonstrate its compliance with its obligations in this agreement and allow the Customer and its auditors or authorised agents to conduct audits and inspections during the term of the Service Agreement (and provide reasonable assistance in connection therewith) for the purpose of verifying that the Processor is Processing Customer Personal Data in accordance with the Processor’s obligations under this agreement, the Service Agreement and applicable Privacy Laws; and
+
+1.4.8 not give access to or transfer any Customer Personal Data to any third party (including any group companies or sub-contractors) without the prior written consent of the Customer. Where the Customer does consent to the Processor engaging a sub-contractor to carry out any part of the Services, the Processor must ensure the reliability and competence of the third party, its employees and agents who may have access to the Customer Personal Data and must include in any contract with the third party, provisions in favour of the Customer which are equivalent to those in this clause and as are required by applicable Privacy Laws. For the avoidance of doubt, where a third party fails to fulfil its obligations under any sub-processing agreement or any applicable Privacy Laws, the Processor will remain fully liable to the Customer for the fulfilment of the Processor’s obligations under this agreement and the Service Agreement.
+
+1.5 The Processor shall notify the Customer immediately if, in the Processor’s opinion, an instruction for the Processing of Customer Personal Data given by the Customer infringes applicable Privacy Laws.
+
+1.6 The Processor shall communicate any claims or requests in respect of the Customer Personal Data without delay to the Customer to enable the Customer to provide details to its customers.
+
+1.7 If the Processor becomes aware of any accidental, unauthorised or unlawful destruction, loss, alteration, or disclosure of, or access to any Customer Personal Data that the Processor Processes when providing the Services (a “Personal Data Breach”), the Processor will:
+
+1.7.1 notify the Customer by email and without undue delay (and in any event within 48 hours). The email shall be sent to the Customer’s primary contact (as shown in the Processor’s customer relationship management (CRM) system) and the Customer is responsible for ensuring this information is kept up to date;
+
+1.7.2 provide the Customer (as soon as possible) with a detailed description of the Data Breach, the type of Customer Personal Data that was the subject of the Data Breach and the identity of each affected person, as soon as such information can be collected or otherwise becomes available (as well as periodic updates to this information and any other information the Customer may reasonably request relating to the Data Breach); and;
+
+1.7.3 not release or publish any filing, communication, notice, press release, or report concerning the Data Breach without the Customer’s prior written approval (except where required to do so by law).
+
+1.8 If, pursuant to Article 28(7) or Article 28(8) of the GDPR, the Information Commissioner adopts standard contractual clauses for the matters referred to in Article 28(3) and Article 28(4) of the GDPR and the Customer notifies the Processor that it wishes to incorporate any element of any such standard contractual clauses into the Agreement, the Processor will agree to the changes as reasonably required by the Customer to achieve this.
+
+1.9 The Processor will not Process Customer Personal Data outside the European Economic Area, or a country in respect of a valid adequacy decision has been issued by the European Commission, except with the prior written consent of the Customer. Where the Customer gives its consent, such transfers will be made subject to the terms of the model clauses for the transfer of Personal Data to data processors established in third countries adopted by the European Commission or any replacement or additional form approved by the European Commission or as applicable in the UK. 2 GENERAL 2.1 In the event of any conflict between the Service Agreement and this agreement, the provisions of this agreement shall prevail to the extent that they are more stringent than those in the Service Agreement. Save as specifically modified and amended in this agreement, the terms and conditions contained in the Service Agreement shall remain in full force and effect and shall govern this agreement.
+
+2.2 This agreement and any dispute or claim (including non-contractual disputes or claims) arising out of or in connection with it or its subject matter or formation shall be governed by and interpreted in accordance with English law.
+
+2.3 The Processor and the Customer irrevocably agree that the English courts that have exclusive jurisdiction to settle any dispute or claim (including non-contractual disputes or claims) that arises out of, or in connection with, this agreement or its subject matter or formation. SCHEDULE 1 “Subject matter of the Processing:” The subject matter for Processing results from the Service Agreement between the Data Controller and the Data Processor.
+
+“Nature and purpose of the Processing:” The Processing of the Personal Data in the course of the Processor delivering cloud-based IT services as more particularly described in the Service Agreement.
+
+“Type of Personal Data:” Personal data may include, among other information, personal contact information such as name, address, telephone or mobile number, fax number, email address, and passwords; employment details including employer name, job title and function, employment history, salary and other benefits, job performance and other capabilities, education/qualifications, identification numbers and business contact details; financial details; goods and services provided; unique IDs collected from mobile devices, network carriers or data providers, IP addresses, behaviour and interest data, and any other data the Data Controller may elect to include as part of Processing.
+
+“Categories of Data Subject:” Data Subjects may include the Customer’s representatives and end users, such as employees, job applicants, contractors, collaborators, partners, customers and users of the Customer and any other Data Subjects the Data Controller may elect to include as part of Processing. Data Subjects may also include individuals attempting to communicate or transfer Personal Data to users of the Service.

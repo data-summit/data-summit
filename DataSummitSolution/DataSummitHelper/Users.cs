@@ -28,7 +28,7 @@ namespace DataSummitHelper
             catch (Exception ae)
             {
                 string strMessage = ae.Message.ToString();
-                string strInner = ae.InnerException.ToString();
+                string strInner = ae.InnerException?.ToString();
             }
             return Users;
         }
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             {
                 returnid = - 1;
                 string strMessage = ae.Message.ToString();
-                string strInner = ae.InnerException.ToString();
+                string strInner = ae.InnerException?.ToString();
             }
 
             return returnid;

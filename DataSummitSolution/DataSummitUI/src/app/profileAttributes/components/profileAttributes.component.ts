@@ -4,8 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { take } from 'rxjs/operators';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { validateConfig } from '@angular/router/src/config';
-import { projection } from '@angular/core/src/render3/instructions';
+
 
 @Component({
     selector: 'ds-profileAttributes',
@@ -13,7 +12,7 @@ import { projection } from '@angular/core/src/render3/instructions';
 })
 export class ProfileAttributesComponent implements OnInit {
 
-    @ViewChild('profileAttributeModal') profileAttributeModal;
+    @ViewChild('profileAttributeModal', { static: false }) profileAttributeModal;
     
     @Input() profileVersionId: number;
     profileAttributes: ProfileAttribute[];

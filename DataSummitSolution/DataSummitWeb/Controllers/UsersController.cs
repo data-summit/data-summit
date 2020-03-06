@@ -35,11 +35,9 @@ namespace DataSummitWeb.Controllers
                 try
                 {
                     //Extract country from body
-                    // WHat is the point in this ToString cast when Phonecode could be the same type...why have string vs int?!
+                    // What is the point in this ToString cast when Phonecode could be the same type...why have string vs int?!
                     var country = (db.Countries.First(c => c.Phonecode.ToString() == regUser.TelCode.Phonecode));
-                    var countryCode = country.Phonecode.ToString();
-
-                    countryCode = string.Format("00{0}", countryCode);
+                    var countryCode = $"00{country.Phonecode}";
 
                     var phoneNumber = (regUser.Phone.Substring(1, 1) == "0") 
                         ? countryCode + regUser.Phone.Substring(1, regUser.Phone.Length - 1)
@@ -94,7 +92,7 @@ namespace DataSummitWeb.Controllers
                 catch(Exception ae)
                 {
                     string strMessage = ae.Message.ToString();
-                    string strInner = ae.InnerException.ToString();
+                    string strInner = ae.InnerException?.ToString();
                 }
             }
         }

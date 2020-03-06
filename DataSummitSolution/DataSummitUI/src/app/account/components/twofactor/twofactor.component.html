@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="col-xs-12 col-md-6 offset-md-3 mt-5">
+      <!-- Default form login -->
+    <form class="text-center border border-light">
+
+      <p class="h4 mb-4">Verify</p>
+
+      <p>Open the two-factor authentication app on your device to view your authentication PIN and verify your identity.</p>
+
+      <!-- 2FA Code -->
+      <input [(ngModel)]="authCode" name="authCode" placeholder="Enter pin">
+
+      <!-- Sign in button -->
+      <button mdbBtn color="info" block="true" class="btn mx-0 my-4 btn-sm btn-block" type="submit" (click)="signIn()">Sign in</button>
+
+      <p>2FA Not setup? Scan QR code below in Google Authenticator</p>
+      <button mdbBtn color="info" block="true" class="btn mx-0 my-4 btn-sm btn-block" type="button" (click)="getQrCodes()">Show 2FA QR code</button>
+
+      <div *ngIf="show">
+          <!-- QR Code -->
+          <h2>Google Authenticator code</h2>
+          <img src="{{qrCodeString}}" id="qrCode" class="mb-4" width="300" height="300">
+
+          <p>QR code not working? Enter manual code in Google Authenticator</p>
+
+          <!-- Manual Code -->
+          <h2>Manual code</h2>
+          <p>{{manualCode}}</p>
+      </div>
+    </form>
+      <!-- Default form login -->
+  </div>
+</div>

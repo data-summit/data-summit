@@ -17,7 +17,7 @@ import { NotifyService } from 'src/app/shared/services/notify.service';
 })
 export class ArchiveDetailsComponent implements OnInit {
 
-  @ViewChild('termsModal') termsModal
+  @ViewChild('termsModal', { static: false }) termsModal
 
   industry: IndustryType;
 

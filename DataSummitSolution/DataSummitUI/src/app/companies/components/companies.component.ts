@@ -3,10 +3,7 @@ import { Company } from '../models/company';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { take } from 'rxjs/operators';
-import { FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ModalDirective } from 'angular-bootstrap-md';
-
-const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
     selector: 'ds-companies',
@@ -14,13 +11,15 @@ const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 })
 export class CompaniesComponent implements OnInit {
 
-    @ViewChild('companyModal') companyModal
+    @ViewChild('companyModal', { static: false }) companyModal
 
     companies: Company[];
     selectedCompany: Company;
     companyForm: FormGroup;
     headers: string[];
     loading: boolean;
+    // TODO fix this prperty
+    company: any;
 
     constructor(private router: Router,
         private api: ApiService,
@@ -40,7 +39,7 @@ export class CompaniesComponent implements OnInit {
             "Actions"
         ]
     }
-    
+
     getCompanies() {
         this.loading = true;
         this.api.get("api/companies")
@@ -56,9 +55,9 @@ export class CompaniesComponent implements OnInit {
             }, error => {
                 console.log(error)
                 this.loading = false;
-            })  
+            })
     }
-    
+
     addOrEditCompany(company?: Company)
     {
         if (company == null)
@@ -71,7 +70,7 @@ export class CompaniesComponent implements OnInit {
     deleteCompany(company?: Company)
     {
         if (company.CompanyId > 0) //New entry
-        { 
+        {
             this.api.delete(`api/companies/${company.CompanyId}`, company.CompanyId)
                 .pipe(take(1))
                 .subscribe(result => {
@@ -93,7 +92,7 @@ export class CompaniesComponent implements OnInit {
     saveCompany()
     {
         if (this.selectedCompany.CompanyId == 0) //New entry
-        { 
+        {
             this.api.post("api/companies", this.selectedCompany)
                 .pipe(take(1))
                 .subscribe(result => {
@@ -105,7 +104,7 @@ export class CompaniesComponent implements OnInit {
                 })
         }
         else    //updated entry
-        { 
+        {
             this.api.put("api/companies/"+ this.selectedCompany.CompanyId, this.selectedCompany)
             .pipe(take(1))
                 .subscribe(result => {
