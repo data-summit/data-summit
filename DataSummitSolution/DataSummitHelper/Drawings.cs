@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,9 +22,9 @@ namespace DataSummitHelper
             return dataSummitDbContext.Drawings.Count();
         }
 
-        public List<DataSummitModels.Drawings> GetAllCompanyDrawings(int projectId)
+        public List<DataSummitModels.DB.Drawings> GetAllCompanyDrawings(int projectId)
         {
-            List<DataSummitModels.Drawings> drawings = new List<DataSummitModels.Drawings>();
+            List<DataSummitModels.DB.Drawings> drawings = new List<DataSummitModels.DB.Drawings>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -36,13 +36,13 @@ namespace DataSummitHelper
             }
             return drawings;
         }
-        public long CreateDrawing(List<DataSummitModels.Drawings> drawings)
+        public long CreateDrawing(List<DataSummitModels.DB.Drawings> drawings)
         {
             long returnid = 0;
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                foreach (DataSummitModels.Drawings drawing in drawings)
+                foreach (DataSummitModels.DB.Drawings drawing in drawings)
                 {
                     dataSummitDbContext.Drawings.Add(drawing);
                     dataSummitDbContext.SaveChanges();
@@ -57,7 +57,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateDrawing(long id, DataSummitModels.Drawings drawing)
+        public void UpdateDrawing(long id, DataSummitModels.DB.Drawings drawing)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Drawings drawing = dataSummitDbContext.Drawings.First(p => p.DrawingId == drawingId);
+                DataSummitModels.DB.Drawings drawing = dataSummitDbContext.Drawings.First(p => p.DrawingId == drawingId);
                 dataSummitDbContext.Drawings.Remove(drawing);
             }
             catch (Exception ae)

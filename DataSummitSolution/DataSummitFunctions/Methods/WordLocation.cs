@@ -9,10 +9,10 @@ namespace DataSummitFunctions.Methods
 {
     public static class WordLocation
     {
-        public static List<Models.Consolidated.Sentences> Corrected(
+        public static List<Models.Sentences> Corrected(
                                     List<Models.Consolidated.Sentences> sents, ImageGrid ig)
         {
-            List<Models.Consolidated.Sentences> lOut = new List<Models.Consolidated.Sentences>();
+            List<Models.Sentences> lOut = new List<Models.Sentences>();
             try
             {
                 foreach (Models.Consolidated.Sentences s in sents)
@@ -26,8 +26,8 @@ namespace DataSummitFunctions.Methods
                     s.Width = s.Width;
                     s.Height = s.Height;
                     s.IsUsed = true;
-                    lOut.Add(s);
 
+                    lOut.Add(s.ToModel());
                 }
             }
             catch (Exception ae)

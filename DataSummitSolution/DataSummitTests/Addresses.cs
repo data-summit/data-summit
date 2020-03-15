@@ -1,5 +1,5 @@
 using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -16,7 +16,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_Address()
         {
-            DataSummitModels.Addresses Address = new DataSummitModels.Addresses
+            DataSummitModels.DB.Addresses Address = new DataSummitModels.DB.Addresses
             {
                 AddressId = 1,
                 CompanyId = 1,
@@ -32,7 +32,7 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockAddressesDbSet = new Mock<DbSet<DataSummitModels.Addresses>>();
+            var mockAddressesDbSet = new Mock<DbSet<DataSummitModels.DB.Addresses>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
@@ -42,14 +42,14 @@ namespace DataSummitTests
 
             mockAddresses.CreateAddress(Address);
 
-            mockAddressesDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.Addresses>()), Times.Once());
+            mockAddressesDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.Addresses>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_Company_Address_by_id()
         {
-            DataSummitModels.Companies company1 = new DataSummitModels.Companies
+            DataSummitModels.DB.Companies company1 = new DataSummitModels.DB.Companies
             {
                 CompanyId = 1,
                 Name = "Unit Test Company1",
@@ -59,7 +59,7 @@ namespace DataSummitTests
                 Website = "www.UnitTestCompany1.com"
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            DataSummitModels.Companies company2 = new DataSummitModels.Companies
+            DataSummitModels.DB.Companies company2 = new DataSummitModels.DB.Companies
             {
                 CompanyId = 2,
                 Name = "Unit Test Company2",
@@ -70,9 +70,9 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testAddresses = new List<DataSummitModels.Addresses>
+            var testAddresses = new List<DataSummitModels.DB.Addresses>
             {
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 1,
                     CompanyId = 1,
@@ -87,7 +87,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now,
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 2,
                     CompanyId = 2,
@@ -102,7 +102,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now,
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 3,
                     CompanyId = 3,
@@ -119,11 +119,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockAddressDbSet = new Mock<DbSet<DataSummitModels.Addresses>>();
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.Provider).Returns(testAddresses.Provider);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.Expression).Returns(testAddresses.Expression);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.ElementType).Returns(testAddresses.ElementType);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.GetEnumerator()).Returns(testAddresses.GetEnumerator());
+            var mockAddressDbSet = new Mock<DbSet<DataSummitModels.DB.Addresses>>();
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.Provider).Returns(testAddresses.Provider);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.Expression).Returns(testAddresses.Expression);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.ElementType).Returns(testAddresses.ElementType);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.GetEnumerator()).Returns(testAddresses.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -139,7 +139,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Get_Project_Address_by_id()
         {
-            DataSummitModels.Companies company1 = new DataSummitModels.Companies
+            DataSummitModels.DB.Companies company1 = new DataSummitModels.DB.Companies
             {
                 CompanyId = 1,
                 Name = "Unit Test Company1",
@@ -149,7 +149,7 @@ namespace DataSummitTests
                 Website = "www.UnitTestCompany1.com"
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            DataSummitModels.Projects Project1 = new DataSummitModels.Projects
+            DataSummitModels.DB.Projects Project1 = new DataSummitModels.DB.Projects
             {
                 ProjectId = 1,
                 Name = "Unit Test Project1",
@@ -159,9 +159,9 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testAddresses = new List<DataSummitModels.Addresses>
+            var testAddresses = new List<DataSummitModels.DB.Addresses>
             {
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 1,
                     ProjectId = 1,
@@ -176,7 +176,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 2,
                     ProjectId = 2,
@@ -191,7 +191,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.Addresses
+                new DataSummitModels.DB.Addresses
                 {
                     AddressId = 3,
                     ProjectId = 3,
@@ -208,11 +208,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockAddressDbSet = new Mock<DbSet<DataSummitModels.Addresses>>();
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.Provider).Returns(testAddresses.Provider);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.Expression).Returns(testAddresses.Expression);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.ElementType).Returns(testAddresses.ElementType);
-            mockAddressDbSet.As<IQueryable<DataSummitModels.Addresses>>().Setup(m => m.GetEnumerator()).Returns(testAddresses.GetEnumerator());
+            var mockAddressDbSet = new Mock<DbSet<DataSummitModels.DB.Addresses>>();
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.Provider).Returns(testAddresses.Provider);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.Expression).Returns(testAddresses.Expression);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.ElementType).Returns(testAddresses.ElementType);
+            mockAddressDbSet.As<IQueryable<DataSummitModels.DB.Addresses>>().Setup(m => m.GetEnumerator()).Returns(testAddresses.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible

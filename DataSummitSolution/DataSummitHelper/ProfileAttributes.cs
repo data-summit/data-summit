@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.ProfileAttributes> GetAllProfileVersionProfileAttributes(int profileVersionId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.ProfileAttributes> GetAllProfileVersionProfileAttributes(int profileVersionId)
         {
-            List<DataSummitModels.ProfileAttributes> profileattributes = new List<DataSummitModels.ProfileAttributes>();
+            List<DataSummitModels.DB.ProfileAttributes> profileattributes = new List<DataSummitModels.DB.ProfileAttributes>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,9 +30,9 @@ namespace DataSummitHelper
             return profileattributes;
         }
 
-        public DataSummitModels.ProfileAttributes GetProfileAttributesById(int profileAttributeId)
+        public DataSummitModels.DB.ProfileAttributes GetProfileAttributesById(int profileAttributeId)
         {
-            DataSummitModels.ProfileAttributes profileattributes = new DataSummitModels.ProfileAttributes();
+            DataSummitModels.DB.ProfileAttributes profileattributes = new DataSummitModels.DB.ProfileAttributes();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             return profileattributes;
         }
 
-        public long CreateProfileAttribute(DataSummitModels.ProfileAttributes profileAttribute, bool IsProdEnvironment = false)
+        public long CreateProfileAttribute(DataSummitModels.DB.ProfileAttributes profileAttribute)
         {
             long returnid = 0;
             try
@@ -63,7 +63,7 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateProfileAttribute(long id, DataSummitModels.ProfileAttributes profileAttribute, bool IsProdEnvironment = false)
+        public void UpdateProfileAttribute(long id, DataSummitModels.DB.ProfileAttributes profileAttribute)
         {
             try
             {
@@ -76,12 +76,12 @@ namespace DataSummitHelper
             }
             return;
         }
-        public void DeleteProfileAttribute(long profileAttributeId, bool IsProdEnvironment = false)
+        public void DeleteProfileAttribute(long profileAttributeId)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.ProfileAttributes profileattribute = dataSummitDbContext.ProfileAttributes.First(p => p.ProfileAttributeId == profileAttributeId);
+                DataSummitModels.DB.ProfileAttributes profileattribute = dataSummitDbContext.ProfileAttributes.First(p => p.ProfileAttributeId == profileAttributeId);
                 dataSummitDbContext.ProfileAttributes.Remove(profileattribute);
             }
             catch (Exception ae)

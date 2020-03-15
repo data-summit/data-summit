@@ -152,7 +152,7 @@ namespace DataSummitFunctions
 
                             imgUp.Tasks.Add(new Tasks("Azure OCR\tProcessed image " + imgUp.SplitImages.IndexOf(ig).ToString("000"), imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
                             log.Info(imgUp.Tasks[imgUp.Tasks.Count - 1].Name + ": " + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString());
-                            List<Sentences> sentences = new List<Sentences>();
+                            List<Models.Consolidated.Sentences> sentences = new List<Models.Consolidated.Sentences>();
 
                             if (res != null)
                             {
@@ -173,7 +173,7 @@ namespace DataSummitFunctions
                                 lRes.Add(o);
                                 sentences.AddRange(ocrMethods.FromAzure(o.Results));
 
-                                if (ig.Sentences == null) ig.Sentences = new List<Models.Consolidated.Sentences>();
+                                if (ig.Sentences == null) ig.Sentences = new List<Models.Sentences>();
                                 ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
 
                                 imgUp.Tasks.Add(new Tasks("Azure OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
@@ -208,7 +208,7 @@ namespace DataSummitFunctions
                 log.Info(imgUp.Tasks[imgUp.Tasks.Count - 1].Name + ":" + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString());
 
                 //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
-                if (imgUp.Sentences == null) imgUp.Sentences = new List<Sentences>();
+                if (imgUp.Sentences == null) imgUp.Sentences = new List<Models.Sentences>();
                 foreach (ImageGrid ig in imgUp.SplitImages.Where(t => t.ProcessedAzure == false))
                 {
                     if (ig.Sentences != null)
@@ -221,7 +221,9 @@ namespace DataSummitFunctions
                 }
 
                 Self self = new Self();
-                List<Sentences> lResults = self.Clean(imgUp.Sentences);
+                List<Models.Sentences> lResults = self.Clean(
+                                                     imgUp.Sentences.Select(s => s.ToModelConsolidated()).ToList())
+                                                    .Select(s => s.ToModel()).ToList();
                 imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
 
                 imgUp.Tasks.Add(new Tasks("Azure OCR\t'All OCR Results' uploaded", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));

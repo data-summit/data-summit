@@ -1,4 +1,3 @@
-using DataSummitFunctions.Models;
 using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Methods.PostProcessing;
 using Microsoft.Azure.WebJobs;
@@ -14,6 +13,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using DataSummitFunctions.Models.Recognition;
 
 namespace DataSummitFunctions
 {
@@ -28,14 +28,9 @@ namespace DataSummitFunctions
                 string jsonContent = await req.Content.ReadAsStringAsync();
                 dynamic data = JsonConvert.DeserializeObject<List<Sentences>>(jsonContent);
                 List<Sentences> lFeatures = (List<Sentences>)data;
-                List<Sentences> lResults = new List<Sentences>();
-                Dictionary<string, List<int>> dTallies = new Dictionary<string, List<int>>();
-
-                //short Tolerance = 15;
+                List<RectanglePairs> lResults = new List<RectanglePairs>();
                 
-                //TODO - List selecting 'IsUsed' results for each vendor
-                //needs various (and new) methods from below to filter, merge
-                //and select best results.
+
 
                 string jsonToReturn = JsonConvert.SerializeObject(lFeatures);
 
@@ -48,7 +43,7 @@ namespace DataSummitFunctions
                 { Content = new StringContent(JsonConvert.SerializeObject(ae), Encoding.UTF8, "application/json") };
             }
         }
-        private static Drawing OCRAnomalies(Models.Drawing results)
+        private static Models.Drawing OCRAnomalies(Models.Drawing results)
         {
             Models.Drawing reducedOCR = new Models.Drawing();
             try
@@ -56,21 +51,21 @@ namespace DataSummitFunctions
                 List<Sentences> lSameRectAndWords = new List<Sentences>();
                 List<Sentences> lSameRectDifferentWords = new List<Sentences>();
 
-                foreach (Sentences ss in results.Sentences.ToList())
-                {
-                    if (lSameRectAndWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
-                                       s.Top == ss.Top && s.Width == ss.Width &&
-                                       s.Words == ss.Words) == 0)
-                    { lSameRectAndWords.Add(ss); }
-                    if (lSameRectDifferentWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
-                                       s.Top == ss.Top && s.Width == ss.Width &&
-                                       s.Words.ToString() != ss.Words.ToString()) == 0)
-                    { lSameRectDifferentWords.Add(ss); }
-                }
+                //foreach (Sentences ss in results.Sentences.ToList())
+                //{
+                //    if (lSameRectAndWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
+                //                       s.Top == ss.Top && s.Width == ss.Width &&
+                //                       s.Words == ss.Words) == 0)
+                //    { lSameRectAndWords.Add(ss); }
+                //    if (lSameRectDifferentWords.Count(s => s.Height == ss.Height && s.Left == ss.Left &&
+                //                       s.Top == ss.Top && s.Width == ss.Width &&
+                //                       s.Words.ToString() != ss.Words.ToString()) == 0)
+                //    { lSameRectDifferentWords.Add(ss); }
+                //}
 
-                //Word anomalies, should be used for supervised learning
-                reducedOCR.Sentences = lSameRectAndWords.Except(lSameRectDifferentWords).ToList();
-                //reducedOCR.FileName = results.FileName;
+                ////Word anomalies, should be used for supervised learning
+                //reducedOCR.Sentences = lSameRectAndWords.Except(lSameRectDifferentWords).ToList();
+                ////reducedOCR.FileName = results.FileName;
             }
             catch (Exception ae)
             {
@@ -79,7 +74,7 @@ namespace DataSummitFunctions
             return reducedOCR;
         }
 
-        private static Drawing MergeOverlaps(Models.Drawing results)
+        private static Models.Drawing MergeOverlaps(Models.Drawing results)
         {
             Models.Drawing c = new Models.Drawing();
             try
@@ -88,17 +83,20 @@ namespace DataSummitFunctions
                 List<Sentences> lToBeAdded = new List<Sentences>();
                 List<Sentences> lMerged = new List<Sentences>();
 
-                foreach (Sentences sen in results.Sentences.ToList())
+                foreach (Models.Consolidated.Sentences sen in results.Sentences.Select(s => s.ToModelConsolidated()).ToList())
                 {
-                    List<Sentences> ls2 = results.Sentences.Where(s => !s.Equals(sen)).ToList();
+                    List<Models.Consolidated.Sentences> ls2 = results.Sentences
+                                                                .Where(s => !s.Equals(sen))
+                                                                .Select(s => s.ToModelConsolidated())
+                                                                .ToList();
 
                     List<string> s2 = ls2.Select(s => s.Words).ToList();
                     string s1 = sen.Words;
                     string se = sen.Words.Substring(sen.Words.Length - 4, 3);
-                    List<Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
+                    List<Models.Consolidated.Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
                     if (s4.Count > 0)
                     {
-                        foreach (Sentences sen1 in s4)
+                        foreach (Models.Consolidated.Sentences sen1 in s4)
                         {
                             if (ExactSuffixOrPostfix(sen, sen1) == false)
                             {
@@ -142,7 +140,8 @@ namespace DataSummitFunctions
                     }
                     //Remove all confirmed deletes
                 }
-                lMerged = results.Sentences.Intersect(lToBeDeleted.Select(s => s)).ToList();
+                lMerged = results.Sentences.Select(s => s.ToModelConsolidated()).ToList()
+                                 .Intersect(lToBeDeleted.Select(s => s)).ToList();
                 // Methods.PostProcessing.MultipleVendors.lResults.AddRange(lToBeAdded);
             }
             catch (Exception ae)
@@ -259,7 +258,7 @@ namespace DataSummitFunctions
         /// <param name="sCur"></param>
         /// <param name="sTarget"></param>
         /// <returns></returns>
-        private static bool ExactSuffixOrPostfix(Sentences sCur, Sentences sTarget)
+        private static bool ExactSuffixOrPostfix(Models.Consolidated.Sentences sCur, Models.Consolidated.Sentences sTarget)
         {
             try
             {

@@ -1,8 +1,7 @@
-﻿using System;
+﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Models.Consolidated
 {
@@ -73,17 +72,36 @@ namespace DataSummitFunctions.Models.Consolidated
 
         public virtual object Clone()
         {
-            Sentences s = new Sentences();
-            s.SentenceId = Guid.NewGuid();
-            s.IsUsed = this.IsUsed;
-            s.Left = this.Left;
-            s.Top = this.Top;
-            s.Width = this.Width;
-            s.Height = this.Height;
-            s.Vendor = this.Vendor;
-            s.Words = this.Words;
-            s.SlendernessRatio = this.SlendernessRatio;
+            Sentences s = new Sentences
+            {
+                SentenceId = Guid.NewGuid(),
+                IsUsed = this.IsUsed,
+                Left = this.Left,
+                Top = this.Top,
+                Width = this.Width,
+                Height = this.Height,
+                Vendor = this.Vendor,
+                Words = this.Words,
+                SlendernessRatio = this.SlendernessRatio
+            };
             return s;
+        }
+        public Models.Sentences ToModel()
+        {
+            Models.Sentences m = new Models.Sentences();
+            m.Confidence = Confidence;
+            m.Height = Height;
+            m.IsUsed = IsUsed;
+            m.Left = Left;
+            m.Properties = Properties.Select(p => p.ToModel()).ToList();
+            m.SentenceId = SentenceId;
+            m.SlendernessRatio = SlendernessRatio;
+            m.Top = Top;
+            m.Vendor = Vendor;
+            m.Width = Width;
+            m.Words = Words;
+
+            return m;
         }
     }
 }

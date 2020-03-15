@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.Addresses> GetAllCompanyAddresses(int CompanyId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Addresses> GetAllCompanyAddresses(int CompanyId, bool IsProdEnvironment = false)
         {
-            List<DataSummitModels.Addresses> Addresses = new List<DataSummitModels.Addresses>();
+            List<DataSummitModels.DB.Addresses> Addresses = new List<DataSummitModels.DB.Addresses>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,9 +30,9 @@ namespace DataSummitHelper
             return Addresses;
         }
 
-        public List<DataSummitModels.Addresses> GetAllProjectAddresses(int ProjectId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Addresses> GetAllProjectAddresses(int ProjectId, bool IsProdEnvironment = false)
         {
-            List<DataSummitModels.Addresses> Addresses = new List<DataSummitModels.Addresses>();
+            List<DataSummitModels.DB.Addresses> Addresses = new List<DataSummitModels.DB.Addresses>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             return Addresses;
         }
 
-        public long CreateAddress(DataSummitModels.Addresses Address, bool IsProdEnvironment = false)
+        public long CreateAddress(DataSummitModels.DB.Addresses Address, bool IsProdEnvironment = false)
         {
             long returnid = 0;
             try
@@ -63,7 +63,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateAddress(int id, DataSummitModels.Addresses Address, bool IsProdEnvironment = false)
+        public void UpdateAddress(int id, DataSummitModels.DB.Addresses Address, bool IsProdEnvironment = false)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.Addresses Address = dataSummitDbContext.Addresses.First(p => p.AddressId == AddressId);
+                DataSummitModels.DB.Addresses Address = dataSummitDbContext.Addresses.First(p => p.AddressId == AddressId);
                 dataSummitDbContext.Addresses.Remove(Address);
             }
             catch (Exception ae)

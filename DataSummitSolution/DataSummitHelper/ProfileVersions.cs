@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.ProfileVersions> GetAllCompanyProfileVersions(int companyId)
+        public List<DataSummitModels.DB.ProfileVersions> GetAllCompanyProfileVersions(int companyId)
         {
-            List<DataSummitModels.ProfileVersions> profileversions = new List<DataSummitModels.ProfileVersions>();
+            List<DataSummitModels.DB.ProfileVersions> profileversions = new List<DataSummitModels.DB.ProfileVersions>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,30 +30,33 @@ namespace DataSummitHelper
             return profileversions;
         }
 
-        //public List<DataSummitModels.ProfileVersions> GetAllProjectProfileVersions(int companyId, int projectId)
-        //{
-        //    List<DataSummitModels.ProfileVersions> profileversions = new List<DataSummitModels.ProfileVersions>();
-        //    try
-        //    {
-        //        if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-        //        foreach(DataSummitModels.Projects p in dataSummitDbContext.Projects)
-        //        {
-        //            if (p.CompanyId == companyId && p.ProjectId == projectId)
-        //            {
-        //                profileversions.Add(p) 
-        //                    }
-        //        }
-        //        profileversions = dataSummitDbContext.ProfileVersions
-        //                            .Where(e => e.Company.Projects.Where(f => f.ProjectId == projectId && f.CompanyId == companyId))
-        //    }
-        //    catch (Exception ae)
-        //    {
-        //        string strError = ae.Message.ToString();
-        //    }
-        //    return profileversions;
-        //}
+        public DataSummitModels.DB.ProfileVersions GetProfileVersion(int profileVersionId)
+        {
+            DataSummitModels.DB.ProfileVersions profileVersion = new DataSummitModels.DB.ProfileVersions();
+            try
+            {
+                if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
 
-        public int CreateProfileVersion(DataSummitModels.ProfileVersions profileVersion)
+                profileVersion = dataSummitDbContext.ProfileVersions
+                                    .FirstOrDefault(e => e.ProfileVersionId == profileVersionId);
+                profileVersion.ProfileAttributes = dataSummitDbContext.ProfileAttributes
+                                    .Where(e => e.ProfileVersionId == profileVersion.ProfileVersionId).ToList();
+
+                foreach (DataSummitModels.DB.ProfileAttributes pa in profileVersion.ProfileAttributes)
+                {
+                    pa.StandardAttribute = dataSummitDbContext.StandardAttributes
+                                            .FirstOrDefault(e => e.StandardAttributeId == pa.StandardAttributeId);
+                    pa.ProfileVersion = null;
+                }
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+            }
+            return profileVersion;
+        }
+
+        public int CreateProfileVersion(DataSummitModels.DB.ProfileVersions profileVersion)
         {
             int returnid = 0;
             try
@@ -70,7 +73,7 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateProfileVersion(int id, DataSummitModels.ProfileVersions profileVersion)
+        public void UpdateProfileVersion(int id, DataSummitModels.DB.ProfileVersions profileVersion)
         {
             try
             {
@@ -89,7 +92,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.ProfileVersions profileversion = dataSummitDbContext.ProfileVersions.First(p => p.ProfileVersionId == profileVersionId);
+                DataSummitModels.DB.ProfileVersions profileversion = dataSummitDbContext.ProfileVersions.First(p => p.ProfileVersionId == profileVersionId);
                 dataSummitDbContext.ProfileVersions.Remove(profileversion);
                 dataSummitDbContext.SaveChanges();
             }

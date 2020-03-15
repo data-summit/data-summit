@@ -1,5 +1,5 @@
 ﻿using DataSummitHelper;
-using DataSummitModels;
+using DataSummitModels.DB;
 using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,9 +44,9 @@ namespace DataSummitWeb.Controllers
                         : countryCode + regUser.Phone;
 
                     //Extract address from body
-                    var address = new HashSet<DataSummitModels.Addresses>()
+                    var address = new HashSet<DataSummitModels.DB.Addresses>()
                     {
-                        new DataSummitModels.Addresses
+                        new DataSummitModels.DB.Addresses
                         {
                             Street = regUser.Street,
                             Street2 = regUser.Street2,

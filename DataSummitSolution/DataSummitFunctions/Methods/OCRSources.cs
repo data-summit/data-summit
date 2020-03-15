@@ -1,5 +1,4 @@
-﻿using DataSummitFunctions.Models;
-using DataSummitFunctions.Models.Consolidated;
+﻿using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Models.Amazon;
 using DataSummitFunctions.Models.Azure;
 using DataSummitFunctions.Models.Google.Response;
@@ -14,7 +13,7 @@ namespace DataSummitFunctions.Methods
 {
     public class OCRSources
     {
-        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, ImageGrid im)
+        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitFunctions.Models.ImageGrid im)
         {
             List<Sentences> Sentences = new List<Sentences>();
             try
@@ -203,13 +202,15 @@ namespace DataSummitFunctions.Methods
                     else
                     {
                         //Create previous line
-                        Sentences ss = new Sentences();
-                        ss.Words = string.Join(" ", sent.ToList());
-                        ss.Left = senLeft;
-                        ss.Top = senTop;
-                        ss.Width = senRight - senLeft;
-                        ss.Height = senBottom - senTop;
-                        ss.Vendor = "Google";
+                        Sentences ss = new Sentences
+                        {
+                            Words = string.Join(" ", sent.ToList()),
+                            Left = senLeft,
+                            Top = senTop,
+                            Width = senRight - senLeft,
+                            Height = senBottom - senTop,
+                            Vendor = "Google"
+                        };
                         //ss.FileName = filename;
                         lRes.Add(ss);
                         //Apply current line information
@@ -221,14 +222,16 @@ namespace DataSummitFunctions.Methods
                         sent.Add(wor);
                     }
                 }
-                Sentences ssl = new Sentences();
-                ssl.Words = string.Join(" ", sent.ToList());
-                ssl.Left = senLeft;
-                ssl.Top = senTop;
-                ssl.Width = senRight - senLeft;
-                ssl.Height = senBottom - senTop;
-                ssl.Vendor = "Google";
-                ssl.SlendernessRatio = (senRight - senLeft) / (senBottom - senTop);
+                Sentences ssl = new Sentences
+                {
+                    Words = string.Join(" ", sent.ToList()),
+                    Left = senLeft,
+                    Top = senTop,
+                    Width = senRight - senLeft,
+                    Height = senBottom - senTop,
+                    Vendor = "Google",
+                    SlendernessRatio = (senRight - senLeft) / (senBottom - senTop)
+                };
                 //ssl.FileName = filename;
                 lRes.Add(ssl);
 

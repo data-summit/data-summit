@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using DataSummitWeb.DTO;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +21,21 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
+            ProfileVersions profileVersions = profileVersionsService.GetProfileVersion(id);
+
+            var jss = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.All
+            };
+            return JsonConvert.SerializeObject(profileVersions, Formatting.Indented, jss);
+        }
+
+        // GET api/profileVersion/5
+        [HttpGet("{companyid}/profileversions/{id}")]
+        public string Get(int companyid, int id)
+        {
             List<ProfileVersions> lProfileVersions = profileVersionsService
-                                                        .GetAllCompanyProfileVersions(id);
+                                                        .GetAllCompanyProfileVersions(companyid);
             return JsonConvert.SerializeObject(lProfileVersions.ToArray());
         }
 
@@ -34,9 +47,9 @@ namespace DataSummitWeb.Controllers
             int id = 0;
             try
             {
-                DataSummitModels.ProfileVersions pv = null;
-                List<DataSummitModels.ProfileAttributes> lPa = new List<DataSummitModels.ProfileAttributes>();
-                pv = new DataSummitModels.ProfileVersions
+                DataSummitModels.DB.ProfileVersions pv = null;
+                List<DataSummitModels.DB.ProfileAttributes> lPa = new List<DataSummitModels.DB.ProfileAttributes>();
+                pv = new DataSummitModels.DB.ProfileVersions
                 {
                     CompanyId = profileVersion.CompanyId,
                     Name = profileVersion.Name,
@@ -56,7 +69,7 @@ namespace DataSummitWeb.Controllers
                 
                 foreach (ProfileAttributes pa in profileVersion.ProfileAttributes)
                 {
-                    DataSummitModels.ProfileAttributes npa = new DataSummitModels.ProfileAttributes
+                    DataSummitModels.DB.ProfileAttributes npa = new DataSummitModels.DB.ProfileAttributes
                     {
                         BlockPositionId = pa.BlockPositionId,
                         CreatedDate = DateTime.Now,
@@ -88,7 +101,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/profileVersion/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.ProfileVersions profileVersion)
+        public void Put(int id, [FromBody]ProfileVersions profileVersion)
         {
             //Update
             profileVersionsService.UpdateProfileVersion(id, profileVersion);

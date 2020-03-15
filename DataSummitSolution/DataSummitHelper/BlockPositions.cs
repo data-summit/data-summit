@@ -1,4 +1,4 @@
-﻿using DataSummitModels;
+﻿using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +15,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.BlockPositions> GetAllCompanyBlockPositions(int blockPositionId)
+        public List<DataSummitModels.DB.BlockPositions> GetAllCompanyBlockPositions(int blockPositionId)
         {
-            List<DataSummitModels.BlockPositions> BlockPositions = new List<DataSummitModels.BlockPositions>();
+            List<DataSummitModels.DB.BlockPositions> BlockPositions = new List<DataSummitModels.DB.BlockPositions>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,9 +30,9 @@ namespace DataSummitHelper
             return BlockPositions;
         }
 
-        public DataSummitModels.BlockPositions GetBlockPositionById(int blockPositionId)
+        public DataSummitModels.DB.BlockPositions GetBlockPositionById(int blockPositionId)
         {
-            DataSummitModels.BlockPositions BlockPositions = new DataSummitModels.BlockPositions();
+            DataSummitModels.DB.BlockPositions BlockPositions = new DataSummitModels.DB.BlockPositions();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             return BlockPositions;
         }
 
-        public long CreateBlockPosition(DataSummitModels.BlockPositions blockPositions)
+        public long CreateBlockPosition(DataSummitModels.DB.BlockPositions blockPositions)
         {
             long returnid = 0;
             try
@@ -62,7 +62,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateBlockPosition(int id, DataSummitModels.BlockPositions blockPositions)
+        public void UpdateBlockPosition(int id, DataSummitModels.DB.BlockPositions blockPositions)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.BlockPositions BlockPositions = dataSummitDbContext.BlockPositions.First(p => p.BlockPositionId == blockPositionsId);
+                DataSummitModels.DB.BlockPositions BlockPositions = dataSummitDbContext.BlockPositions.First(p => p.BlockPositionId == blockPositionsId);
                 dataSummitDbContext.BlockPositions.Remove(BlockPositions);
                 dataSummitDbContext.SaveChanges();
             }

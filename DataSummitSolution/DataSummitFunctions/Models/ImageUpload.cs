@@ -25,6 +25,7 @@ namespace DataSummitFunctions.Models
         public string ContainerName { get; set; }
         public bool Success { get; set; }
         public int ProfileVersionId { get; set; }
+        public List<ProfileAttributes> ProfileAttributes { get; set; }
         public decimal? AzureConfidence { get; set; }
         public decimal? GoogleConfidence { get; set; }
         public decimal? AmazonConfidence { get; set; }
