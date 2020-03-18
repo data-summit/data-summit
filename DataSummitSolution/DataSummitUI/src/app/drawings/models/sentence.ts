@@ -1,6 +1,6 @@
-import { Rectangle } from "../profileVersion/create/models/rectangle";
-import { Drawing } from "../drawings/models/drawing";
-import { Property } from "../properties/models/property";
+import { Rectangle } from "../../profileVersion/create/models/rectangle";
+import { Drawing } from "./drawing";
+import { Property } from "../../properties/models/property";
 
 export class Sentence {
 

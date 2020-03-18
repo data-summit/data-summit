@@ -16,7 +16,7 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<DataSummitModels.DB.Companies> GetAllCompanies(bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Companies> GetAllCompanies()
         {
             List<DataSummitModels.DB.Companies> companies = new List<DataSummitModels.DB.Companies>();
             try
@@ -31,7 +31,7 @@ namespace DataSummitHelper
             return companies;
         }
 
-        public DataSummitModels.DB.Companies GetCompanyById(int companyId, bool IsProdEnvironment = false)
+        public DataSummitModels.DB.Companies GetCompanyById(int companyId)
         {
             DataSummitModels.DB.Companies company = new DataSummitModels.DB.Companies();
             try
@@ -46,7 +46,7 @@ namespace DataSummitHelper
             return company;
         }
 
-        public int CreateCompany(DataSummitModels.DB.Companies company, bool IsProdEnvironment = false)
+        public int CreateCompany(DataSummitModels.DB.Companies company)
         {
             int returnid = 0;
             try

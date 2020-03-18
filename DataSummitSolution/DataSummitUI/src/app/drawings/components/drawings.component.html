@@ -22,7 +22,7 @@
             <tr class="text-center" mdbTableCol *ngFor="let drawing of drawings">
               <td>{{drawing.FileName}}</td>
               <td>{{drawing.ContainerName}}</td>
-              <td (click)="goToProperties(drawing.drawingId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + drawing.FileName + ' properties'"></i></td>
+              <td (click)="goToProperties(drawing.DrawingId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + drawing.FileName + ' properties'"></i></td>
               <td>{{drawing.CreatedDate | date: 'd-MMM-yyyy'}}</td>
               <td class="text-center">
                 <i class="fa fa-trash-alt pointer" (click)="deleteDrawing(drawing)" [mdbTooltip]="'Delete ' + drawing.FileName"></i>

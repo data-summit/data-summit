@@ -1,5 +1,5 @@
 import { ProfileAttribute } from "../../profileAttributes/models/profileAttribute";
-import { Sentence } from "../../efModels/sentence";
+import { Sentence } from "../../drawings/models/sentence";
 
 export class Property {
 
@@ -7,9 +7,9 @@ export class Property {
 	SentenceId: number;
 	ProfileAttributeId: number;
 	ProfileAttribute: ProfileAttribute;
-  Sentence: Sentence;
-  // TODO fix this property
-  profileVersionId: any;
+	Sentence: Sentence;
+	// TODO fix this property
+	profileVersionId: any;
 
 	constructor(propertyId?: number, sentenceId?: number, profileAttributeId?: number,
 		profileAttribute?: ProfileAttribute, sentence?: Sentence)

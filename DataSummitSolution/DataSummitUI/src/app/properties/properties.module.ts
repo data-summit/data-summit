@@ -8,7 +8,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { DataSummitSharedModule } from '../shared/data-summit-shared.module';
 import { ApiService } from '../shared/services/api.service';
 
-import { FileUploadModule } from "primeng/fileupload"
 import { ButtonModule } from "primeng/button"
 import { TooltipModule } from "primeng/tooltip"
 
@@ -19,7 +18,6 @@ import { TooltipModule } from "primeng/tooltip"
         ReactiveFormsModule,
         DataSummitSharedModule,
         MDBBootstrapModule,
-        FileUploadModule,
         ButtonModule,
         TooltipModule
     ],

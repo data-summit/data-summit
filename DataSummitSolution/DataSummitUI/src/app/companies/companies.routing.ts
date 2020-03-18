@@ -19,7 +19,7 @@ const archiveRoutes: Routes = [
   { path: ":companyId/profileversions/create", component: CreateProfileVersionComponent},
   { path: ":companyId/projects", component: ProjectsComponent },
   { path: ":companyId/projects/:projectId/drawings", component: DrawingsComponent },
-  { path: ":companyId/projects/:projectId/drawings/:drawingId/Properties", component: PropertiesComponent }
+  { path: ":companyId/projects/:projectId/drawings/:drawingId/properties", component: PropertiesComponent }
 ];
 
 @NgModule({

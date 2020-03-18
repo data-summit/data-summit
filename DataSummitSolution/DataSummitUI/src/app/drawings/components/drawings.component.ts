@@ -35,10 +35,10 @@ export class DrawingsComponent implements OnInit {
 
     ngOnInit() {
         this.companyId = this.route.snapshot.params['companyId'];
-        if (typeof this.companyId === 'string')         //Ensure id is number if received as a string
+        if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
         { this.companyId = Number(this.companyId); }
         this.projectId = this.route.snapshot.params['projectId'];
-        if (typeof this.projectId === 'string')         //Ensure id is number if received as a string
+        if (typeof this.projectId == 'string')         //Ensure id is number if received as a string
         { this.projectId = Number(this.projectId); }
         this.getDrawings(this.projectId);
         this.initDrawingsTable();
@@ -165,6 +165,6 @@ export class DrawingsComponent implements OnInit {
     }
 
     goToProperties(drawingId: number) {
-        this.router.navigate([`${this.companyId}/projects/${this.projectId}/drawings/${drawingId}/Properties`])
+        this.router.navigate([`companies/${this.companyId}/projects/${this.projectId}/drawings/${drawingId}/properties`])
     }
 }
