@@ -20,7 +20,7 @@ export class ProfileAttributesComponent implements OnInit {
     selectedProfileAttribute: ProfileAttribute;
     profileAttributeForm: FormGroup
     loading: boolean;
-    companyId: any;
+    companyId: number;
     
     constructor(private router: Router,
         private api: ApiService,
@@ -28,10 +28,15 @@ export class ProfileAttributesComponent implements OnInit {
         private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.profileVersionId = this.route.snapshot.params['profileVersionId']
+        //Get companyId from URL
         this.companyId = this.route.snapshot.params['companyId']
-        if (typeof this.profileVersionId === 'string')         //Ensure id is number if received as a string
+        if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
+        { this.companyId = Number(this.companyId); }
+        //Get profileVersionId from URL
+        this.profileVersionId = this.route.snapshot.params['profileVersionId']
+        if (typeof this.profileVersionId == 'string')         //Ensure id is number if received as a string
         { this.profileVersionId = Number(this.profileVersionId); }
+
         this.getProfileAttributes(this.profileVersionId);
         this.initProfileAttributesTable();
         //this.initProfileAttributeForm();

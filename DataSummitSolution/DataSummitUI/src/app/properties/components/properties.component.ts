@@ -4,6 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Property } from '../models/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DrawingProperty } from '../models/drawingProperty';
+import { Drawing } from '../models/drawing';
+import { ProfileVersion } from '../../profileVersion/models/profileVersion';
+import { ProfileAttribute } from '../../profileAttributes/models/profileAttribute';
+import { Sentence } from '../../drawings/models/sentence';
+import { DrawingData } from '../models/drawingData';
 
 @Component({
     selector: 'ds-properties',
@@ -14,16 +20,15 @@ export class PropertiesComponent implements OnInit {
 
     @ViewChild('propertyModal', { static: false }) propertyModal;
 
-    @Input() companyId: number;
+    companyId: number;
+    projectId: number;
     drawingId: number;
     properties: Property[];
-    headers: string[];
+    drawingProperties: DrawingData;
     selectedProperties: Property;
+    headers: string[];
     drawingForm: FormGroup;
     loading: boolean;
-    // TODO correct types of these properties or update the html to exculde them
-    profileVersions: any;
-    profileVersionForm: any;
     saveProfileAttribute: any;
 
     constructor(private router: Router,
@@ -32,15 +37,26 @@ export class PropertiesComponent implements OnInit {
         private route: ActivatedRoute) { }
 
     ngOnInit() {
-        // CompanyId
-        this.companyId = this.route.snapshot.params['companyId'];
-        if (typeof this.companyId === 'string') { this.companyId = Number(this.companyId); }
-        this.getPropertiess(this.companyId);
+        //Get companyId from URL
+        this.companyId = this.route.snapshot.params['companyId']
+        if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
+        { this.companyId = Number(this.companyId); }
+        //Get projectId from URL
+        this.projectId = this.route.snapshot.params['projectId']
+        if (typeof this.projectId == 'string')         //Ensure id is number if received as a string
+        { this.projectId = Number(this.projectId); }
+        //Get drawingId from URL
+        this.drawingId = this.route.snapshot.params['drawingId']
+        if (typeof this.drawingId == 'string')         //Ensure id is number if received as a string
+        { this.drawingId = Number(this.drawingId); }
+
+        this.drawingProperties = new DrawingData();
         this.initPropertiesTable();
-        this.initPropertiessForm();
+        this.initPropertiesForm();
+        this.getProperties(this.drawingId);
     }
 
-    initPropertiessForm() {
+    initPropertiesForm() {
         this.drawingForm = this.fb.group({
             Name: this.fb.control('', Validators.required),
             CreateDate: this.fb.control('')
@@ -50,31 +66,30 @@ export class PropertiesComponent implements OnInit {
 
     initPropertiesTable() {
         this.headers = [
+            'Standard Name',
             'Name',
-            'Profile Attributes',
-            'Height',
-            'Width',
-            'Created Date',
+            'Name X',
+            'Name Y',
+            'Value',
+            'Value X',
+            'Value Y',
             'Actions'
         ]; }
 
-    getPropertiess(id: number) {
+    getProperties(id: number) {
         this.loading = true;
-        this.api.get('api/profileversions/' + id.toString(), id)
+        this.api.get(`api/properties/${id}`)
             .pipe(take(1))
-                .subscribe((result: Property[]) => {
-                    this.properties = [];
-                    for (let i = 0; i < result.length; i++) {
-                        const p = <Property>result[i];
-                        this.properties.push(p);
-                }
-                console.log(location.origin.toString() + this.router.url.toString());
-                this.loading = false;
+                .subscribe((result: DrawingData) => {
+                    let d = <DrawingData>result;
+                    this.drawingProperties = d;
+                    console.log(location.origin.toString() + this.router.url.toString());
             }, error => {
+                console.log("Error occurred");
                 console.log(error);
-                this.loading = false;
             });
-        }
+        this.loading = false;
+    }
 
     goToAttributes(drawingId: number) {
         this.router.navigate(['companies/profileattributes', drawingId]);
@@ -100,7 +115,7 @@ export class PropertiesComponent implements OnInit {
             this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
                 .pipe(take(1))
                 .subscribe(result => {
-                    this.getPropertiess(this.companyId);
+                    this.getProperties(this.companyId);
                     console.log(result);
                 }, error => {
                     console.log(error);

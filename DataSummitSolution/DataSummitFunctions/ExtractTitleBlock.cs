@@ -31,25 +31,41 @@ namespace DataSummitFunctions
                 foreach (ProfileAttributes pa in iu.ProfileAttributes)
                 {
                     string name = pa.Name;
-                    var instances = iu.Sentences.Count(b => 
+                    var instances = iu.Sentences.Count(b =>
                                               (b.Left > (pa.ValueX - Tolerance) && b.Left < (pa.ValueX + pa.ValueWidth) + Tolerance) &&
                                               (b.Top > (pa.ValueY - Tolerance) && b.Top < (pa.ValueY + pa.ValueHeight) + Tolerance));
-                    var sentences = iu.Sentences.Where(b =>
+
+                    if (instances > 0)
+                    {
+                        var sentences = iu.Sentences.Where(b =>
                                               (b.Left > (pa.ValueX - Tolerance) && b.Left < (pa.ValueX + pa.ValueWidth) + Tolerance) &&
                                               (b.Top > (pa.ValueY - Tolerance) && b.Top < (pa.ValueY + pa.ValueHeight) + Tolerance)).ToList();
-                    if (instances == 1)
-                    {
-                        pa.Value = sentences[0].Words;
+                        if (pa.Properties == null) pa.Properties = new List<Models.Properties>();
+                        if (instances == 1)
+                        {
+                            pa.Value = sentences[0].Words;
+                            Models.Properties p = new Models.Properties();
+                            p.SentenceId = sentences[0].SentenceId;
+                            p.ProfileAttributeId = pa.ProfileAttributeId;
+                            pa.Properties.Add(p);
+                        }
+                        else if (instances > 1)
+                        {
+                            //Combine results for now
+                            pa.Value = string.Join(" ", sentences.Select(w => w.Words).ToList()).Trim();
+                            // Additional tests for multiple results to determine containment
+                            // or whether specific words are to be split
+                            foreach (var s in sentences)
+                            {
+                                Models.Properties p = new Models.Properties();
+                                p.SentenceId = s.SentenceId;
+                                p.ProfileAttributeId = pa.ProfileAttributeId;
+                                pa.Properties.Add(p);
+                            }
+                        }
+                        else
+                        { }
                     }
-                    else if (instances > 1)
-                    {
-                        //Combine results for now
-                        pa.Value = string.Join(" ", sentences.Select(w => w.Words).ToList()).Trim();
-                        // Additional tests for multiple results to determine containment
-                        // or whether specific words are to be split
-                    }
-                    else
-                    { }
                 }
 
                 string jsonToReturn = JsonConvert.SerializeObject(iu);

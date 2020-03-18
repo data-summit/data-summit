@@ -1,5 +1,5 @@
-﻿using DataSummitHelper;
-using DataSummitModels.DB;
+﻿using DataSummitModels.DB;
+using DataSummitModels.DTO;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -21,7 +21,8 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "";
+            DrawingData dd = propertiesService.GetAllDrawingProperties(id);
+            return JsonConvert.SerializeObject(dd);
         }
 
         // POST api/values
@@ -29,7 +30,7 @@ namespace DataSummitWeb.Controllers
         public string Post([FromBody]DataSummitModels.DB.Properties properties)
         {
             //Create
-            return JsonConvert.SerializeObject(propertiesService.CreateProperty(properties, Startup.IsProdEnvironment));
+            return JsonConvert.SerializeObject(propertiesService.CreateProperty(properties));
         }
 
         // PUT api/values/5
@@ -37,14 +38,14 @@ namespace DataSummitWeb.Controllers
         public void Put(int id, [FromBody]DataSummitModels.DB.Properties properties)
         {
             //Update
-            propertiesService.UpdateProperty(id, properties, Startup.IsProdEnvironment);
+            propertiesService.UpdateProperty(id, properties);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public string Delete(long id)
         {
-            propertiesService.DeleteProperty(id, Startup.IsProdEnvironment);
+            propertiesService.DeleteProperty(id);
             return JsonConvert.SerializeObject("Ok");
         }
     }
