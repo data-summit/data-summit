@@ -66,9 +66,6 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Data" />
-    <Folder Include="dbo\Deploy" />
-    <Folder Include="dbo\Deploy\Local" />
-    <Folder Include="dbo\Deploy\Cloud" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Addresses.sql" />
@@ -109,37 +106,32 @@
     <Build Include="dbo\Tables\Properties.sql" />
     <Build Include="dbo\Tables\StandardAttributes.sql" />
     <Build Include="dbo\Tables\PaperOrientations.sql" />
+    <None Include="dbo\Data\Addresses.sql" />
+    <None Include="dbo\Data\AspNetRoles.sql" />
+    <None Include="dbo\Data\AspNetUsers.sql" />
+    <None Include="dbo\Data\AzureCompanyResourceUrls.sql" />
+    <None Include="dbo\Data\BlockPositions.sql" />
+    <None Include="dbo\Data\Companies.sql" />
+    <None Include="dbo\Data\Countries.sql" />
+    <None Include="dbo\Data\Currencies.sql" />
+    <None Include="dbo\Data\Drawings.sql" />
+    <None Include="dbo\Data\Genders.sql" />
+    <None Include="dbo\Data\GoogleLanguages.sql" />
+    <None Include="dbo\Data\ImageGrids.sql" />
+    <None Include="dbo\Data\PaperOrientations.sql" />
+    <None Include="dbo\Data\PaperSizes.sql" />
+    <None Include="dbo\Data\ProfileAttributes.sql" />
+    <None Include="dbo\Data\ProfileVersions.sql" />
+    <None Include="dbo\Data\Projects.sql" />
+    <None Include="dbo\Data\Properties.sql" />
+    <None Include="dbo\Data\Sentences.sql" />
+    <None Include="dbo\Data\StandardAttributes.sql" />
+    <None Include="dbo\Data\Tasks.sql" />
+    <None Include="dbo\Data\UserInfo.sql" />
+    <None Include="dbo\Data\UserInfoTypes.sql" />
+    <None Include="dbo\Data\UserTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataSummitDB.refactorlog" />
-  </ItemGroup>
-  <ItemGroup>
-    <PostDeploy Include="dbo\Deploy\Local\Script.PostDeployment.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dbo\Data\AspNetRoles.sql" />
-    <None Include="dbo\Data\Companies.sql" />
-    <None Include="dbo\Data\UserTypes.sql" />
-    <None Include="dbo\Data\AspNetUsers.sql" />
-    <None Include="dbo\Data\UserInfoTypes.sql" />
-    <None Include="dbo\Data\UserInfo.sql" />
-    <None Include="dbo\Data\BlockPositions.sql" />
-    <None Include="dbo\Data\PaperSizes.sql" />
-    <None Include="dbo\Data\StandardAttributes.sql" />
-    <None Include="dbo\Data\AzureCompanyResourceUrls.sql" />
-    <None Include="dbo\Data\Projects.sql" />
-    <None Include="dbo\Data\Countries.sql" />
-    <None Include="dbo\Data\Addresses.sql" />
-    <None Include="dbo\Data\PaperOrientations.sql" />
-    <None Include="dbo\Data\Drawings.sql" />
-    <None Include="dbo\Data\ImageGrids.sql" />
-    <None Include="dbo\Data\Sentences.sql" />
-    <None Include="dbo\Data\Tasks.sql" />
-    <None Include="dbo\Data\Currencies.sql" />
-    <None Include="dbo\Data\GoogleLanguages.sql" />
-    <None Include="dbo\Data\ProfileVersions.sql" />
-    <None Include="dbo\Data\ProfileAttributes.sql" />
-    <None Include="dbo\Data\Properties.sql" />
-    <None Include="dbo\Data\Genders.sql" />
   </ItemGroup>
 </Project>
