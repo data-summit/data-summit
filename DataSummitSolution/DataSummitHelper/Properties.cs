@@ -32,10 +32,12 @@ namespace DataSummitHelper
                     ProfileAttributes.Where(a => a.ProfileVersionId == Template.ProfileVersionId).ToList();
                 List<DataSummitModels.DB.Sentences> sentences = dataSummitDbContext.
                     Sentences.Where(s => s.DrawingId == drawingId).ToList();
+
+                var propertiesSentences = dataSummitDbContext.Properties.Select(p => p.Sentence)
+                    .ToList();
+
                 List<DataSummitModels.DB.Properties> Properties = dataSummitDbContext
                     .Properties.Where(p => sentences.Select(s => s.SentenceId).Contains(p.SentenceId) == true).ToList();
-                List<DataSummitModels.DB.StandardAttributes> standardAttributes = dataSummitDbContext
-                    .StandardAttributes.ToList();
 
                 //Map Drawing properties
                 dp.AmazonConfidence = Drawing.AmazonConfidence;
@@ -70,10 +72,10 @@ namespace DataSummitHelper
                 {
                     DataSummitModels.DB.Sentences sentence = sentences.FirstOrDefault(s => s.SentenceId == p.SentenceId);
                     DataSummitModels.DB.ProfileAttributes attribute = Attributes.FirstOrDefault(a => a.ProfileAttributeId == p.ProfileAttributeId);
+                    
                     if (sentence != null && attribute != null)
                     {
                         PropertyData pd = new PropertyData();
-                        DataSummitModels.DB.StandardAttributes standard = standardAttributes.FirstOrDefault(sa => sa.StandardAttributeId == attribute.StandardAttributeId);
 
                         //Map Sentence class properties
                         pd.SentenceId = sentence.SentenceId;
@@ -105,10 +107,8 @@ namespace DataSummitHelper
                         pd.ValueY = attribute.ValueY;
                         pd.ValueWidth = attribute.ValueWidth;
                         pd.ValueHeight = attribute.ValueHeight;
-
-                        //Map StandardAttribute properties
-                        pd.StandardAttributeId = standard.StandardAttributeId;
-                        pd.StandardName = standard.Name;
+                        pd.StandardAttributeId = attribute.StandardAttributeId.Value;
+                        pd.StandardName = attribute.StandardAttribute.Name;
 
                         dp.Properties.Add(pd);
                     }
@@ -138,18 +138,26 @@ namespace DataSummitHelper
             return returnlong;
         }
 
-        public void UpdateProperty(int id, DataSummitModels.DB.Properties property)
+        public async void UpdateProperty(int propertyId, string value)
         {
             try
             {
-                if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitModels.DB.DataSummitDbContext();
-                dataSummitDbContext.Properties.Update(property);
+                // if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitModels.DB.DataSummitDbContext();
+                // dataSummitDbContext.Properties.Update(property);
+                // _ = await dataSummitDbContext.SaveChangesAsync();
+
+                // var property = new DataSummitModels.DB.Properties() { Id = propertyId, Value = value };
+                // using (var context = new DataSummitModels.DB.DataSummitDbContext())
+                // {
+                //     context.Properties.Attach(property);
+                //     context.Entry(property).Property(p => p.Value).IsModified = true;
+                //     context.SaveChanges();
+                // }
             }
-            catch (Exception ae)
+            catch (Exception ex)
             {
-                string strError = ae.Message.ToString();
+                throw;
             }
-            return;
         }
 
         public void DeleteProperty(long propertyId)

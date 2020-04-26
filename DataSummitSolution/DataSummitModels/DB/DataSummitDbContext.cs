@@ -9,10 +9,11 @@ namespace DataSummitModels.DB
         private string connProdString = @"Server=tcp:datasummit.database.windows.net,1433;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=TomJames;Password=!Aa1234567;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         private bool OnConfigureIsProductionDb = false;
 
+        // Required when using DI
+        // This allows us to inject the context and pass the connection string in via the calling service's Startup.cs
         public DataSummitDbContext(DbContextOptions<DataSummitDbContext> options)
             : base(options)
-        {
-        }
+        { }
 
         public DataSummitDbContext()
         {
@@ -20,34 +21,8 @@ namespace DataSummitModels.DB
             var optionsBuilder = new DbContextOptionsBuilder<DataSummitDbContext>();
         }
 
-        public DataSummitDbContext(bool IsProdEnvironment = false)
-        {
-            //Manually added by TJ. May not be the correct method to initialise the database/context connection
-            var optionsBuilder = new DbContextOptionsBuilder<DataSummitDbContext>();
-            if (IsProdEnvironment)
-            {
-                // This internal bool is required as "protected override void OnConfiguring" cannot pass 
-                // "bool IsProdEnvironment = false" parameter
-                OnConfigureIsProductionDb = true;
-                optionsBuilder.UseSqlServer(connProdString);
-            }
-            else
-            { optionsBuilder.UseSqlServer(connDevString); }
-
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // Uses local bool to determine whether development or production environment
-                // is actvie
-                if (OnConfigureIsProductionDb)
-                { optionsBuilder.UseSqlServer(connProdString); }
-                else
-                { optionsBuilder.UseSqlServer(connDevString); }
-            }
-        }
+        { }
 
         public virtual DbSet<Addresses> Addresses { get; set; }
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
@@ -86,7 +61,7 @@ namespace DataSummitModels.DB
         public virtual DbSet<UserInfo> UserInfo { get; set; }
         public virtual DbSet<UserInfoTypes> UserInfoTypes { get; set; }
         public virtual DbSet<UserTypes> UserTypes { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");

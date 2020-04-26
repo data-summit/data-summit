@@ -75,6 +75,9 @@ namespace DataSummitOAuthServer
                     //    "https://oauth.data-summit.co.uk", "https://ui.data-summit.co.uk", "https://data-summit.co.uk")
                     //    .AllowAnyHeader()
                     //    .AllowAnyMethod();
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
                 });
             });
 

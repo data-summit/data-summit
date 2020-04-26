@@ -18,6 +18,7 @@
     "DataSummitOAuthServer": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "https://localhost:55836",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
