@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { ProfileVersion } from '../models/profileVersion';
+import { TemplateTableRow } from '../models/templateTableRow';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -16,9 +16,9 @@ export class ProfileVersionsComponent implements OnInit {
 
     @Input() companyId: number;
     profileVersionId: number;
-    profileVersions: ProfileVersion[];
+    profileVersions: Array<TemplateTableRow>;
     headers: string[];
-    selectedProfileVersion: ProfileVersion;
+    selectedProfileVersion: TemplateTableRow;
     profileVersionForm: FormGroup
     loading: boolean;
 
@@ -28,13 +28,11 @@ export class ProfileVersionsComponent implements OnInit {
         private route: ActivatedRoute) { }
 
     ngOnInit() {
-        //CompanyId
         this.companyId = this.route.snapshot.params['companyId']
-        if (typeof this.companyId == 'string')         //Ensure companyId is number if received as a string
+        if (typeof this.companyId == 'string') //Ensure companyId is number if received as a string
         { this.companyId = Number(this.companyId);}
         this.getProfileVersions(this.companyId);
         this.initProfileVersionTable();
-        //this.initProfileVersionsForm();
     }
 
     initProfileVersionTable() {
@@ -51,13 +49,18 @@ export class ProfileVersionsComponent implements OnInit {
         this.loading = true;
         this.api.get("api/profileversions/" + id.toString(), id)
             .pipe(take(1))
-                .subscribe((result: ProfileVersion[]) => {
+                .subscribe((result: any[]) => {
                     this.profileVersions = [];
                     for (let i = 0; i < result.length; i++) {
-                        let p = <ProfileVersion>result[i];
-                        this.profileVersions.push(p);
+                        let t = new TemplateTableRow(result[i].profileVersionId, 
+                            result[i].templateName, 
+                            result[i].companyId, 
+                            result[i].width, 
+                            result[i].height, 
+                            result[i].createdDate);
+
+                        this.profileVersions.push(t);
                 };
-                console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
             }, error => {
                 console.log(error)
@@ -65,19 +68,18 @@ export class ProfileVersionsComponent implements OnInit {
             });
         }
 
-    goToAttributes(profileVersion?: ProfileVersion) {
+    goToAttributes(profileVersion?: TemplateTableRow) {
         this.router.navigate([`companies/${this.companyId.toString()}/profileversions/${profileVersion.ProfileVersionId}/profileAttributes`]);
     }
 
     createProfileVersion() {
         this.router.navigate([`companies/${this.companyId.toString()}/profileversions/create`])
-        //this.router.navigate([`companies/${this.companyId.toString()}/profileversions/${profileVersion.ProfileVersionId}/Create`])
     }
 
-    addOrEditProfileVersion(profileVersion?: ProfileVersion)
+    addOrEditProfileVersion(profileVersion?: TemplateTableRow)
     {
         if (profileVersion == null)
-        { this.selectedProfileVersion = new ProfileVersion(); }
+        { this.selectedProfileVersion = new TemplateTableRow(); }
         else
         { this.selectedProfileVersion = profileVersion; }
         this.profileVersionModal.show();
@@ -86,7 +88,7 @@ export class ProfileVersionsComponent implements OnInit {
     hideDialog()
     {
         this.profileVersionModal.hide();
-        this.selectedProfileVersion = new ProfileVersion();
+        this.selectedProfileVersion = new TemplateTableRow();
     }
 
     saveProfileVersion()
@@ -117,7 +119,7 @@ export class ProfileVersionsComponent implements OnInit {
         }
     }
 
-    deleteProfileVersion(profileVersion?: ProfileVersion)
+    deleteProfileVersion(profileVersion?: TemplateTableRow)
     {
         if (profileVersion.ProfileVersionId > 0) //New entry
         { 

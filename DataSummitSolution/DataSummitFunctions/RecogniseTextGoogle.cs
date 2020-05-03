@@ -1,5 +1,4 @@
 using DataSummitFunctions.Models;
-using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Models.Google.Request;
 using DataSummitFunctions.Models.Google.Response;
 using DataSummitFunctions.Methods.PostProcessing;
@@ -171,7 +170,7 @@ namespace DataSummitFunctions
                         ig.Sentences = null;
                     }
 
-                    Methods.PostProcessing.Self self = new Methods.PostProcessing.Self();
+                    Self self = new Self();
                     List<Models.Sentences> lResults = self.Clean(imgUp
                                             .Sentences.Select(s => s.ToModelConsolidated()).ToList())
                                             .Select(s => s.ToModel()).ToList();

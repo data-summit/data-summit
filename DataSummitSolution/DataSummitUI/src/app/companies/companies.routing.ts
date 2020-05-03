@@ -6,7 +6,7 @@ import { ProfileVersionsComponent } from "../profileVersion/components/profileVe
 import { ProfileAttributesComponent } from "../profileAttributes/components/profileAttributes.component";
 import { DrawingsComponent } from "../drawings/components/drawings.component";
 import { PropertiesComponent } from "../properties/components/properties.component";
-import { StandardAttributeComponent } from "../standardAttribute/components/standardAttribute.component";
+import { StandardAttributeComponent } from "../../obsolete/standardAttribute/components/standardAttribute.component";
 import { CreateProfileVersionComponent } from "../profileVersion/create/components/createProfileVersion.component";
 //import { Template } from "@angular/compiler/src/render3/r3_ast";
 

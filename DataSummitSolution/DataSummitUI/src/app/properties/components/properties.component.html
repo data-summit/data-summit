@@ -3,7 +3,7 @@
     <table>
         <tr>
           <td width="100%">
-            <h2 class="h1 py-5 font-weight-bold" *ngIf="drawingProperties.FileName != null">Drawing: {{drawingProperties.FileName}}</h2>
+            <!-- <h2 class="h1 py-5 font-weight-bold" *ngIf="drawingProperties.FileName != null">Drawing: {{drawingProperties.FileName}}</h2> -->
           </td>
         </tr>
     </table>
@@ -14,18 +14,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center" mdbTableCol *ngFor="let a of drawingProperties.Properties">
+          <tr class="text-center" mdbTableCol *ngFor="let a of drawingProperties; index as i;">
             <td style="text-align:left;">{{a.StandardName}}</td>
             <td style="text-align:left;">{{a.Name}}</td>
-            <td style="text-align:right;">{{a.NameX.toLocaleString('en-us', {minimumFractionDigits: 0})}}</td>
-            <td style="text-align:right;">{{a.NameY.toLocaleString('en-us', {minimumFractionDigits: 0})}}</td>
-            <td style="text-align:left;">{{a.Words}}</td>
-            <td style="text-align:right;">{{a.ValueX.toLocaleString('en-us', {minimumFractionDigits: 0})}}</td>
-            <td style="text-align:right;">{{a.ValueY.toLocaleString('en-us', {minimumFractionDigits: 0})}}</td>
+            <td *ngIf="enableEdit">
+              <input [required]="required" [name]="value" [(ngModel)]="a.Value" [placeholder]="label" />
+            </td>
+            <td *ngIf="!enableEdit" style="text-align:left;">{{a.Value}}</td>
+            <td style="text-align:left;">{{a.Confidence}}</td>
             <td class="text-center">
-              <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + a.ProfileAttributeId" (click)="addOrEditProperties(p)"></i>
+              <i *ngIf="enableEdit && enableEditIndex == i" class="fa fa-ban pointer" (click)="enableEdit=false" ng-click="cancel()"></i>
                 |
-              <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + a.ProfileAttributeId" (click)="deleteProperties(p)"></i>
+              <i *ngIf="enableEdit && enableEditIndex == i" class="fa fa-check-circle pointer" id="saveBtn" (click)="updateDrawingProperty(a.Id, a.Value)"></i>
+              <i *ngIf="!enableEdit" class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + a.Id" (click)="enableEditMethod(i)"></i>
+                |
+              <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + a.Id" (click)="deleteDrawingProperty(p)"></i>
             </td>
           </tr>
         </tbody>

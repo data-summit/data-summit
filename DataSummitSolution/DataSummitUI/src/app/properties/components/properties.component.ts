@@ -1,15 +1,9 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { Property } from '../models/property';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawingProperty } from '../models/drawingProperty';
-import { Drawing } from '../models/drawing';
-import { ProfileVersion } from '../../profileVersion/models/profileVersion';
-import { ProfileAttribute } from '../../profileAttributes/models/profileAttribute';
-import { Sentence } from '../../drawings/models/sentence';
-import { DrawingData } from '../models/drawingData';
 
 @Component({
     selector: 'ds-properties',
@@ -23,13 +17,13 @@ export class PropertiesComponent implements OnInit {
     companyId: number;
     projectId: number;
     drawingId: number;
-    properties: Property[];
-    drawingProperties: DrawingData;
-    selectedProperties: Property;
     headers: string[];
     drawingForm: FormGroup;
     loading: boolean;
     saveProfileAttribute: any;
+    enableEdit = false;
+    enableEditIndex = null;
+    drawingProperties: Array<DrawingProperty>
 
     constructor(private router: Router,
         private api: ApiService,
@@ -50,10 +44,9 @@ export class PropertiesComponent implements OnInit {
         if (typeof this.drawingId == 'string')         //Ensure id is number if received as a string
         { this.drawingId = Number(this.drawingId); }
 
-        this.drawingProperties = new DrawingData();
         this.initPropertiesTable();
         this.initPropertiesForm();
-        this.getProperties(this.drawingId);
+        this.getDrawingProperties(this.drawingId);
     }
 
     initPropertiesForm() {
@@ -61,34 +54,39 @@ export class PropertiesComponent implements OnInit {
             Name: this.fb.control('', Validators.required),
             CreateDate: this.fb.control('')
         });
-        this.selectedProperties = new Property();
     }
 
     initPropertiesTable() {
         this.headers = [
             'Standard Name',
             'Name',
-            'Name X',
-            'Name Y',
             'Value',
-            'Value X',
-            'Value Y',
+            'Confidence',
             'Actions'
         ]; }
 
-    getProperties(id: number) {
-        this.loading = true;
-        this.api.get(`api/properties/${id}`)
+    getDrawingProperties(id: number) {
+        this.loading = true;        
+        this.api.get(`api/properties/drawing/${id}`)
             .pipe(take(1))
-                .subscribe((result: DrawingData) => {
-                    let d = <DrawingData>result;
-                    this.drawingProperties = d;
-                    console.log(location.origin.toString() + this.router.url.toString());
+                .subscribe((result: any[]) => {
+                    this.drawingProperties = [];
+
+                    for (let i = 0; i < result.length; i++) {
+                        let p = new DrawingProperty(result[i].sentenceId, 
+                            result[i].standardName, 
+                            result[i].name, 
+                            result[i].wordValue, 
+                            result[i].confidence);
+
+                        this.drawingProperties.push(p);
+                };
+                console.log(location.origin.toString() + this.router.url.toString());
+                this.loading = false;
             }, error => {
-                console.log("Error occurred");
                 console.log(error);
-            });
-        this.loading = false;
+                this.loading = false;
+            })
     }
 
     goToAttributes(drawingId: number) {
@@ -99,27 +97,40 @@ export class PropertiesComponent implements OnInit {
         this.router.navigate(['drawings', 'create', 'createprofileversion', this.companyId]);
     }
 
-    addOrEditProperties(drawing?: Property) {
-        if (drawing == null) { this.selectedProperties = new Property(); } else { this.selectedProperties = drawing; }
-        this.selectedProperties.PropertyId = this.drawingId;
+    addOrEditDrawingProperty(drawingPropertyId?: number) {
         this.propertyModal.show();
     }
 
-    hideDialog() {
-        this.propertyModal.hide();
-        this.selectedProperties = new Property();
-    }
+    // deleteProperties(property?: Property) {
+    //     if (property.PropertyId > 0) {
+    //         this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
+    //             .pipe(take(1))
+    //             .subscribe(result => {
+    //                 this.getProperties(this.companyId);
+    //                 console.log(result);
+    //             }, error => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }
 
-    deleteProperties(property?: Property) {
-        if (property.PropertyId > 0) {
-            this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
+    updateDrawingProperty(propertyId: string, propertyValue: string) {
+        let drawingProperty ={propertyId, propertyValue};
+        console.log(drawingProperty);
+        
+        if (drawingProperty) {
+            this.api.post('api/properties/update', drawingProperty)
                 .pipe(take(1))
                 .subscribe(result => {
-                    this.getProperties(this.companyId);
                     console.log(result);
                 }, error => {
                     console.log(error);
                 });
         }
+    }
+
+    enableEditMethod(i: number) {
+        this.enableEdit = true;
+        this.enableEditIndex = i;
     }
 }

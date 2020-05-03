@@ -1,17 +1,10 @@
-﻿using DataSummitModels.DB;
-using DataSummitModels.DTO;
-using DataSummitWeb.Models;
+﻿using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataSummitHelper;
 using System.Linq;
 using DataSummitHelper.Interfaces;
-using DataSummitHelper.Services;
-using DataSummitHelper.Dao.Interfaces;
 
 namespace DataSummitWeb.Controllers
 {
@@ -19,15 +12,14 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class PropertiesController : Controller
     {
-        private readonly IDataSummitHelper _dataSummitHelper;
+        private readonly IDataSummitHelperService _dataSummitHelper;
         
-        public PropertiesController(IDataSummitHelper dataSummitHelper)
+        public PropertiesController(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
-        DataSummitHelper.Properties propertiesService = new DataSummitHelper.Properties(new DataSummitDbContext());
-
+        // GET api/properties/drawing/{id}
         [HttpGet("drawing/{id}")]
         public async Task<IActionResult> GetDrawingProperties([FromRoute] string id)
         {
@@ -41,27 +33,19 @@ namespace DataSummitWeb.Controllers
             return Ok(drawingProperties);
         }
 
-        [HttpPost]
-        public async Task UpdateDrawingProperty([FromBody]DrawingProperty property)
+        [HttpPost("update")]
+        public async Task<IActionResult> UpdateDrawingPropertyValue([FromBody] DrawingPropertyValue drawingPropertyValue)
         {
-            await _dataSummitHelper.UpdateDrawingPropertyValue(property.Id, property.Value);
-            propertiesService.UpdateProperty(property.Id, property.Value);
+            await _dataSummitHelper.UpdateDrawingPropertyValue(drawingPropertyValue.PropertyId, drawingPropertyValue.PropertyValue);
+            return Ok();
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            DrawingData dd = propertiesService.GetAllDrawingProperties(id);
-            return JsonConvert.SerializeObject(dd);
-        }
-
-        // DELETE api/values/5
+        // DELETE api/properties/{id}
         [HttpDelete("{id}")]
-        public string Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            propertiesService.DeleteProperty(id);
-            return JsonConvert.SerializeObject("Ok");
+            await _dataSummitHelper.DeleteDrawingProperty(id);
+            return Ok();
         }
     }
 }

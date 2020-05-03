@@ -1,5 +1,5 @@
-﻿using DataSummitModels.DB;
-using DataSummitREST;
+﻿using DataSummitHelper.Interfaces;
+using DataSummitModels.DB;
 using DataSummitWeb.DTO;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,213 +8,187 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using DataSummitWeb.Enums;
 
 namespace DataSummitWeb.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
-    public class DrawingsController : Controller
+    public partial class DrawingsController : Controller
     {
-        //DataSummitHelper.Users usersService = new DataSummitHelper.Users(new DataSummitDbContext());
-        DataSummitHelper.AzureCompanyResourceUrls azureService = new DataSummitHelper.AzureCompanyResourceUrls(new DataSummitDbContext());
-        DataSummitHelper.Drawings drawingsService = new DataSummitHelper.Drawings(new DataSummitDbContext());
-        DataSummitHelper.ProfileVersions templatesService = new DataSummitHelper.ProfileVersions(new DataSummitDbContext());
+        private readonly IDataSummitHelperService _dataSummitHelper;
+        private const int maxTrialDrawingUploads = 100;
 
-        private DataSummitDbContext db = new DataSummitDbContext();
-        // GET api/drawings/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        private enum ImageUploadTypes
         {
-            List<DataSummitModels.DB.Drawings> lDrawings = drawingsService.GetAllCompanyDrawings(id);
-            return JsonConvert.SerializeObject(lDrawings.ToArray());
+            GIF,
+            JPG,
+            JPEG,
+            PDF,
+            PNG
+        }
+
+        private enum AzureResource
+        {
+            SplitDocument = 1,
+            ImageToContainer = 2,
+            DivideImage = 3,
+            RecogniseTextAzure = 4,
+            PostProcessing = 5,
+            ExtractTitleBlock = 6
+        }
+
+        public DrawingsController(IDataSummitHelperService dataSummitHelper)
+        {
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var drawings = await _dataSummitHelper.GetProjectDrawings(id);
+            return Ok(drawings);
         }
 
         [HttpGet("templates/{id}")]
-        public string GetTemplates(int companyId)
+        public async Task<IActionResult> GetTemplates(int companyId)
         {
-            List<DataSummitModels.DB.ProfileVersions> lTemplates = templatesService.GetAllCompanyProfileVersions(companyId);
-            return JsonConvert.SerializeObject(lTemplates.ToArray());
+            var templates = await _dataSummitHelper.GetAllCompanyTemplates(companyId);
+            return Ok(templates);
         }
 
-        // POST api/values
         [HttpPost]
-        public string Post([FromBody] List<DrawingUpload> drawings)
+        public string Post([FromBody] List<DrawingUpload> drawingUploads)
         {
-            List<long> returnIds = new List<long>();
+            var returnIds = new List<long>();
             try
             {
-                List<Drawings> drawingsOut = new List<Drawings>();
-                //Catches empty UI data pass
-                if (drawings == null) return "Invalid drawing upload";
-
-                ////Verify credentials prior to processing
-                //AspNetUsers uC = db.AspNetUsers.First(u => u.Id == drawings.First().UserId);
-                //if (uC.IsTrial == true)
-                //{
-                //    //Selects the maximum number of drawings based on their current Trial Limit
-                //    drawings = drawings.Take(TrialRemaining(uC)).ToList();
-                //    //Need to modify UI to handle this type of call
-                //    if (drawings.Count == 0) return "Drawing Limit Hit";
-                //}
-                //else
-                //{
-                //    //Company based account
-
-                //    //Tests required:
-                //    //Monthly quota limits (contract)
-                //    //Monthly quota limits (PAYG)
-                //    //Bundle limits and expiration (prepaid bundles)
-                //}
-
-                //List<Task> lTasks = new List<Task>();
-                foreach (DrawingUpload du in drawings)
+                var drawings = new List<Drawings>();
+                if (drawings == null)
                 {
-                    //lTasks.Add(Task.Run(() =>
-                    //{
-                    if (du.File != null)
+                    return "Invalid drawing upload";
+                }
+
+                foreach (DrawingUpload drawingUpload in drawingUploads)
+                {
+                    if (drawingUpload.File != null)
                     {
-                        List<Drawings> dOut = ProcessDrawingUpload(du);
-                        drawingsOut.AddRange(dOut);
+                        var processedDrawing = ProcessDrawingUpload(drawingUpload);
+                        drawings.AddRange(processedDrawing);
                     }
-                    //}));
                 }
-                foreach(Drawings d in drawingsOut)
+
+                foreach(Drawings d in drawings)
                 {
-                    long id = drawingsService.CreateDrawing(drawingsOut);
-                    if (id > 0) returnIds.Add(id);
+                    // long id = _dataSummitHelper.CreateDrawing(drawings);
+                    // if (id > 0) returnIds.Add(id);
                 }
-                //Task.WaitAll(lTasks.ToArray());
             }
             catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
+            { }
 
             return JsonConvert.SerializeObject(returnIds);
         }
 
-        // PUT api/drawings/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Drawings project)
         {
             //Update
-            drawingsService.UpdateDrawing(id, project);
+            //_dataSummitHelper.UpdateDrawing(id, project);
             return;
         }
 
-        // DELETE api/drawings/5
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            drawingsService.DeleteDrawing(id);
+            //_dataSummitHelper.DeleteDrawing(id);
             return JsonConvert.SerializeObject("Ok");
         }
 
-        private List<Drawings> ProcessDrawingUpload (DrawingUpload du)
+        private List<Drawings> ProcessDrawingUpload (DrawingUpload drawingUpload)
         {
-            List<Drawings> lRet = new List<Drawings>();
+            var drawings = new List<Drawings>();
             try
             {
-                ImageUpload imU = new ImageUpload();
-                imU.ProjectId = du.ProjectId;
-                imU.ProfileVersionId = du.TemplateId;
-                imU.FileName = du.FileName;
-                imU.File = du.File;
-                //imU.UserId = uC.Id;
-
-                Projects cProject = db.Projects.First(p => p.ProjectId == du.ProjectId);
-
-                string s = Convert.ToBase64String(du.File);
-                if (AuditDataPassed(ref imU) == true)
+                if (AuditUploadIds(drawingUpload))
                 {
+                    var mimeType = string.Empty;
+                    switch (drawingUpload.FileType)
+                    {
+                        case "application/pdf":
+                            mimeType = ImageUploadTypes.PDF.ToString();
+                            break;
+                        case "image/jpeg":
+                            mimeType = ImageUploadTypes.JPG.ToString();
+                            break;
+                        case "image/x-png":
+                            mimeType = ImageUploadTypes.PNG.ToString();
+                            break;
+                        case "image/gif":
+                            mimeType = ImageUploadTypes.GIF.ToString();
+                            break;
+                    }
 
-                    if (du.FileType == "application/pdf")
+                    var imageUpload = new ImageUpload
                     {
-                        imU.Type = "PDF";
-                        lRet.AddRange(ProcessPDF(imU, cProject));
-                    }
-                    else if (du.FileType == "image/jpeg")
-                    {
-                        imU.Type = "JPG";
-                        lRet.AddRange(ProcessDrawings(imU));
-                    }
-                    else if (du.FileType == "image/x-png")
-                    {
-                        imU.Type = "PNG";
-                        lRet.AddRange(ProcessDrawings(imU));
-                    }
-                    else if (du.FileType == "image/gif")
-                    {
-                        imU.Type = "GIF";
-                        lRet.AddRange(ProcessDrawings(imU));
-                    }
+                        ProjectId = drawingUpload.ProjectId,
+                        ProfileVersionId = drawingUpload.TemplateId,
+                        FileName = drawingUpload.FileName,
+                        File = drawingUpload.File,
+                        Type = mimeType
+                    };
+
+                    drawings.AddRange(ProcessDrawings(imageUpload));
                 }
             }
             catch (Exception ae)
-            {
-                string strMessage = ae.Message.ToString();
-                string strInner = ae.InnerException.ToString();
-            }
-            return lRet;
+            { }
+
+            return drawings;
         }
 
-        private bool AuditDataPassed(ref ImageUpload imgU)
+        private bool AuditUploadIds(DrawingUpload imgU)
         {
-            try
-            {
-                int pId = imgU.ProjectId;
-                //Check for project number
-                if (pId <= 0) return false;
-                //Check for company number, acquire from project if necessary
-                if (imgU.ProjectId > 0)
-                {
-                    var comp = db.Companies.FirstOrDefault(c => c.Projects.Count(p => p.ProjectId == pId) > 0);
-                    imgU.CompanyId = comp.CompanyId;
-                }
-                if (imgU.CompanyId <= 0) return false;
+            bool idsAreValid = false;
 
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-            return true;
+            idsAreValid &= imgU.ProjectId > 0;
+            // idsAreValid &= imgU.CompanyId > 0;
+
+            return idsAreValid;
         }
 
-        private int TrialRemaining(AspNetUsers user)
+        private int TrialRemaining()
         {
+            int trialRemainingDrawingCount = 0;
+
             try
             {
-                int dCount = db.Drawings.Count(d => d.UserId == user.Id);
                 //Remaining trial documents
-                if (dCount > 0 && dCount < 100)
-                {
-                    return 100 - dCount;
-                }
-                else
-                {
-                    return 0;
-                }
+                trialRemainingDrawingCount = trialRemainingDrawingCount > 0 && trialRemainingDrawingCount < maxTrialDrawingUploads 
+                    ? 100 - trialRemainingDrawingCount 
+                    : trialRemainingDrawingCount;
             }
             catch (Exception ae)
-            { string strError = ae.Message.ToString(); }
-            return 0;
+            { }
+
+            return trialRemainingDrawingCount;
         }
 
-        private List<DataSummitModels.DB.Drawings> ProcessPDF(ImageUpload drawData, Projects cProject)
+        private List<Drawings> ProcessPDF(ImageUpload drawData, Projects cProject)
         {
-            List<DataSummitModels.DB.Drawings> draws = new List<Drawings>();
+            List<Drawings> drawingss = new List<Drawings>();
             try
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();
 
-                Uri uriSplitDocument = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.SplitDocument);
+                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, AzureResource.SplitDocument.ToString());
                 drawData.BlobStorageName = cProject.BlobStorageName;
                 drawData.BlobStorageKey = cProject.BlobStorageKey;
                 drawData.CompanyId = cProject.CompanyId;
 
-                HttpResponseMessage httpPDFImages = API.ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(drawData));
+                HttpResponseMessage httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(drawData));
                 List<ImageUpload> lPDFImages = new List<ImageUpload>();
                 try
                 {
@@ -227,142 +201,102 @@ namespace DataSummitWeb.Controllers
                 { string strError = ae1.ToString(); }
             }
             catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-            return draws;
+            { }
+
+            return drawingss;
         }
 
-        private List<Drawings> ProcessDrawings(ImageUpload drawData)
+        private List<Drawings> ProcessDrawings(ImageUpload imageUpload)
         {
-            List<Drawings> draws = new List<Drawings>();
+            List<Drawings> drawingss = new List<Drawings>();
             try
             {
-                List<ImageUpload> lFiles = new List<ImageUpload>();
-                Projects cProject = db.Projects.First(p => p.ProjectId == drawData.ProjectId);
-                List<AzureCompanyResourceUrls> lRes = db.AzureCompanyResourceUrls.Where(a => a.CompanyId == cProject.CompanyId).ToList();
-                drawData.BlobStorageName = cProject.BlobStorageName;
-                drawData.BlobStorageKey = cProject.BlobStorageKey;
-                drawData.CompanyId = cProject.CompanyId;
+                List<ImageUpload> imageUploads = new List<ImageUpload>();
+                Projects projects = null;
+                imageUpload.BlobStorageName = projects.BlobStorageName;
+                imageUpload.BlobStorageKey = projects.BlobStorageKey;
+                imageUpload.CompanyId = projects.CompanyId;
 
                 //Document manipulation
-                Uri uriSplitDocument = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.SplitDocument);
-                Uri uriImageToContainer = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.ImageToContainer);
-                Uri uriDivideImage = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.DivideImage);
+                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.SplitDocument.ToString());
+                Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.ImageToContainer.ToString());
+                Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.DivideImage.ToString());
+                
                 //OCR
-                //Uri uriAmazonOCR = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.RecogniseTextAmazon);
-                Uri uriAzureOCR = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.RecogniseTextAzure);
-                //Uri uriGoogleOCR = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.RecogniseTextGoogle);
+                Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.RecogniseTextAzure.ToString());
+                
                 //Post processing
-                Uri uriPostProcessing = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.PostProcessing);
+                Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.PostProcessing.ToString());
+                
                 //Extract title block properties
-                Uri uriExtractTitleBlock = azureService.GetIndividualUrl(drawData.CompanyId, DataSummitHelper.AzureCompanyResourceUrls.AzureResource.ExtractTitleBlock);
+                Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.ExtractTitleBlock.ToString());
 
-                if (drawData.Type == "PDF")
+                if (imageUpload.Type == ImageUploadTypes.PDF.ToString())
                 {
                     //Ensure that each PDF is split into a single drawing
-                    HttpResponseMessage httpPDFImages = API.ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(drawData));
-                    List<ImageUpload> lPDFImages = new List<ImageUpload>();
+                    var httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(imageUpload));
+                    var pdfImages = new List<ImageUpload>();
                     try
                     {
-                        string sPDFImages = httpPDFImages.Content.ReadAsStringAsync().Result;
-                        lPDFImages = JsonConvert.DeserializeObject<List<ImageUpload>>(sPDFImages);
-                        if (lPDFImages.Count > 0)
-                        { lFiles.AddRange(lPDFImages); }
+                        string pdfImageStrings = httpPDFImages.Content.ReadAsStringAsync().Result;
+                        pdfImages = JsonConvert.DeserializeObject<List<ImageUpload>>(pdfImageStrings);
+                        if (pdfImages.Count > 0)
+                        { imageUploads.AddRange(pdfImages); }
                     }
                     catch (Exception ae1)
-                    { string strError = ae1.ToString(); }
-
-                    ////Iterate the list of PDFs
-                    //for (int i = 0; i < lPDFImages.Count; i++)
-                    //{
-                    //    HttpResponseMessage httpImageUpload = API.ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(lPDFImages[i]));
-                    //    try
-                    //    {
-                    //        string sImageUpload = httpImageUpload.Content.ReadAsStringAsync().Result;
-                    //        ImageUpload imgResponse = JsonConvert.DeserializeObject<DataSummitModels.ImageUpload>(sImageUpload);
-                    //        lPDFImages[i] = imgResponse;
-                    //    }
-                    //    catch (Exception ae1)
-                    //    { string strError = ae1.ToString(); }
-                    //}
+                    { }
                 }
                 else
                 {
                     //Single image file, no manipulation required
-                    lFiles.Add(drawData);
+                    imageUploads.Add(imageUpload);
                 }
 
-
-                //List<Task> tFunctions = new List<Task>();
-
                 //Upload, split, OCR and list title block properties for each image
-                for (int i = 0; i < lFiles.Count; i++)
+                for (int i = 0; i < imageUploads.Count; i++)
                 {
-                    //tFunctions.Add(Task.Run(() =>
-                    //{ 
                     //Upload image to Azure storage and create container if necessary
-                    HttpResponseMessage httpImageUpload = API.ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(lFiles[i]));
-                    string sImageUpload = httpImageUpload.Content.ReadAsStringAsync().Result;
-                    ImageUpload respImageUpload = JsonConvert.DeserializeObject<ImageUpload>(sImageUpload);
-                    respImageUpload.Tasks = VerifyTaskList(respImageUpload.Tasks.ToList());
-                    lFiles[i] = respImageUpload;
+                    var httpImageUpload = ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(imageUploads[i]));
+                    string imageUploadString = httpImageUpload.Content.ReadAsStringAsync().Result;
+                    var imageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(imageUploadString);
+                    imageUploadObject.Tasks = VerifyTaskList(imageUploadObject.Tasks.ToList());
+                    imageUploads[i] = imageUploadObject;
 
                     //Divide image into OCR acceptable sives
-                    HttpResponseMessage httpDivideImage = API.ProcessCall(uriDivideImage, JsonConvert.SerializeObject(lFiles[i]));
-                    string sDivideImage = httpDivideImage.Content.ReadAsStringAsync().Result;
-                    ImageUpload respDivideImage = JsonConvert.DeserializeObject<ImageUpload>(sDivideImage);
-                    respDivideImage.Tasks = VerifyTaskList(respDivideImage.Tasks.ToList());
-                    lFiles[i] = respDivideImage;
+                    var divideImage = ProcessCall(uriDivideImage, JsonConvert.SerializeObject(imageUploads[i]));
+                    string divideImageString = divideImage.Content.ReadAsStringAsync().Result;
+                    var divideImageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(divideImageString);
+                    divideImageUploadObject.Tasks = VerifyTaskList(divideImageUploadObject.Tasks.ToList());
+                    imageUploads[i] = divideImageUploadObject;
 
                     ///Self cleaning occurs in all 3 OCR functions
                     byte iAzureIt = 0;
-                    //byte iAmazonIt = 0; byte iGoogleIt = 0;
 
                     //Azure
-                    while (iAzureIt < 10 && lFiles[i].SplitImages.Count(si => si.ProcessedAzure == false) > 0)
+                    while (iAzureIt < 10 && imageUploads[i].SplitImages.Count(si => si.ProcessedAzure == false) > 0)
                     {
-                        lFiles[i] = StartPostProcessing(uriAzureOCR, lFiles[i]);
+                        imageUploads[i] = StartPostProcessing(uriAzureOCR, imageUploads[i]);
                         iAzureIt = (byte)(iAzureIt + 1);
                     }
-                    //List<Task> tOCRs = new List<Task>();
-                    //List<ImageUpload> asyncI = new List<ImageUpload>();
-                    //tOCRs.Add(Task.Run(async () => 
-                    //{
-                    //    ////Amazon OCR
-                    //    //asyncI.Add(await StartPostProcessingAsync(uriAmazonOCR, lFiles[i]));
-                    //    //Azure OCR
-                    //    asyncI.Add(await StartPostProcessingAsync(uriAzureOCR, lFiles[i]));
-                    //    ////Google OCR
-                    //    //asyncI.Add(await StartPostProcessingAsync(uriGoogleOCR, lFiles[i]));
-                    //}));
 
                     //Extract title block properties
-                    lFiles[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, lFiles[i]);
-
-                    ////Wait for all results
-                    //Task.WaitAll(tOCRs.ToArray());
+                    imageUploads[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, imageUploads[i]);
                 }
-                //Task.WaitAll(tFunctions.ToArray());                
 
                 //Convert ImageUpload object data to a Drawing object data
-                foreach (ImageUpload f in lFiles)
+                foreach (ImageUpload f in imageUploads)
                 {
                     if (f.WidthOriginal >= f.HeightOriginal)
                     { f.PaperOrientationId = 2; }
                     else
                     { f.PaperOrientationId = 1; }
                     f.CreatedDate = DateTime.Now;
-                    draws.Add(f.ToDrawing());
+                    drawingss.Add(f.ToDrawing());
                 }
-                //}
             }
             catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-                if (ae.InnerException != null) strError = ae.InnerException.ToString();
-            }
-            return draws;
+            { }
+            return drawingss;
         }
 
         private ImageUpload StartPostProcessing(Uri uriPostProcessing, ImageUpload im)
@@ -371,16 +305,13 @@ namespace DataSummitWeb.Controllers
             try
             {
                 //Filter and augment OCR results
-                HttpResponseMessage httpPostProcessing = API.ProcessCall(uriPostProcessing, JsonConvert.SerializeObject(imOut));
+                HttpResponseMessage httpPostProcessing = ProcessCall(uriPostProcessing, JsonConvert.SerializeObject(imOut));
                 string sPostProcessing = httpPostProcessing.Content.ReadAsStringAsync().Result;
                 ImageUpload respPostProcessing = JsonConvert.DeserializeObject<ImageUpload>(sPostProcessing);
                 imOut = respPostProcessing;
             }
             catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-                if (ae.InnerException != null) strError = ae.InnerException.ToString();
-            }
+            { }
             return imOut;
         }
 
@@ -390,7 +321,7 @@ namespace DataSummitWeb.Controllers
             try
             {
                 //Extract title block properties from attributes and sentences
-                HttpResponseMessage httpExtractTitleBlock = API.ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
+                HttpResponseMessage httpExtractTitleBlock = ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
                 string sExtractTitleBlock = httpExtractTitleBlock.Content.ReadAsStringAsync().Result;
                 ImageUpload respExtractTitleBlock = JsonConvert.DeserializeObject<ImageUpload>(sExtractTitleBlock);
                 respExtractTitleBlock.Tasks = VerifyTaskList(respExtractTitleBlock.Tasks.ToList());
@@ -404,57 +335,20 @@ namespace DataSummitWeb.Controllers
             return imOut;
         }
 
-        private async Task<ImageUpload> StartPostProcessingAsync(Uri uriPostProcessing, ImageUpload im)
+        // TODO: This method makes absolutely NO SENSE!
+        private List<Tasks> VerifyTaskList(List<Tasks> tasks)
         {
-            ImageUpload imOut = im;
+            var taskList = tasks ?? new List<Tasks>();
             try
             {
-                //Filter and augment OCR results
-                HttpResponseMessage httpPostProcessing = API.ProcessCall(uriPostProcessing, JsonConvert.SerializeObject(imOut));
-                string sPostProcessing = await httpPostProcessing.Content.ReadAsStringAsync();
-                ImageUpload respPostProcessing = JsonConvert.DeserializeObject<ImageUpload>(sPostProcessing);
-                imOut = respPostProcessing;
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-                if (ae.InnerException != null) strError = ae.InnerException.ToString();
-            }
-            return imOut;
-        }
-
-        private async Task<ImageUpload> ExtractTitleBlockPropertiesAsync(Uri uriExtractTitleBlock, ImageUpload im)
-        {
-            ImageUpload imOut = im;
-            try
-            {
-                //Extract title block properties from attributes and sentences
-                HttpResponseMessage httpExtractTitleBlock = API.ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
-                string sExtractTitleBlock = await httpExtractTitleBlock.Content.ReadAsStringAsync();
-                ImageUpload respExtractTitleBlock = JsonConvert.DeserializeObject<ImageUpload>(sExtractTitleBlock);
-                respExtractTitleBlock.Tasks = VerifyTaskList(respExtractTitleBlock.Tasks.ToList());
-                imOut = respExtractTitleBlock;
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-                if (ae.InnerException != null) strError = ae.InnerException.ToString();
-            }
-            return imOut;
-        }
-
-        private List<Tasks> VerifyTaskList(List<Tasks> lTasks)
-        {
-            try
-            {
-                if (lTasks == null) lTasks = new List<Tasks>();
-                if (lTasks.Count == 0)
+                if (taskList.Count == 0)
                 {
-                    foreach (Tasks td in lTasks)
-                    { lTasks.Add(td); };
-                    if (lTasks.Count == 0)
+                    foreach (var task in taskList)
+                    { taskList.Add(task); };
+                    
+                    if (tasks.Count == 0)
                     {
-                        lTasks.Add(
+                        tasks.Add(
                           new Tasks
                           {
                               Name = "Azure Task Count byPass (to be deleted)",
@@ -466,11 +360,19 @@ namespace DataSummitWeb.Controllers
                 }
             }
             catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-                if (ae.InnerException != null) strError = ae.InnerException.ToString();
-            }
-            return lTasks;
+            { }
+            return tasks;
+        }
+
+        public static HttpResponseMessage ProcessCall(Uri uri, string payload)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            var stringTask = client.PostAsync(uri, httpContent);
+            return stringTask.Result;
         }
     }
 }

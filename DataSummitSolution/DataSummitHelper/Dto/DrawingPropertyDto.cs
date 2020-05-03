@@ -1,5 +1,5 @@
+using DataSummitHelper.Classes;
 using System;
-using DsDb = DataSummitModels.DB;
 
 namespace DataSummitHelper.Dto
 {
@@ -7,19 +7,21 @@ namespace DataSummitHelper.Dto
     /// </summary>
     public sealed class DrawingPropertyDto
     {
-        public int Id { get; set; }
+        public long ProfileAttributeId { get; set; }
         public string StandardName { get; set; }
         public string Name { get; set; }
-        public string Value { get; set; }
         public decimal? Confidence { get; set; }
+        public Guid SentenceId { get; set; }
+        public string WordValue { get; set; }
 
-        public DrawingPropertyDto(DsDb.ProfileAttributes profileAttribute)
+        public DrawingPropertyDto(DrawingProperty drawingProperty)
         {
-            Id = profileAttribute.ProfileVersionId.Value;
-            StandardName = profileAttribute.StandardAttribute.Name;
-            Name = profileAttribute.Name;
-            Value = profileAttribute.Value;
+            ProfileAttributeId = drawingProperty.ProfileAttributes.ProfileAttributeId;
+            StandardName = drawingProperty.ProfileAttributes.StandardAttribute.Name;
+            Name = drawingProperty.ProfileAttributes.Name;
             Confidence = null;
+            SentenceId = drawingProperty.Sentences.SentenceId;
+            WordValue = drawingProperty.Sentences.Words;
         }
     }
 }

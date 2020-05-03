@@ -1,5 +1,4 @@
-﻿using DataSummitModels.DB.Paper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace DataSummitModels.DB
 {
@@ -464,12 +463,6 @@ namespace DataSummitModels.DB
                 entity.Property(e => e.Type).HasMaxLength(7);
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
-
-                entity.HasOne(d => d.PaperOrientation)
-                    .WithMany(p => p.Drawings)
-                    .HasForeignKey(d => d.PaperOrientationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Drawings_PaperOrientations");
 
                 entity.HasOne(d => d.PaperSize)
                     .WithMany(p => p.Drawings)

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitWeb", "DataSummitWeb\DataSummitWeb.csproj", "{1B085E6A-8D7C-46AA-A1F4-C521749791CB}"
 EndProject
@@ -16,8 +16,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitModels", "DataSummitModels\DataSummitModels.csproj", "{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitFunctions", "DataSummitFunctions\DataSummitFunctions.csproj", "{578A8167-393A-4B26-8DFA-A57582D00060}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitREST", "DataSummitRESTClient\DataSummitREST.csproj", "{BEA20FD9-9424-4477-9189-2FCAAE283804}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitOAuthServer", "DataSummitOAuthServer\DataSummitOAuthServer.csproj", "{4CF460DD-6379-4220-95E5-76B78E3EA472}"
 EndProject
@@ -55,10 +53,6 @@ Global
 		{578A8167-393A-4B26-8DFA-A57582D00060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BEA20FD9-9424-4477-9189-2FCAAE283804}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CF460DD-6379-4220-95E5-76B78E3EA472}.Release|Any CPU.ActiveCfg = Release|Any CPU

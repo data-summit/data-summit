@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Company } from '../models/company';
+import { CompanyTableRow } from '../models/companyTableRow';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { take } from 'rxjs/operators';
@@ -13,13 +13,11 @@ export class CompaniesComponent implements OnInit {
 
     @ViewChild('companyModal', { static: false }) companyModal
 
-    companies: Company[];
-    selectedCompany: Company;
+    companies: CompanyTableRow[];
+    selectedCompany: CompanyTableRow;
     companyForm: FormGroup;
     headers: string[];
     loading: boolean;
-    // TODO fix this prperty
-    company: any;
 
     constructor(private router: Router,
         private api: ApiService,
@@ -44,10 +42,10 @@ export class CompaniesComponent implements OnInit {
         this.loading = true;
         this.api.get("api/companies")
         .pipe(take(1))
-            .subscribe((result: Company[]) => {
+            .subscribe((result: CompanyTableRow[]) => {
                 this.companies = [];
                 for (let i = 0; i < result.length; i++) {
-                    let c = <Company>result[i];
+                    let c = <CompanyTableRow>result[i];
                     this.companies.push(c);
                 }
                 console.log(location.origin.toString() + this.router.url.toString());
@@ -58,20 +56,25 @@ export class CompaniesComponent implements OnInit {
             })
     }
 
-    addOrEditCompany(company?: Company)
+    addCompany(company?: CompanyTableRow)
     {
-        if (company == null)
-        { this.selectedCompany = new Company(); }
+        if (!company)
+        { this.selectedCompany = new CompanyTableRow(); }
         else
         { this.selectedCompany = company; }
         this.companyModal.show();
     }
 
-    deleteCompany(company?: Company)
+    editCompany(company?: CompanyTableRow)
     {
-        if (company.CompanyId > 0) //New entry
+        this.addCompany(company);
+    }
+
+    deleteCompany(company?: CompanyTableRow)
+    {
+        if (company.CompanyId > 0)
         {
-            this.api.delete(`api/companies/${company.CompanyId}`, company.CompanyId)
+            this.api.delete(`api/companies/delete`, company.CompanyId)
                 .pipe(take(1))
                 .subscribe(result => {
                     this.companyModal.hide();
@@ -86,14 +89,14 @@ export class CompaniesComponent implements OnInit {
     hideDialog()
     {
         this.companyModal.hide();
-        this.selectedCompany = new Company();
+        this.selectedCompany = new CompanyTableRow();
     }
 
     saveCompany()
     {
-        if (this.selectedCompany.CompanyId == 0) //New entry
+        if (this.selectedCompany.CompanyId === 0) //New entry
         {
-            this.api.post("api/companies", this.selectedCompany)
+            this.api.post("api/companies/create", this.selectedCompany)
                 .pipe(take(1))
                 .subscribe(result => {
                     this.companyModal.hide();
@@ -105,7 +108,7 @@ export class CompaniesComponent implements OnInit {
         }
         else    //updated entry
         {
-            this.api.put("api/companies/"+ this.selectedCompany.CompanyId, this.selectedCompany)
+            this.api.put("api/companies/update", this.selectedCompany)
             .pipe(take(1))
                 .subscribe(result => {
                     this.companyModal.hide();
@@ -115,13 +118,17 @@ export class CompaniesComponent implements OnInit {
                     console.log(error)
                 })
         }
+
+        this.getCompanies();
     }
-    goToTemplates(company?: Company)
+
+    goToTemplates(company?: CompanyTableRow)
     {
-        this.router.navigate([`companies/${company.CompanyId}/profileversions`])
+        this.router.navigate(['companies', company.CompanyId, 'profileversions']);
     }
-    goToProjects(company?: Company)
+
+    goToProjects(company?: CompanyTableRow)
     {
-        this.router.navigate([`companies//${company.CompanyId}/projects`])
+        this.router.navigate(['companies', company.CompanyId, 'projects']);
     }
 }

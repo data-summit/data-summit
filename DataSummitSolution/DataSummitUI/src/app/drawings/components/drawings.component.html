@@ -19,13 +19,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="text-center" mdbTableCol *ngFor="let drawing of drawings">
-              <td>{{drawing.FileName}}</td>
-              <td>{{drawing.ContainerName}}</td>
-              <td (click)="goToProperties(drawing.DrawingId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + drawing.FileName + ' properties'"></i></td>
-              <td>{{drawing.CreatedDate | date: 'd-MMM-yyyy'}}</td>
+            <tr class="text-center" mdbTableCol *ngFor="let drawingRow of drawingTableRows">
+              <td>{{drawingRow.Name}}</td>
+              <td>{{drawingRow.ContainerUrl}}</td>
+              <td (click)="goToProperties(drawingRow.DrawingId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + drawingRow.Name + ' properties'"></i></td>
+              <td>{{drawingRow.CreatedDate | date: 'd-MMM-yyyy'}}</td>
               <td class="text-center">
-                <i class="fa fa-trash-alt pointer" (click)="deleteDrawing(drawing)" [mdbTooltip]="'Delete ' + drawing.FileName"></i>
+                <i class="fa fa-trash-alt pointer" (click)="deleteDrawing(drawingRow)" [mdbTooltip]="'Delete ' + drawingRow.name"></i>
               </td>
             </tr>
           </tbody>

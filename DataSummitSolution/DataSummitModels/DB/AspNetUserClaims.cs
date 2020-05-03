@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DataSummitModels.DB
+﻿namespace DataSummitModels.DB
 {
     public partial class AspNetUserClaims
     {

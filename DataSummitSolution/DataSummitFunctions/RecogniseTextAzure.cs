@@ -1,13 +1,11 @@
 using DataSummitFunctions.Models;
 using DataSummitFunctions.Models.Azure;
-using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Methods.PostProcessing;
 
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -51,7 +49,7 @@ namespace DataSummitFunctions
                 if (imgUp.Tasks.Count == 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: 'Tasks' list is empty");
 
                 List<BlobOCR> lRes = new List<BlobOCR>();
-                Models.Drawing ocrRes = new Models.Drawing();
+                Drawing ocrRes = new Drawing();
 
                 string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.BlobStorageName +
                                            ";AccountKey=" + imgUp.BlobStorageKey + ";EndpointSuffix=core.windows.net";

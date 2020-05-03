@@ -12,7 +12,7 @@ import { ApiService } from '../shared/services/api.service';
 import { ProjectsModule } from '../projects/projects.module';
 import { ProfileVersionsModule } from '../profileVersion/profileVersions.module';
 import { ProfileAttributesModule } from '../profileAttributes/profileAttributes.module';
-import { StandardAttributeModule } from '../standardAttribute/standardAttribute.module';
+import { StandardAttributeModule } from '../../obsolete/standardAttribute/standardAttribute.module';
 import { DrawingsModule } from '../drawings/drawings.module';
 import { PropertiesComponent } from '../properties/components/properties.component';
 import { PropertiesModule } from '../properties/properties.module';

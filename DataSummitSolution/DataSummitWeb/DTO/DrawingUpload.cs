@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-
-namespace DataSummitWeb.DTO
+﻿namespace DataSummitWeb.DTO
 {
     public class DrawingUpload
     {

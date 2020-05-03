@@ -1,9 +1,7 @@
 ﻿using DataSummitFunctions.Models.Consolidated;
-using DataSummitFunctions.Methods.PostProcessing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Methods.PostProcessing
@@ -11,7 +9,7 @@ namespace DataSummitFunctions.Methods.PostProcessing
     public class Self
     {
         public List<int> TotalTally = new List<int>();
-        public List<Models.Consolidated.Sentences> Clean(List<Models.Consolidated.Sentences> transferOCR, short Tolerance = 9)
+        public List<Sentences> Clean(List<Sentences> transferOCR, short Tolerance = 9)
         {
             try
             {

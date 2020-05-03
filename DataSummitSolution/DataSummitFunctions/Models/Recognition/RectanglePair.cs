@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DataSummitFunctions.Models.Recognition
+﻿namespace DataSummitFunctions.Models.Recognition
 {
     public class RectanglePair
     {

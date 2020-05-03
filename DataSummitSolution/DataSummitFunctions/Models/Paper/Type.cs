@@ -1,6 +1,4 @@
-﻿using System.Drawing.Printing;
-
-namespace DataSummitFunctions.Models.Paper
+﻿namespace DataSummitFunctions.Models.Paper
 {
     public class Type
     {

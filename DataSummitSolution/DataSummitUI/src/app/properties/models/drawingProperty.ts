@@ -1,24 +1,21 @@
-import { ProfileAttribute } from "../../profileAttributes/models/profileAttribute";
-import { Sentence } from "../../drawings/models/sentence";
-import { Drawing } from "../../properties/models/drawing";
-import { ProfileVersion } from "../../profileVersion/models/profileVersion";
-import { Property } from "./property";
-
 export class DrawingProperty {
 
-	Drawing: Drawing;
-	Template: ProfileVersion;
-	Attributes: ProfileAttribute[];
-	Properties: Property[];
-	Sentences: Sentence[];
+    Id: string;
+    StandardName: string;
+    Name: string;
+    Value: string;
+    Confidence: number;
 
-	constructor(drawing?: Drawing, profileVersion?: ProfileVersion, profileAttributes?: ProfileAttribute[],
-		properties?: Property[], sentences?: Sentence[])
-	{
-		this.Drawing = drawing || new Drawing();
-		this.Template = profileVersion || new ProfileVersion();
-		this.Attributes = profileAttributes || [];
-		this.Properties = properties || [];
-		this.Sentences = sentences || [];
-	}
+    constructor(Id?: string,
+        standardName?: string,
+        name?: string, 
+        value?: string,
+        confidence?: number)
+    {
+        this.Id = Id || null; 
+        this.StandardName = standardName || null; 
+        this.Name = name || null; 
+        this.Value = value || null; 
+        this.Confidence = confidence || null; 
+    }    
 }

@@ -1,5 +1,4 @@
 ﻿using DataSummitFunctions.Models;
-using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Models.Google.Request;
 using DataSummitFunctions.Models.Google.Response;
 using Microsoft.WindowsAzure.Storage;
@@ -11,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Methods
 {
@@ -19,7 +17,7 @@ namespace DataSummitFunctions.Methods
     {
         public Drawing Run(List<System.Drawing.Image> images)
         {
-            Models.Drawing cOCR = new Models.Drawing();
+            Drawing cOCR = new Drawing();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -45,7 +43,7 @@ namespace DataSummitFunctions.Methods
 
         public Drawing Run(List<ImageGrid> lDrawings)
         {
-            Models.Drawing cOCR = new Models.Drawing();
+            Drawing cOCR = new Drawing();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -71,7 +69,7 @@ namespace DataSummitFunctions.Methods
 
         public Drawing Run(List<string> lfilepaths)
         {
-            Models.Drawing cOCR = new Models.Drawing();
+            Drawing cOCR = new Drawing();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -99,7 +97,7 @@ namespace DataSummitFunctions.Methods
 
         public Drawing Run(List<Uri> lblobs)
         {
-            Models.Drawing cOCR = new Models.Drawing();
+            Drawing cOCR = new Drawing();
             try
             {
                 Cloud gCloud = new Cloud();

@@ -8,11 +8,10 @@ const appRoutes: Routes = [
   { path: "", redirectTo: "/home", pathMatch: "full" },
   { path: "home", component: HomeComponent },
   { path: "terms-and-conditions", component: TermsAndConditionsComponent, canActivate: [AuthGuardService] },
-  { path: "scan", loadChildren: () => import('./scan/scan.module').then(m => m.ScanModule) },
+  // { path: "scan", loadChildren: () => import('./scan/scan.module').then(m => m.ScanModule) },
   { path: "archive", loadChildren: () => import('./archive/archive.module').then(m => m.ArchiveModule) },
   { path: "account", loadChildren: () => import('./account/account.module').then(m => m.AccountModule) },
   { path: "help", loadChildren: () => import('./help/help.module').then(m => m.HelpModule) },
-  // { path: "pricing", loadChildren: () => import('./pricing/pricing.module').then(m => m.PricingModule) },
   { path: "aboutus", loadChildren: () => import('./aboutus/aboutus.module').then(m => m.AboutUsModule) },
   { path: "companies", loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule) },
 ];

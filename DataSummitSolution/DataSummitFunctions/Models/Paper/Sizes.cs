@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Models.Paper
 {
     public static class Sizes
     {
-        public static List<Paper.Type> All = new List<Paper.Type>();
+        public static List<Type> All = new List<Type>();
 
         public static void Load()
         {

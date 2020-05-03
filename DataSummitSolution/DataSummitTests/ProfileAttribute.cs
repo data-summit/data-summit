@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace DataSummitTests
@@ -16,7 +15,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_profileAttribute()
         {
-            DataSummitModels.DB.ProfileAttributes profileAttribute = new DataSummitModels.DB.ProfileAttributes
+            ProfileAttributes profileAttribute = new ProfileAttributes
             {
                 ProfileAttributeId = 1,
                 Name = "Unit Test ProfileAttribute1",
@@ -36,24 +35,24 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockProfileAttributesDbSet = new Mock<DbSet<DataSummitModels.DB.ProfileAttributes>>();
+            var mockProfileAttributesDbSet = new Mock<DbSet<ProfileAttributes>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.ProfileAttributes).Returns(mockProfileAttributesDbSet.Object);
-            var mockProfileAttributes = new DataSummitHelper.ProfileAttributes(mockContext.Object);
+            var mockProfileAttributes = new ProfileAttribute(mockContext.Object);
 
             mockProfileAttributes.CreateProfileAttribute(profileAttribute);
 
-            mockProfileAttributesDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.ProfileAttributes>()), Times.Once());
+            mockProfileAttributesDbSet.Verify(m => m.Add(It.IsAny<ProfileAttributes>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_profileAttribute_by_id()
         {
-            DataSummitModels.DB.ProfileVersions profileVersion1 = new DataSummitModels.DB.ProfileVersions
+            ProfileVersions profileVersion1 = new ProfileVersions
             {
                 ProfileVersionId = 1,
                 Name = "Unit Test ProfileVersion1",
@@ -67,7 +66,7 @@ namespace DataSummitTests
                 Y = 100
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            DataSummitModels.DB.ProfileVersions profileVersion2 = new DataSummitModels.DB.ProfileVersions
+            ProfileVersions profileVersion2 = new ProfileVersions
             {
                 ProfileVersionId = 2,
                 Name = "Unit Test ProfileVersion2",
@@ -82,9 +81,9 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testProfileAttributes = new List<DataSummitModels.DB.ProfileAttributes>
+            var testProfileAttributes = new List<ProfileAttributes>
             {
-                new DataSummitModels.DB.ProfileAttributes
+                new ProfileAttributes
                 {
                     ProfileAttributeId = 1,
                     Name = "Unit Test ProfileAttribute1",
@@ -104,7 +103,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.DB.ProfileAttributes
+                new ProfileAttributes
                 {
                     ProfileAttributeId = 2,
                     Name = "Unit Test ProfileAttribute2",
@@ -124,7 +123,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.DB.ProfileAttributes
+                new ProfileAttributes
                 {
                     ProfileAttributeId = 3,
                     Name = "Unit Test ProfileAttribute3",
@@ -146,11 +145,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockProfileAttributeDbSet = new Mock<DbSet<DataSummitModels.DB.ProfileAttributes>>();
-            mockProfileAttributeDbSet.As<IQueryable<DataSummitModels.DB.ProfileAttributes>>().Setup(m => m.Provider).Returns(testProfileAttributes.Provider);
-            mockProfileAttributeDbSet.As<IQueryable<DataSummitModels.DB.ProfileAttributes>>().Setup(m => m.Expression).Returns(testProfileAttributes.Expression);
-            mockProfileAttributeDbSet.As<IQueryable<DataSummitModels.DB.ProfileAttributes>>().Setup(m => m.ElementType).Returns(testProfileAttributes.ElementType);
-            mockProfileAttributeDbSet.As<IQueryable<DataSummitModels.DB.ProfileAttributes>>().Setup(m => m.GetEnumerator()).Returns(testProfileAttributes.GetEnumerator());
+            var mockProfileAttributeDbSet = new Mock<DbSet<ProfileAttributes>>();
+            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.Provider).Returns(testProfileAttributes.Provider);
+            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.Expression).Returns(testProfileAttributes.Expression);
+            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.ElementType).Returns(testProfileAttributes.ElementType);
+            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.GetEnumerator()).Returns(testProfileAttributes.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -158,7 +157,7 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.ProfileAttributes).Returns(mockProfileAttributeDbSet.Object);
 
-            var mockProfileAttributeService = new DataSummitHelper.ProfileAttributes(mockContext.Object);
+            var mockProfileAttributeService = new ProfileAttribute(mockContext.Object);
             var mockProfileAttribute = mockProfileAttributeService.GetProfileAttributesById(1);
             Assert.AreEqual(mockProfileAttribute.ProfileAttributeId, testProfileAttributes.ToList()[0].ProfileAttributeId);
         }

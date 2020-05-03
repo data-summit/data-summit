@@ -1,19 +1,15 @@
 ﻿using DataSummitFunctions.Models.Consolidated;
-using DataSummitFunctions.Models.Amazon;
 using DataSummitFunctions.Models.Azure;
 using DataSummitFunctions.Models.Google.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Amazon.Rekognition.Model;
 
 namespace DataSummitFunctions.Methods
 {
     public class OCRSources
     {
-        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitFunctions.Models.ImageGrid im)
+        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, Models.ImageGrid im)
         {
             List<Sentences> Sentences = new List<Sentences>();
             try
@@ -103,11 +99,11 @@ namespace DataSummitFunctions.Methods
                     //    Sentences.Add(s);
                     //}
                     //Full Text Annotation
-                    foreach (Models.Google.Response.Page pag in g.fullTextAnnotation.pages)
+                    foreach (Page pag in g.fullTextAnnotation.pages)
                     {
-                        foreach (Models.Google.Response.Block b in pag.blocks)
+                        foreach (Block b in pag.blocks)
                         {
-                            foreach (Models.Google.Response.Paragraph p in b.paragraphs)
+                            foreach (Paragraph p in b.paragraphs)
                             {
                                 List<Sentences> lSen = DivideBlockIntoLines(p, "");
                                 foreach (Sentences ss in lSen)
@@ -147,11 +143,11 @@ namespace DataSummitFunctions.Methods
                 foreach (Responses g in lres)
                 {
                     //Full Text Annotation
-                    foreach (Models.Google.Response.Page pag in g.fullTextAnnotation.pages)
+                    foreach (Page pag in g.fullTextAnnotation.pages)
                     {
-                        foreach (Models.Google.Response.Block b in pag.blocks)
+                        foreach (Block b in pag.blocks)
                         {
-                            foreach (Models.Google.Response.Paragraph p in b.paragraphs)
+                            foreach (Paragraph p in b.paragraphs)
                             {
                                 List<Sentences> lSen = DivideBlockIntoLines(p, filename);
                                 foreach (Sentences ss in lSen)
@@ -168,7 +164,7 @@ namespace DataSummitFunctions.Methods
             return Sentences;
         }
 
-        private List<Sentences> DivideBlockIntoLines(Models.Google.Response.Paragraph p, string filename, short Tolerance = 4)
+        private List<Sentences> DivideBlockIntoLines(Paragraph p, string filename, short Tolerance = 4)
         {
             List<Sentences> lRes = new List<Sentences>();
             List<List<string>> lLines = new List<List<string>>();

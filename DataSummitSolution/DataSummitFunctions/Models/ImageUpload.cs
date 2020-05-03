@@ -1,5 +1,4 @@
-﻿using DataSummitFunctions.Models.Consolidated;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DataSummitFunctions.Models

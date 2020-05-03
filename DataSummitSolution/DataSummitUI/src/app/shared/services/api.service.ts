@@ -100,13 +100,19 @@ export class ApiService {
     return this.request(options);
   }
 
-  delete(url: string, params?: any): Observable<Response> {
+  delete(url: string, data?: any, params?: any): Observable<Response> {
+    if (!data) {
+      data = params;
+      params = {};
+    }
     let url_ = this.Url(url);
+
     let options = new ApiOptions();
     options.method = 'DELETE';
     options.url = url_;
     options.params = params;
-
+    options.data = data;
+    
     return this.request(options);
   }
 
@@ -207,7 +213,6 @@ export class ApiService {
 
   private addCors(options: ApiOptions): ApiOptions {
     options.headers["Access-Control-Allow-Origin"] = "*";
-    //options.headers.append('Access-Control-Allow-Origin', 'http://localhost:45678');
     options.headers['Access-Control-Allow-Credentials'] = 'true';
     return options;
   }

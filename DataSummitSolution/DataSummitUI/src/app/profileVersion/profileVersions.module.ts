@@ -14,7 +14,7 @@ import { TooltipModule } from "primeng/tooltip"
 import { ProfileVersionsComponent } from './components/profileVersions.component';
 import { CreateProfileVersionComponent } from './create/components/createProfileVersion.component';
 import { ProfileAttributesModule } from '../profileAttributes/profileAttributes.module';
-import { StandardAttributeModule } from '../standardAttribute/standardAttribute.module';
+import { StandardAttributeModule } from '../../obsolete/standardAttribute/standardAttribute.module';
 
 @NgModule({
     imports: [

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Project } from '../models/project';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ProfileVersion } from 'src/app/profileVersion/create/models/profileVersion';
 
 @Component({
     selector: 'ds-projects',
@@ -55,10 +56,13 @@ export class ProjectsComponent implements OnInit {
         this.loading = true;
         this.api.get("api/projects/" + id.toString(), id)
             .pipe(take(1))
-                .subscribe((result: Project[]) => {
+                .subscribe((result: any[]) => {
                     this.projects = [];
                     for (let i = 0; i < result.length; i++) {
-                        let p = <Project>result[i];
+                        let p = new Project(result[i].projectId, 
+                            result[i].name, 
+                            this.companyId,
+                            result[i].createdDate);
                         this.projects.push(p);
                 };
                 console.log(location.origin.toString() + this.router.url.toString());
@@ -75,33 +79,38 @@ export class ProjectsComponent implements OnInit {
         this.selectedProject = new Project();
     }
 
-    addOrEditProject(project?: Project)
+    addProject(project?: Project)
     {
-        if (project == null)
-        { this.selectedProject = new Project(); }
+        if (!project)
+        { this.selectedProject = new Project() }
         else
         { this.selectedProject = project; }
-        this.selectedProject.CompanyId = this.companyId;
         this.projectModal.show();
     }
     
+    editProject(project?: Project)
+    {
+        this.addProject(project);
+    }
+
     goToDrawings(projectId: number) {
-        this.router.navigate([`companies/${this.companyId}/projects/${projectId}/drawings`]);
+        this.router.navigate(['companies', this.companyId, 'projects', projectId, 'drawings']);
     }
 
     goToTemplates(projectId: number) {
-        this.router.navigate(['projects', 'templates', projectId]);
+        this.router.navigate(['companies', this.companyId, 'profileversions']);
     }
 
     createTemplate() {
-        this.router.navigate([`companies/${this.companyId.toString()}/profileversions/create`])
+        this.router.navigate(['companies', this.companyId, 'profileversions', 'create'])
     }
 
     saveProject() 
     {
+        this.selectedProject.CompanyId = this.companyId;
         if (this.selectedProject.ProjectId == 0) //New entry
         { 
-            this.api.post("api/projects", this.selectedProject)
+            this.api.post("api/projects/create", this.selectedProject)
                 .pipe(take(1))
                 .subscribe(result => {
                     this.projectModal.hide();
@@ -111,9 +120,9 @@ export class ProjectsComponent implements OnInit {
                     console.log(error);
                 });
         }
-        else    //updated entry
+        else //updated entry
         { 
-            this.api.put("api/projects/" + this.companyId, this.selectedProject)
+            this.api.put("api/projects/update", this.selectedProject)
             .pipe(take(1))
                 .subscribe(result => {
                     this.projectModal.hide();
@@ -127,9 +136,10 @@ export class ProjectsComponent implements OnInit {
     
     deleteProject(project?: Project)
     {
-        if (project.ProjectId > 0) //New entry
+        project.CompanyId = this.companyId;
+        if (project.ProjectId > 0)
         { 
-            this.api.delete("api/projects/" + project.ProjectId.toString(), project.ProjectId)
+            this.api.delete("api/projects/delete", project.ProjectId)
                 .pipe(take(1))
                 .subscribe(result => {
                     this.projectModal.hide();

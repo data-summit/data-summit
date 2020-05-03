@@ -19,15 +19,15 @@
           </thead>
           <tbody>
             <tr class="text-center" mdbTableCol *ngFor="let pv of profileVersions">
-              <td>{{pv.Name}}</td>
-              <td (click)="goToAttributes(pv)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + pv.Name + ' attributes'"></i></td>
-              <td>{{pv.HeightOriginal}}</td>
-              <td>{{pv.WidthOriginal}}</td>
+              <td>{{pv.TemplateName}}</td>
+              <td (click)="goToAttributes(pv)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + pv.TemplateName + ' attributes'"></i></td>
+              <td>{{pv.Height}}</td>
+              <td>{{pv.Width}}</td>
               <td>{{pv.CreatedDate | date: 'd-MMM-yyyy'}}</td>
               <td class="text-center">
-                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pv.Name" (click)="addOrEditProfileVersion(pv)"></i>
+                <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pv.TemplateName" (click)="addOrEditProfileVersion(pv)"></i>
                  | 
-                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pv.Name" (click)="deleteProfileVersion(pv)"></i>
+                <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + pv.TemplateName" (click)="deleteProfileVersion(pv)"></i>
               </td>
             </tr>
           </tbody>
