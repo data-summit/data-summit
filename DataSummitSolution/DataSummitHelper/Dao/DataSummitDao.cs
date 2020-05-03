@@ -106,15 +106,14 @@ namespace DataSummitHelper.Dao
             return drawingProperties;
         }
 
-        public async Task UpdateDrawingPropertyValue(string drawingPropertyId, string drawingPropertyValue)
+        public async Task UpdateDrawingPropertyValue(Guid drawingPropertyId, string drawingPropertyValue)
         {
             try
             {
-                var sentenceId = new Guid(drawingPropertyId);
-                var sentence = new Sentences() { SentenceId = sentenceId };
+                var sentence = new Sentences() { SentenceId = drawingPropertyId };
                 sentence.Words = drawingPropertyValue;
                 _context.Sentences.Attach(sentence);
-                _context.Sentences.Update(sentence);
+                _context.Entry(sentence).Property("Words").IsModified = true;
                 await _context.SaveChangesAsync();
             }
             catch (Exception)

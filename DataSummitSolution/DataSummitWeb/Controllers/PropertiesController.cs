@@ -33,10 +33,10 @@ namespace DataSummitWeb.Controllers
             return Ok(drawingProperties);
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")]
         public async Task<IActionResult> UpdateDrawingPropertyValue([FromBody] DrawingPropertyValue drawingPropertyValue)
         {
-            await _dataSummitHelper.UpdateDrawingPropertyValue(drawingPropertyValue.PropertyId, drawingPropertyValue.PropertyValue);
+            await _dataSummitHelper.UpdateDrawingPropertyValue(drawingPropertyValue.ToDto());
             return Ok();
         }
 

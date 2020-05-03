@@ -14,6 +14,9 @@ namespace DataSummitHelper.Dto
         public Guid SentenceId { get; set; }
         public string WordValue { get; set; }
 
+        public DrawingPropertyDto()
+        { ; }
+
         public DrawingPropertyDto(DrawingProperty drawingProperty)
         {
             ProfileAttributeId = drawingProperty.ProfileAttributes.ProfileAttributeId;

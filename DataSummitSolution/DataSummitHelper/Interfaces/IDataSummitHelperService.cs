@@ -27,7 +27,7 @@ namespace DataSummitHelper.Interfaces
         Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId);
         Task DeleteDrawingProperty(long drawingPropertyId);
         Task<List<DrawingPropertyDto>> GetDrawingProperties(int drawingId);
-        Task UpdateDrawingPropertyValue(string drawingPropertyId, string drawingPropertyValue);
+        Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty);
         Uri GetIndividualUrl(int companyId, string azureResource);
 
         Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId);

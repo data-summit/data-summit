@@ -99,9 +99,9 @@ namespace DataSummitHelper.Services
             return drawingDtos;
         }
 
-        public async Task UpdateDrawingPropertyValue(string drawingPropertyId, string drawingPropertyValue)
+        public async Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty)
         {
-            await _dao.UpdateDrawingPropertyValue(drawingPropertyId, drawingPropertyValue);
+            await _dao.UpdateDrawingPropertyValue(drawingProperty.SentenceId, drawingProperty.WordValue);
         }
 
         public async Task<List<DrawingPropertyDto>> GetDrawingProperties(int drawingId)

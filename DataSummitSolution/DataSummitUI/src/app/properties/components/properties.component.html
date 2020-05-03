@@ -14,24 +14,49 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="text-center" mdbTableCol *ngFor="let a of drawingProperties; index as i;">
-            <td style="text-align:left;">{{a.StandardName}}</td>
-            <td style="text-align:left;">{{a.Name}}</td>
+          <tr class="text-center" mdbTableCol *ngFor="let drawingProperty of drawingProperties">
+            <td style="text-align:left;">{{drawingProperty.StandardName}}</td>
+            <td style="text-align:left;">{{drawingProperty.Name}}</td>
             <td *ngIf="enableEdit">
-              <input [required]="required" [name]="value" [(ngModel)]="a.Value" [placeholder]="label" />
+              <input [required]="required" [name]="value" [(ngModel)]="drawingProperty.Value" [placeholder]="label" />
             </td>
-            <td *ngIf="!enableEdit" style="text-align:left;">{{a.Value}}</td>
-            <td style="text-align:left;">{{a.Confidence}}</td>
+            <td *ngIf="!enableEdit" style="text-align:left;">{{drawingProperty.Value}}</td>
+            <td style="text-align:left;">{{drawingProperty.Confidence}}</td>
             <td class="text-center">
-              <i *ngIf="enableEdit && enableEditIndex == i" class="fa fa-ban pointer" (click)="enableEdit=false" ng-click="cancel()"></i>
+              <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + drawingProperty.Name" (click)="editDrawingProperty(drawingProperty)"></i>
                 |
-              <i *ngIf="enableEdit && enableEditIndex == i" class="fa fa-check-circle pointer" id="saveBtn" (click)="updateDrawingProperty(a.Id, a.Value)"></i>
-              <i *ngIf="!enableEdit" class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + a.Id" (click)="enableEditMethod(i)"></i>
-                |
-              <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + a.Id" (click)="deleteDrawingProperty(p)"></i>
+              <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + drawingProperty.Id" (click)="deleteDrawingProperty(drawingProperty)"></i>
             </td>
           </tr>
         </tbody>
       </table>
   </section>
+  <div mdbModal #drawingPropertyModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="drawingPropertyModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" *ngIf="selectedDrawingProperty.Id == null" id="myModalLabel">New Property Name</h4>
+          <h4 class="modal-title w-100" *ngIf="selectedDrawingProperty.Id != null" id="myModalLabel">Edit: {{selectedDrawingProperty.Name}}</h4>
+        </div>
+        <div class="modal-body">
+          <form class="border border-light p-3" #propertyForm>
+            <div class="form-row mb-2">
+              <input type="text" name="PropertyValue" placeholder="Property Value" style="width: 90%; margin-right: 5px;"
+                    [(ngModel)]="selectedDrawingProperty.Value" #ProjectName="ngModel">
+              <!-- <i *ngIf="PropertyName && PropertyName.valid" class="fas fa-check-circle fa-2x" style="color: green;"></i> -->
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
+            mdbWavesEffect>Close</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="saveDrawingProperty()" mdbWavesEffect>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

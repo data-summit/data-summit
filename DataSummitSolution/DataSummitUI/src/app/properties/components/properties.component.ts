@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawingProperty } from '../models/drawingProperty';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'ds-properties',
@@ -12,13 +12,14 @@ import { DrawingProperty } from '../models/drawingProperty';
 
 export class PropertiesComponent implements OnInit {
 
-    @ViewChild('propertyModal', { static: false }) propertyModal;
+    @ViewChild('drawingPropertyModal', { static: false }) drawingPropertyModal;
 
-    companyId: number;
+    @Input() companyId: number;
     projectId: number;
     drawingId: number;
     headers: string[];
-    drawingForm: FormGroup;
+    selectedDrawingProperty: DrawingProperty;
+    drawingPropertiesForm: FormGroup;
     loading: boolean;
     saveProfileAttribute: any;
     enableEdit = false;
@@ -35,10 +36,6 @@ export class PropertiesComponent implements OnInit {
         this.companyId = this.route.snapshot.params['companyId']
         if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
         { this.companyId = Number(this.companyId); }
-        //Get projectId from URL
-        this.projectId = this.route.snapshot.params['projectId']
-        if (typeof this.projectId == 'string')         //Ensure id is number if received as a string
-        { this.projectId = Number(this.projectId); }
         //Get drawingId from URL
         this.drawingId = this.route.snapshot.params['drawingId']
         if (typeof this.drawingId == 'string')         //Ensure id is number if received as a string
@@ -50,10 +47,11 @@ export class PropertiesComponent implements OnInit {
     }
 
     initPropertiesForm() {
-        this.drawingForm = this.fb.group({
+        this.drawingPropertiesForm = this.fb.group({
             Name: this.fb.control('', Validators.required),
             CreateDate: this.fb.control('')
         });
+        this.selectedDrawingProperty = new DrawingProperty();
     }
 
     initPropertiesTable() {
@@ -89,6 +87,12 @@ export class PropertiesComponent implements OnInit {
             })
     }
 
+    hideDialog()
+    {
+        this.drawingPropertyModal.hide();
+        this.selectedDrawingProperty = new DrawingProperty();
+    }
+
     goToAttributes(drawingId: number) {
         this.router.navigate(['companies/profileattributes', drawingId]);
     }
@@ -97,8 +101,16 @@ export class PropertiesComponent implements OnInit {
         this.router.navigate(['drawings', 'create', 'createprofileversion', this.companyId]);
     }
 
-    addOrEditDrawingProperty(drawingPropertyId?: number) {
-        this.propertyModal.show();
+    addDrawingProperty(drawingProperty?: DrawingProperty) {
+        if (!drawingProperty)
+        { this.selectedDrawingProperty = new DrawingProperty() }
+        else
+        { this.selectedDrawingProperty = drawingProperty; }
+        this.drawingPropertyModal.show();
+    }
+
+    editDrawingProperty(drawingProperty?: DrawingProperty) {
+        this.addDrawingProperty(drawingProperty);
     }
 
     // deleteProperties(property?: Property) {
@@ -129,8 +141,32 @@ export class PropertiesComponent implements OnInit {
         }
     }
 
-    enableEditMethod(i: number) {
-        this.enableEdit = true;
-        this.enableEditIndex = i;
+    saveDrawingProperty() 
+    {
+        //this.selectedDrawingProperty.CompanyId = this.companyId;
+        if (!this.selectedDrawingProperty.Id) //New entry
+        { 
+            this.api.post("api/properties/create", this.selectedDrawingProperty)
+                .pipe(take(1))
+                .subscribe(result => {
+                    this.drawingPropertyModal.hide();
+                    this.getDrawingProperties(this.drawingId);
+                    console.log(result);
+                }, error => {
+                    console.log(error);
+                });
+        }
+        else //updated entry
+        { 
+            this.api.put("api/properties/update", this.selectedDrawingProperty)
+            .pipe(take(1))
+                .subscribe(result => {
+                    this.drawingPropertyModal.hide();
+                    this.getDrawingProperties(this.drawingId);
+                    console.log(result)
+                }, error => {
+                    console.log(error)
+                })
+        }
     }
 }

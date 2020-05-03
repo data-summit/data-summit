@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Project } from '../models/project';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ProfileVersion } from 'src/app/profileVersion/create/models/profileVersion';
 
 @Component({
     selector: 'ds-projects',

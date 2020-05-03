@@ -1,5 +1,6 @@
 using DataSummitHelper.Classes;
 using DataSummitModels.DB;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ namespace DataSummitHelper.Dao.Interfaces
         Task DeleteProfileAttribute(long profileAttributeId);
         Task<List<Drawings>> GetAllProjectDrawings(int projectId);
         Task<List<DrawingProperty>> GetDrawingPropertiesByDrawingId(int drawingId);
-        Task UpdateDrawingPropertyValue(string drawingPropertyId, string drawingPropertyValue);
+        Task UpdateDrawingPropertyValue(Guid drawingPropertyId, string drawingPropertyValue);
         Task<List<ProfileAttributes>> GetProfileAttributesForDrawingId(int drawingId);
     }
 }
