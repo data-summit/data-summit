@@ -47,6 +47,7 @@ export class ProjectsComponent implements OnInit {
             "Name",
             "Drawings",
             "Project Templates",
+            "Company Templates",
             "Created Date",
             "Actions"
         ]}
@@ -96,7 +97,11 @@ export class ProjectsComponent implements OnInit {
         this.router.navigate(['companies', this.companyId, 'projects', projectId, 'drawings']);
     }
 
-    goToTemplates(projectId: number) {
+    goToProjectTemplates(projectId: number) {
+        this.router.navigate(['companies', this.companyId, 'projects', projectId, 'profileversions']);
+    }
+
+    goToCompanyTemplates() {
         this.router.navigate(['companies', this.companyId, 'profileversions']);
     }
 

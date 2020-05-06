@@ -24,23 +24,23 @@ namespace DataSummitHelper.Interfaces
 
         #region Drawings
         Task<List<DrawingDto>> GetProjectDrawings(int projectId);
-        Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId);
         Task DeleteDrawingProperty(long drawingPropertyId);
         Task<List<DrawingPropertyDto>> GetDrawingProperties(int drawingId);
         Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty);
-        Uri GetIndividualUrl(int companyId, string azureResource);
-
-        Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId);
         #endregion
 
-        #region ProfileVersions
+        Uri GetIndividualUrl(int companyId, string azureResource);
 
+        #region Templates
+        Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId);
+        Task<List<TemplateDto>> GetAllProjectTemplates(int companyId);
+
+        Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId);
         #endregion
 
 
         #region Properties
 
         #endregion
-
     }
 }

@@ -31,7 +31,7 @@ export class CompaniesComponent implements OnInit {
     initCompaniesTable() {
         this.headers = [
             "Name",
-            "Templates",
+            "Company Templates",
             "Projects",
             "Company Number",
             "Actions"

@@ -177,6 +177,7 @@ namespace DataSummitHelper.Dao
         #endregion
         #endregion
 
+        #region Templates
         public async Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId)
         {
             var profileVersions = new List<ProfileVersions>();
@@ -189,42 +190,32 @@ namespace DataSummitHelper.Dao
             }
             catch (Exception ae)
             {
-                string strError = ae.Message.ToString();
+                throw;
             }
 
             return profileVersions;
         }
-        public async Task<List<Drawings>> GetProjectDrawings(int projectId)
+
+        public async Task<List<ProfileVersions>> GetProjectProfileVersions(int projectId)
         {
-            var drawings = new List<Drawings>();
+            var profileVersions = new List<ProfileVersions>();
 
             try
             {
-                drawings = await _context.Drawings
-                    .Where(d => d.ProjectId == projectId)
+                profileVersions = await _context.ProfileVersions
+                    .Where(pv => pv.Company.Projects
+                        .Select(p => p.ProjectId)
+                        .Single() == projectId)
                     .ToListAsync();
             }
             catch (Exception ae)
             {
+                throw;
             }
 
-            return drawings;
+            return profileVersions;
         }
-        public async Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int templateId)
-        {
-            var profileAttributes = new List<ProfileAttributes>();
-            try
-            {
-                profileAttributes = await _context.ProfileAttributes
-                    .Where(p => p.ProfileVersionId == templateId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
-
-            return profileAttributes;
-        }
+        #endregion
 
         #region Projects
         public async Task<List<Projects>> GetAllCompanyProjects(int companyId)
@@ -287,5 +278,38 @@ namespace DataSummitHelper.Dao
             }
         }
         #endregion
+
+        public async Task<List<Drawings>> GetProjectDrawings(int projectId)
+        {
+            var drawings = new List<Drawings>();
+
+            try
+            {
+                drawings = await _context.Drawings
+                    .Where(d => d.ProjectId == projectId)
+                    .ToListAsync();
+            }
+            catch (Exception ae)
+            {
+            }
+
+            return drawings;
+        }
+
+        public async Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int templateId)
+        {
+            var profileAttributes = new List<ProfileAttributes>();
+            try
+            {
+                profileAttributes = await _context.ProfileAttributes
+                    .Where(p => p.ProfileVersionId == templateId)
+                    .ToListAsync();
+            }
+            catch (Exception ae)
+            {
+            }
+
+            return profileAttributes;
+        }
     }
 }

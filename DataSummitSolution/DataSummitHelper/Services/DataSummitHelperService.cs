@@ -99,6 +99,17 @@ namespace DataSummitHelper.Services
             return drawingDtos;
         }
 
+        public async Task<List<DrawingDto>> GetProjectDrawings(int projectId)
+        {
+            var drawings = await _dao.GetProjectDrawings(projectId);
+            var drawingDtos = drawings.Select(d => new DrawingDto(d))
+                .ToList();
+
+            return drawingDtos;
+        }
+        #endregion
+
+        #region Properties
         public async Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty)
         {
             await _dao.UpdateDrawingPropertyValue(drawingProperty.SentenceId, drawingProperty.WordValue);
@@ -112,17 +123,9 @@ namespace DataSummitHelper.Services
 
             return drawingPropertyDtos;
         }
-
-        public async Task<List<DrawingDto>> GetProjectDrawings(int projectId)
-        {
-            var drawings = await _dao.GetProjectDrawings(projectId);
-            var drawingDtos = drawings.Select(d => new DrawingDto(d))
-                .ToList();
-
-            return drawingDtos;
-        }
         #endregion
 
+        #region Templates
         public async Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId)
         {
             var templates = await _dao.GetCompanyProfileVersions(companyId);
@@ -132,9 +135,13 @@ namespace DataSummitHelper.Services
             return templateDtos;
         }
 
-        public Uri GetIndividualUrl(int companyId, string azureResource)
+        public async Task<List<TemplateDto>> GetAllProjectTemplates(int projectId)
         {
-            throw new NotImplementedException();
+            var templates = await _dao.GetProjectProfileVersions(projectId);
+            var templateDtos = templates.Select(t => new TemplateDto(t))
+                .ToList();
+
+            return templateDtos;
         }
 
         public async Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId)
@@ -144,6 +151,12 @@ namespace DataSummitHelper.Services
                 .ToList();
 
             return templateAttributeDtos;
+        }
+        #endregion
+
+        public Uri GetIndividualUrl(int companyId, string azureResource)
+        {
+            throw new NotImplementedException();
         }
     }
 }
