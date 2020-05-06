@@ -25,7 +25,11 @@ namespace DataSummitHelper.Dao.Interfaces
 
         Task<List<Drawings>> GetProjectDrawings(int companyId);
 
+        #region Templates
         Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId);
+        Task<List<ProfileVersions>> GetProjectProfileVersions(int projectId);
+        #endregion
+
 
         Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int profileId);
 

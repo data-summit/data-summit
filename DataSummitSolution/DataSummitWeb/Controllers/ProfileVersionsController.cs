@@ -21,13 +21,22 @@ namespace DataSummitWeb.Controllers
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
-        // GET api/profileVersion/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        // GET api/profileVersion/company/5
+        [HttpGet("company/{id}")]
+        public async Task<IActionResult> GetCompanyTemplates(int id)
         {
             var profileVersions = await _dataSummitHelper.GetAllCompanyTemplates(id);
 
             return Ok(profileVersions);
+        }
+
+        // GET api/profileVersion/project/5
+        [HttpGet("project/{id}")]
+        public async Task<IActionResult> GetProjectTemplates(int id)
+        {
+            var templates = await _dataSummitHelper.GetAllProjectTemplates(id);
+
+            return Ok(templates);
         }
 
         // POST api/profileVersion

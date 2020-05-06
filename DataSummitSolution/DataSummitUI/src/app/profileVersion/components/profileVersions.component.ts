@@ -15,6 +15,7 @@ export class ProfileVersionsComponent implements OnInit {
     @ViewChild('profileVersionModal', { static: false }) profileVersionModal
 
     @Input() companyId: number;
+    @Input() projectId: number;
     profileVersionId: number;
     profileVersions: Array<TemplateTableRow>;
     headers: string[];
@@ -31,7 +32,13 @@ export class ProfileVersionsComponent implements OnInit {
         this.companyId = this.route.snapshot.params['companyId']
         if (typeof this.companyId == 'string') //Ensure companyId is number if received as a string
         { this.companyId = Number(this.companyId);}
-        this.getProfileVersions(this.companyId);
+        
+        this.projectId = this.route.snapshot.params['projectId']
+        if (typeof this.projectId == 'string') //Ensure companyId is number if received as a string
+        { this.projectId = Number(this.projectId);}
+
+        this.loadTableData();
+        
         this.initProfileVersionTable();
     }
 
@@ -45,9 +52,18 @@ export class ProfileVersionsComponent implements OnInit {
             "Actions"
         ]}
 
-    getProfileVersions(id: number) {
+    loadTableData() {
+        if (this.projectId) {
+            this.getProjectProfileVersions(this.projectId);
+        }
+        else {
+            this.getCompanyProfileVersions(this.companyId);
+        }
+    }
+
+    getCompanyProfileVersions(id: number) {
         this.loading = true;
-        this.api.get("api/profileversions/" + id.toString(), id)
+        this.api.get("api/profileversions/company/" + id.toString(), id)
             .pipe(take(1))
                 .subscribe((result: any[]) => {
                     this.profileVersions = [];
@@ -66,14 +82,37 @@ export class ProfileVersionsComponent implements OnInit {
                 console.log(error)
                 this.loading = false;
             });
-        }
+    }
+
+    getProjectProfileVersions(id: number) {
+        this.loading = true;
+        this.api.get("api/profileversions/project/" + id.toString())
+            .pipe(take(1))
+                .subscribe((result: any[]) => {
+                    this.profileVersions = [];
+                    for (let i = 0; i < result.length; i++) {
+                        let t = new TemplateTableRow(result[i].profileVersionId, 
+                            result[i].templateName, 
+                            result[i].companyId, 
+                            result[i].width, 
+                            result[i].height, 
+                            result[i].createdDate);
+
+                        this.profileVersions.push(t);
+                };
+                this.loading = false;
+            }, error => {
+                console.log(error)
+                this.loading = false;
+            });
+    }
 
     goToAttributes(profileVersion?: TemplateTableRow) {
-        this.router.navigate([`companies/${this.companyId.toString()}/profileversions/${profileVersion.ProfileVersionId}/profileAttributes`]);
+        this.router.navigate(['companies', this.companyId, 'profileversions', profileVersion.ProfileVersionId, 'profileAttributes']);
     }
 
     createProfileVersion() {
-        this.router.navigate([`companies/${this.companyId.toString()}/profileversions/create`])
+        this.router.navigate(['companies', this.companyId, 'profileversions', 'create']);
     }
 
     addOrEditProfileVersion(profileVersion?: TemplateTableRow)
@@ -99,7 +138,7 @@ export class ProfileVersionsComponent implements OnInit {
                 .pipe(take(1))
                 .subscribe(result => {
                     this.profileVersionModal.hide();
-                    this.getProfileVersions(this.companyId);
+                    this.loadTableData();
                     console.log(result);
                 }, error => {
                     console.log(error);
@@ -111,7 +150,7 @@ export class ProfileVersionsComponent implements OnInit {
             .pipe(take(1))
                 .subscribe(result => {
                     this.profileVersionModal.hide();
-                    this.getProfileVersions(this.companyId);
+                    this.loadTableData();
                     console.log(result);
                 }, error => {
                     console.log(error);
@@ -126,7 +165,7 @@ export class ProfileVersionsComponent implements OnInit {
             this.api.delete("api/profileVersions/" + profileVersion.ProfileVersionId.toString(), profileVersion.ProfileVersionId)
                 .pipe(take(1))
                 .subscribe(result => {
-                    this.getProfileVersions(this.companyId);
+                    this.loadTableData();
                     console.log(result);
                 }, error => {
                     console.log(error);
