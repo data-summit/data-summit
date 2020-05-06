@@ -1,26 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
+using DataSummitHelper.Dao;
+using DataSummitHelper.Dao.Interfaces;
+using DataSummitHelper.Interfaces;
+using DataSummitHelper.Services;
+using DataSummitModels.DB;
 using DataSummitWeb.Classes;
-using DataSummitWeb.Models;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
-using Microsoft.Net.Http.Headers;
 
 namespace DataSummitWeb
 {
@@ -86,8 +79,13 @@ namespace DataSummitWeb
                     });
             });
 
-            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            // Add service dependencies.
+            services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies()
+                .UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -103,10 +101,8 @@ namespace DataSummitWeb
 
                 options.User.RequireUniqueEmail = true;
             });
-
-            //This exposes IServiceCollection after ConfigureServices has been called+
-            //which allows the database connection to be set depending on the environment settings
-            Services = services;
+            services.AddScoped<IDataSummitHelperService, DataSummitHelperService>();
+            services.AddScoped<IDataSummitDao, DataSummitDao>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,14 +111,11 @@ namespace DataSummitWeb
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                ConnectionString = Configuration.GetConnectionString("DatabaseConnection");
-                Services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(ConnectionString));
-                IsProdEnvironment = true;
+                IsProdEnvironment = false;
             }
             else
             {
-                ConnectionString = Configuration.GetConnectionString("DatabaseConnection");
-                Services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(ConnectionString));
+                IsProdEnvironment = true;
             }
 
             app.UseHttpsRedirection();

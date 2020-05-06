@@ -4,8 +4,6 @@ using Amazon.Rekognition.Model;
 using AWS = Amazon;
 
 using DataSummitFunctions.Models;
-using DataSummitFunctions.Models.Amazon;
-using DataSummitFunctions.Models.Consolidated;
 using DataSummitFunctions.Methods.PostProcessing;
 
 using Microsoft.Azure.WebJobs;
@@ -93,7 +91,7 @@ namespace DataSummitFunctions
                     blockBlobOrig.DownloadToStream(ms);
                     ms.Seek(0, SeekOrigin.Begin);
 
-                    detectTextRequest.Image = new AWS.Rekognition.Model.Image();
+                    detectTextRequest.Image = new Image();
                     detectTextRequest.Image.Bytes = ms;
                     DetectTextResponse res = rekognitionClient.DetectText(detectTextRequest);
                     List<Models.Consolidated.Sentences> sentences = new List<Models.Consolidated.Sentences>();

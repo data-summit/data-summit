@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DataSummitModels.DB
 {
@@ -17,9 +15,9 @@ namespace DataSummitModels.DB
         public string BlobStorageName { get; set; }
         public string BlobStorageKey { get; set; }
         public List<ProfileAttributes> ProfileAttributes { get; set; }
-        public List<string> Layers { get; set; }
         public List<ImageGrids> SplitImages { get; set; }
         public Paper.Types PaperSize { get; set; }
+
         public ImageUpload()
         { }
 
@@ -33,8 +31,6 @@ namespace DataSummitModels.DB
                 ContainerName = ContainerName,
                 CreatedDate = CreatedDate,
                 DrawingId = DrawingId,
-                //DrawingFeatures = DrawingFeatures,
-                //Layers = DrawingLayers,
                 File = File,
                 FileName = FileName,
                 GoogleConfidence = GoogleConfidence,

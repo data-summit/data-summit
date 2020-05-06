@@ -1,6 +1,4 @@
-﻿using DataSummitFunctions.Models.Consolidated;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace DataSummitFunctions.Models

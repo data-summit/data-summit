@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { ProfileAttributesComponent } from "./components/profileAttributes.component";
-import { StandardAttributeComponent } from "../standardAttribute/components/standardAttribute.component";
+import { StandardAttributeComponent } from "../../obsolete/standardAttribute/components/standardAttribute.component";
 
 const archiveRoutes: Routes = [
   { path: ":profileversionId", component: ProfileAttributesComponent },

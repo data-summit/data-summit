@@ -1,15 +1,9 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { Property } from '../models/property';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DrawingProperty } from '../models/drawingProperty';
-import { Drawing } from '../models/drawing';
-import { ProfileVersion } from '../../profileVersion/models/profileVersion';
-import { ProfileAttribute } from '../../profileAttributes/models/profileAttribute';
-import { Sentence } from '../../drawings/models/sentence';
-import { DrawingData } from '../models/drawingData';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
     selector: 'ds-properties',
@@ -18,18 +12,19 @@ import { DrawingData } from '../models/drawingData';
 
 export class PropertiesComponent implements OnInit {
 
-    @ViewChild('propertyModal', { static: false }) propertyModal;
+    @ViewChild('drawingPropertyModal', { static: false }) drawingPropertyModal;
 
-    companyId: number;
+    @Input() companyId: number;
     projectId: number;
     drawingId: number;
-    properties: Property[];
-    drawingProperties: DrawingData;
-    selectedProperties: Property;
     headers: string[];
-    drawingForm: FormGroup;
+    selectedDrawingProperty: DrawingProperty;
+    drawingPropertiesForm: FormGroup;
     loading: boolean;
     saveProfileAttribute: any;
+    enableEdit = false;
+    enableEditIndex = null;
+    drawingProperties: Array<DrawingProperty>
 
     constructor(private router: Router,
         private api: ApiService,
@@ -41,54 +36,61 @@ export class PropertiesComponent implements OnInit {
         this.companyId = this.route.snapshot.params['companyId']
         if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
         { this.companyId = Number(this.companyId); }
-        //Get projectId from URL
-        this.projectId = this.route.snapshot.params['projectId']
-        if (typeof this.projectId == 'string')         //Ensure id is number if received as a string
-        { this.projectId = Number(this.projectId); }
         //Get drawingId from URL
         this.drawingId = this.route.snapshot.params['drawingId']
         if (typeof this.drawingId == 'string')         //Ensure id is number if received as a string
         { this.drawingId = Number(this.drawingId); }
 
-        this.drawingProperties = new DrawingData();
         this.initPropertiesTable();
         this.initPropertiesForm();
-        this.getProperties(this.drawingId);
+        this.getDrawingProperties(this.drawingId);
     }
 
     initPropertiesForm() {
-        this.drawingForm = this.fb.group({
+        this.drawingPropertiesForm = this.fb.group({
             Name: this.fb.control('', Validators.required),
             CreateDate: this.fb.control('')
         });
-        this.selectedProperties = new Property();
+        this.selectedDrawingProperty = new DrawingProperty();
     }
 
     initPropertiesTable() {
         this.headers = [
             'Standard Name',
             'Name',
-            'Name X',
-            'Name Y',
             'Value',
-            'Value X',
-            'Value Y',
+            'Confidence',
             'Actions'
         ]; }
 
-    getProperties(id: number) {
-        this.loading = true;
-        this.api.get(`api/properties/${id}`)
+    getDrawingProperties(id: number) {
+        this.loading = true;        
+        this.api.get(`api/properties/drawing/${id}`)
             .pipe(take(1))
-                .subscribe((result: DrawingData) => {
-                    let d = <DrawingData>result;
-                    this.drawingProperties = d;
-                    console.log(location.origin.toString() + this.router.url.toString());
+                .subscribe((result: any[]) => {
+                    this.drawingProperties = [];
+
+                    for (let i = 0; i < result.length; i++) {
+                        let p = new DrawingProperty(result[i].sentenceId, 
+                            result[i].standardName, 
+                            result[i].name, 
+                            result[i].wordValue, 
+                            result[i].confidence);
+
+                        this.drawingProperties.push(p);
+                };
+                console.log(location.origin.toString() + this.router.url.toString());
+                this.loading = false;
             }, error => {
-                console.log("Error occurred");
                 console.log(error);
-            });
-        this.loading = false;
+                this.loading = false;
+            })
+    }
+
+    hideDialog()
+    {
+        this.drawingPropertyModal.hide();
+        this.selectedDrawingProperty = new DrawingProperty();
     }
 
     goToAttributes(drawingId: number) {
@@ -99,27 +101,72 @@ export class PropertiesComponent implements OnInit {
         this.router.navigate(['drawings', 'create', 'createprofileversion', this.companyId]);
     }
 
-    addOrEditProperties(drawing?: Property) {
-        if (drawing == null) { this.selectedProperties = new Property(); } else { this.selectedProperties = drawing; }
-        this.selectedProperties.PropertyId = this.drawingId;
-        this.propertyModal.show();
+    addDrawingProperty(drawingProperty?: DrawingProperty) {
+        if (!drawingProperty)
+        { this.selectedDrawingProperty = new DrawingProperty() }
+        else
+        { this.selectedDrawingProperty = drawingProperty; }
+        this.drawingPropertyModal.show();
     }
 
-    hideDialog() {
-        this.propertyModal.hide();
-        this.selectedProperties = new Property();
+    editDrawingProperty(drawingProperty?: DrawingProperty) {
+        this.addDrawingProperty(drawingProperty);
     }
 
-    deleteProperties(property?: Property) {
-        if (property.PropertyId > 0) {
-            this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
+    // deleteProperties(property?: Property) {
+    //     if (property.PropertyId > 0) {
+    //         this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
+    //             .pipe(take(1))
+    //             .subscribe(result => {
+    //                 this.getProperties(this.companyId);
+    //                 console.log(result);
+    //             }, error => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }
+
+    updateDrawingProperty(propertyId: string, propertyValue: string) {
+        let drawingProperty ={propertyId, propertyValue};
+        console.log(drawingProperty);
+        
+        if (drawingProperty) {
+            this.api.post('api/properties/update', drawingProperty)
                 .pipe(take(1))
                 .subscribe(result => {
-                    this.getProperties(this.companyId);
                     console.log(result);
                 }, error => {
                     console.log(error);
                 });
+        }
+    }
+
+    saveDrawingProperty() 
+    {
+        //this.selectedDrawingProperty.CompanyId = this.companyId;
+        if (!this.selectedDrawingProperty.Id) //New entry
+        { 
+            this.api.post("api/properties/create", this.selectedDrawingProperty)
+                .pipe(take(1))
+                .subscribe(result => {
+                    this.drawingPropertyModal.hide();
+                    this.getDrawingProperties(this.drawingId);
+                    console.log(result);
+                }, error => {
+                    console.log(error);
+                });
+        }
+        else //updated entry
+        { 
+            this.api.put("api/properties/update", this.selectedDrawingProperty)
+            .pipe(take(1))
+                .subscribe(result => {
+                    this.drawingPropertyModal.hide();
+                    this.getDrawingProperties(this.drawingId);
+                    console.log(result)
+                }, error => {
+                    console.log(error)
+                })
         }
     }
 }

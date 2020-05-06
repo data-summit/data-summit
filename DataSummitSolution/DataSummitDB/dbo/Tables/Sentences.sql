@@ -12,6 +12,7 @@
 	[SlendernessRatio]	DECIMAL				NULL DEFAULT 0, 
 	[DrawingId]			BIGINT				NOT NULL, 
 
+    [ModifiedWords] NVARCHAR(MAX) NULL DEFAULT NULL, 
     CONSTRAINT [PK_SentenceId] PRIMARY KEY CLUSTERED ([SentenceId] ASC),
     CONSTRAINT [FK_Sentences_Drawings] FOREIGN KEY ([DrawingId]) REFERENCES [dbo].[Drawings] ([DrawingId]) ON DELETE CASCADE ON UPDATE CASCADE
 )

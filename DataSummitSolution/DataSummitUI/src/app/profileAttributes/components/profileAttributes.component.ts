@@ -64,12 +64,20 @@ export class ProfileAttributesComponent implements OnInit {
         this.loading = true;
         this.api.get("api/profileAttributes/" + id.toString(), id)  
             .pipe(take(1))
-                .subscribe((result: ProfileAttribute[]) => {
+                .subscribe((result: any[]) => {
                 this.profileAttributes = [];
                 for (let i = 0; i < result.length; i++) {
-                    let p = <ProfileAttribute>result[i];
+                    let p = new ProfileAttribute(result[i].profileAttributeId,
+                        result[i].standardAttributeName,
+                        result[i].name,
+                        result[i].x,
+                        result[i].y,
+                        result[i].width,
+                        result[i].height,
+                        result[i].createdDate);
                     this.profileAttributes.push(p);
                 };
+
                 console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
             }, error => {
@@ -95,7 +103,7 @@ export class ProfileAttributesComponent implements OnInit {
     
     saveProfileAttribute()
     {
-        if (this.selectedProfileAttribute.ProfileVersionId == 0) //New entry
+        if (this.selectedProfileAttribute.ProfileAttributeId == 0) //New entry
         { 
             this.api.post("api/profileattributes", this.selectedProfileAttribute)
                 .pipe(take(1))
@@ -109,7 +117,7 @@ export class ProfileAttributesComponent implements OnInit {
         }
         else    //updated entry
         { 
-            this.api.put("api/profileversions/"+ this.profileVersionId, this.selectedProfileAttribute)
+            this.api.put("api/profileattributes/"+ this.profileVersionId, this.selectedProfileAttribute)
             .pipe(take(1))
                 .subscribe(result => {
                     this.profileAttributeModal.hide();

@@ -13,7 +13,7 @@ import { ApiService } from '../shared/services/api.service';
 import { FileUploadModule } from "primeng/fileupload"
 import { ButtonModule } from "primeng/button"
 import { TooltipModule } from "primeng/tooltip"
-import { StandardAttributeModule } from '../standardAttribute/standardAttribute.module';
+import { StandardAttributeModule } from '../../obsolete/standardAttribute/standardAttribute.module';
 
 @NgModule({
     imports: [

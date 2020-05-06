@@ -1,62 +1,30 @@
-import { ProfileVersion } from "../../profileVersion/models/profileVersion";
-import { StandardAttribute } from "../../standardAttribute/models/standardAttribute";
-import { Property } from "../../properties/models/property";
-
 export class ProfileAttribute {
 
 	ProfileAttributeId: number;
+	StandardAttributeName: string;
 	Name: string;
-	NameX: number;
-	NameY: number;
-	NameWidth: number;
-	NameHeight: number;
-	PaperSizeId: number;
-	BlockPositionId: number;
-	ProfileVersionId: number;
-	CreatedDate?: Date | string;
-	UserId?: number;
-	Value: string;
 	ValueX?: number;
 	ValueY?: number;
-	ValueWidth?: number;
-	ValueHeight?: number;
-	StandardAttributeId?: number;
-	BlockPosition?: number;
-	PaperSize?: number;
-	ProfileVersion?: ProfileVersion;
-	StandardAttribute?: StandardAttribute;
-	Properties?: Property[];
-
-	constructor(profileAttributeId?: number, name?: string, nameX?: number,
-		nameY?: number, nameWidth?: number, nameHeight?: number,
-		paperSizeId?: number, blockPositionId?: number, profileVersionId?: number,
-		createdDate?: Date | string, userId?: number, value?: string,
-		valueX?: number, valueY?: number, valueWidth?: number,
-		valueHeight?: number, standardAttributeId?: number, blockPosition?: number,
-		paperSize?: number, profileVersion?: ProfileVersion, standardAttribute?: StandardAttribute,
-		properties?: Property[])
+	Width: number;
+	Height: number;
+	CreatedDate?: Date | string;
+	
+	constructor(profileAttributeId?: number, 
+		standardAttributeName?: string, 
+		name?: string,
+		valueX?: number, 
+		valueY?: number, 
+		width?: number, 
+		height?: number,
+		createdDate?: Date | string)
 	{
 		this.ProfileAttributeId = profileAttributeId || 0;
+		this.StandardAttributeName = standardAttributeName || "";
 		this.Name = name || "";
-		this.NameX = nameX || 0;
-		this.NameY = nameY || 0;
-		this.NameWidth = nameWidth || 0;
-		this.NameHeight = nameHeight || 0;
-		this.PaperSizeId = paperSizeId || 0;
-		this.BlockPositionId = blockPositionId || 0;
-		this.ProfileVersionId = profileVersionId || 0;
-		this.CreatedDate = createdDate || null;
-		this.UserId = userId || 0 || null;
-		this.Value = value || "";
 		this.ValueX = valueX || 0 || null;
 		this.ValueY = valueY || 0 || null;
-		this.ValueWidth = valueWidth || 0 || null;
-		this.ValueHeight = valueHeight || 0 || null;
-		this.StandardAttributeId = standardAttributeId || 0 || null;
-		this.BlockPosition = blockPosition;
-		this.PaperSize = paperSize;
-		this.ProfileVersion = profileVersion;
-		this.StandardAttribute = standardAttribute;
-		this.Properties = properties;
+		this.Width = width || 0;
+		this.Height = height || 0;
+		this.CreatedDate = createdDate || null;
 	}
 }

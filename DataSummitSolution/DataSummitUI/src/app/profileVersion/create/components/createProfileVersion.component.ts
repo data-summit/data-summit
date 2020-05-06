@@ -6,11 +6,10 @@ import { RectanglePairs } from '../models/rectanglepairs';
 import { RectanglePair } from '../models/rectanglepair';
 import 'fabric';
 import { NotifyService } from '../../../shared/services/notify.service';
-import { ProfileVersion } from '../../../profileVersion/models/profileVersion';
-import { ProfileAttribute } from '../../../profileAttributes/models/profileAttribute';
+import { ProfileVersion } from '../models/profileVersion';
 import { Rectangle } from '../models/rectangle';
 
-import { StandardAttribute } from 'src/app/standardAttribute/models/standardAttribute';
+import { StandardAttribute } from 'src/obsolete/standardAttribute/models/standardAttribute';
 
 declare const fabric: any;
 
@@ -75,7 +74,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     private notifyService: NotifyService) { }
 
   ngOnInit() {
-    //CompanyId
     this.companyId = this.route.snapshot.params['companyId']
     if (typeof this.companyId == 'string')         //Ensure companyId is number if received as a string
     { this.companyId = Number(this.companyId);}
@@ -92,35 +90,18 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
   saveTemplateName()
   {
-    //Populate profile attributes
-    let pas: ProfileAttribute[] = [];
     this.saveGroups.forEach(rp => {
-      let pa: ProfileAttribute = new ProfileAttribute();
       let rN: Rectangle = new Rectangle();
       let rV: Rectangle = new Rectangle();
       rN = rp.TitleRectangle;
       rV = rp.ValueRectangle;
-      pa.ProfileAttributeId = pas.length + 1;
-      pa.NameHeight = Math.round(rN.Height);
-      pa.NameWidth = Math.round(rN.Width);
-      pa.NameX = Math.round(rN.Tl.x);
-      pa.NameY = Math.round(rN.Tl.y);
-      pa.ValueHeight = Math.round(rV.Height);
-      pa.ValueWidth = Math.round(rV.Width);
-      pa.ValueX = Math.round(rV.Tl.x);
-      pa.ValueY = Math.round(rV.Tl.y);
-      if (pa.ProfileVersionId == null) pa.ProfileVersionId = 0;
-      if (pa.BlockPositionId == null || pa.BlockPositionId == 0) pa.BlockPositionId = 1;
-      if (pa.StandardAttributeId == null|| pa.StandardAttributeId == 0) pa.StandardAttributeId = 1;
-      pas.push(pa);
     });
-    this.template.ProfileAttributes = pas;
     this.templateNameModal.show();
   }
 
-  deleteAttribute(pa: ProfileAttribute)
+  deleteAttribute(profileAttributeId)
   {
-    this.template.ProfileAttributes.splice(pa.ProfileAttributeId, 1);
+    // this.template.ProfileAttributes.splice(pa.ProfileAttributeId, 1);
   }
 
   saveDefinition(templateName: string) {
@@ -159,8 +140,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     //TODO replace default userId with actual user
     this.template.UserId = 1;
     
-    //let v: string = JSON.stringify(this.template);
-
     this.api.post('api/profileversions', this.template)
         .pipe(take(1))
         .subscribe(() => {
@@ -211,7 +190,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
         this.selected = selectedObject
         selectedObject.hasRotatingPoint = true;
         selectedObject.transparentCorners = false;
-        // selectedObject.cornerColor = 'rgba(255, 87, 34, 0.7)';
 
         this.resetPanels();
 
@@ -250,17 +228,10 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // this.canvas.setWidth(this.size.width);
     this.width = this.canvasContainer.nativeElement.clientWidth - 30
     this.height = this.width * (1 / 1.4142)
     this.canvas.setWidth(this.width);
     this.canvas.setHeight(this.height);
-
-    // get references to the html canvas element & its context
-    // this.canvas.on('mouse:down', (e) => {
-    // let canvasElement: any = document.getElementById('canvas');
-    // console.log(canvasElement)
-    // });
   }
 
 
@@ -336,11 +307,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
       hasBorders: true
     });
 
-    // this.canvas.add(add);
-    // this.canvas.requestRenderAll();
-
     this.canvas.getActiveObject().toGroup();
-    // g1.set({ fill: 'rgba(92,184,92,0.1)' })
     let g1 = this.canvas.getActiveObject();
 
     let group = new fabric.Group([g1, add], {
@@ -354,7 +321,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     this.canvas.add(group);
     this.canvas.discardActiveObject();
     this.canvas.requestRenderAll();
-    // }
   }
 
   unlinkRects() {
@@ -380,13 +346,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
       formData.append('uploadFile', file, file.name);
     }
   }
-
-  //Block "Size"
-
-  // changeSize(event: any) {
-  //   this.canvas.setWidth(this.size.width);
-  //   this.canvas.setHeight(this.size.height);
-  // }
 
   //Block "Add text"
 
@@ -446,8 +405,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
           width: this.canvasContainer.nativeElement.clientWidth,
           height: 800
         });
-        // image.setWidth(200);
-        // image.setHeight(200);
         this.extend(image, this.randomId());
         this.canvas.setBackgroundImage(image);
       });
@@ -466,24 +423,13 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
         this.height = image.height
         this.width = image.width
         this.canvas.setBackgroundColor({ source: image.src, repeat: 'no-repeat' }, () => {
-          // self.props.canvasFill = '';
           this.canvas.renderAll();
         });
         this.canvas.renderAll();
-        // this.setCanvasImage(event.target['result']);
       }
       reader.readAsDataURL(event.target.files[0]);
-      //this.ConvertImageToString(reader.result);
     }
   }
-
-  // async ConvertImageToString(im: any)
-  // {
-  //   if (typeof im != "string")
-  //   {
-  //     ArrayBuffer ab = 
-  //   }
-  // }
 
   panScreen(direction: string) {
     switch (direction) {
@@ -515,7 +461,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
   removeWhite() {
     this.url = '';
     this.canvas.setBackgroundColor({ source: this.url, repeat: 'no-repeat' }, () => {
-      // self.props.canvasFill = '';
       this.canvas.renderAll();
     });
   };
@@ -577,11 +522,9 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
   /*Canvas*/
 
   cleanSelect() {
-    // this.canvas.deactivateAllWithDispatch().renderAll();
   }
 
   selectItemAfterAdded(obj) {
-    // this.canvas.deactivateAllWithDispatch().renderAll();
     this.canvas.setActiveObject(obj);
   }
 
@@ -609,7 +552,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
       this.canvas.setWidth(image.width)
       this.canvas.setHeight(image.height)
       this.canvas.setBackgroundColor({ source: image.src, repeat: 'no-repeat' }, () => {
-        // self.props.canvasFill = '';
         this.canvas.renderAll();
       });
       this.width = image.width;
@@ -811,20 +753,10 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
   removeSelected() {
     let activeObject = this.canvas.getActiveObject()
-    // activeGroup = this.canvas.getActiveGroup();
 
     if (activeObject) {
       this.canvas.remove(activeObject);
-      // this.textString = '';
     }
-    // else if (activeGroup) {
-    //   let objectsInGroup = activeGroup.getObjects();
-    //   this.canvas.discardActiveGroup();
-    //   let self = this;
-    //   objectsInGroup.forEach(function (object) {
-    //     self.canvas.remove(object);
-    //   });
-    // }
   }
 
   bringToFront() {
@@ -833,7 +765,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
     if (activeObject) {
       activeObject.bringToFront();
-      // activeObject.opacity = 1;
     }
     else if (activeGroup) {
       let objectsInGroup = activeGroup.getObjects();
@@ -850,7 +781,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
     if (activeObject) {
       activeObject.sendToBack();
-      // activeObject.opacity = 1;
     }
     else if (activeGroup) {
       let objectsInGroup = activeGroup.getObjects();
@@ -873,7 +803,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     }
     else {
       console.log(this.canvas.toDataURL('png'))
-      //window.open(this.canvas.toDataURL('png'));
       var image = new Image();
       image.src = this.canvas.toDataURL('png')
       var w = window.open("");
@@ -883,12 +812,6 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
 
   rasterizeSVG() {
     console.log(this.canvas.toSVG())
-    // window.open(
-    //   'data:image/svg+xml;utf8,' +
-    //   encodeURIComponent(this.canvas.toSVG()));
-    // console.log(this.canvas.toSVG())
-    // var image = new Image();
-    // image.src = this.canvas.toSVG()
     var w = window.open("");
     w.document.write(this.canvas.toSVG());
   };

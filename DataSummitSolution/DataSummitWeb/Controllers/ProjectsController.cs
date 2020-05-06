@@ -1,9 +1,9 @@
-﻿using DataSummitHelper;
-using DataSummitModels.DB;
-using Microsoft.AspNetCore.Authorization;
+﻿using DataSummitHelper.Interfaces;
+using DataSummitWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataSummitWeb.Controllers
@@ -12,41 +12,43 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
-        //Connection string determined by Startup.IEnvironment and used privately in dbContext
-        //Projects projectsService = new Projects(new DataSummitDbContext(Startup.ConnectionString));
-        DataSummitHelper.Projects projectsService = new DataSummitHelper.Projects(new DataSummitDbContext());
+        private readonly IDataSummitHelperService _dataSummitHelper;
 
-        private DataSummitDbContext db = new DataSummitDbContext();
-        // GET api/projects/5
+        public ProjectsController(IDataSummitHelperService dataSummitHelper)
+        {
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+        }
+
+        // GET api/projects/{id}
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetProjectById(int id)
         {
-            List<DataSummitModels.DB.Projects> lProjects = projectsService.GetAllCompanyProjects(id);
-            return JsonConvert.SerializeObject(lProjects.ToArray());
+            var projectDtos = await _dataSummitHelper.GetAllCompanyProjects(id);
+            var projects = projectDtos.Select(p => Project.FromDto(p))
+                .ToList();
+            return Ok(projects);
         }
 
-        // POST api/projects
-        [HttpPost]
-        public string Post([FromBody]DataSummitModels.DB.Projects project)
+        // POST api/projects/create
+        [HttpPost("create")]
+        public async Task CreateProject([FromBody]Project project)
         {
-            //Create
-            return JsonConvert.SerializeObject(projectsService.CreateProject(project));
+            await _dataSummitHelper.CreateProject(project.ToDto());
         }
 
-        // PUT api/projects/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.DB.Projects project)
+        // PUT api/projects/update
+        [HttpPut("update")]
+        public async Task UpdateProject([FromBody]Project project)
         {
             //Update
-            projectsService.UpdateProject(id, project);
+            await _dataSummitHelper.UpdateProject(project.ToDto());
         }
 
-        // DELETE api/projects/5
-        [HttpDelete("{id}")]
-        public string Delete(int id)
+        // DELETE api/projects/delete/{id}
+        [HttpDelete("delete")]
+        public async Task DeleteProjectById([FromBody]int id)
         {
-            projectsService.DeleteProject(id);
-            return JsonConvert.SerializeObject("Ok");
+            await _dataSummitHelper.DeleteProject(id);
         }
     }
 }

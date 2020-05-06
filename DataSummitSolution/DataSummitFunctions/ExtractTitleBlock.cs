@@ -6,8 +6,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using DataSummitFunctions.Models;
-using DataSummitFunctions.Models.Consolidated;
-using DataSummitFunctions.Models.Recognition;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;

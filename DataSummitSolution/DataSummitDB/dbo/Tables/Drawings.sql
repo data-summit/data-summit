@@ -19,6 +19,7 @@
     CONSTRAINT [PK_Drawing] PRIMARY KEY CLUSTERED ([DrawingId] ASC),
     CONSTRAINT [FK_Drawings_Projects] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([ProjectId]),
 	CONSTRAINT [FK_Drawings_PaperSizes] FOREIGN KEY ([PaperSizeId]) REFERENCES [dbo].[PaperSizes] ([PaperSizeId]),
-	CONSTRAINT [FK_Drawings_PaperOrientations] FOREIGN KEY ([PaperOrientationId]) REFERENCES [dbo].[PaperOrientations] ([PaperOrientationId])
+	CONSTRAINT [FK_Drawings_PaperOrientations] FOREIGN KEY ([PaperOrientationId]) REFERENCES [dbo].[PaperOrientations] ([PaperOrientationId]), 
+    CONSTRAINT [FK_Drawings_ProfileVersions] FOREIGN KEY ([ProfileVersionId]) REFERENCES [ProfileVersions]([ProfileVersionId])
 );
 

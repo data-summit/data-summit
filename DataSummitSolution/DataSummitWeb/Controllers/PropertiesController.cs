@@ -1,11 +1,10 @@
-﻿using DataSummitModels.DB;
-using DataSummitModels.DTO;
+﻿using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using DataSummitHelper.Interfaces;
 
 namespace DataSummitWeb.Controllers
 {
@@ -13,40 +12,40 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class PropertiesController : Controller
     {
-        //Connection string determined by Startup.IEnvironment and used privately in dbContext
-        //DataSummitHelper.Properties propertiesService = new DataSummitHelper.Properties(new DataSummitDbContext(localDbConnectionString));
-        DataSummitHelper.Properties propertiesService = new DataSummitHelper.Properties(new DataSummitDbContext());
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        private readonly IDataSummitHelperService _dataSummitHelper;
+        
+        public PropertiesController(IDataSummitHelperService dataSummitHelper)
         {
-            DrawingData dd = propertiesService.GetAllDrawingProperties(id);
-            return JsonConvert.SerializeObject(dd);
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
-        // POST api/values
-        [HttpPost]
-        public string Post([FromBody]DataSummitModels.DB.Properties properties)
+        // GET api/properties/drawing/{id}
+        [HttpGet("drawing/{id}")]
+        public async Task<IActionResult> GetDrawingProperties([FromRoute] string id)
         {
-            //Create
-            return JsonConvert.SerializeObject(propertiesService.CreateProperty(properties));
+            var drawingId = int.Parse(id);
+            var drawingPropertyRows = await _dataSummitHelper.GetDrawingProperties(drawingId);
+
+            var drawingProperties = drawingPropertyRows
+                .Select(row => DrawingProperty.FromDto(row))
+                .ToList();
+
+            return Ok(drawingProperties);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.DB.Properties properties)
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateDrawingPropertyValue([FromBody] DrawingPropertyValue drawingPropertyValue)
         {
-            //Update
-            propertiesService.UpdateProperty(id, properties);
+            await _dataSummitHelper.UpdateDrawingPropertyValue(drawingPropertyValue.ToDto());
+            return Ok();
         }
 
-        // DELETE api/values/5
+        // DELETE api/properties/{id}
         [HttpDelete("{id}")]
-        public string Delete(long id)
+        public async Task<IActionResult> Delete(long id)
         {
-            propertiesService.DeleteProperty(id);
-            return JsonConvert.SerializeObject("Ok");
+            await _dataSummitHelper.DeleteDrawingProperty(id);
+            return Ok();
         }
     }
 }

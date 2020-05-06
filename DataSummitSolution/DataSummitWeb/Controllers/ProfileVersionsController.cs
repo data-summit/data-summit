@@ -1,11 +1,11 @@
-﻿using DataSummitModels.DB;
+﻿using DataSummitHelper.Interfaces;
+using DataSummitModels.DB;
 using DataSummitWeb.DTO;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataSummitWeb.Controllers
@@ -14,42 +14,32 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class ProfileVersionsController : Controller
     {
-        DataSummitHelper.ProfileVersions profileVersionsService = new DataSummitHelper.ProfileVersions(new DataSummitDbContext());
-        private DataSummitDbContext db = new DataSummitDbContext();
+        private readonly IDataSummitHelperService _dataSummitHelper;
 
-        // GET api/profileVersion/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        public ProfileVersionsController(IDataSummitHelperService dataSummitHelper)
         {
-            ProfileVersions profileVersions = profileVersionsService.GetProfileVersion(id);
-
-            var jss = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.All
-            };
-            return JsonConvert.SerializeObject(profileVersions, Formatting.Indented, jss);
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
         // GET api/profileVersion/5
-        [HttpGet("{companyid}/profileversions/{id}")]
-        public string Get(int companyid, int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            List<ProfileVersions> lProfileVersions = profileVersionsService
-                                                        .GetAllCompanyProfileVersions(companyid);
-            return JsonConvert.SerializeObject(lProfileVersions.ToArray());
+            var profileVersions = await _dataSummitHelper.GetAllCompanyTemplates(id);
+
+            return Ok(profileVersions);
         }
 
         // POST api/profileVersion
         [HttpPost]
-        //public string Post([FromBody]ProfileVersion profileversion)
         public string Post([FromBody] ProfileVersionDTO profileVersion)
         {
             int id = 0;
             try
             {
-                DataSummitModels.DB.ProfileVersions pv = null;
-                List<DataSummitModels.DB.ProfileAttributes> lPa = new List<DataSummitModels.DB.ProfileAttributes>();
-                pv = new DataSummitModels.DB.ProfileVersions
+                ProfileVersions pv = null;
+                List<ProfileAttributes> lPa = new List<ProfileAttributes>();
+                pv = new ProfileVersions
                 {
                     CompanyId = profileVersion.CompanyId,
                     Name = profileVersion.Name,
@@ -69,7 +59,7 @@ namespace DataSummitWeb.Controllers
                 
                 foreach (ProfileAttributes pa in profileVersion.ProfileAttributes)
                 {
-                    DataSummitModels.DB.ProfileAttributes npa = new DataSummitModels.DB.ProfileAttributes
+                    ProfileAttributes npa = new ProfileAttributes
                     {
                         BlockPositionId = pa.BlockPositionId,
                         CreatedDate = DateTime.Now,
@@ -90,9 +80,9 @@ namespace DataSummitWeb.Controllers
                 }
                 pv.ProfileAttributes = lPa;
                 t.Wait();
-                id = profileVersionsService.CreateProfileVersion(pv);
+                //id = profileVersionsService.CreateProfileVersion(pv);
             }
-            catch (System.Exception ae)
+            catch (Exception ae)
             { string strError = ae.Message.ToString(); }
 
             //Upload and map
@@ -104,7 +94,7 @@ namespace DataSummitWeb.Controllers
         public void Put(int id, [FromBody]ProfileVersions profileVersion)
         {
             //Update
-            profileVersionsService.UpdateProfileVersion(id, profileVersion);
+            //profileVersionsService.UpdateProfileVersion(id, profileVersion);
             return;
         }
 
@@ -112,7 +102,7 @@ namespace DataSummitWeb.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            profileVersionsService.DeleteProfileVersion(id);
+            //profileVersionsService.DeleteProfileVersion(id);
             return JsonConvert.SerializeObject("Ok");
         }
 

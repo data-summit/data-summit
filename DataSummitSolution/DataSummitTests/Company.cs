@@ -1,4 +1,5 @@
 ﻿using DataSummitHelper;
+using DataSummitHelper.Classes;
 using DataSummitModels.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -18,7 +19,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_company()
         {
-            DataSummitModels.DB.Companies company = new DataSummitModels.DB.Companies
+            Companies company = new Companies
             {
                 Name = "Unit Test Company",
                 CompanyNumber = "0000000",
@@ -28,26 +29,26 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockCompanyDbSet = new Mock<DbSet<DataSummitModels.DB.Companies>>();
+            var mockCompanyDbSet = new Mock<DbSet<Companies>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.Companies).Returns(mockCompanyDbSet.Object);
-            var mockCompany = new DataSummitHelper.Companies(mockContext.Object);
+            var mockCompany = new Company(mockContext.Object);
 
             mockCompany.CreateCompany(company);
 
-            mockCompanyDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.Companies>()), Times.Once());
+            mockCompanyDbSet.Verify(m => m.Add(It.IsAny<Companies>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_company_by_id()
         {
-            var testCompanies = new List<DataSummitModels.DB.Companies>
+            var testCompanies = new List<Companies>
             {
-                new DataSummitModels.DB.Companies
+                new Companies
                 {
                     CompanyId = 1,
                     Name = "Unit Test Company1",
@@ -57,7 +58,7 @@ namespace DataSummitTests
                     Website = "www.UnitTestCompany1.com"
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.DB.Companies
+                new Companies
                 {
                     CompanyId = 2,
                     Name = "Unit Test Company2",
@@ -67,7 +68,7 @@ namespace DataSummitTests
                     Website = "www.UnitTestCompany2.com"
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new DataSummitModels.DB.Companies
+                new Companies
                 {
                     CompanyId = 3,
                     Name = "Unit Test Company3",
@@ -79,11 +80,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockCompanyDbSet = new Mock<DbSet<DataSummitModels.DB.Companies>>();
-            mockCompanyDbSet.As<IQueryable<DataSummitModels.DB.Companies>>().Setup(m => m.Provider).Returns(testCompanies.Provider);
-            mockCompanyDbSet.As<IQueryable<DataSummitModels.DB.Companies>>().Setup(m => m.Expression).Returns(testCompanies.Expression);
-            mockCompanyDbSet.As<IQueryable<DataSummitModels.DB.Companies>>().Setup(m => m.ElementType).Returns(testCompanies.ElementType);
-            mockCompanyDbSet.As<IQueryable<DataSummitModels.DB.Companies>>().Setup(m => m.GetEnumerator()).Returns(testCompanies.GetEnumerator());
+            var mockCompanyDbSet = new Mock<DbSet<Companies>>();
+            mockCompanyDbSet.As<IQueryable<Companies>>().Setup(m => m.Provider).Returns(testCompanies.Provider);
+            mockCompanyDbSet.As<IQueryable<Companies>>().Setup(m => m.Expression).Returns(testCompanies.Expression);
+            mockCompanyDbSet.As<IQueryable<Companies>>().Setup(m => m.ElementType).Returns(testCompanies.ElementType);
+            mockCompanyDbSet.As<IQueryable<Companies>>().Setup(m => m.GetEnumerator()).Returns(testCompanies.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -91,7 +92,7 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.Companies).Returns(mockCompanyDbSet.Object);
 
-            var mockCompanyService = new DataSummitHelper.Companies(mockContext.Object);
+            var mockCompanyService = new Company(mockContext.Object);
             var mockCompany = mockCompanyService.GetCompanyById(1);
             Assert.AreEqual(mockCompany.CompanyNumber, testCompanies.ToList()[0].CompanyNumber);
         }

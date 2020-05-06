@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataSummitModels;
 using Newtonsoft.Json;
 using DataSummitModels.DB;
 
@@ -15,7 +12,7 @@ namespace DataSummitWeb.Controllers
     [ApiController]
     public class StandardAttributesController : ControllerBase
     {
-        DataSummitHelper.StandardAttributes standardAttributesService = new DataSummitHelper.StandardAttributes(new DataSummitDbContext());
+        DataSummitHelper.StandardAttribute standardAttributesService = new DataSummitHelper.StandardAttribute(new DataSummitDbContext());
         private DataSummitDbContext db = new DataSummitDbContext();
 
         // GET: api/StandardAttributes/5
@@ -68,7 +65,7 @@ namespace DataSummitWeb.Controllers
         //}
 
         [HttpPost]
-        public string PostStandardAttributes(DataSummitModels.DB.ProfileVersions profileVersion)
+        public string PostStandardAttributes(ProfileVersions profileVersion)
         {
             return JsonConvert.SerializeObject(profileVersion);
         }

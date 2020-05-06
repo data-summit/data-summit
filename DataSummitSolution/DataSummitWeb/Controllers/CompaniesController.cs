@@ -1,9 +1,11 @@
-﻿using DataSummitHelper;
-using DataSummitModels.DB;
+﻿using DataSummitHelper.Dto;
+using DataSummitHelper.Interfaces;
+using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataSummitWeb.Controllers
@@ -12,44 +14,50 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class CompaniesController : Controller
     {
-        DataSummitHelper.Companies companiesService = new DataSummitHelper.Companies(new DataSummitDbContext());
+        private readonly IDataSummitHelperService _dataSummitHelper;
+
+        public CompaniesController(IDataSummitHelperService dataSummitHelper)
+        {
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+        }
 
         // GET api/companies
         [HttpGet]
-        public string Get()
+        public async Task<string> GetAllCompanies()
         {
-            List<DataSummitModels.DB.Companies> companies = companiesService.GetAllCompanies();
+            var companyDtos = await _dataSummitHelper.GetAllCompanies();
+            var companies = companyDtos.Select(c => Company.FromDto(c))
+                .ToList();
             return JsonConvert.SerializeObject(companies.ToArray());
         }
 
-        // GET api/companies/5
+        // GET api/companies/{id}
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string GetCompanyById(int id)
         {
-            DataSummitModels.DB.Companies company = companiesService.GetCompanyById(id);
+            var company = _dataSummitHelper.GetCompanyById(id);
             return JsonConvert.SerializeObject(company);
         }
 
-        // POST api/Company
-        [HttpPost]
-        public string Post([FromBody]DataSummitModels.DB.Companies company)
+        // POST api/Company/create
+        [HttpPost("create")]
+        public async Task CreateNewCompany([FromBody]Company company)
         {
-            return JsonConvert.SerializeObject(companiesService.CreateCompany(company));
+            await _dataSummitHelper.CreateCompany(company.ToDto());
         }
 
-        // PUT api/Company/5
-        [HttpPut("{id}")]
-        public void Put([FromBody]DataSummitModels.DB.Companies company)
+        // PUT api/Company/update
+        [HttpPut("update")]
+        public async Task UpdateCompany([FromBody]CompanyDto company)
         {
-            companiesService.UpdateCompany(company);
+            await _dataSummitHelper.UpdateCompany(company);
         }
 
-        // DELETE api/Company/5
-        [HttpDelete("{id}")]
-        public string Delete(int id)
+        // DELETE api/Company/delete
+        [HttpDelete("delete")]
+        public async Task DeleteCompany([FromBody]int companyId)
         {
-            companiesService.DeleteCompany(id);
-            return JsonConvert.SerializeObject("Ok");
+            await _dataSummitHelper.DeleteCompany(companyId);
         }
     }
 }

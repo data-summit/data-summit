@@ -1,18 +1,15 @@
 ﻿using DataSummitFunctions.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataSummitFunctions.Methods
 {
     public static class WordLocation
     {
-        public static List<Models.Sentences> Corrected(
+        public static List<Sentences> Corrected(
                                     List<Models.Consolidated.Sentences> sents, ImageGrid ig)
         {
-            List<Models.Sentences> lOut = new List<Models.Sentences>();
+            List<Sentences> lOut = new List<Sentences>();
             try
             {
                 foreach (Models.Consolidated.Sentences s in sents)

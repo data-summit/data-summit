@@ -1,5 +1,4 @@
 using DataSummitFunctions.Models.Consolidated;
-using DataSummitFunctions.Methods.PostProcessing;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
@@ -83,9 +82,9 @@ namespace DataSummitFunctions
                 List<Sentences> lToBeAdded = new List<Sentences>();
                 List<Sentences> lMerged = new List<Sentences>();
 
-                foreach (Models.Consolidated.Sentences sen in results.Sentences.Select(s => s.ToModelConsolidated()).ToList())
+                foreach (Sentences sen in results.Sentences.Select(s => s.ToModelConsolidated()).ToList())
                 {
-                    List<Models.Consolidated.Sentences> ls2 = results.Sentences
+                    List<Sentences> ls2 = results.Sentences
                                                                 .Where(s => !s.Equals(sen))
                                                                 .Select(s => s.ToModelConsolidated())
                                                                 .ToList();
@@ -93,10 +92,10 @@ namespace DataSummitFunctions
                     List<string> s2 = ls2.Select(s => s.Words).ToList();
                     string s1 = sen.Words;
                     string se = sen.Words.Substring(sen.Words.Length - 4, 3);
-                    List<Models.Consolidated.Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
+                    List<Sentences> s4 = ls2.Where(s => s.Words.Contains(se)).ToList();
                     if (s4.Count > 0)
                     {
-                        foreach (Models.Consolidated.Sentences sen1 in s4)
+                        foreach (Sentences sen1 in s4)
                         {
                             if (ExactSuffixOrPostfix(sen, sen1) == false)
                             {
@@ -198,7 +197,7 @@ namespace DataSummitFunctions
                     double dblAveStart = tFromStart.Average(v => v.Item2);
                     double dblAveEnd = tFromEnd.Average(v => v.Item2);
 
-                    SimMetricsMetricUtilities.SmithWaterman sw = new SmithWaterman();
+                    SmithWaterman sw = new SmithWaterman();
                     List<double> ForwardAverage1 = new List<double>();
                     List<double> BackwardAverage1 = new List<double>();
                     List<double> ForwardAverage2 = new List<double>();
@@ -258,7 +257,7 @@ namespace DataSummitFunctions
         /// <param name="sCur"></param>
         /// <param name="sTarget"></param>
         /// <returns></returns>
-        private static bool ExactSuffixOrPostfix(Models.Consolidated.Sentences sCur, Models.Consolidated.Sentences sTarget)
+        private static bool ExactSuffixOrPostfix(Sentences sCur, Sentences sTarget)
         {
             try
             {

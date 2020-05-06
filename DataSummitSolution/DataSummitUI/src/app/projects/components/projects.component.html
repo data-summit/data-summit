@@ -7,7 +7,7 @@
           </td>
           <td width="37%"></td>
           <td width="40%" align="right">
-            <button type="button" style="width: 170px" mdbBtn color="primary" class="relative waves-light" (click)="addOrEditProject()" mdbWavesEffect>Add Project</button>
+            <button type="button" style="width: 170px" mdbBtn color="primary" class="relative waves-light" (click)="addProject()" mdbWavesEffect>Add Project</button>
             <button type="button" style="width: 170px" mdbBtn color="primary" class="btn btn-info" (click)="createTemplate()" mdbWavesEffect>Add Template</button>
           </td>
         </tr>
@@ -22,10 +22,10 @@
           <tr class="text-center" mdbTableCol *ngFor="let proj of projects">
             <td>{{proj.Name}}</td>
             <td (click)="goToDrawings(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' drawings'"></i></td>
-            <td (click)="goToTemplatess(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' templates'"></i></td>
+            <td (click)="goToTemplates(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' templates'"></i></td>
             <td>{{proj.CreatedDate | date: 'dd/MM/yyyy'}}</td>
             <td class="text-center">
-              <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + proj.Name" (click)="addOrEditProject(proj)"></i>
+              <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + proj.Name" (click)="editProject(proj)"></i>
                |
               <i class="fa fa-trash-alt pointer" [mdbTooltip]="'Delete ' + proj.Name" (click)="deleteProject(proj)"></i>
             </td>
@@ -46,11 +46,6 @@
         </div>
         <div class="modal-body">
           <form class="border border-light p-3" #projectForm>
-            <!-- <div *ngIf="projectForm.get('Name').hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
-              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
-                <small>Required</small>
-              </div>
-            </div> -->
             <div class="form-row mb-2">
               <input type="text" name="ProjectName" placeholder="Project Name" style="width: 90%; margin-right: 5px;"
                     [(ngModel)]="selectedProject.Name" #ProjectName="ngModel"
@@ -65,7 +60,6 @@
           <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="hideDialog()"
             mdbWavesEffect>Close</button>
           <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="saveProject()" mdbWavesEffect>Save</button>
-          <!-- [disabled]="!projectForm.dirty || !projectForm.valid" Form never becomes valid so cannot click save -->
         </div>
       </div>
     </div>

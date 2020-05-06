@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { ProfileVersionsComponent } from "./components/profileVersions.component";
 import { CreateProfileVersionComponent } from "./create/components/createProfileVersion.component";
 import { ProfileAttributesComponent } from "../profileAttributes/components/profileAttributes.component";
-import { StandardAttributeComponent } from "../standardAttribute/components/standardAttribute.component";
+import { StandardAttributeComponent } from "../../obsolete/standardAttribute/components/standardAttribute.component";
 
 const archiveRoutes: Routes = [
   { path: ":companyId", component: ProfileVersionsComponent },

@@ -3,22 +3,14 @@ using DataSummitFunctions.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Newtonsoft.Json;
 
-using SelectPdf;
-
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;

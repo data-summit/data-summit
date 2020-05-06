@@ -18,12 +18,12 @@
           </thead>
           <tbody>
             <tr class="text-center" mdbTableCol *ngFor="let pa of profileAttributes">
-              <td align="Left">{{pa.StandardAttribute.Name}}</td>
+              <td align="Left">{{pa.StandardAttributeName}}</td>
               <td align="Left">{{pa.Name}}</td>
-              <td>{{pa.NameX}}</td>
-              <td>{{pa.NameY}}</td>
-              <td>{{pa.NameWidth}}</td>
-              <td>{{pa.NameHeight}}</td>
+              <td>{{pa.ValueX}}</td>
+              <td>{{pa.ValueY}}</td>
+              <td>{{pa.Width}}</td>
+              <td>{{pa.Height}}</td>
               <td>{{pa.CreatedDate | date: 'd-MMM-yyyy'}}</td>
               <td class="text-center">
                 <i class="fa fa-edit pointer" [mdbTooltip]="'Edit ' + pa.Name" (click)="addOrEditProfileAttribute(pa)"></i>
@@ -47,12 +47,6 @@
         </div>
         <div class="modal-body">
           <form class="border border-light p-3" #profileAttributeForm>
-            <!-- Name -->
-            <!-- <div *ngIf="AttributeName.hasError('required')" class="form-row mb-2" style="height: 25%; padding-bottom: 0%;">
-              <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">
-                <small>Required</small>
-              </div>
-            </div> -->
             <div class="form-row mb-2">
               <h6 class="col-sm-3" style="height: 25%; width: 10%; padding-bottom: 0%;">Name:</h6>
               <div class="col-sm-3" style="height: 25%; padding-bottom: 0%;">

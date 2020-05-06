@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="b67037c2-b2f9-4376-b200-83003ce54d13" ChangeDateTime="04/28/2020 11:47:26">
+    <Property Name="ElementName" Value="[dbo].[DrawingTemplates].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawingTemplates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DrawingTemplateId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d8cf199d-7427-48fa-9666-b428cef46ed5" ChangeDateTime="04/28/2020 11:48:45">
+    <Property Name="ElementName" Value="[dbo].[FK_DrawingTemplates_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[DrawingTemplates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_DrawingTemplates_Drawings]" />
+  </Operation>
+</Operations>

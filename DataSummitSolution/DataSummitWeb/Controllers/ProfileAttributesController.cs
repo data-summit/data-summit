@@ -1,9 +1,9 @@
-﻿using DataSummitHelper;
+﻿using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 
 namespace DataSummitWeb.Controllers
@@ -12,49 +12,39 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class ProfileAttributesController : Controller
     {
-        DataSummitHelper.ProfileAttributes profileAttributeService = new DataSummitHelper.ProfileAttributes(new DataSummitDbContext());
-        DataSummitHelper.BlockPositions blockPositionService = new DataSummitHelper.BlockPositions(new DataSummitDbContext());
-        DataSummitHelper.StandardAttributes standardAttributeService = new DataSummitHelper.StandardAttributes(new DataSummitDbContext());
-        DataSummitHelper.PaperSizes paperSizeSerice = new DataSummitHelper.PaperSizes(new DataSummitDbContext());
+        private readonly IDataSummitHelperService _dataSummitHelper;
+
+        public ProfileAttributesController(IDataSummitHelperService dataSummitHelper)
+        {
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+        }
 
         private DataSummitDbContext db = new DataSummitDbContext();
+        
         // GET api/profileAttributes/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            List<DataSummitModels.DB.ProfileAttributes> lProfileAttributes = profileAttributeService.GetAllProfileVersionProfileAttributes(id);
-            try
-            {                                                 
-                foreach (DataSummitModels.DB.ProfileAttributes pa in lProfileAttributes)
-                {
-                    pa.BlockPosition = blockPositionService.GetBlockPositionById(pa.BlockPositionId);
-                    pa.PaperSize = paperSizeSerice.GetPaperSizesById(pa.PaperSizeId);
-                    pa.StandardAttribute = standardAttributeService.GetStandardAttributesById((short)pa.StandardAttributeId);
-                }
-            }
-            catch (System.Exception ae)
-            {
-                string strError = "";
-                if (ae.Message != null) strError = ae.Message.ToString();
-            }
-            return JsonConvert.SerializeObject(lProfileAttributes.ToArray());
+            var profileAttributes = await _dataSummitHelper.GetTemplateAttribtes(id);
+            return Ok(profileAttributes);
         }
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]DataSummitModels.DB.ProfileAttributes profileAttribute)
+        public string Post([FromBody]ProfileAttributes profileAttribute)
         {
             //Create
-            return JsonConvert.SerializeObject(
-                profileAttributeService.CreateProfileAttribute(profileAttribute));
+            //return JsonConvert.SerializeObject(
+            //    profileAttributeService.CreateProfileAttribute(profileAttribute));
+            return null;
         }
 
         // PUT api/profileAttributes/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]DataSummitModels.DB.ProfileAttributes profileAttribute)
+        public void Put(int id, [FromBody]ProfileAttributes profileAttribute)
         {
             //Update
-            profileAttributeService.UpdateProfileAttribute(id, profileAttribute);
+            //profileAttributeService.UpdateProfileAttribute(id, profileAttribute);
             return;
         }
 
@@ -62,7 +52,7 @@ namespace DataSummitWeb.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            profileAttributeService.DeleteProfileAttribute(id);
+            //profileAttributeService.DeleteProfileAttribute(id);
             return JsonConvert.SerializeObject("Ok");
         }
     }

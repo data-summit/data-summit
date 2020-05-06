@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Auth;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 using Newtonsoft.Json;
@@ -13,8 +12,6 @@ using SelectPdf;
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -136,7 +133,7 @@ namespace DataSummitFunctions
                                 pdfSingle.Pages[0].Orientation = PdfPageOrientation.Portrait;
                                 //May need to rotate Spire single PDF to Potrait
                                 sPage = spdfSingle.Pages.Add(spirePDF.Pages[i].Size, new Spire.Pdf.Graphics.PdfMargins(0), Spire.Pdf.PdfPageRotateAngle.RotateAngle0);
-                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new System.Drawing.PointF(0, 0));
+                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new PointF(0, 0));
                             }
                             else
                             {
@@ -144,7 +141,7 @@ namespace DataSummitFunctions
                                 pdfSingle.Pages[0].Orientation = PdfPageOrientation.Landscape;
                                 //May need to rotate Spire single PDF to Landscape
                                 sPage = spdfSingle.Pages.Add(spirePDF.Pages[i].Size, new Spire.Pdf.Graphics.PdfMargins(0), Spire.Pdf.PdfPageRotateAngle.RotateAngle0);
-                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new System.Drawing.PointF(0, 0));
+                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new PointF(0, 0));
                             }
                         }
                         else
@@ -156,7 +153,7 @@ namespace DataSummitFunctions
                                 //May need to rotate Spire single PDF to Landscape
                                 sPage = spdfSingle.Pages.Add(new SizeF(spirePDF.Pages[i].Size.Height, spirePDF.Pages[i].Size.Width),
                                                                  new Spire.Pdf.Graphics.PdfMargins(0), Spire.Pdf.PdfPageRotateAngle.RotateAngle0);
-                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new System.Drawing.PointF(0, 0));
+                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new PointF(0, 0));
                             }
                             else
                             {
@@ -164,7 +161,7 @@ namespace DataSummitFunctions
                                 pdfSingle.Pages[0].Orientation = PdfPageOrientation.Landscape;
                                 //May need to rotate Spire single PDF to Potrait
                                 sPage = spdfSingle.Pages.Add(spirePDF.Pages[i].Size, new Spire.Pdf.Graphics.PdfMargins(0), Spire.Pdf.PdfPageRotateAngle.RotateAngle0);
-                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new System.Drawing.PointF(0, 0));
+                                spirePDF.Pages[i].CreateTemplate().Draw(sPage, new PointF(0, 0));
                             }
                         }
 

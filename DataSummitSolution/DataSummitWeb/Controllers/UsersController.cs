@@ -16,7 +16,7 @@ namespace DataSummitWeb.Controllers
     public class UsersController : Controller
     {
         //Connection string determined by Startup.IEnvironment and used privately in dbContext
-        Users usersService = new Users(new DataSummitDbContext());
+        User usersService = new User(new DataSummitDbContext());
 
         private DataSummitDbContext db = new DataSummitDbContext();
         [HttpGet("{id}")]
@@ -44,9 +44,9 @@ namespace DataSummitWeb.Controllers
                         : countryCode + regUser.Phone;
 
                     //Extract address from body
-                    var address = new HashSet<DataSummitModels.DB.Addresses>()
+                    var address = new HashSet<Addresses>()
                     {
-                        new DataSummitModels.DB.Addresses
+                        new Addresses
                         {
                             Street = regUser.Street,
                             Street2 = regUser.Street2,

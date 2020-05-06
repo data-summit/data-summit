@@ -2,11 +2,10 @@
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, catchError } from 'rxjs/operators';
-import { Drawing } from '../models/drawing';
+import { DrawingData } from '../models/drawingdata';
 import { DrawingUpload } from '../models/drawingupload'
 import { FileUpload } from 'primeng/fileupload';
 import { FormBuilder } from '@angular/forms';
-import { ProfileVersion } from '../../profileVersion/models/profileVersion'
 
 @Component({
     selector: 'ds-drawings',
@@ -20,10 +19,9 @@ export class DrawingsComponent implements OnInit {
 
     companyId: number;
     projectId: number;
-    drawings: Drawing[];
-    selectedDrawing: Drawing;
+    drawingTableRows: Array<DrawingData>;
+    selectedDrawing: DrawingData;
     drawingsForUpload: DrawingUpload[];
-    templates: ProfileVersion[];
     templateId: number;
     headers: string[];
     loading: boolean;
@@ -55,14 +53,18 @@ export class DrawingsComponent implements OnInit {
     }
 
     getDrawings(id: number) {
-        this.loading = true;
+        this.loading = true;        
         this.api.get("api/drawings/" + id.toString(), id)
             .pipe(take(1))
-                .subscribe((result: Drawing[]) => {
-                    this.drawings = [];
+                .subscribe((result: any[]) => {
+                    this.drawingTableRows = [];
+
                     for (let i = 0; i < result.length; i++) {
-                        let p = <Drawing>result[i];
-                        this.drawings.push(p);
+                        let d = new DrawingData(result[i].drawingId, 
+                            result[i].name, 
+                            result[i].containerUrl, 
+                            result[i].createdDate);
+                        this.drawingTableRows.push(d);
                 };
                 console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
@@ -72,23 +74,23 @@ export class DrawingsComponent implements OnInit {
             })
     }
 
-    addDrawing() {
-        this.api.get(`api/profileversions/${this.companyId}`, this.companyId)
-            .pipe(take(1))
-                .subscribe((result: ProfileVersion[]) => {
-                    this.templates = [];
-                    for (let i = 0; i < result.length; i++) {
-                        let p = <ProfileVersion>result[i];
-                        this.templates.push(p);
-                };
-                console.log(location.origin.toString() + this.router.url.toString());
-                this.loading = false;
-                this.drawingModal.show();
-            }, error => {
-                console.log(error)
-                this.loading = false;
-            });
-    }
+    // addDrawing() {
+    //     this.api.get(`api/profileversions/${this.companyId}`, this.companyId)
+    //         .pipe(take(1))
+    //             .subscribe((result: ProfileVersion[]) => {
+    //                 this.templates = [];
+    //                 for (let i = 0; i < result.length; i++) {
+    //                     let p = <ProfileVersion>result[i];
+    //                     this.templates.push(p);
+    //             };
+    //             console.log(location.origin.toString() + this.router.url.toString());
+    //             this.loading = false;
+    //             this.drawingModal.show();
+    //         }, error => {
+    //             console.log(error)
+    //             this.loading = false;
+    //         });
+    // }
 
     onChange(event){
         if (typeof event === 'string')         //Ensure id is number if received as a string
@@ -127,10 +129,6 @@ export class DrawingsComponent implements OnInit {
                     
                     draw.File = btoa(binary);
                     
-                    // let formData: FormData = new FormData();
-                    // formData.append('file', file);
-                    // draw.File = formData;
-
                     this.drawingsForUpload.push(draw);
 
                     this.api.postImage(`api/drawings/`, this.drawingsForUpload)
@@ -147,7 +145,6 @@ export class DrawingsComponent implements OnInit {
                                 this.drawingModal.hide();
                             });
                 }
-                //reader.readAsArrayBuffer(file);
             }
         }
     }
@@ -158,9 +155,9 @@ export class DrawingsComponent implements OnInit {
 
     deleteDrawing(drawing) {
         //todo: api call:
-        let index = this.drawings.findIndex(d => d == drawing)
+        let index = this.drawingTableRows.findIndex(d => d == drawing)
         if(index > -1) {
-            this.drawings.splice(index, 1)
+            this.drawingTableRows.splice(index, 1)
         }
     }
 
