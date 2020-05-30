@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Castle.Core.Configuration;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
@@ -13,10 +14,12 @@ namespace DataSummitHelper.Services
     public class DataSummitHelperService : IDataSummitHelperService
     {
         private readonly IDataSummitDao _dao;
+        private readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
 
-        public DataSummitHelperService(IDataSummitDao dao)
+        public DataSummitHelperService(IDataSummitDao dao, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             _dao = dao;
+            _configuration = configuration;
         }
 
         #region Companies
@@ -84,6 +87,14 @@ namespace DataSummitHelper.Services
         #endregion
 
         #region Drawings
+        public async Task<bool> IsDrawingDocument(int drawingId)
+        {
+            var documentClassification = _configuration["DocumentClassification"];
+
+            //TODO make http call to //"https://documentlayout.cognitiveservices.azure.com/" and pass data to ML project
+
+            return false;
+        }
         public async Task DeleteDrawingProperty(long drawingPropertyId)
         {
             await _dao.DeleteProfileAttribute(drawingPropertyId);
