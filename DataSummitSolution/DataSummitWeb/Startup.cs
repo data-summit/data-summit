@@ -19,16 +19,12 @@ namespace DataSummitWeb
 {
     public class Startup
     {
-        public static string ConnectionString { get; private set; }
-        public static bool IsProdEnvironment = false;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-        private IServiceCollection Services { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -36,6 +32,9 @@ namespace DataSummitWeb
             services.AddMvcCore()
                 .AddAuthorization()
                 .AddJsonFormatters();
+
+            var secretName = "DatabaseConnection";
+            var connectionString = Configuration[secretName];
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")
@@ -82,10 +81,10 @@ namespace DataSummitWeb
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add service dependencies.
-            services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
-            services.AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies()
-                .UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
-            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DatabaseConnection")));
+            services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
+                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
+                .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -111,11 +110,6 @@ namespace DataSummitWeb
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                IsProdEnvironment = false;
-            }
-            else
-            {
-                IsProdEnvironment = true;
             }
 
             app.UseHttpsRedirection();
