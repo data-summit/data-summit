@@ -8,6 +8,7 @@ using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace DataSummitHelper.Services
 {
@@ -52,6 +53,24 @@ namespace DataSummitHelper.Services
         public async Task DeleteCompany(int id)
         {
            await _dao.DeleteCompany(id);
+        }
+
+        public async Task<string> GetAuthorizationToken()
+        {
+            ServicePrinciple.AzureSubscriptionId = _configuration["AzureSubscriptionId"];
+            ServicePrinciple.AzureTenantId = _configuration["AzureTenantId"];
+            ServicePrinciple.ServicePrincipalPassword = _configuration["ServicePrincipalPassword"];
+            ServicePrinciple.ClientId = _configuration["ClientId"];
+
+            ClientCredential cc = new ClientCredential(ServicePrinciple.ClientId, ServicePrinciple.ServicePrincipalPassword);
+            var context = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext("https://login.windows.net/" + ServicePrinciple.AzureTenantId);
+            var result = await context.AcquireTokenAsync("https://management.azure.com/", cc);
+            if (result == null)
+            {
+                throw new InvalidOperationException("Failed to obtain the JWT token");
+            }
+
+            return result.AccessToken;
         }
         #endregion
 
