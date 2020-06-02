@@ -184,48 +184,7 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     this.canvas.on({
       'object:moving': () => { },
       'object:modified': () => { },
-      'object:selected': (e) => {
-
-        let selectedObject = e.target;
-        this.selected = selectedObject
-        selectedObject.hasRotatingPoint = true;
-        selectedObject.transparentCorners = false;
-
-        this.resetPanels();
-
-        if (selectedObject.type !== 'group' && selectedObject) {
-
-          this.getId();
-          this.getOpacity();
-
-          switch (selectedObject.type) {
-            case 'rect':
-            case 'circle':
-            case 'triangle':
-              this.figureEditor = true;
-              this.getFill();
-              break;
-            case 'i-text':
-              this.textEditor = true;
-              this.getLineHeight();
-              this.getCharSpacing();
-              this.getBold();
-              this.getFontStyle();
-              this.getFill();
-              this.getTextDecoration();
-              this.getTextAlign();
-              this.getFontFamily();
-              break;
-            case 'image':
-              console.log('image');
-              break;
-          }
-        }
-      },
-      'selection:cleared': () => {
-        this.selected = null;
-        this.resetPanels();
-      }
+      'object:selected': (e) => {}
     });
 
     this.width = this.canvasContainer.nativeElement.clientWidth - 30
