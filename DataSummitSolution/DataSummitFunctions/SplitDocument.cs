@@ -64,8 +64,8 @@ namespace DataSummitFunctions
 
                 List<ImageUpload> imgOut = new List<ImageUpload>();
 
-                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.BlobStorageName +
-                                           ";AccountKey=" + imgUp.BlobStorageKey + ";EndpointSuffix=core.windows.net";
+                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
+                                           ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
                 CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
                 string strError = "Blob connection";
@@ -276,8 +276,8 @@ namespace DataSummitFunctions
 
                     if (blockBlobJPG != null)
                     {
-                        iu.BlobStorageName = blockBlobJPG.Name;
-                        iu.BlobStorageKey = blockBlobJPG.Uri.ToString();
+                        iu.StorageAccountName = blockBlobJPG.Name;
+                        iu.StorageAccountKey = blockBlobJPG.Uri.ToString();
                         iu.BlobURL = blockBlobJPG.StorageUri.ToString();
                     }
                     imgOut.Add(iu);

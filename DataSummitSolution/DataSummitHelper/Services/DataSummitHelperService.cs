@@ -2,13 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Castle.Core.Configuration;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Models;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
 
 namespace DataSummitHelper.Services
 {
@@ -41,36 +45,26 @@ namespace DataSummitHelper.Services
 
         public async Task CreateCompany(CompanyDto companyDto)
         {
+            AzureResources azr = new AzureResources(_configuration);
             var company = companyDto.ToCompany();
             await _dao.CreateCompany(company);
+            company.ResourceGroup = await azr.CreateResourceGroup(company.Name);
         }
 
         public async Task UpdateCompany(CompanyDto company)
         {
-            await _dao.UpdateCompany(company.ToCompany());
+            AzureResources azr = new AzureResources(_configuration);
+            var companyDto = company.ToCompany();
+            await _dao.UpdateCompany(companyDto);
+            companyDto.ResourceGroup = await azr.UpdateResourceGroup(companyDto.ResourceGroup, companyDto.Name);
         }
 
         public async Task DeleteCompany(int id)
         {
-           await _dao.DeleteCompany(id);
-        }
-
-        public async Task<string> GetAuthorizationToken()
-        {
-            ServicePrinciple.AzureSubscriptionId = _configuration["AzureSubscriptionId"];
-            ServicePrinciple.AzureTenantId = _configuration["AzureTenantId"];
-            ServicePrinciple.ServicePrincipalPassword = _configuration["ServicePrincipalPassword"];
-            ServicePrinciple.ClientId = _configuration["ClientId"];
-
-            ClientCredential cc = new ClientCredential(ServicePrinciple.ClientId, ServicePrinciple.ServicePrincipalPassword);
-            var context = new Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext("https://login.windows.net/" + ServicePrinciple.AzureTenantId);
-            var result = await context.AcquireTokenAsync("https://management.azure.com/", cc);
-            if (result == null)
-            {
-                throw new InvalidOperationException("Failed to obtain the JWT token");
-            }
-
-            return result.AccessToken;
+            AzureResources azr = new AzureResources(_configuration);
+            var company = await _dao.GetCompanyById(id);
+            await _dao.DeleteCompany(id);
+            await azr.DeleteResourceGroup(company.ResourceGroup);
         }
         #endregion
 
@@ -86,22 +80,29 @@ namespace DataSummitHelper.Services
 
         public async Task CreateProject(ProjectDto projectDto)
         {
+            AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
-            project.BlobStorageName = "TODO: Where From";
-            project.BlobStorageKey = "TODO: Where From";
+            await azr.CreateStorageAccount(project.Company.ResourceGroup, project.Name);
             project.UserId = -1;
             await _dao.CreateProject(project);
         }
 
         public async Task UpdateProject(ProjectDto projectDto)
         {
+            AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
+            var oldProject = _dao.GetProjectById(projectDto.ProjectId).Result;
+            project.Name = await azr.UpdateStorageAccount(project.Company.ResourceGroup, oldProject.Name, project.Name);
             await _dao.UpdateProjectName(project);
         }
 
         public async Task DeleteProject(int id)
         {
+            AzureResources azr = new AzureResources(_configuration);
+            var project = await _dao.GetProjectById(id);
+            var company = await _dao.GetCompanyById(project.CompanyId);
             await _dao.DeleteProject(id);
+            await azr.DeleteStorageAccount(company.ResourceGroup, project.Name);
         }
         #endregion
 

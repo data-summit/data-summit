@@ -12,8 +12,8 @@ namespace DataSummitModels.DB
         public int X { get; set; }
         public int Y { get; set; }
         public string Image { get; set; }
-        public string BlobStorageName { get; set; }
-        public string BlobStorageKey { get; set; }
+        public string StorageAccountName { get; set; }
+        public string StorageAccountKey { get; set; }
         public List<ProfileAttributes> ProfileAttributes { get; set; }
         public List<ImageGrids> SplitImages { get; set; }
         public Paper.Types PaperSize { get; set; }

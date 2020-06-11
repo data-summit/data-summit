@@ -4,10 +4,6 @@ namespace DataSummitModels.DB
 {
     public class DataSummitDbContext : DbContext
     {
-        private string connDevString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Integrated Security=True";
-        private string connProdString = @"Server=tcp:datasummit.database.windows.net,1433;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=TomJames;Password=!Aa1234567;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-        private bool OnConfigureIsProductionDb = false;
-
         // Required when using DI
         // This allows us to inject the context and pass the connection string in via the calling service's Startup.cs
         public DataSummitDbContext(DbContextOptions<DataSummitDbContext> options)
@@ -718,11 +714,11 @@ namespace DataSummitModels.DB
                 entity.HasKey(e => e.ProjectId)
                     .HasName("PK_ProjectId");
 
-                entity.Property(e => e.BlobStorageKey)
+                entity.Property(e => e.StorageAccountKey)
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.Property(e => e.BlobStorageName)
+                entity.Property(e => e.StorageAccountName)
                     .IsRequired()
                     .HasMaxLength(255);
 

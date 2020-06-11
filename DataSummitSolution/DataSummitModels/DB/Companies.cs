@@ -22,6 +22,7 @@ namespace DataSummitModels.DB
         public DateTime? CreatedDate { get; set; }
         public long? UserId { get; set; }
         public string Website { get; set; }
+        public string ResourceGroup { get; set; }
 
         public virtual ICollection<Addresses> Addresses { get; set; }
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }

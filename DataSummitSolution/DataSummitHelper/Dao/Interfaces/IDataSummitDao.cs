@@ -18,6 +18,7 @@ namespace DataSummitHelper.Dao.Interfaces
 
         #region Projects
         Task<List<Projects>> GetAllCompanyProjects(int companyId);
+        Task<Projects> GetProjectById(int id);
         Task CreateProject(Projects company);
         Task UpdateProjectName(Projects company);
         Task DeleteProject(int id);

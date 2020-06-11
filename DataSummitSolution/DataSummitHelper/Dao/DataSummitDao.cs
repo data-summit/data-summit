@@ -168,13 +168,11 @@ namespace DataSummitHelper.Dao
                 throw;
             }
         }
-
-        #region Unused
+        
         public async Task<Companies> GetCompanyById(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Companies.FirstOrDefaultAsync(c => c.CompanyId == id);
         }
-        #endregion
         #endregion
 
         #region Templates
@@ -253,8 +251,8 @@ namespace DataSummitHelper.Dao
             {
                 _context.Projects.Attach(project);
                 _context.Entry(project).Property("Name").IsModified = true;
-                _context.Entry(project).Property("BlobStorageName").IsModified = false;
-                _context.Entry(project).Property("BlobStorageKey").IsModified = false;
+                _context.Entry(project).Property("StorageAccountName").IsModified = false;
+                _context.Entry(project).Property("StorageAccountKey").IsModified = false;
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
@@ -276,6 +274,11 @@ namespace DataSummitHelper.Dao
             {
                 throw;
             }
+        }
+
+        public async Task<Projects> GetProjectById(int id)
+        {
+            return await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
         }
         #endregion
 

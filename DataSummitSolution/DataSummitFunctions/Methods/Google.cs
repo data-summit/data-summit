@@ -107,7 +107,7 @@ namespace DataSummitFunctions.Methods
                 string connectionString = "";
 
                 //String.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}",
-                //                                            Keys.Azure.BlobStorageName, Keys.Azure.BlobStorageKey);
+                //                                            Keys.Azure.StorageAccountName, Keys.Azure.StorageAccountKey);
                 CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
                 CloudBlobClient blobClient = account.CreateCloudBlobClient();
 

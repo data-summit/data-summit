@@ -13,8 +13,8 @@ namespace DataSummitModels.DB
 
         public int ProjectId { get; set; }
         public string Name { get; set; }
-        public string BlobStorageName { get; set; }
-        public string BlobStorageKey { get; set; }
+        public string StorageAccountName { get; set; }
+        public string StorageAccountKey { get; set; }
         public int CompanyId { get; set; }
         public DateTime CreatedDate { get; set; }
         public long UserId { get; set; }

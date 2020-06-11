@@ -184,8 +184,8 @@ namespace DataSummitWeb.Controllers
                 List<ImageUpload> lFiles = new List<ImageUpload>();
 
                 Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, AzureResource.SplitDocument.ToString());
-                drawData.BlobStorageName = cProject.BlobStorageName;
-                drawData.BlobStorageKey = cProject.BlobStorageKey;
+                drawData.StorageAccountName = cProject.StorageAccountName;
+                drawData.StorageAccountKey = cProject.StorageAccountKey;
                 drawData.CompanyId = cProject.CompanyId;
 
                 HttpResponseMessage httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(drawData));
@@ -213,8 +213,8 @@ namespace DataSummitWeb.Controllers
             {
                 List<ImageUpload> imageUploads = new List<ImageUpload>();
                 Projects projects = null;
-                imageUpload.BlobStorageName = projects.BlobStorageName;
-                imageUpload.BlobStorageKey = projects.BlobStorageKey;
+                imageUpload.StorageAccountName = projects.StorageAccountName;
+                imageUpload.StorageAccountKey = projects.StorageAccountKey;
                 imageUpload.CompanyId = projects.CompanyId;
 
                 //Document manipulation

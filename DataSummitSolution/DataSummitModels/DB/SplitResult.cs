@@ -5,8 +5,8 @@ namespace DataSummitModels.DB
     public class SplitResult
     {
         public List<ImageGrids> grids { get; set; }
-        public string BlobStorageName { get; set; }
-        public string BlobStorageKey { get; set; }
+        public string StorageAccountName { get; set; }
+        public string StorageAccountKey { get; set; }
 
         public SplitResult()
         {

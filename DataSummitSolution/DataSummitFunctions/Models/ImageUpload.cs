@@ -16,8 +16,8 @@ namespace DataSummitFunctions.Models
         public int X { get; set; }
         public int Y { get; set; }
         public List<Tasks> Tasks { get; set; }
-        public string BlobStorageName { get; set; }
-        public string BlobStorageKey { get; set; }
+        public string StorageAccountName { get; set; }
+        public string StorageAccountKey { get; set; }
         public string Type { get; set; }
         public List<string> Layers { get; set; }
         public string BlobURL { get; set; }
