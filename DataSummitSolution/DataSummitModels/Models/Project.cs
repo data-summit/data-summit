@@ -20,10 +20,10 @@ namespace DataSummitDbModels
         public string Name { get; set; }
         [Required]
         [StringLength(255)]
-        public string BlobStorageName { get; set; }
+        public string StorageAccountName { get; set; }
         [Required]
         [StringLength(255)]
-        public string BlobStorageKey { get; set; }
+        public string StorageAccountKey { get; set; }
         public int CompanyId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreatedDate { get; set; }

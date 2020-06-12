@@ -33,8 +33,7 @@ namespace DataSummitWeb
                 .AddAuthorization()
                 .AddJsonFormatters();
 
-            var secretName = "DatabaseConnection";
-            var connectionString = Configuration[secretName];
+            var connectionString = Configuration["DatabaseConnection"];
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")

@@ -44,11 +44,11 @@ namespace DataSummitFunctions
                 if (imgUp.FileName == null) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: File name is empty.");
                 if (imgUp.Type == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Type is blank.");
                 if (imgUp.File.Length == 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: PDF/Image is empty.");
-                if (imgUp.BlobStorageName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage name required.");
-                if (imgUp.BlobStorageKey == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage key required.");
+                if (imgUp.StorageAccountName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage name required.");
+                if (imgUp.StorageAccountKey == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage key required.");
 
-                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.BlobStorageName +
-                                           ";AccountKey=" + imgUp.BlobStorageKey + ";EndpointSuffix=core.windows.net";
+                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
+                                           ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
                 CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
                 string strError = "Storage account connection";

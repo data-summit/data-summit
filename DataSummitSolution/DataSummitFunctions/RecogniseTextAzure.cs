@@ -38,8 +38,8 @@ namespace DataSummitFunctions
                 //Validate entry data
                 if (imgUp.FileName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: File name is ,less than zero.");
                 if (imgUp.Type == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Type is blank.");
-                if (imgUp.BlobStorageName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage name required.");
-                if (imgUp.BlobStorageKey == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage key required.");
+                if (imgUp.StorageAccountName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage name required.");
+                if (imgUp.StorageAccountKey == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Image must have width greater than zero");
                 if (imgUp.HeightOriginal <= 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Image must have height greater than zero");
                 if (imgUp.ContainerName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Container must have a GUID name");
@@ -51,8 +51,8 @@ namespace DataSummitFunctions
                 List<BlobOCR> lRes = new List<BlobOCR>();
                 Drawing ocrRes = new Drawing();
 
-                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.BlobStorageName +
-                                           ";AccountKey=" + imgUp.BlobStorageKey + ";EndpointSuffix=core.windows.net";
+                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
+                                           ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
                 CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
                 string strError = "Blob connection";
