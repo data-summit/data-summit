@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace AzureFunctions.Models.Google.Response
+{
+    [Serializable]
+    public class BoundingPoly
+    {
+        public List<Vertex> vertices { get; set; }
+
+        public BoundingPoly()
+        { }
+    }
+}

@@ -12,17 +12,22 @@
     <PackageId>DataSummit.Models</PackageId>
     <Authors>Tom James</Authors>
     <Company>Data Summit</Company>
-    <Version>2020.0</Version>
+    <Version>2021.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIconUrl>https://github.com/data-summit/data-summit/blob/master/Data%20Summit%20(300x300px).png</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/data-summit/data-summit/tree/master/DataSummitSolution/DataSummitModels</PackageProjectUrl>
     <RepositoryUrl>https://github.com/data-summit/data-summit</RepositoryUrl>
-    <AssemblyVersion>2020.0.0.0</AssemblyVersion>
-    <FileVersion>2020.0.0.0</FileVersion>
+    <AssemblyVersion>2021.1.0.0</AssemblyVersion>
+    <FileVersion>2021.1.0.0</FileVersion>
     <Copyright>Data Summit Ltd</Copyright>
-    <NeutralLanguage></NeutralLanguage>
-    <PackageLicenseUrl>https://github.com/data-summit/data-summit/blob/master/License.txt</PackageLicenseUrl>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>Data Summit (300x300px).jpg</PackageIcon>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>NuGet Licence.txt</PackageLicenseFile>
+    <Description>Provides access to the standard models used to pass data objects.</Description>
+    <RepositoryType>DLL</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +43,17 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\Users\TomJames_zyl8law\Data Summit Ltd\Data Summit Hub - Documents\20-Marketing\Icons\Data Summit (300x300px).jpg">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="NuGet Licence.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
