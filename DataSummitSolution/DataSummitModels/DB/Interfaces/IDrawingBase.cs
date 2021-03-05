@@ -21,9 +21,9 @@ namespace DataSummitModels.DB
         DateTime? CreatedDate { get; set; }
         string UserId { get; set; }
         string Type { get; set; }
-        IList<DrawingLayers> Layers { get; set; }
-        IList<Sentences> Sentences { get; set; }
-        IList<Tasks> Tasks { get; set; }
+        List<DrawingLayers> Layers { get; set; }
+        List<Sentences> Sentences { get; set; }
+        List<Tasks> Tasks { get; set; }
 
     }
 }

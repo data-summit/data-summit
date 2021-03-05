@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace DataSummitModels.DB
 {
@@ -20,6 +21,7 @@ namespace DataSummitModels.DB
         public Enums.Image.Type Type { get; set; }
         public long DrawingId { get; set; }
         public Image Image { get; set; }
+        public List<Sentences> Sentences { get; set; }
 
         public virtual Drawings Drawing { get; set; }
     }

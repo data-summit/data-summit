@@ -31,8 +31,8 @@ namespace DataSummitModels.DB
         public string Type { get; set; }
 
 
-        public virtual IList<DrawingLayers> Layers { get; set; }
-        public virtual IList<Sentences> Sentences { get; set; }
-        public virtual IList<Tasks> Tasks { get; set; }
+        public virtual List<DrawingLayers> Layers { get; set; }
+        public virtual List<Sentences> Sentences { get; set; }
+        public virtual List<Tasks> Tasks { get; set; }
     }
 }

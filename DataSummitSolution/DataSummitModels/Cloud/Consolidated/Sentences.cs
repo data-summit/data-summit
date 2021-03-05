@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AzureFunctions.Models.Consolidated
+namespace DataSummitModels.Cloud.Consolidated
 {
     public class Sentences : ICloneable
     {
         public Sentences()
         {
             SentenceId = Guid.NewGuid();
-            Properties = new HashSet<Properties>();
+            //Properties = new HashSet<Properties>();
         }
 
         public Guid SentenceId { get; set; }
@@ -25,7 +25,7 @@ namespace AzureFunctions.Models.Consolidated
         public long DrawingId { get; set; }
 
         //public virtual Drawings Drawing { get; set; }
-        public virtual ICollection<Properties> Properties { get; set; }
+        public virtual List<Properties> Properties { get; set; } = new List<Properties>();
 
         public Sentences(string words)
         {
@@ -85,9 +85,9 @@ namespace AzureFunctions.Models.Consolidated
             };
             return s;
         }
-        public DataSummitModels.Cloud.Consolidated.Sentences ToModel()
+        public DB.Sentences ToModel()
         {
-            DataSummitModels.Cloud.Consolidated.Sentences m = new DataSummitModels.Cloud.Consolidated.Sentences();
+            DB.Sentences m = new DB.Sentences();
             m.Confidence = Confidence;
             m.Height = Height;
             m.IsUsed = IsUsed;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataSummitModels.Cloud.Consolidated;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
