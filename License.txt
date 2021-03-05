@@ -1,64 +1,64 @@
-This document contains the general terms and conditions for “Data Summit”. A copy of the standard Microsoft Cloud Agreement is also included at the end of this document.
+This document contains the general terms and conditions for "Data Summit". A copy of the standard Microsoft Cloud Agreement is also included at the end of this document.
 
 Version 1.0, released in November 2018, does not supersede any other versions. The version is in accordance with the General Data Protection Regulation (EU) 2016/679 (GDPR) to include, Annex A: Data Processing Agreement , and associated updates to Section 1, Definitions.
 
 On Direct General Terms and Conditions
 
-These general terms and conditions (“Terms”) and the other documents referred to govern your access to and use of the Services (as defined below). These Terms may be updated from time to time and the latest copy will be available on our website at www.data-summit.co.uk. 1 Definitions The following expressions have the following meanings:
+These general terms and conditions ("Terms") and the other documents referred to govern your access to and use of the Services (as defined below). These Terms may be updated from time to time and the latest copy will be available on our website at www.data-summit.co.uk. 1 Definitions The following expressions have the following meanings:
 
 Expression Meaning...
 
-“Act” the Data Protection Act 1998
+"Act" the Data Protection Act 1998
 
 "Billing Commencement Date" the inclusive date from which billing will start. For some services you may be charged in advance of this date where services require provisioning as part of the commissioning process.
 
-“Recurrence Period” the invoice frequency of Service (monthly, annually, etc.)
+"Recurrence Period" the invoice frequency of Service (monthly, annually, etc.)
 
-“Content” any information, files, data or material uploaded by you including any text.
+"Content" any information, files, data or material uploaded by you including any text.
 
 "Hardware" any hardware provided by us to you as part of providing any Service.
 
-“Individual Information” any Content that contains personal data (as that term is defined in the Act).
+"Individual Information" any Content that contains personal data (as that term is defined in the Act).
 
-“Initial Term” the agreed minimum term for each Service, which shall start on the Billing Commencement Date on each relevant Services, excluding any free or trial period.
+"Initial Term" the agreed minimum term for each Service, which shall start on the Billing Commencement Date on each relevant Services, excluding any free or trial period.
 
-“IPR” all copyright and related rights, rights in computer software, design rights, trade marks, database rights, patents, trade secrets, know-how, rights in confidential information and all other intellectual property rights.
+"IPR" all copyright and related rights, rights in computer software, design rights, trade marks, database rights, patents, trade secrets, know-how, rights in confidential information and all other intellectual property rights.
 
-“Month” each consecutive period of one month commencing on the Billing Commencement Date and the same day of each subsequent calendar month.
+"Month" each consecutive period of one month commencing on the Billing Commencement Date and the same day of each subsequent calendar month.
 
-“Proposal Document” the accompanying document signed and accepted by you setting out details of the proposed solution and service provision should this be of a more bespoke nature and would therefore not be fully captured within the standard Service Agreement.
+"Proposal Document" the accompanying document signed and accepted by you setting out details of the proposed solution and service provision should this be of a more bespoke nature and would therefore not be fully captured within the standard Service Agreement.
 
-“Service Agreement” the document signed and accepted by you setting out the Services, the Service Fees, the Initial Term, any product specific special terms which may override clauses in this document and other information relating to the Services and including these Terms and the SLA.
+"Service Agreement" the document signed and accepted by you setting out the Services, the Service Fees, the Initial Term, any product specific special terms which may override clauses in this document and other information relating to the Services and including these Terms and the SLA.
 
-“Service Fee” the fee payable by you to us, for the Services, which is made up of the Subscription Fee and any applicable Usage Fee.
+"Service Fee" the fee payable by you to us, for the Services, which is made up of the Subscription Fee and any applicable Usage Fee.
 
 "SLA" our service level agreement(s) setting out information about the expected performance of the Services.
 
-“Services” the products and services we supply to you as detailed in the Service Agreement.
+"Services" the products and services we supply to you as detailed in the Service Agreement.
 
-“Subscription Fee” that regular part of the Service Fee (often payable in advance).
+"Subscription Fee" that regular part of the Service Fee (often payable in advance).
 
-“Supplier” any company we use to provide the Services to you.
+"Supplier" any company we use to provide the Services to you.
 
-“Usage Measure” the unit of measurement for the Services as set out in the Service Agreement (e.g. Seconds, Gigabytes, etc.).
+"Usage Measure" the unit of measurement for the Services as set out in the Service Agreement (e.g. Seconds, Gigabytes, etc.).
 
-“Usage Fee” that variable part of the Service Fee based on actual Usage for a period (may be charged current month or in arrears).
+"Usage Fee" that variable part of the Service Fee based on actual Usage for a period (may be charged current month or in arrears).
 
-“we”, “our” or “us” On Direct Business Services Limited (company number 04631034) trading as “Data Summit” whose registered office is at Barleys, Park View Road, Woldingham, Surrey, CR3 7DN.
+"we", "our" or "us" On Direct Business Services Limited (company number 04631034) trading as "Data Summit" whose registered office is at Barleys, Park View Road, Woldingham, Surrey, CR3 7DN.
 
-“you” or "your" the customer named in the Service Agreement.
+"you" or "your" the customer named in the Service Agreement.
 
-“Appropriate Technical and Organisational Measures" shall be interpreted in accordance with the Privacy Laws.
+"Appropriate Technical and Organisational Measures" shall be interpreted in accordance with the Privacy Laws.
 
-“Customer Personal Data" means any Personal Data the Processing of which is subject to Privacy Laws, that is controlled by the Customer and its customers (where applicable) which the Processor Processes in the course of providing the Services under the Agreement, wherever the Processing takes place.
+"Customer Personal Data" means any Personal Data the Processing of which is subject to Privacy Laws, that is controlled by the Customer and its customers (where applicable) which the Processor Processes in the course of providing the Services under the Agreement, wherever the Processing takes place.
 
-“Data Controller" shall be interpreted in accordance with the Privacy Laws.
+"Data Controller" shall be interpreted in accordance with the Privacy Laws.
 
-“Data Processor" shall be interpreted in accordance with the Privacy Laws.
+"Data Processor" shall be interpreted in accordance with the Privacy Laws.
 
-“Data Subject" shall be interpreted in accordance with the Privacy Laws.
+"Data Subject" shall be interpreted in accordance with the Privacy Laws.
 
-“EU Data Protection Law" means all applicable EU data protection and privacy laws, including:
+"EU Data Protection Law" means all applicable EU data protection and privacy laws, including:
 
 (i) prior to 25 May 2018, the EU Data Protection Directive 95/46/EC and, on and after 25 May 2018, the General Data Protection Regulation 2016/679;
 
@@ -66,15 +66,15 @@ Expression Meaning...
 
 (iii) any other European Union or EU Member State laws made under or pursuant to (i) or (ii), in each case as such laws may be amended or superseded from time to time.
 
-“GDPR" means the General Data Protection Regulation (EU) 2016/679.
+"GDPR" means the General Data Protection Regulation (EU) 2016/679.
 
-“Personal Data" shall be interpreted in accordance with the Privacy Laws.
+"Personal Data" shall be interpreted in accordance with the Privacy Laws.
 
-“Privacy Laws" means applicable laws serving to ensure the protection of Personal Data (including in connection with the Processing of Personal Data), and the protection of the rights and freedoms (in particular, their right to privacy) of Data Subjects relating to their Personal Data, including EU Data Protection Law and UK Data Protection Law, in each case as such laws may be amended or superseded from time to time.
+"Privacy Laws" means applicable laws serving to ensure the protection of Personal Data (including in connection with the Processing of Personal Data), and the protection of the rights and freedoms (in particular, their right to privacy) of Data Subjects relating to their Personal Data, including EU Data Protection Law and UK Data Protection Law, in each case as such laws may be amended or superseded from time to time.
 
-“Processing" shall be interpreted in accordance with the Privacy Laws (and “Process” shall be construed accordingly).
+"Processing" shall be interpreted in accordance with the Privacy Laws (and "Process" shall be construed accordingly).
 
-“UK Data Protection Law" means all applicable UK data protection and privacy laws including any UK law which replaces EU Data Protection Law, or which implements or transposes EU Data Protection Law into UK law. 2 Our Obligations 2.1 We agree to:
+"UK Data Protection Law" means all applicable UK data protection and privacy laws including any UK law which replaces EU Data Protection Law, or which implements or transposes EU Data Protection Law into UK law. 2 Our Obligations 2.1 We agree to:
 
 2.1.1 assist you in the set-up of the Services;
 
@@ -148,7 +148,7 @@ Expression Meaning...
 
 4.3 You may allow extra users to have access to existing and additional new Services. We therefore reserve the right to charge Subscription and Usage Fees based on your additional usage. This will be charged at the rate set out in the Service Agreement or, if no rate is specified, at our standard list price. It is your responsibility to request rates information.
 
-4.4 Usage Fees for some Services will be charged in arrears, based on actual Usage for the Month. Usage Fees for all other Services will be charged and invoiced in the Month of service based on a “snapshot” of data, which is taken during the Month, and is applied to the whole Month.
+4.4 Usage Fees for some Services will be charged in arrears, based on actual Usage for the Month. Usage Fees for all other Services will be charged and invoiced in the Month of service based on a "snapshot" of data, which is taken during the Month, and is applied to the whole Month.
 
 4.5 We will not increase the Service Fees during the first 12 months of the agreement except to the extent that third party licensors (such as Microsoft) increase or pass on their charges to us.
 
@@ -258,7 +258,7 @@ Expression Meaning...
 
 10.3 For all other Services (e.g. annually billed services):
 
-10.3.1 The Service shall be automatically extended for a period of 12 months (“Extended Term”) at the end of the Initial Term and at the end of each Extended Term, unless and until either party gives written notice to the other party, not later than 60 days before the end of the Initial term or the relevant Extended Term, to terminate such Service at the end of the Initial Term or the relevant extended Term, as the case may be.
+10.3.1 The Service shall be automatically extended for a period of 12 months ("Extended Term") at the end of the Initial Term and at the end of each Extended Term, unless and until either party gives written notice to the other party, not later than 60 days before the end of the Initial term or the relevant Extended Term, to terminate such Service at the end of the Initial Term or the relevant extended Term, as the case may be.
 
 10.4 We may terminate or suspend the Services immediately by giving written notice if:
 
@@ -324,7 +324,7 @@ WA4 6HL 12 General 12.1 For the avoidance of any doubt any conflicting terms wil
 
 12.8 In the event of any conflict, the following order or precedence shall apply: the Service Agreement, these Terms, and finally the SLA. 13 Law 13.1 This Agreement shall be governed by and construed in accordance with English law and the parties agree to submit to the non-exclusive jurisdiction of the English courts. 14 Relationship of parties and subcontractors 14.1 We shall act at all times as an independent contractor.
 
-14.2 We may with your prior consent, use sub-contractors to perform services under this agreement. 15 Force Majeure 15.1 Neither party shall be liable for any loss suffered by the other party or deemed to be in default for any delays or failures in performance hereunder (other than in relation to payment) resulting from acts or causes beyond its reasonable control or from acts of God, acts or (if enacted after the date hereof), regulations of any governmental or supra-national authority. Microsoft Cloud Agreement – (only applicable to Microsoft Cloud Services) This Microsoft Cloud Agreement is entered into between the entity you represent, or, if you do not designate an entity in connection with a Subscription purchase or renewal, you individually (“Customer”), and Microsoft Ireland Operations Limited (“Microsoft”). It consists of the terms and conditions below, Use Rights, SLA, and all documents referenced within those documents (together, the “agreement”). It is effective on the date that your Reseller provisions your Subscription. Key terms are defined in Section 10. 1 Grants, rights and terms All rights granted under this agreement are non-exclusive and non-transferable and apply as long as neither Customer nor any of its Affiliates is in material breach of this agreement.
+14.2 We may with your prior consent, use sub-contractors to perform services under this agreement. 15 Force Majeure 15.1 Neither party shall be liable for any loss suffered by the other party or deemed to be in default for any delays or failures in performance hereunder (other than in relation to payment) resulting from acts or causes beyond its reasonable control or from acts of God, acts or (if enacted after the date hereof), regulations of any governmental or supra-national authority. Microsoft Cloud Agreement – (only applicable to Microsoft Cloud Services) This Microsoft Cloud Agreement is entered into between the entity you represent, or, if you do not designate an entity in connection with a Subscription purchase or renewal, you individually ("Customer"), and Microsoft Ireland Operations Limited ("Microsoft"). It consists of the terms and conditions below, Use Rights, SLA, and all documents referenced within those documents (together, the "agreement"). It is effective on the date that your Reseller provisions your Subscription. Key terms are defined in Section 10. 1 Grants, rights and terms All rights granted under this agreement are non-exclusive and non-transferable and apply as long as neither Customer nor any of its Affiliates is in material breach of this agreement.
 
 (a) Software. Upon acceptance of each order, Microsoft grants Customer a limited right to use the Software in the quantities ordered.
 
@@ -350,7 +350,7 @@ WA4 6HL 12 General 12.1 For the avoidance of any doubt any conflicting terms wil
 
 (e) Restrictions. Customer may use the Product only in accordance with this agreement. Customer may not (and is not licensed to): (1) reverse engineer, decompile or disassemble any Product or Fix, or attempt to do so; (2) install or use non-Microsoft software or technology in any way that would subject Microsoft’s intellectual property or technology to any other license terms; or (3) work around any technical limitations in a Product or Fix or restrictions in Product documentation. Customer may not disable, tamper with, or otherwise attempt to circumvent any billing mechanism that meters Customer’s use of the Online Services. Except as expressly permitted in this agreement or Product documentation, Customer may not distribute, sublicense, rent, lease, lend, resell or transfer and Products, in whole or in part, or use them to offer hosting services to a third party.
 
-(f) Preview releases. Microsoft may make Previews available. Previews are provided “as-is,” “with all faults,” and “as-available,” and are excluded from the SLA and all limited warranties provided in this agreement. Previews may not be covered by customer support. Previews may be subject to reduced or different security, compliance, and privacy commitments, as further explained in the Online Services Terms and any additional notices provided with the Preview. Microsoft may change or discontinue Previews at any time without notice. Microsoft also may choose not to release a Preview into “General Availability.”
+(f) Preview releases. Microsoft may make Previews available. Previews are provided "as-is," "with all faults," and "as-available," and are excluded from the SLA and all limited warranties provided in this agreement. Previews may not be covered by customer support. Previews may be subject to reduced or different security, compliance, and privacy commitments, as further explained in the Online Services Terms and any additional notices provided with the Preview. Microsoft may change or discontinue Previews at any time without notice. Microsoft also may choose not to release a Preview into "General Availability."
 
 (g) Verifying compliance for Products.
 
@@ -468,45 +468,45 @@ You agree to receive electronic notices from us, which will be sent by email to 
 
 (o) Contracting authority. If you are an individual accepting these terms on behalf of an entity, you represent that you have the legal authority to enter into this agreement on that entity’s behalf.
 
-(p) Waiver of right to void online purchases. To the maximum extent permitted by applicable law, Customer waives its rights to void purchases under this agreement pursuant to any law governing distance selling or electronic or online agreements, as well as any right or obligation regarding prior information, subsequent confirmation, rights of withdrawal, or cooling-off periods. 10 Definitions Any reference in this agreement to “day” will be a calendar day.
+(p) Waiver of right to void online purchases. To the maximum extent permitted by applicable law, Customer waives its rights to void purchases under this agreement pursuant to any law governing distance selling or electronic or online agreements, as well as any right or obligation regarding prior information, subsequent confirmation, rights of withdrawal, or cooling-off periods. 10 Definitions Any reference in this agreement to "day" will be a calendar day.
 
-“Acceptable Use Policy” is set forth in the Online Services Terms.
+"Acceptable Use Policy" is set forth in the Online Services Terms.
 
-“Affiliate” means any legal entity that a party owns, that owns a party, or that is under common ownership with a party. “Ownership” means, for purposes of this definition, control of more than a 50% interest in an entity.
+"Affiliate" means any legal entity that a party owns, that owns a party, or that is under common ownership with a party. "Ownership" means, for purposes of this definition, control of more than a 50% interest in an entity.
 
-“Consumption Offering”, “Commitment Offering”, or “Limited Offering” describe categories of Subscription offers and are defined in Section 2.
+"Consumption Offering", "Commitment Offering", or "Limited Offering" describe categories of Subscription offers and are defined in Section 2.
 
-“Customer Data” is defined in the Online Services Terms.
+"Customer Data" is defined in the Online Services Terms.
 
-“End User” means any person you permit to access Customer Data hosted in the Online Services or otherwise use the Online Services.
+"End User" means any person you permit to access Customer Data hosted in the Online Services or otherwise use the Online Services.
 
-“Fix” means a Product fix, modifications or enhancements, or their derivatives, that Microsoft either releases generally (such as Product service packs) or provides to Customer to address a specific issue.
+"Fix" means a Product fix, modifications or enhancements, or their derivatives, that Microsoft either releases generally (such as Product service packs) or provides to Customer to address a specific issue.
 
-“Licensing Site” means http://www.microsoft.com/licensing/contracts or a successor site.
+"Licensing Site" means http://www.microsoft.com/licensing/contracts or a successor site.
 
-“Non-Microsoft Product” is defined in the Online Services Terms.
+"Non-Microsoft Product" is defined in the Online Services Terms.
 
-“Online Services” means any of the Microsoft-hosted online services subscribed to by Customer under this agreement, including Microsoft Dynamics Online Services, Office 365 Services, Microsoft Azure Services, or Microsoft Intune Online Services.
+"Online Services" means any of the Microsoft-hosted online services subscribed to by Customer under this agreement, including Microsoft Dynamics Online Services, Office 365 Services, Microsoft Azure Services, or Microsoft Intune Online Services.
 
-“Online Services Terms” means the additional terms that apply to Customer’s use of Online Services published on the Licensing Site and updated from time to time.
+"Online Services Terms" means the additional terms that apply to Customer’s use of Online Services published on the Licensing Site and updated from time to time.
 
-“Previews” means preview, beta, or other pre-release version or feature of the Online Services or Software offered by Microsoft to obtain customer feedback.
+"Previews" means preview, beta, or other pre-release version or feature of the Online Services or Software offered by Microsoft to obtain customer feedback.
 
-“Product” means all products identified in the Product Terms, such as all Software, Online Services and other web-based services, including Previews.
+"Product" means all products identified in the Product Terms, such as all Software, Online Services and other web-based services, including Previews.
 
-“Product Terms” means the document that provides information about Microsoft Products and Professional Services available through volume licensing. The Product Terms document is published on the Licensing Site and is updated from time to time.
+"Product Terms" means the document that provides information about Microsoft Products and Professional Services available through volume licensing. The Product Terms document is published on the Licensing Site and is updated from time to time.
 
-“Reseller” means an entity authorized by Microsoft to resell Software licenses and Online Service Subscriptions under this program and engaged by you to provide assistance with your Subscription.
+"Reseller" means an entity authorized by Microsoft to resell Software licenses and Online Service Subscriptions under this program and engaged by you to provide assistance with your Subscription.
 
-“SLA” means Service Level Agreement, which specifies the minimum service level for the Online Services and is published on the Licensing Site.
+"SLA" means Service Level Agreement, which specifies the minimum service level for the Online Services and is published on the Licensing Site.
 
-“Software” means licensed copies of Microsoft software identified on the Product Terms. Software does not include Online Services, but Software may be a part of an Online Service.
+"Software" means licensed copies of Microsoft software identified on the Product Terms. Software does not include Online Services, but Software may be a part of an Online Service.
 
-“Subscription” means an enrollment for Online Services for a defined Term as established by your Reseller.
+"Subscription" means an enrollment for Online Services for a defined Term as established by your Reseller.
 
-“Term” means the duration of a Subscription (e.g., 30 days or 12 months).
+"Term" means the duration of a Subscription (e.g., 30 days or 12 months).
 
-“Use Rights” means the use rights or terms of service for each Product published on the Licensing Site and updated from time to time. The Use Rights supersede the terms of any end user license agreement that accompanies a Product. The Use Rights for Software are published by Microsoft in the Product Terms. The Use Rights for Online Services are published in the Online Services Terms.
+"Use Rights" means the use rights or terms of service for each Product published on the Licensing Site and updated from time to time. The Use Rights supersede the terms of any end user license agreement that accompanies a Product. The Use Rights for Software are published by Microsoft in the Product Terms. The Use Rights for Online Services are published in the Online Services Terms.
 
 Annex A – Data Processing Agreement 1 DATA PROTECTION 1.1 The Processor agrees, in relation to the Customer Personal Data, that the Customer is the Data Controller (and therefore controls what happens to the Customer Personal Data) and the Processor is the Data Processor.
 
@@ -542,7 +542,7 @@ Annex A – Data Processing Agreement 1 DATA PROTECTION 1.1 The Processor agrees
 
 1.6 The Processor shall communicate any claims or requests in respect of the Customer Personal Data without delay to the Customer to enable the Customer to provide details to its customers.
 
-1.7 If the Processor becomes aware of any accidental, unauthorised or unlawful destruction, loss, alteration, or disclosure of, or access to any Customer Personal Data that the Processor Processes when providing the Services (a “Personal Data Breach”), the Processor will:
+1.7 If the Processor becomes aware of any accidental, unauthorised or unlawful destruction, loss, alteration, or disclosure of, or access to any Customer Personal Data that the Processor Processes when providing the Services (a "Personal Data Breach"), the Processor will:
 
 1.7.1 notify the Customer by email and without undue delay (and in any event within 48 hours). The email shall be sent to the Customer’s primary contact (as shown in the Processor’s customer relationship management (CRM) system) and the Customer is responsible for ensuring this information is kept up to date;
 
@@ -556,10 +556,10 @@ Annex A – Data Processing Agreement 1 DATA PROTECTION 1.1 The Processor agrees
 
 2.2 This agreement and any dispute or claim (including non-contractual disputes or claims) arising out of or in connection with it or its subject matter or formation shall be governed by and interpreted in accordance with English law.
 
-2.3 The Processor and the Customer irrevocably agree that the English courts that have exclusive jurisdiction to settle any dispute or claim (including non-contractual disputes or claims) that arises out of, or in connection with, this agreement or its subject matter or formation. SCHEDULE 1 “Subject matter of the Processing:” The subject matter for Processing results from the Service Agreement between the Data Controller and the Data Processor.
+2.3 The Processor and the Customer irrevocably agree that the English courts that have exclusive jurisdiction to settle any dispute or claim (including non-contractual disputes or claims) that arises out of, or in connection with, this agreement or its subject matter or formation. SCHEDULE 1 "Subject matter of the Processing:" The subject matter for Processing results from the Service Agreement between the Data Controller and the Data Processor.
 
-“Nature and purpose of the Processing:” The Processing of the Personal Data in the course of the Processor delivering cloud-based IT services as more particularly described in the Service Agreement.
+"Nature and purpose of the Processing:" The Processing of the Personal Data in the course of the Processor delivering cloud-based IT services as more particularly described in the Service Agreement.
 
-“Type of Personal Data:” Personal data may include, among other information, personal contact information such as name, address, telephone or mobile number, fax number, email address, and passwords; employment details including employer name, job title and function, employment history, salary and other benefits, job performance and other capabilities, education/qualifications, identification numbers and business contact details; financial details; goods and services provided; unique IDs collected from mobile devices, network carriers or data providers, IP addresses, behaviour and interest data, and any other data the Data Controller may elect to include as part of Processing.
+"Type of Personal Data:" Personal data may include, among other information, personal contact information such as name, address, telephone or mobile number, fax number, email address, and passwords; employment details including employer name, job title and function, employment history, salary and other benefits, job performance and other capabilities, education/qualifications, identification numbers and business contact details; financial details; goods and services provided; unique IDs collected from mobile devices, network carriers or data providers, IP addresses, behaviour and interest data, and any other data the Data Controller may elect to include as part of Processing.
 
-“Categories of Data Subject:” Data Subjects may include the Customer’s representatives and end users, such as employees, job applicants, contractors, collaborators, partners, customers and users of the Customer and any other Data Subjects the Data Controller may elect to include as part of Processing. Data Subjects may also include individuals attempting to communicate or transfer Personal Data to users of the Service.
+"Categories of Data Subject:" Data Subjects may include the Customer’s representatives and end users, such as employees, job applicants, contractors, collaborators, partners, customers and users of the Customer and any other Data Subjects the Data Controller may elect to include as part of Processing. Data Subjects may also include individuals attempting to communicate or transfer Personal Data to users of the Service.
