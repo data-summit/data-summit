@@ -1,22 +1,22 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using AzureFunctions.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage;
-using AzureFunctions.Models;
-using System.Drawing;
+
+using Newtonsoft.Json;
+
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Net.Http;
-using System.Net;
+using System.Threading.Tasks;
 
 namespace AzureFunctions
 {
@@ -29,17 +29,17 @@ namespace AzureFunctions
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            //log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            //string name = req.Query["name"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            //string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            //dynamic data = JsonConvert.DeserializeObject(requestBody);
+            //name = name ?? data?.name;
 
             try
             {
-                string jsonContent = await req.Content.ReadAsStringAsync();
+                string jsonContent = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
@@ -47,18 +47,18 @@ namespace AzureFunctions
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
                 if (imgUp.Layers == null) imgUp.Layers = new List<string>();
 
-                //if (imgUp.CompanyId < 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: CompanyId is less than zero.");
-                //if (imgUp.ProjectId < 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: ProjectId is less than zero.");
-                if (imgUp.DrawingId < 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: DrawingId is less than zero.");
-                //if (imgUp.Company == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Company is blank.");
-                //if (imgUp.Project == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Project is blank.");
-                if (imgUp.FileName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: File name is ,less than zero.");
-                if (imgUp.Type == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Type is blank.");
-                if (imgUp.StorageAccountName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage name required.");
-                if (imgUp.StorageAccountKey == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Storage key required.");
-                if (imgUp.WidthOriginal <= 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Image must have width greater than zero");
-                if (imgUp.HeightOriginal <= 0) return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Image must have height greater than zero");
-                if (imgUp.ContainerName == "") return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Container must have a GUID name");
+                //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
+                //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
+                if (imgUp.DrawingId < 0) return new BadRequestObjectResult("Illegal input: DrawingId is less than zero.");
+                //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
+                //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
+                if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
+                if (imgUp.Type == "") return new BadRequestObjectResult("Illegal input: Type is blank.");
+                if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
+                if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
+                if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
+                if (imgUp.HeightOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have height greater than zero");
+                if (imgUp.ContainerName == "") return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
 
                 string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
                                            ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
@@ -81,36 +81,42 @@ namespace AzureFunctions
                 //Get Container name from input object, exit if not found
                 CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
                 if (await cbc.ExistsAsync() == false)
-                { return req.CreateResponse(HttpStatusCode.BadRequest, "Illegal input: Cannot find Container with name: " + imgUp.ContainerName); }
-
+                { return new BadRequestObjectResult("Illegal input: Cannot find Container with name: " + imgUp.ContainerName); }
+                
                 //Find 'Original.jpg' blob
                 CloudBlockBlob cbbOrig = default(CloudBlockBlob);
-                if (cbc.ListBlobsSegmentedAsync().Count(b => b.Uri.ToString() == imgUp.BlobURL) > 0)
+                BlobContinuationToken blobContinuationToken = null;
+                var listBlobs = await cbc.ListBlobsSegmentedAsync(null, blobContinuationToken);
+                blobContinuationToken = listBlobs.ContinuationToken;
+                do
                 {
-                    cbbOrig = cbc.ListBlobs().Cast<CloudBlockBlob>().FirstOrDefault(b => b.Uri.ToString() == imgUp.BlobURL);
-                }
-                else
-                {
-                    foreach (IListBlobItem blobItem in cbc.ListBlobs())
+                    if (listBlobs.Results.Count(b => b.Uri.ToString() == imgUp.BlobURL) > 0)
                     {
-                        if (blobItem is CloudBlockBlob)
+                        cbbOrig = listBlobs.Results.Cast<CloudBlockBlob>().FirstOrDefault(b => b.Uri.ToString() == imgUp.BlobURL);
+                    }
+                    else
+                    {
+                        foreach (IListBlobItem blobItem in listBlobs.Results)
                         {
-                            CloudBlockBlob cbb = blobItem as CloudBlockBlob;
-
-                            if (cbb.Name == "Original.jpg")
+                            if (blobItem is CloudBlockBlob)
                             {
-                                cbbOrig = cbb;
-                                break;
+                                CloudBlockBlob cbb = blobItem as CloudBlockBlob;
+
+                                if (cbb.Name == "Original.jpg")
+                                {
+                                    cbbOrig = cbb;
+                                    break;
+                                }
                             }
                         }
                     }
-                }
+                } while (blobContinuationToken != null);    // Loop while the continuation token is not null.
 
                 imgUp.Tasks.Add(new Tasks("Fetch 'Original.jpg'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
 
                 if (cbbOrig == null)
                 {
-                    return req.CreateResponse(HttpStatusCode.BadRequest, "Could not locate 'Original.jpg' file in container '" + imgUp.ContainerName + "'.");
+                    return new BadRequestObjectResult("Could not locate 'Original.jpg' file in container '" + imgUp.ContainerName + "'.");
                 }
                 else
                 {
@@ -249,25 +255,13 @@ namespace AzureFunctions
 
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);
 
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                { Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json") };
-
+                return new OkObjectResult(jsonToReturn);
             }
             catch (Exception ae)
             {
                 //return error generated within function code
-                HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                res.Content = new StringContent(JsonConvert.SerializeObject(ae), Encoding.UTF8, "application/json");
-                return res;
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(ae));
             }
-
-
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
         }
     }
 }
