@@ -1,4 +1,4 @@
-using AzureFunctions.Models;
+
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using DataSummitModels.DB;
 
 namespace AzureFunctions
 {
@@ -38,7 +39,7 @@ namespace AzureFunctions
                 List<Task> lTasks = new List<Task>();
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<string>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
 
                 if (jsonContent.Length == 0) return new BadRequestObjectResult("Illegal input: No content");
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
@@ -101,7 +102,7 @@ namespace AzureFunctions
                 //Clear heavy payload content
                 imgUp.File = null;
                     imgUp.Processed = true;
-                    imgUp.BlobURL = cbbImage.Uri.ToString();
+                    imgUp.BlobUrl = cbbImage.Uri.ToString();
                 }));
 
                 lTasks.Add(Task.Run(() =>

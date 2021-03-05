@@ -1,4 +1,4 @@
-using AzureFunctions.Models;
+using DataSummitModels.DB;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -37,7 +37,7 @@ namespace AzureFunctions
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<string>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
 
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
@@ -82,9 +82,9 @@ namespace AzureFunctions
                 blobContinuationToken = listBlobs.ContinuationToken;
                 do
                 {
-                    if (listBlobs.Results.Count(b => b.Uri.ToString() == imgUp.BlobURL) > 0)
+                    if (listBlobs.Results.Count(b => b.Uri.ToString() == imgUp.BlobUrl) > 0)
                     {
-                        cbbOrig = listBlobs.Results.Cast<CloudBlockBlob>().FirstOrDefault(b => b.Uri.ToString() == imgUp.BlobURL);
+                        cbbOrig = listBlobs.Results.Cast<CloudBlockBlob>().FirstOrDefault(b => b.Uri.ToString() == imgUp.BlobUrl);
                     }
                     else
                     {
@@ -118,7 +118,7 @@ namespace AzureFunctions
                     Image img = Image.FromStream(ms);
 
                     //Split images prior to upload
-                    if (imgUp.SplitImages == null) imgUp.SplitImages = new List<ImageGrid>();
+                    if (imgUp.SplitImages == null) imgUp.SplitImages = new List<ImageGrids>();
 
                     int widthMod = (int)Math.Ceiling(((double)img.Width / MaxPixelSpan));
                     int heightMod = (int)Math.Ceiling(((double)img.Height / MaxPixelSpan));
@@ -137,12 +137,12 @@ namespace AzureFunctions
                     {
                         for (int y = 0; y < heightMod; y++)
                         {
-                            ImageGrid ig = new ImageGrid
+                            ImageGrids ig = new ImageGrids
                             {
                                 Name = "F_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
                                 WidthStart = x,
                                 HeightStart = y,
-                                Type = ImageGrid.ImageType.Normal
+                                Type = DataSummitModels.Enums.Image.Type.Normal
                             };
                             if (x == widthMod - 1 && y != heightMod - 1)
                             {
@@ -188,12 +188,12 @@ namespace AzureFunctions
                     {
                         for (int y = 0; y < heightMod; y++)
                         {
-                            ImageGrid ig = new ImageGrid
+                            ImageGrids ig = new ImageGrids
                             {
                                 Name = "O_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
                                 WidthStart = x,
                                 HeightStart = y,
-                                Type = ImageGrid.ImageType.Overlap
+                                Type = DataSummitModels.Enums.Image.Type.Overlap
                             };
                             ig.WidthStart = (x * widthSpan) + (widthSpan / 2);
                             ig.HeightStart = (y * heightSpan) + (heightSpan / 2);
@@ -208,10 +208,10 @@ namespace AzureFunctions
                     }
 
                     imgUp.Tasks.Add(new Tasks("Divide Image\tOriginal divide into " +
-                                                     imgUp.SplitImages.Count(d => d.Type == ImageGrid.ImageType.Overlap).ToString() +
+                                                     imgUp.SplitImages.Count(d => d.Type == DataSummitModels.Enums.Image.Type.Overlap).ToString() +
                                                      " overlapping images", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
 
-                    foreach (ImageGrid imgG in imgUp.SplitImages)
+                    foreach (ImageGrids imgG in imgUp.SplitImages)
                     {
                         CloudBlockBlob gridBlob = cbc.GetBlockBlobReference(imgG.Name);
                         MemoryStream msG = new MemoryStream();
@@ -219,7 +219,7 @@ namespace AzureFunctions
                         msG.Seek(0, SeekOrigin.Begin);
                         await gridBlob.UploadFromStreamAsync(msG);
 
-                        imgG.BlobURL = gridBlob.Uri.ToString();
+                        imgG.BlobUrl = gridBlob.Uri.ToString();
                         gridBlob.Metadata.Add("Name", imgG.Name);
                         gridBlob.Metadata.Add("WidthStart", imgG.WidthStart.ToString());
                         gridBlob.Metadata.Add("HeightStart", imgG.HeightStart.ToString());

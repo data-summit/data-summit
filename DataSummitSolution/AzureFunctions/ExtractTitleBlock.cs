@@ -1,4 +1,3 @@
-using AzureFunctions.Models;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -13,6 +12,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using DataSummitModels.DB;
 
 namespace AzureFunctions
 {

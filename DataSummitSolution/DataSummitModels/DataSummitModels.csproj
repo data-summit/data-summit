@@ -13,7 +13,7 @@
     <Authors>Tom James</Authors>
     <Company>Data Summit</Company>
     <Version>2021.1</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/data-summit/data-summit/tree/master/DataSummitSolution/DataSummitModels</PackageProjectUrl>
     <RepositoryUrl>https://github.com/data-summit/data-summit</RepositoryUrl>
@@ -46,10 +46,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\Users\TomJames_zyl8law\Data Summit Ltd\Data Summit Hub - Documents\20-Marketing\Icons\Data Summit (300x300px).jpg">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <None Include="NuGet Licence.txt">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

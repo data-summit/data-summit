@@ -1,4 +1,6 @@
-﻿namespace DataSummitModels.DB
+﻿using System.Drawing;
+
+namespace DataSummitModels.DB
 {
     public partial class ImageGrids
     {
@@ -15,8 +17,9 @@
         public bool ProcessedAmazon { get; set; }
         public bool ProcessedAzure { get; set; }
         public bool ProcessedGoogle { get; set; }
-        public byte Type { get; set; }
+        public Enums.Image.Type Type { get; set; }
         public long DrawingId { get; set; }
+        public Image Image { get; set; }
 
         public virtual Drawings Drawing { get; set; }
     }
