@@ -10,8 +10,8 @@ namespace AzureFunctions.Models.Amazon
 {
     public class AmazonOCR
     {
-        public String FileName { get; set; }
-        public Uri Uri { get; set; }
+        public string FileName { get; set; }
+        public rri Uri { get; set; }
         public long Size { get; set; }
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
