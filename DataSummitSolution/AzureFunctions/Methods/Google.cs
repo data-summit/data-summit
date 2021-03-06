@@ -117,7 +117,7 @@ namespace AzureFunctions.Methods
                     ICloudBlob b = await blobClient.GetBlobReferenceFromServerAsync(u);
 
                     byte[] imageBytes = new byte[b.Properties.Length];
-                    b.DownloadRangeToByteArrayAsync(imageBytes, 0, 0, b.Properties.Length);
+                    await b.DownloadRangeToByteArrayAsync(imageBytes, 0, 0, b.Properties.Length);
                     List<Responses> rs = RecogniseText(Convert.ToBase64String(imageBytes));
                     if (rs != null)
                     { gCloud.responses.AddRange(rs); }

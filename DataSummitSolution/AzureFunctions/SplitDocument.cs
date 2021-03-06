@@ -209,10 +209,8 @@ namespace AzureFunctions
                             imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": pdf converted to jpg'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
                             log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
 
-                            blockBlobJPG.UploadFromByteArrayAsync(imgBytes, 0, imgBytes.Length);
+                            await blockBlobJPG.UploadFromByteArrayAsync(imgBytes, 0, imgBytes.Length);
                         }
-
-
 
                         imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.jpg'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
                         log.LogInformation("(Total: " + TimeSpan.FromTicks(imgUp.Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
