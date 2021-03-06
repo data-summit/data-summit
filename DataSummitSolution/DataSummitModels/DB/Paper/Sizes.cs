@@ -89,81 +89,81 @@ namespace DataSummitModels.DB.Paper
             All.Add(new Types("US standard fanfold", 378, 279, Size.USStandardFanfold));
         }
 
-    //    public static Size Match(float widthPixel, float heightPixel, short tolerance = 5)
-    //    {
-    //        List<Type> lPossibleMatches = new List<Type>();
-    //        try
-    //        {
-    //            int width = (int)Math.Round(widthPixel * 0.352777777777, 0);
-    //            int height = (int)Math.Round(heightPixel * 0.352777777777, 0);
+        public static Size Match(float widthPixel, float heightPixel, short tolerance = 5)
+        {
+            List<Types> lPossibleMatches = new List<Types>();
+            try
+            {
+                int width = (int)Math.Round(widthPixel * 0.352777777777, 0);
+                int height = (int)Math.Round(heightPixel * 0.352777777777, 0);
 
-    //            lPossibleMatches.AddRange(
-    //                All.Where(p =>
-    //                (p.Height - tolerance) <= height && (p.Height + tolerance) >= height &&
-    //                (p.Width - tolerance) <= width && (p.Width + tolerance) >= width)
-    //                .ToList());
+                lPossibleMatches.AddRange(
+                    All.Where(p =>
+                    (p.Height - tolerance) <= height && (p.Height + tolerance) >= height &&
+                    (p.Width - tolerance) <= width && (p.Width + tolerance) >= width)
+                    .ToList());
 
-    //            if (lPossibleMatches.Count > 1)
-    //            {
-    //                Type Match = ReduceMultiMatch(lPossibleMatches, width, height, tolerance);
-    //                return Match.Kind;
-    //            }
-    //            else if (lPossibleMatches.Count == 1)
-    //            {
-    //                return lPossibleMatches[0].Kind;
-    //            }
+                if (lPossibleMatches.Count > 1)
+                {
+                    Types Match = ReduceMultiMatch(lPossibleMatches, width, height, tolerance);
+                    return Match.Size;
+                }
+                else if (lPossibleMatches.Count == 1)
+                {
+                    return lPossibleMatches[0].Size;
+                }
 
-    //            //Find matches for landscape orientation
-    //            if (lPossibleMatches.Count == 0)
-    //            {
-    //                lPossibleMatches.AddRange(
-    //                    All.Where(p =>
-    //                    (p.Height - tolerance) <= width && (p.Height + tolerance) >= width &&
-    //                    (p.Width - tolerance) <= height && (p.Width + tolerance) >= height)
-    //                    .ToList());
+                //Find matches for landscape orientation
+                if (lPossibleMatches.Count == 0)
+                {
+                    lPossibleMatches.AddRange(
+                        All.Where(p =>
+                        (p.Height - tolerance) <= width && (p.Height + tolerance) >= width &&
+                        (p.Width - tolerance) <= height && (p.Width + tolerance) >= height)
+                        .ToList());
 
-    //                if (lPossibleMatches.Count > 1)
-    //                {
-    //                    Type Match = ReduceMultiMatch(lPossibleMatches, height, width, tolerance);
-    //                }
-    //                else if (lPossibleMatches.Count == 1)
-    //                {
-    //                    return lPossibleMatches[0].Kind;
-    //                }
-    //            }
-    //        }
-    //        catch (Exception ae)
-    //        { string strError = ae.Message.ToString(); }
-    //        return Size.Custom;
-    //    }
+                    if (lPossibleMatches.Count > 1)
+                    {
+                        Types Match = ReduceMultiMatch(lPossibleMatches, height, width, tolerance);
+                    }
+                    else if (lPossibleMatches.Count == 1)
+                    {
+                        return lPossibleMatches[0].Size;
+                    }
+                }
+            }
+            catch (Exception ae)
+            { string strError = ae.Message.ToString(); }
+            return Size.Custom;
+        }
 
-    //    private static Type ReduceMultiMatch(List<Type> lMatches, int width, int height, short tolerance)
-    //    {
-    //        try
-    //        {
-    //            for (short i = 0; i < tolerance; i++)
-    //            {
-    //                if (All.Count(p =>
-    //                    (p.Height - i) <= width && (p.Height + i) >= width &&
-    //                    (p.Width - i) <= height && (p.Width + i) >= height) == 1)
-    //                {
-    //                    return All.First(p =>
-    //                        (p.Height - i) <= width && (p.Height + i) >= width &&
-    //                        (p.Width - i) <= height && (p.Width + i) >= height);
-    //                }
-    //                else if (All.Count(p =>
-    //                    (p.Height - i) <= width && (p.Height + i) >= width &&
-    //                    (p.Width - i) <= height && (p.Width + i) >= height) == 1)
-    //                {
-    //                    return All.First(p =>
-    //                        (p.Height - i) <= width && (p.Height + i) >= width &&
-    //                        (p.Width - i) <= height && (p.Width + i) >= height);
-    //                }
-    //            }
-    //        }
-    //        catch (Exception ae)
-    //        { string strError = ae.Message.ToString(); }
-    //        return lMatches[0];
-    //    }
+        private static Types ReduceMultiMatch(List<Types> lMatches, int width, int height, short tolerance)
+        {
+            try
+            {
+                for (short i = 0; i < tolerance; i++)
+                {
+                    if (All.Count(p =>
+                        (p.Height - i) <= width && (p.Height + i) >= width &&
+                        (p.Width - i) <= height && (p.Width + i) >= height) == 1)
+                    {
+                        return All.First(p =>
+                            (p.Height - i) <= width && (p.Height + i) >= width &&
+                            (p.Width - i) <= height && (p.Width + i) >= height);
+                    }
+                    else if (All.Count(p =>
+                        (p.Height - i) <= width && (p.Height + i) >= width &&
+                        (p.Width - i) <= height && (p.Width + i) >= height) == 1)
+                    {
+                        return All.First(p =>
+                            (p.Height - i) <= width && (p.Height + i) >= width &&
+                            (p.Width - i) <= height && (p.Width + i) >= height);
+                    }
+                }
+            }
+            catch (Exception ae)
+            { string strError = ae.Message.ToString(); }
+            return lMatches[0];
+        }
     }
 }
