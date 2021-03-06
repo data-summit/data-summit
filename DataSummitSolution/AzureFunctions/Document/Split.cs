@@ -20,11 +20,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AzureFunctions
+namespace AzureFunctions.Document
 {
-    public static class SplitDocument
+    public static class Split
     {
-        [FunctionName("SplitDocument")]
+        [FunctionName("Split")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
