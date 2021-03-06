@@ -22,9 +22,9 @@ using System.Net;
 using System.Text;
 using System.Linq;
 
-namespace AzureFunctions
+namespace AzureFunctions.RecogniseText
 {
-    public static class RecogniseTextGoogle
+    public static class Google
     {
         [FunctionName("RecogniseTextGoogle")]
         public static async Task<IActionResult> Run(

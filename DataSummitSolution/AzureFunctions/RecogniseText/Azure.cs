@@ -22,9 +22,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace AzureFunctions
+namespace AzureFunctions.RecogniseText
 {
-    public static class RecogniseTextAzure
+    public static class Azure
     {
         [FunctionName("RecogniseTextAzure")]
         public static async Task<IActionResult> Run(

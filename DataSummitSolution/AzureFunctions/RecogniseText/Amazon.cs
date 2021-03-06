@@ -20,9 +20,9 @@ using System.Threading.Tasks;
 using AzureFunctions.Methods.PostProcessing;
 using DataSummitModels.Cloud.Consolidated;
 
-namespace AzureFunctions
+namespace AzureFunctions.RecogniseText
 {
-    public static class RecogniseTextAmazon
+    public static class Amazon
     {
         [FunctionName("RecogniseTextAmazon")]
         public static async Task<IActionResult> Run(
