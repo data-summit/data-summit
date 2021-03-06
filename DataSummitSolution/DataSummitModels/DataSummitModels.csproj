@@ -8,33 +8,50 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>DataSummit.Models</PackageId>
     <Authors>Tom James</Authors>
     <Company>Data Summit</Company>
-    <Version>2020.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIconUrl>https://github.com/data-summit/data-summit/blob/master/Data%20Summit%20(300x300px).png</PackageIconUrl>
+    <Version>2021.1</Version>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageIconUrl></PackageIconUrl>
     <PackageProjectUrl>https://github.com/data-summit/data-summit/tree/master/DataSummitSolution/DataSummitModels</PackageProjectUrl>
     <RepositoryUrl>https://github.com/data-summit/data-summit</RepositoryUrl>
-    <AssemblyVersion>2020.0.0.0</AssemblyVersion>
-    <FileVersion>2020.0.0.0</FileVersion>
+    <AssemblyVersion>2021.1.0.0</AssemblyVersion>
+    <FileVersion>2021.1.0.0</FileVersion>
     <Copyright>Data Summit Ltd</Copyright>
-    <NeutralLanguage></NeutralLanguage>
-    <PackageLicenseUrl>https://github.com/data-summit/data-summit/blob/master/License.txt</PackageLicenseUrl>
+    <NeutralLanguage>en-GB</NeutralLanguage>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>Data Summit (300x300px).jpg</PackageIcon>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>NuGet Licence.txt</PackageLicenseFile>
+    <Description>Provides access to the standard models used to pass data objects.</Description>
+    <RepositoryType>DLL</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.12" />
     <PackageReference Include="System.Drawing.Common" Version="4.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <None Include="NuGet Licence.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

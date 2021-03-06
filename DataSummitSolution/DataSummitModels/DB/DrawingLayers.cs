@@ -7,5 +7,8 @@
         public long DrawingId { get; set; }
 
         public virtual Drawings Drawing { get; set; }
+
+        public DrawingLayers()
+        { ; }
     }
 }

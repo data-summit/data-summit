@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace DataSummitWeb
 {
@@ -31,7 +33,12 @@ namespace DataSummitWeb
         {
             services.AddMvcCore()
                 .AddAuthorization()
-                .AddJsonFormatters();
+                .AddNewtonsoftJson(o =>
+                {
+                    o.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });
+                //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
 

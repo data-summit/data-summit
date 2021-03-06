@@ -7,9 +7,9 @@ namespace DataSummitModels.DB
     {
         public DrawingBase()
         {
-            Layers = new HashSet<DrawingLayers>();
-            Sentences = new HashSet<Sentences>();
-            Tasks = new HashSet<Tasks>();
+            //Layers = new HashSet<DrawingLayers>();
+            //Sentences = new HashSet<Sentences>();
+            //Tasks = new HashSet<Tasks>();
         }
 
         public long DrawingId { get; set; }
@@ -31,8 +31,8 @@ namespace DataSummitModels.DB
         public string Type { get; set; }
 
 
-        public virtual ICollection<DrawingLayers> Layers { get; set; }
-        public virtual ICollection<Sentences> Sentences { get; set; }
-        public virtual ICollection<Tasks> Tasks { get; set; }
+        public virtual List<DrawingLayers> Layers { get; set; }
+        public virtual List<Sentences> Sentences { get; set; }
+        public virtual List<Tasks> Tasks { get; set; }
     }
 }
