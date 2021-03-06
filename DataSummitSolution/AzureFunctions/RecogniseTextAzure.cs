@@ -1,23 +1,26 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+using AzureFunctions.Models.Azure;
+using AzureFunctions.Methods.PostProcessing;
+
+using DataSummitModels.DB;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using DataSummitModels.DB;
-using DataSummitModels.Cloud.Consolidated;
 using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
-using AzureFunctions.Models.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+
+using Newtonsoft.Json;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using AzureFunctions.Methods.PostProcessing;
+using System.Threading.Tasks;
 
 namespace AzureFunctions
 {
