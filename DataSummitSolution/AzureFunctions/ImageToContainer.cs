@@ -107,12 +107,16 @@ namespace AzureFunctions
 
                 lTasks.Add(Task.Run(() =>
                 {
-                    Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
-                    imgUp.WidthOriginal = bmp.Width;
-                    imgUp.HeightOriginal = bmp.Height;
+                    //Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
+                    using (var ms = new MemoryStream(imgUp.File))
+                    {
+                        Image bmp = new Bitmap(ms);
+                        imgUp.WidthOriginal = bmp.Width;
+                        imgUp.HeightOriginal = bmp.Height;
 
-                    imgUp.Tasks.Add(new Tasks("Image dimensions assessed", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                        imgUp.Tasks.Add(new Tasks("Image dimensions assessed", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
+                        log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                    }
                 }));
 
                 Task.WaitAll(lTasks.ToArray());
