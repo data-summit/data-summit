@@ -1,6 +1,7 @@
 ﻿using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
 using DataSummitWeb.DTO;
+using DataSummitModels.Enums;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -28,16 +29,6 @@ namespace DataSummitWeb.Controllers
             JPEG,
             PDF,
             PNG
-        }
-
-        private enum AzureResource
-        {
-            SplitDocument = 1,
-            ImageToContainer = 2,
-            DivideImage = 3,
-            RecogniseTextAzure = 4,
-            PostProcessing = 5,
-            ExtractTitleBlock = 6
         }
 
         public DrawingsController(IDataSummitHelperService dataSummitHelper)
@@ -183,7 +174,7 @@ namespace DataSummitWeb.Controllers
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();
 
-                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, AzureResource.SplitDocument.ToString());
+                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, Azure.Functions.SplitDocument.ToString());
                 drawData.StorageAccountName = cProject.StorageAccountName;
                 drawData.StorageAccountKey = cProject.StorageAccountKey;
                 drawData.CompanyId = cProject.CompanyId;
@@ -218,18 +209,18 @@ namespace DataSummitWeb.Controllers
                 imageUpload.CompanyId = projects.CompanyId;
 
                 //Document manipulation
-                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.SplitDocument.ToString());
-                Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.ImageToContainer.ToString());
-                Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.DivideImage.ToString());
+                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
+                Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
+                Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
                 
                 //OCR
-                Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.RecogniseTextAzure.ToString());
+                Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
                 
                 //Post processing
-                Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.PostProcessing.ToString());
+                Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
                 
                 //Extract title block properties
-                Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, AzureResource.ExtractTitleBlock.ToString());
+                Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
 
                 if (imageUpload.Type == ImageUploadTypes.PDF.ToString())
                 {

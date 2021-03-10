@@ -5,10 +5,19 @@ namespace DataSummitModels.Enums
     {
         public enum Type
         {
-            DrawingPlanView = 1,
-            Gantt = 2,
-            Report = 3,
-            Schematic = 4
+            Unknown = 1,
+            DrawingPlanView = 2,
+            Gantt = 3,
+            Report = 4,
+            Schematic = 5
+        }
+
+        public enum Format
+        {
+            Unknown = 4,
+            JPG = 1,
+            PNG = 2,
+            PDF = 3
         }
     }
 }

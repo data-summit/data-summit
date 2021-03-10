@@ -1,6 +1,7 @@
 using DataSummitHelper.Dto;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace DataSummitHelper.Interfaces
@@ -42,5 +43,7 @@ namespace DataSummitHelper.Interfaces
         #region Properties
 
         #endregion
+
+        Task<HttpResponseMessage> ProcessCall(Uri uri, string payload);
     }
 }

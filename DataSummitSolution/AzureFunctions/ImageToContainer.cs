@@ -1,4 +1,4 @@
-
+using DataSummitModels.DB;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
-using DataSummitModels.DB;
 
 namespace AzureFunctions
 {
@@ -99,8 +98,8 @@ namespace AzureFunctions
                     imgUp.Tasks.Add(new Tasks("Image uploaded to blob", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
                     log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
 
-                //Clear heavy payload content
-                imgUp.File = null;
+                    //Clear heavy payload content
+                    imgUp.File = null;
                     imgUp.Processed = true;
                     imgUp.BlobUrl = cbbImage.Uri.ToString();
                 }));

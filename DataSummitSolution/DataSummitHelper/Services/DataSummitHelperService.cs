@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection.Metadata;
+using System.Text;
 using System.Threading.Tasks;
 using Castle.Core.Configuration;
 using DataSummitHelper.Dao.Interfaces;
@@ -188,6 +190,17 @@ namespace DataSummitHelper.Services
         public Uri GetIndividualUrl(int companyId, string azureResource)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<HttpResponseMessage> ProcessCall(Uri uri, string payload)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+
+            HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            var stringTask = await client.PostAsync(uri, httpContent);
+            return stringTask;
         }
     }
 }
