@@ -14,7 +14,7 @@
 	[ProcessedAzure]	BIT				NOT NULL DEFAULT 0,
 	[ProcessedGoogle]	BIT				NOT NULL DEFAULT 0,
 	[Type]				TINYINT			NOT NULL,
-	[DrawingId]			BIGINT			NOT NULL,
+	[DocumentId]			BIGINT			NOT NULL,
 	CONSTRAINT [PK_ImageGrids] PRIMARY KEY CLUSTERED ([ImageGridId] ASC),
-	CONSTRAINT [FK_ImageGrids_Drawings] FOREIGN KEY ([DrawingId]) REFERENCES [dbo].[Drawings] ([DrawingId])
+	CONSTRAINT [FK_ImageGrids_Documents] FOREIGN KEY ([DocumentId]) REFERENCES [dbo].[Documents] ([DocumentId])
 )

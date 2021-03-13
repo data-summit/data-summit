@@ -225,7 +225,7 @@ INSERT [dbo].[Currencies] ([CurrencyId], [Entity], [Name], [AlphabeticCode], [Nu
 GO
 INSERT [dbo].[Currencies] ([CurrencyId], [Entity], [Name], [AlphabeticCode], [NumericCode], [MinorUnit], [IsFundYesNo], [CreatedDate], [UserId]) VALUES (111, N'INDONESIA', N'Rupiah', N'IDR', N'360', N'2', 0, NULL, NULL)
 GO
-INSERT [dbo].[Currencies] ([CurrencyId], [Entity], [Name], [AlphabeticCode], [NumericCode], [MinorUnit], [IsFundYesNo], [CreatedDate], [UserId]) VALUES (112, N'INTERNATIONAL MONETARY FUND (IMF) ', N'SDR (Special Drawing Right)', N'XDR', N'960', N' ', 0, NULL, NULL)
+INSERT [dbo].[Currencies] ([CurrencyId], [Entity], [Name], [AlphabeticCode], [NumericCode], [MinorUnit], [IsFundYesNo], [CreatedDate], [UserId]) VALUES (112, N'INTERNATIONAL MONETARY FUND (IMF) ', N'SDR (Special Document Right)', N'XDR', N'960', N' ', 0, NULL, NULL)
 GO
 INSERT [dbo].[Currencies] ([CurrencyId], [Entity], [Name], [AlphabeticCode], [NumericCode], [MinorUnit], [IsFundYesNo], [CreatedDate], [UserId]) VALUES (113, N'IRAN, ISLAMIC REPUBLIC OF', N'Iranian Rial', N'IRR', N'364', N'2', 0, NULL, NULL)
 GO
