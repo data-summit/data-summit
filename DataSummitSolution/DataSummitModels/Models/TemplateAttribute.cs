@@ -6,14 +6,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class ProfileAttribute
+    public partial class TemplateAttribute
     {
-        public ProfileAttribute()
+        public TemplateAttribute()
         {
             Properties = new HashSet<Property>();
         }
 
-        public long ProfileAttributeId { get; set; }
+        public long TemplateAttributeId { get; set; }
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
@@ -23,7 +23,7 @@ namespace DataSummitDbModels
         public short NameHeight { get; set; }
         public byte PaperSizeId { get; set; }
         public byte BlockPositionId { get; set; }
-        public int ProfileVersionId { get; set; }
+        public int TemplateVersionId { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? CreatedDate { get; set; }
         public long? UserId { get; set; }
@@ -35,18 +35,18 @@ namespace DataSummitDbModels
         public short? StandardAttributeId { get; set; }
 
         [ForeignKey("BlockPositionId")]
-        [InverseProperty("ProfileAttributes")]
+        [InverseProperty("TemplateAttributes")]
         public virtual BlockPosition BlockPosition { get; set; }
         [ForeignKey("PaperSizeId")]
-        [InverseProperty("ProfileAttributes")]
+        [InverseProperty("TemplateAttributes")]
         public virtual PaperSize PaperSize { get; set; }
-        [ForeignKey("ProfileVersionId")]
-        [InverseProperty("ProfileAttributes")]
-        public virtual ProfileVersion ProfileVersion { get; set; }
+        [ForeignKey("TemplateVersionId")]
+        [InverseProperty("TemplateAttributes")]
+        public virtual TemplateVersion TemplateVersion { get; set; }
         [ForeignKey("StandardAttributeId")]
-        [InverseProperty("ProfileAttributes")]
+        [InverseProperty("TemplateAttributes")]
         public virtual StandardAttribute StandardAttribute { get; set; }
-        [InverseProperty("ProfileAttribute")]
+        [InverseProperty("TemplateAttribute")]
         public virtual ICollection<Property> Properties { get; set; }
     }
 }

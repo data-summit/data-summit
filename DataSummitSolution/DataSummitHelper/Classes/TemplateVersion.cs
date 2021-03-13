@@ -5,65 +5,65 @@ using System.Linq;
 
 namespace DataSummitHelper
 {
-    public class ProfileVersion
+    public class TemplateVersion
     {
         private DataSummitDbContext dataSummitDbContext;
 
-        public ProfileVersion(DataSummitDbContext dbContext)
+        public TemplateVersion(DataSummitDbContext dbContext)
         {
             dataSummitDbContext = dbContext;
         }
 
-        public List<ProfileVersions> GetAllCompanyProfileVersions(int companyId)
+        public List<TemplateVersions> GetAllCompanyTemplateVersions(int companyId)
         {
-            List<ProfileVersions> profileversions = new List<ProfileVersions>();
+            List<TemplateVersions> templateversions = new List<TemplateVersions>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                profileversions = dataSummitDbContext.ProfileVersions.Where(e => e.CompanyId == companyId).ToList();
+                templateversions = dataSummitDbContext.TemplateVersions.Where(e => e.CompanyId == companyId).ToList();
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
-            return profileversions;
+            return templateversions;
         }
 
-        public ProfileVersions GetProfileVersion(int profileVersionId)
+        public TemplateVersions GetTemplateVersion(int templateVersionId)
         {
-            ProfileVersions profileVersion = new ProfileVersions();
+            TemplateVersions templateVersion = new TemplateVersions();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
 
-                profileVersion = dataSummitDbContext.ProfileVersions
-                                    .FirstOrDefault(e => e.ProfileVersionId == profileVersionId);
-                profileVersion.ProfileAttributes = dataSummitDbContext.ProfileAttributes
-                                    .Where(e => e.ProfileVersionId == profileVersion.ProfileVersionId).ToList();
+                templateVersion = dataSummitDbContext.TemplateVersions
+                                    .FirstOrDefault(e => e.TemplateVersionId == templateVersionId);
+                templateVersion.TemplateAttributes = dataSummitDbContext.TemplateAttributes
+                                    .Where(e => e.TemplateVersionId == templateVersion.TemplateVersionId).ToList();
 
-                foreach (ProfileAttributes pa in profileVersion.ProfileAttributes)
+                foreach (TemplateAttributes pa in templateVersion.TemplateAttributes)
                 {
                     pa.StandardAttribute = dataSummitDbContext.StandardAttributes
                                             .FirstOrDefault(e => e.StandardAttributeId == pa.StandardAttributeId);
-                    pa.ProfileVersion = null;
+                    pa.TemplateVersion = null;
                 }
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
-            return profileVersion;
+            return templateVersion;
         }
 
-        public int CreateProfileVersion(ProfileVersions profileVersion)
+        public int CreateTemplateVersion(TemplateVersions templateVersion)
         {
             int returnid = 0;
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                dataSummitDbContext.ProfileVersions.Add(profileVersion);
+                dataSummitDbContext.TemplateVersions.Add(templateVersion);
                 dataSummitDbContext.SaveChanges();
-                returnid = profileVersion.ProfileVersionId;
+                returnid = templateVersion.TemplateVersionId;
             }
             catch (Exception ae)
             {
@@ -72,12 +72,12 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateProfileVersion(int id, ProfileVersions profileVersion)
+        public void UpdateTemplateVersion(int id, TemplateVersions templateVersion)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                dataSummitDbContext.ProfileVersions.Update(profileVersion);
+                dataSummitDbContext.TemplateVersions.Update(templateVersion);
                 dataSummitDbContext.SaveChanges();
             }
             catch (Exception ae)
@@ -86,13 +86,13 @@ namespace DataSummitHelper
             }
             return;
         }
-        public void DeleteProfileVersion(int profileVersionId)
+        public void DeleteTemplateVersion(int templateVersionId)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                ProfileVersions profileversion = dataSummitDbContext.ProfileVersions.First(p => p.ProfileVersionId == profileVersionId);
-                dataSummitDbContext.ProfileVersions.Remove(profileversion);
+                TemplateVersions templateversion = dataSummitDbContext.TemplateVersions.First(p => p.TemplateVersionId == templateVersionId);
+                dataSummitDbContext.TemplateVersions.Remove(templateversion);
                 dataSummitDbContext.SaveChanges();
             }
             catch (Exception ae)

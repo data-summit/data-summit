@@ -10,22 +10,22 @@ using System.Linq;
 namespace DataSummitTests
 {
     [TestClass]
-    public class ProfileAttributeTests
+    public class TemplateAttributeTests
     {
         [TestMethod]
-        public void Create_new_profileAttribute()
+        public void Create_new_templateAttribute()
         {
-            ProfileAttributes profileAttribute = new ProfileAttributes
+            TemplateAttributes templateAttribute = new TemplateAttributes
             {
-                ProfileAttributeId = 1,
-                Name = "Unit Test ProfileAttribute1",
+                TemplateAttributeId = 1,
+                Name = "Unit Test TemplateAttribute1",
                 BlockPositionId = 1,
                 NameHeight = 100,
                 NameWidth = 1000,
                 NameX = 1000,
                 NameY = 100,
                 PaperSizeId = 1,
-                ProfileVersionId = 1,
+                TemplateVersionId = 1,
                 Value = "10",
                 ValueHeight = 100,
                 ValueWidth = 1000,
@@ -35,27 +35,27 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockProfileAttributesDbSet = new Mock<DbSet<ProfileAttributes>>();
+            var mockTemplateAttributesDbSet = new Mock<DbSet<TemplateAttributes>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
-            mockContext.Setup(m => m.ProfileAttributes).Returns(mockProfileAttributesDbSet.Object);
-            var mockProfileAttributes = new ProfileAttribute(mockContext.Object);
+            mockContext.Setup(m => m.TemplateAttributes).Returns(mockTemplateAttributesDbSet.Object);
+            var mockTemplateAttributes = new TemplateAttribute(mockContext.Object);
 
-            mockProfileAttributes.CreateProfileAttribute(profileAttribute);
+            mockTemplateAttributes.CreateTemplateAttribute(templateAttribute);
 
-            mockProfileAttributesDbSet.Verify(m => m.Add(It.IsAny<ProfileAttributes>()), Times.Once());
+            mockTemplateAttributesDbSet.Verify(m => m.Add(It.IsAny<TemplateAttributes>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
-        public void Get_profileAttribute_by_id()
+        public void Get_templateAttribute_by_id()
         {
-            ProfileVersions profileVersion1 = new ProfileVersions
+            TemplateVersions templateVersion1 = new TemplateVersions
             {
-                ProfileVersionId = 1,
-                Name = "Unit Test ProfileVersion1",
+                TemplateVersionId = 1,
+                Name = "Unit Test TemplateVersion1",
                 CreatedDate = DateTime.Now,
                 Height = 100,
                 HeightOriginal = 1000,
@@ -66,10 +66,10 @@ namespace DataSummitTests
                 Y = 100
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            ProfileVersions profileVersion2 = new ProfileVersions
+            TemplateVersions templateVersion2 = new TemplateVersions
             {
-                ProfileVersionId = 2,
-                Name = "Unit Test ProfileVersion2",
+                TemplateVersionId = 2,
+                Name = "Unit Test TemplateVersion2",
                 CreatedDate = DateTime.Now,
                 Height = 200,
                 HeightOriginal = 2000,
@@ -81,20 +81,20 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testProfileAttributes = new List<ProfileAttributes>
+            var testTemplateAttributes = new List<TemplateAttributes>
             {
-                new ProfileAttributes
+                new TemplateAttributes
                 {
-                    ProfileAttributeId = 1,
-                    Name = "Unit Test ProfileAttribute1",
+                    TemplateAttributeId = 1,
+                    Name = "Unit Test TemplateAttribute1",
                     BlockPositionId = 1,
                     NameHeight = 100,
                     NameWidth = 1000,
                     NameX = 1000,
                     NameY = 100,
                     PaperSizeId = 1,
-                    ProfileVersion = profileVersion1,
-                    ProfileVersionId = profileVersion1.ProfileVersionId,
+                    TemplateVersion = templateVersion1,
+                    TemplateVersionId = templateVersion1.TemplateVersionId,
                     Value = "10",
                     ValueHeight = 100, 
                     ValueWidth = 1000,
@@ -103,18 +103,18 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new ProfileAttributes
+                new TemplateAttributes
                 {
-                    ProfileAttributeId = 2,
-                    Name = "Unit Test ProfileAttribute2",
+                    TemplateAttributeId = 2,
+                    Name = "Unit Test TemplateAttribute2",
                     BlockPositionId = 2,
                     NameHeight = 200,
                     NameWidth = 2000,
                     NameX = 2000,
                     NameY = 200,
                     PaperSizeId = 2,
-                    ProfileVersion = profileVersion2,
-                    ProfileVersionId = profileVersion2.ProfileVersionId,
+                    TemplateVersion = templateVersion2,
+                    TemplateVersionId = templateVersion2.TemplateVersionId,
                     Value = "20",
                     ValueHeight = 200,
                     ValueWidth = 2000,
@@ -123,18 +123,18 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new ProfileAttributes
+                new TemplateAttributes
                 {
-                    ProfileAttributeId = 3,
-                    Name = "Unit Test ProfileAttribute3",
+                    TemplateAttributeId = 3,
+                    Name = "Unit Test TemplateAttribute3",
                     BlockPositionId = 3,
                     NameHeight = 300,
                     NameWidth = 3000,
                     NameX = 3000,
                     NameY = 300,
                     PaperSizeId = 3,
-                    ProfileVersion = profileVersion1,
-                    ProfileVersionId = profileVersion1.ProfileVersionId,
+                    TemplateVersion = templateVersion1,
+                    TemplateVersionId = templateVersion1.TemplateVersionId,
                     Value = "30",
                     ValueHeight = 300,
                     ValueWidth = 3000,
@@ -145,21 +145,21 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockProfileAttributeDbSet = new Mock<DbSet<ProfileAttributes>>();
-            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.Provider).Returns(testProfileAttributes.Provider);
-            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.Expression).Returns(testProfileAttributes.Expression);
-            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.ElementType).Returns(testProfileAttributes.ElementType);
-            mockProfileAttributeDbSet.As<IQueryable<ProfileAttributes>>().Setup(m => m.GetEnumerator()).Returns(testProfileAttributes.GetEnumerator());
+            var mockTemplateAttributeDbSet = new Mock<DbSet<TemplateAttributes>>();
+            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.Provider).Returns(testTemplateAttributes.Provider);
+            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.Expression).Returns(testTemplateAttributes.Expression);
+            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.ElementType).Returns(testTemplateAttributes.ElementType);
+            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.GetEnumerator()).Returns(testTemplateAttributes.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
-            mockContext.Setup(c => c.ProfileAttributes).Returns(mockProfileAttributeDbSet.Object);
+            mockContext.Setup(c => c.TemplateAttributes).Returns(mockTemplateAttributeDbSet.Object);
 
-            var mockProfileAttributeService = new ProfileAttribute(mockContext.Object);
-            var mockProfileAttribute = mockProfileAttributeService.GetProfileAttributesById(1);
-            Assert.AreEqual(mockProfileAttribute.ProfileAttributeId, testProfileAttributes.ToList()[0].ProfileAttributeId);
+            var mockTemplateAttributeService = new TemplateAttribute(mockContext.Object);
+            var mockTemplateAttribute = mockTemplateAttributeService.GetTemplateAttributesById(1);
+            Assert.AreEqual(mockTemplateAttribute.TemplateAttributeId, testTemplateAttributes.ToList()[0].TemplateAttributeId);
         }
     }
 }

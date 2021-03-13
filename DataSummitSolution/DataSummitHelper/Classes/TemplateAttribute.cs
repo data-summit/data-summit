@@ -5,56 +5,56 @@ using System.Linq;
 
 namespace DataSummitHelper
 {
-    public class ProfileAttribute
+    public class TemplateAttribute
     {
         private DataSummitDbContext dataSummitDbContext;
 
-        public ProfileAttribute(DataSummitDbContext dbContext)
+        public TemplateAttribute(DataSummitDbContext dbContext)
         {
             dataSummitDbContext = dbContext;
         }
 
-        public List<ProfileAttributes> GetAllProfileVersionProfileAttributes(int profileVersionId)
+        public List<TemplateAttributes> GetAllTemplateVersionTemplateAttributes(int templateVersionId)
         {
-            List<ProfileAttributes> profileattributes = new List<ProfileAttributes>();
+            List<TemplateAttributes> templateattributes = new List<TemplateAttributes>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                profileattributes = dataSummitDbContext.ProfileAttributes.Where(e => e.ProfileVersionId == profileVersionId).ToList();
+                templateattributes = dataSummitDbContext.TemplateAttributes.Where(e => e.TemplateVersionId == templateVersionId).ToList();
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
-            return profileattributes;
+            return templateattributes;
         }
 
-        public ProfileAttributes GetProfileAttributesById(int profileAttributeId)
+        public TemplateAttributes GetTemplateAttributesById(int templateAttributeId)
         {
-            ProfileAttributes profileattributes = new ProfileAttributes();
+            TemplateAttributes templateattributes = new TemplateAttributes();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                profileattributes = dataSummitDbContext.ProfileAttributes.First(e => e.ProfileAttributeId == profileAttributeId);
+                templateattributes = dataSummitDbContext.TemplateAttributes.First(e => e.TemplateAttributeId == templateAttributeId);
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
-            return profileattributes;
+            return templateattributes;
         }
 
-        public long CreateProfileAttribute(ProfileAttributes profileAttribute)
+        public long CreateTemplateAttribute(TemplateAttributes templateAttribute)
         {
             long returnid = 0;
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                profileAttribute.CreatedDate = DateTime.Now;
-                //profileattribute.UserId = OAuthServer.User.Identity.Name;
-                dataSummitDbContext.ProfileAttributes.Add(profileAttribute);
+                templateAttribute.CreatedDate = DateTime.Now;
+                //templateattribute.UserId = OAuthServer.User.Identity.Name;
+                dataSummitDbContext.TemplateAttributes.Add(templateAttribute);
                 dataSummitDbContext.SaveChanges();
-                returnid = profileAttribute.ProfileAttributeId;
+                returnid = templateAttribute.TemplateAttributeId;
             }
             catch (Exception ae)
             {
@@ -62,12 +62,12 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateProfileAttribute(long id, ProfileAttributes profileAttribute)
+        public void UpdateTemplateAttribute(long id, TemplateAttributes templateAttribute)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                dataSummitDbContext.ProfileAttributes.Update(profileAttribute);
+                dataSummitDbContext.TemplateAttributes.Update(templateAttribute);
             }
             catch (Exception ae)
             {
@@ -75,13 +75,13 @@ namespace DataSummitHelper
             }
             return;
         }
-        public void DeleteProfileAttribute(long profileAttributeId)
+        public void DeleteTemplateAttribute(long templateAttributeId)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                ProfileAttributes profileattribute = dataSummitDbContext.ProfileAttributes.First(p => p.ProfileAttributeId == profileAttributeId);
-                dataSummitDbContext.ProfileAttributes.Remove(profileattribute);
+                TemplateAttributes templateattribute = dataSummitDbContext.TemplateAttributes.First(p => p.TemplateAttributeId == templateAttributeId);
+                dataSummitDbContext.TemplateAttributes.Remove(templateattribute);
             }
             catch (Exception ae)
             {

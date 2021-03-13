@@ -65,9 +65,9 @@ namespace DataSummitWeb.Controllers
         //}
 
         [HttpPost]
-        public string PostStandardAttributes(ProfileVersions profileVersion)
+        public string PostStandardAttributes(TemplateVersions templateVersion)
         {
-            return JsonConvert.SerializeObject(profileVersion);
+            return JsonConvert.SerializeObject(templateVersion);
         }
 
         // DELETE: api/StandardAttributes/5

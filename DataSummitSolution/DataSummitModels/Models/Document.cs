@@ -30,7 +30,7 @@ namespace DataSummitDbModels
         public string ContainerName { get; set; }
         public bool Success { get; set; }
         public int ProjectId { get; set; }
-        public int ProfileVersionId { get; set; }
+        public int TemplateVersionId { get; set; }
         [Column(TypeName = "decimal(3, 2)")]
         public decimal? AzureConfidence { get; set; }
         [Column(TypeName = "decimal(3, 2)")]
@@ -54,9 +54,9 @@ namespace DataSummitDbModels
         [ForeignKey("PaperSizeId")]
         [InverseProperty("Documents")]
         public virtual PaperSize PaperSize { get; set; }
-        [ForeignKey("ProfileVersionId")]
+        [ForeignKey("TemplateVersionId")]
         [InverseProperty("Documents")]
-        public virtual ProfileVersion ProfileVersion { get; set; }
+        public virtual TemplateVersion TemplateVersion { get; set; }
         [ForeignKey("ProjectId")]
         [InverseProperty("Documents")]
         public virtual Project Project { get; set; }

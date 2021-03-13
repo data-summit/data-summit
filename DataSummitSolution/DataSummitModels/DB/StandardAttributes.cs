@@ -6,12 +6,12 @@ namespace DataSummitModels.DB
     {
         public StandardAttributes()
         {
-            ProfileAttributes = new HashSet<ProfileAttributes>();
+            TemplateAttributes = new HashSet<TemplateAttributes>();
         }
 
         public short StandardAttributeId { get; set; }
         public string Name { get; set; }
 
-        public virtual ICollection<ProfileAttributes> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttributes> TemplateAttributes { get; set; }
     }
 }

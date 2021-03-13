@@ -26,13 +26,13 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async Task DeleteProfileAttribute(long profileAttributeId)
+        public async Task DeleteTemplateAttribute(long templateAttributeId)
         {
             try
             {
-                var profileAttribute = new ProfileAttributes() { ProfileAttributeId = profileAttributeId };
-                _context.ProfileAttributes.Attach(profileAttribute);
-                _context.ProfileAttributes.Remove(profileAttribute);
+                var templateAttribute = new TemplateAttributes() { TemplateAttributeId = templateAttributeId };
+                _context.TemplateAttributes.Attach(templateAttribute);
+                _context.TemplateAttributes.Remove(templateAttribute);
                 await _context.SaveChangesAsync();
             }
             catch (Exception)
@@ -58,22 +58,22 @@ namespace DataSummitHelper.Dao
             return documents;
         }
 
-        public async Task<List<ProfileAttributes>> GetProfileAttributesForDocumentId(int documentId)
+        public async Task<List<TemplateAttributes>> GetTemplateAttributesForDocumentId(int documentId)
         {
-            var profileAttributes = new List<ProfileAttributes>();
+            var templateAttributes = new List<TemplateAttributes>();
 
             try
             {
                 var document = await _context.Documents.FirstOrDefaultAsync(d => d.DocumentId == documentId);
-                var profileVersion = await _context.ProfileVersions.FirstOrDefaultAsync(p => p.ProfileVersionId == document.ProfileVersionId);
-                profileAttributes = profileVersion.ProfileAttributes.ToList();
+                var templateVersion = await _context.TemplateVersions.FirstOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
+                templateAttributes = templateVersion.TemplateAttributes.ToList();
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
 
-            return profileAttributes;
+            return templateAttributes;
         }
 
         public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
@@ -86,15 +86,15 @@ namespace DataSummitHelper.Dao
                     .FirstOrDefaultAsync(d => d.DocumentId == documentId);
 
                 documentProperties = await _context.Properties
-                    .Select(p => new { p.ProfileAttribute, p.Sentence })
+                    .Select(p => new { p.TemplateAttribute, p.Sentence })
                     .Where(profAtrrWords => 
-                        profAtrrWords.ProfileAttribute.ProfileVersionId == document.ProfileVersionId 
+                        profAtrrWords.TemplateAttribute.TemplateVersionId == document.TemplateVersionId 
                         && profAtrrWords.Sentence.DocumentId == document.DocumentId
                     )
                     .Select(a => new DocumentProperty()
                     {
                         Sentences =  a.Sentence,
-                        ProfileAttributes = a.ProfileAttribute
+                        TemplateAttributes = a.TemplateAttribute
                     })
                     .ToListAsync();
             }
@@ -176,13 +176,13 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region Templates
-        public async Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId)
+        public async Task<List<TemplateVersions>> GetCompanyTemplateVersions(int companyId)
         {
-            var profileVersions = new List<ProfileVersions>();
+            var templateVersions = new List<TemplateVersions>();
 
             try
             {
-                profileVersions = await _context.ProfileVersions
+                templateVersions = await _context.TemplateVersions
                     .Where(p => p.CompanyId == companyId)
                     .ToListAsync();
             }
@@ -191,16 +191,16 @@ namespace DataSummitHelper.Dao
                 throw;
             }
 
-            return profileVersions;
+            return templateVersions;
         }
 
-        public async Task<List<ProfileVersions>> GetProjectProfileVersions(int projectId)
+        public async Task<List<TemplateVersions>> GetProjectTemplateVersions(int projectId)
         {
-            var profileVersions = new List<ProfileVersions>();
+            var templateVersions = new List<TemplateVersions>();
 
             try
             {
-                profileVersions = await _context.ProfileVersions
+                templateVersions = await _context.TemplateVersions
                     .Where(pv => pv.Company.Projects
                         .Select(p => p.ProjectId)
                         .Single() == projectId)
@@ -211,7 +211,7 @@ namespace DataSummitHelper.Dao
                 throw;
             }
 
-            return profileVersions;
+            return templateVersions;
         }
         #endregion
 
@@ -299,20 +299,20 @@ namespace DataSummitHelper.Dao
             return documents;
         }
 
-        public async Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int templateId)
+        public async Task<List<TemplateAttributes>> GetTemplateAttribtesForTemplateId(int templateId)
         {
-            var profileAttributes = new List<ProfileAttributes>();
+            var templateAttributes = new List<TemplateAttributes>();
             try
             {
-                profileAttributes = await _context.ProfileAttributes
-                    .Where(p => p.ProfileVersionId == templateId)
+                templateAttributes = await _context.TemplateAttributes
+                    .Where(p => p.TemplateVersionId == templateId)
                     .ToListAsync();
             }
             catch (Exception ae)
             {
             }
 
-            return profileAttributes;
+            return templateAttributes;
         }
     }
 }

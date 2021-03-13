@@ -18,7 +18,7 @@ namespace DataSummitTests
             Properties property = new Properties
             {
                 PropertyId = 1,
-                ProfileAttributeId = 1,
+                TemplateAttributeId = 1,
                 SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             };
 
@@ -44,7 +44,7 @@ namespace DataSummitTests
                 new Properties
                 {
                     PropertyId = 1,
-                    ProfileAttributeId = 1,
+                    TemplateAttributeId = 1,
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Sentence = new Sentences
                     {
@@ -54,7 +54,7 @@ namespace DataSummitTests
                 new Properties
                 {
                     PropertyId = 2,
-                    ProfileAttributeId = 2,
+                    TemplateAttributeId = 2,
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Sentence = new Sentences
                     {
@@ -64,7 +64,7 @@ namespace DataSummitTests
                 new Properties
                 {
                     PropertyId = 3,
-                    ProfileAttributeId = 3,
+                    TemplateAttributeId = 3,
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Sentence = new Sentences
                     {

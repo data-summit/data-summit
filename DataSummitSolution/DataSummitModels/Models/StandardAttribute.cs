@@ -10,7 +10,7 @@ namespace DataSummitDbModels
     {
         public StandardAttribute()
         {
-            ProfileAttributes = new HashSet<ProfileAttribute>();
+            TemplateAttributes = new HashSet<TemplateAttribute>();
         }
 
         public short StandardAttributeId { get; set; }
@@ -19,6 +19,6 @@ namespace DataSummitDbModels
         public string Name { get; set; }
 
         [InverseProperty("StandardAttribute")]
-        public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttribute> TemplateAttributes { get; set; }
     }
 }

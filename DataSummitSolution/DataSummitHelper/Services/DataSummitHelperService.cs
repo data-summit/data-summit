@@ -119,7 +119,7 @@ namespace DataSummitHelper.Services
         }
         public async Task DeleteDocumentProperty(long documentPropertyId)
         {
-            await _dao.DeleteProfileAttribute(documentPropertyId);
+            await _dao.DeleteTemplateAttribute(documentPropertyId);
         }
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
@@ -161,7 +161,7 @@ namespace DataSummitHelper.Services
         #region Templates
         public async Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId)
         {
-            var templates = await _dao.GetCompanyProfileVersions(companyId);
+            var templates = await _dao.GetCompanyTemplateVersions(companyId);
             var templateDtos = templates.Select(t => new TemplateDto(t))
                 .ToList();
 
@@ -170,7 +170,7 @@ namespace DataSummitHelper.Services
 
         public async Task<List<TemplateDto>> GetAllProjectTemplates(int projectId)
         {
-            var templates = await _dao.GetProjectProfileVersions(projectId);
+            var templates = await _dao.GetProjectTemplateVersions(projectId);
             var templateDtos = templates.Select(t => new TemplateDto(t))
                 .ToList();
 

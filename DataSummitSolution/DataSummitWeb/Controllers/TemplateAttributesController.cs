@@ -10,49 +10,49 @@ namespace DataSummitWeb.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
-    public class ProfileAttributesController : Controller
+    public class TemplateAttributesController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public ProfileAttributesController(IDataSummitHelperService dataSummitHelper)
+        public TemplateAttributesController(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
         private DataSummitDbContext db = new DataSummitDbContext();
         
-        // GET api/profileAttributes/5
+        // GET api/templateAttributes/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var profileAttributes = await _dataSummitHelper.GetTemplateAttribtes(id);
-            return Ok(profileAttributes);
+            var templateAttributes = await _dataSummitHelper.GetTemplateAttribtes(id);
+            return Ok(templateAttributes);
         }
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]ProfileAttributes profileAttribute)
+        public string Post([FromBody]TemplateAttributes templateAttribute)
         {
             //Create
             //return JsonConvert.SerializeObject(
-            //    profileAttributeService.CreateProfileAttribute(profileAttribute));
+            //    templateAttributeService.CreateTemplateAttribute(templateAttribute));
             return null;
         }
 
-        // PUT api/profileAttributes/5
+        // PUT api/templateAttributes/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]ProfileAttributes profileAttribute)
+        public void Put(int id, [FromBody]TemplateAttributes templateAttribute)
         {
             //Update
-            //profileAttributeService.UpdateProfileAttribute(id, profileAttribute);
+            //templateAttributeService.UpdateTemplateAttribute(id, templateAttribute);
             return;
         }
 
-        // DELETE api/profileAttributes/5
+        // DELETE api/templateAttributes/5
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            //profileAttributeService.DeleteProfileAttribute(id);
+            //templateAttributeService.DeleteTemplateAttribute(id);
             return JsonConvert.SerializeObject("Ok");
         }
     }

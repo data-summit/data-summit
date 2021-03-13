@@ -10,13 +10,13 @@ namespace DataSummitDbModels
     {
         public int DocumentTemplateId { get; set; }
         public long? DocumentId { get; set; }
-        public int? ProfileVersionId { get; set; }
+        public int? TemplateVersionId { get; set; }
 
         [ForeignKey("DocumentId")]
         [InverseProperty("DocumentTemplates")]
         public virtual Document Document { get; set; }
-        [ForeignKey("ProfileVersionId")]
+        [ForeignKey("TemplateVersionId")]
         [InverseProperty("DocumentTemplates")]
-        public virtual ProfileVersion ProfileVersion { get; set; }
+        public virtual TemplateVersion TemplateVersion { get; set; }
     }
 }

@@ -46,8 +46,8 @@ namespace DataSummitDbModels.Context
         public virtual DbSet<PaperSize> PaperSizes { get; set; }
         public virtual DbSet<Point> Points { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProfileAttribute> ProfileAttributes { get; set; }
-        public virtual DbSet<ProfileVersion> ProfileVersions { get; set; }
+        public virtual DbSet<TemplateAttribute> TemplateAttributes { get; set; }
+        public virtual DbSet<TemplateVersion> TemplateVersions { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Sentence> Sentences { get; set; }
@@ -233,11 +233,11 @@ namespace DataSummitDbModels.Context
                     .HasForeignKey(d => d.PaperSizeId)
                     .HasConstraintName("FK_Documents_PaperSizes");
 
-                entity.HasOne(d => d.ProfileVersion)
+                entity.HasOne(d => d.TemplateVersion)
                     .WithMany(p => p.Documents)
-                    .HasForeignKey(d => d.ProfileVersionId)
+                    .HasForeignKey(d => d.TemplateVersionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Documents_ProfileVersions");
+                    .HasConstraintName("FK_Documents_TemplateVersions");
 
                 entity.HasOne(d => d.Project)
                     .WithMany(p => p.Documents)
@@ -271,10 +271,10 @@ namespace DataSummitDbModels.Context
                     .HasForeignKey(d => d.DocumentId)
                     .HasConstraintName("FK_DocumentTemplates_Documents");
 
-                entity.HasOne(d => d.ProfileVersion)
+                entity.HasOne(d => d.TemplateVersion)
                     .WithMany(p => p.DocumentTemplates)
-                    .HasForeignKey(d => d.ProfileVersionId)
-                    .HasConstraintName("FK_DocumentTemplates_ProfileVersions");
+                    .HasForeignKey(d => d.TemplateVersionId)
+                    .HasConstraintName("FK_DocumentTemplates_TemplateVersions");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -335,35 +335,35 @@ namespace DataSummitDbModels.Context
                 entity.Property(e => e.PointId).ValueGeneratedNever();
             });
 
-            modelBuilder.Entity<ProfileAttribute>(entity =>
+            modelBuilder.Entity<TemplateAttribute>(entity =>
             {
                 entity.HasOne(d => d.BlockPosition)
-                    .WithMany(p => p.ProfileAttributes)
+                    .WithMany(p => p.TemplateAttributes)
                     .HasForeignKey(d => d.BlockPositionId)
-                    .HasConstraintName("FK_ProfileAttributes_BlockPositions");
+                    .HasConstraintName("FK_TemplateAttributes_BlockPositions");
 
                 entity.HasOne(d => d.PaperSize)
-                    .WithMany(p => p.ProfileAttributes)
+                    .WithMany(p => p.TemplateAttributes)
                     .HasForeignKey(d => d.PaperSizeId)
-                    .HasConstraintName("FK_ProfileAttributes_PaperSizes");
+                    .HasConstraintName("FK_TemplateAttributes_PaperSizes");
 
-                entity.HasOne(d => d.ProfileVersion)
-                    .WithMany(p => p.ProfileAttributes)
-                    .HasForeignKey(d => d.ProfileVersionId)
-                    .HasConstraintName("FK_ProfileAttributes_ProfileVersions");
+                entity.HasOne(d => d.TemplateVersion)
+                    .WithMany(p => p.TemplateAttributes)
+                    .HasForeignKey(d => d.TemplateVersionId)
+                    .HasConstraintName("FK_TemplateAttributes_TemplateVersions");
 
                 entity.HasOne(d => d.StandardAttribute)
-                    .WithMany(p => p.ProfileAttributes)
+                    .WithMany(p => p.TemplateAttributes)
                     .HasForeignKey(d => d.StandardAttributeId)
-                    .HasConstraintName("FK_ProfileAttributes_StandardAttributes");
+                    .HasConstraintName("FK_TemplateAttributes_StandardAttributes");
             });
 
-            modelBuilder.Entity<ProfileVersion>(entity =>
+            modelBuilder.Entity<TemplateVersion>(entity =>
             {
                 entity.HasOne(d => d.Company)
-                    .WithMany(p => p.ProfileVersions)
+                    .WithMany(p => p.TemplateVersions)
                     .HasForeignKey(d => d.CompanyId)
-                    .HasConstraintName("FK_ProfileVersions_Companies");
+                    .HasConstraintName("FK_TemplateVersions_Companies");
             });
 
             modelBuilder.Entity<Project>(entity =>
@@ -376,10 +376,10 @@ namespace DataSummitDbModels.Context
 
             modelBuilder.Entity<Property>(entity =>
             {
-                entity.HasOne(d => d.ProfileAttribute)
+                entity.HasOne(d => d.TemplateAttribute)
                     .WithMany(p => p.Properties)
-                    .HasForeignKey(d => d.ProfileAttributeId)
-                    .HasConstraintName("FK_Properties_ProfileAttributes");
+                    .HasForeignKey(d => d.TemplateAttributeId)
+                    .HasConstraintName("FK_Properties_TemplateAttributes");
 
                 entity.HasOne(d => d.Sentence)
                     .WithMany(p => p.Properties)

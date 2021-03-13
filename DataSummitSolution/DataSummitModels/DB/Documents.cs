@@ -32,7 +32,7 @@ namespace DataSummitModels.DB
             imgU.GoogleConfidence = GoogleConfidence;
             imgU.AzureConfidence = AzureConfidence;
             imgU.Processed = Processed;
-            imgU.ProfileVersionId = ProfileVersionId;
+            imgU.TemplateVersionId = TemplateVersionId;
             imgU.ProjectId = ProjectId;
             imgU.Sentences = Sentences;
             imgU.Success = Success;

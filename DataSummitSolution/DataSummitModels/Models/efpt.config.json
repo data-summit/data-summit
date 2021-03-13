@@ -130,11 +130,11 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[ProfileAttributes]"
+         "Name": "[dbo].[TemplateAttributes]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[ProfileVersions]"
+         "Name": "[dbo].[TemplateVersions]"
       },
       {
          "HasPrimaryKey": true,

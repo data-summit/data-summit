@@ -14,7 +14,7 @@ namespace DataSummitDbModels
             AspNetUsers = new HashSet<AspNetUser>();
             AzureCompanyResourceUrls = new HashSet<AzureCompanyResourceUrl>();
             Orders = new HashSet<Order>();
-            ProfileVersions = new HashSet<ProfileVersion>();
+            TemplateVersions = new HashSet<TemplateVersion>();
             Projects = new HashSet<Project>();
         }
 
@@ -41,7 +41,7 @@ namespace DataSummitDbModels
         [InverseProperty("Company")]
         public virtual ICollection<Order> Orders { get; set; }
         [InverseProperty("Company")]
-        public virtual ICollection<ProfileVersion> ProfileVersions { get; set; }
+        public virtual ICollection<TemplateVersion> TemplateVersions { get; set; }
         [InverseProperty("Company")]
         public virtual ICollection<Project> Projects { get; set; }
     }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace DataSummitModels.DB
 {
-    public partial class ProfileVersions
+    public partial class TemplateVersions
     {
-        public ProfileVersions()
+        public TemplateVersions()
         {
-            ProfileAttributes = new HashSet<ProfileAttributes>();
+            TemplateAttributes = new HashSet<TemplateAttributes>();
         }
 
-        public int ProfileVersionId { get; set; }
+        public int TemplateVersionId { get; set; }
         public string Name { get; set; }
         public int CompanyId { get; set; }
         public byte[] Image { get; set; }
@@ -24,6 +24,6 @@ namespace DataSummitModels.DB
         public int? Y { get; set; }
 
         public virtual Companies Company { get; set; }
-        public virtual ICollection<ProfileAttributes> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttributes> TemplateAttributes { get; set; }
     }
 }

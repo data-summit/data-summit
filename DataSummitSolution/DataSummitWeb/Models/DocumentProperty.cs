@@ -5,7 +5,7 @@ namespace DataSummitWeb.Models
 {
     public class DocumentProperty
     {
-        public long ProfileAttributeId { get; set; }
+        public long TemplateAttributeId { get; set; }
         public string StandardName { get; set; }
         public string Name { get; set; }
         public decimal? Confidence { get; set; }
@@ -21,7 +21,7 @@ namespace DataSummitWeb.Models
 
             return new DocumentProperty
             {
-                ProfileAttributeId = dto.ProfileAttributeId,
+                TemplateAttributeId = dto.TemplateAttributeId,
                 StandardName = dto.StandardName,
                 Name = dto.Name,
                 Confidence = null,

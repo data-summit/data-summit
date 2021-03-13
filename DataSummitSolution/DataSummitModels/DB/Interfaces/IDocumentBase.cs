@@ -12,7 +12,7 @@ namespace DataSummitModels.DB
         string ContainerName { get; set; }
         bool Success { get; set; }
         int ProjectId { get; set; }
-        int ProfileVersionId { get; set; }
+        int TemplateVersionId { get; set; }
         decimal? AzureConfidence { get; set; }
         decimal? GoogleConfidence { get; set; }
         decimal? AmazonConfidence { get; set; }

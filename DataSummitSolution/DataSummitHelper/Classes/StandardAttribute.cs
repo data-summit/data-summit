@@ -21,7 +21,7 @@ namespace DataSummitHelper
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
                 lStandardAttributes = dataSummitDbContext.StandardAttributes.Where(c => 
-                        c.ProfileAttributes.First().ProfileAttributeId == id).ToList();
+                        c.TemplateAttributes.First().TemplateAttributeId == id).ToList();
             }
             catch (Exception ae)
             {

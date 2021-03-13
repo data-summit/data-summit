@@ -35,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\DataSummit-Web - FTP.pubxml.user" />
-    <None Include="Properties\PublishProfiles\DataSummit-Web - Web Deploy.pubxml.user" />
+    <None Include="Properties\PublishTemplates\DataSummit-Web - FTP.pubxml.user" />
+    <None Include="Properties\PublishTemplates\DataSummit-Web - Web Deploy.pubxml.user" />
   </ItemGroup>
 
   <ItemGroup>

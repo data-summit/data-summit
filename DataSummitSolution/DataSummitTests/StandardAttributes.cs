@@ -15,17 +15,17 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_standardAttribute()
         {
-            ProfileAttributes profileAttribute = new ProfileAttributes
+            TemplateAttributes templateAttribute = new TemplateAttributes
             {
-                ProfileAttributeId = 1,
-                Name = "Unit Test ProfileAttribute1",
+                TemplateAttributeId = 1,
+                Name = "Unit Test TemplateAttribute1",
                 BlockPositionId = 1,
                 NameHeight = 100,
                 NameWidth = 1000,
                 NameX = 1000,
                 NameY = 100,
                 PaperSizeId = 1,
-                ProfileVersionId = 1,
+                TemplateVersionId = 1,
                 Value = "10",
                 ValueHeight = 100,
                 ValueWidth = 1000,
@@ -38,7 +38,7 @@ namespace DataSummitTests
             {
                 StandardAttributeId = 1,
                 Name = "Unit Test StandardAttribute",
-                ProfileAttributes = new List<ProfileAttributes> { profileAttribute }
+                TemplateAttributes = new List<TemplateAttributes> { templateAttribute }
             };
 
             var mockStandardAttributesDbSet = new Mock<DbSet<StandardAttributes>>();
@@ -68,17 +68,17 @@ namespace DataSummitTests
                 Website = "www.UnitTestCompany1.com"
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            ProfileAttributes profileAttribute = new ProfileAttributes
+            TemplateAttributes templateAttribute = new TemplateAttributes
             {
-                ProfileAttributeId = 1,
-                Name = "Unit Test ProfileAttribute1",
+                TemplateAttributeId = 1,
+                Name = "Unit Test TemplateAttribute1",
                 BlockPositionId = 1,
                 NameHeight = 100,
                 NameWidth = 1000,
                 NameX = 1000,
                 NameY = 100,
                 PaperSizeId = 1,
-                ProfileVersionId = 1,
+                TemplateVersionId = 1,
                 Value = "10",
                 ValueHeight = 100,
                 ValueWidth = 1000,
@@ -91,7 +91,7 @@ namespace DataSummitTests
             {
                 StandardAttributeId = 1,
                 Name = "Unit Test StandardAttribute",
-                ProfileAttributes = new List<ProfileAttributes> { profileAttribute }
+                TemplateAttributes = new List<TemplateAttributes> { templateAttribute }
             };
 
             var testStandardAttributes = new List<StandardAttributes>
@@ -100,19 +100,19 @@ namespace DataSummitTests
                 {
                     StandardAttributeId = 1,
                     Name = "Unit Test StandardAttribute1",
-                    ProfileAttributes = new List<ProfileAttributes> { profileAttribute }
+                    TemplateAttributes = new List<TemplateAttributes> { templateAttribute }
                 },
                 new StandardAttributes
                 {
                     StandardAttributeId = 2,
                     Name = "Unit Test StandardAttribute2",
-                    ProfileAttributes = new List<ProfileAttributes> { profileAttribute }
+                    TemplateAttributes = new List<TemplateAttributes> { templateAttribute }
                 },
                 new StandardAttributes
                 {
                     StandardAttributeId = 3,
                     Name = "Unit Test StandardAttribute3",
-                    ProfileAttributes = new List<ProfileAttributes> { profileAttribute }
+                    TemplateAttributes = new List<TemplateAttributes> { templateAttribute }
                 }
             }.AsQueryable();
 

@@ -10,11 +10,11 @@ namespace DataSummitDbModels
     {
         public long PropertyId { get; set; }
         public Guid SentenceId { get; set; }
-        public long ProfileAttributeId { get; set; }
+        public long TemplateAttributeId { get; set; }
 
-        [ForeignKey("ProfileAttributeId")]
+        [ForeignKey("TemplateAttributeId")]
         [InverseProperty("Properties")]
-        public virtual ProfileAttribute ProfileAttribute { get; set; }
+        public virtual TemplateAttribute TemplateAttribute { get; set; }
         [ForeignKey("SentenceId")]
         [InverseProperty("Properties")]
         public virtual Sentence Sentence { get; set; }

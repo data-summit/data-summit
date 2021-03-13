@@ -31,7 +31,7 @@ namespace AzureFunctions
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 int Tolerance = 3;
 
-                foreach (ProfileAttributes pa in iu.ProfileAttributes)
+                foreach (TemplateAttributes pa in iu.TemplateAttributes)
                 {
                     string name = pa.Name;
                     var instances = iu.Sentences.Count(b =>
@@ -49,7 +49,7 @@ namespace AzureFunctions
                             pa.Value = sentences[0].Words;
                             Properties p = new Properties();
                             p.SentenceId = sentences[0].SentenceId;
-                            p.ProfileAttributeId = pa.ProfileAttributeId;
+                            p.TemplateAttributeId = pa.TemplateAttributeId;
                             pa.Properties.Add(p);
                         }
                         else if (instances > 1)
@@ -62,7 +62,7 @@ namespace AzureFunctions
                             {
                                 Properties p = new Properties();
                                 p.SentenceId = s.SentenceId;
-                                p.ProfileAttributeId = pa.ProfileAttributeId;
+                                p.TemplateAttributeId = pa.TemplateAttributeId;
                                 pa.Properties.Add(p);
                             }
                         }

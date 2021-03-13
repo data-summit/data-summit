@@ -7,6 +7,6 @@ namespace DataSummitHelper.Classes
     public sealed class DocumentProperty
     {
         public Sentences Sentences { get; set; }
-        public ProfileAttributes ProfileAttributes { get; set; }
+        public TemplateAttributes TemplateAttributes { get; set; }
     }
 }

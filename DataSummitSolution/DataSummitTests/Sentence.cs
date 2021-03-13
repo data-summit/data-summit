@@ -47,14 +47,14 @@ namespace DataSummitTests
             //{
             //    DocumentId = 1,
             //    DrawVtempId = 1,
-            //    ProfileAttributeId = 1,
+            //    TemplateAttributeId = 1,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             //};
             //DocumentVTemplate documentVTemplate2 = new DocumentVTemplate
             //{
             //    DocumentId = 2,
             //    DrawVtempId = 2,
-            //    ProfileAttributeId = 2,
+            //    TemplateAttributeId = 2,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002")
             //};
 

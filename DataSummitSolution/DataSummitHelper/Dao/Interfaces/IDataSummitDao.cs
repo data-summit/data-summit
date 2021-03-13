@@ -27,17 +27,17 @@ namespace DataSummitHelper.Dao.Interfaces
         Task<List<Documents>> GetProjectDocuments(int companyId);
 
         #region Templates
-        Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId);
-        Task<List<ProfileVersions>> GetProjectProfileVersions(int projectId);
+        Task<List<TemplateVersions>> GetCompanyTemplateVersions(int companyId);
+        Task<List<TemplateVersions>> GetProjectTemplateVersions(int projectId);
         #endregion
 
 
-        Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int profileId);
+        Task<List<TemplateAttributes>> GetTemplateAttribtesForTemplateId(int templateId);
 
-        Task DeleteProfileAttribute(long profileAttributeId);
+        Task DeleteTemplateAttribute(long templateAttributeId);
         Task<List<Documents>> GetAllProjectDocuments(int projectId);
         Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId);
         Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue);
-        Task<List<ProfileAttributes>> GetProfileAttributesForDocumentId(int documentId);
+        Task<List<TemplateAttributes>> GetTemplateAttributesForDocumentId(int documentId);
     }
 }

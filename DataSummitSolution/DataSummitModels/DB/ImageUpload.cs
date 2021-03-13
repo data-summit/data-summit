@@ -14,7 +14,7 @@ namespace DataSummitModels.DB
         public string Image { get; set; }
         public string StorageAccountName { get; set; }
         public string StorageAccountKey { get; set; }
-        public List<ProfileAttributes> ProfileAttributes { get; set; }
+        public List<TemplateAttributes> TemplateAttributes { get; set; }
         public List<ImageGrids> SplitImages { get; set; }
         public Paper.Types PaperSize { get; set; }
 
@@ -37,7 +37,7 @@ namespace DataSummitModels.DB
                 PaperOrientationId = PaperOrientationId,
                 PaperSizeId = PaperSizeId,
                 Processed = Processed,
-                ProfileVersionId = ProfileVersionId,
+                TemplateVersionId = TemplateVersionId,
                 ProjectId = ProjectId,
                 Sentences = Sentences,
                 ImageGrids = SplitImages,

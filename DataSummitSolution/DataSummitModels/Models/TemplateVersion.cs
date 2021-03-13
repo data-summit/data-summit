@@ -6,16 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class ProfileVersion
+    public partial class TemplateVersion
     {
-        public ProfileVersion()
+        public TemplateVersion()
         {
             DocumentTemplates = new HashSet<DocumentTemplate>();
             Documents = new HashSet<Document>();
-            ProfileAttributes = new HashSet<ProfileAttribute>();
+            TemplateAttributes = new HashSet<TemplateAttribute>();
         }
 
-        public int ProfileVersionId { get; set; }
+        public int TemplateVersionId { get; set; }
         [Required]
         [StringLength(1023)]
         public string Name { get; set; }
@@ -33,13 +33,13 @@ namespace DataSummitDbModels
         public int? Y { get; set; }
 
         [ForeignKey("CompanyId")]
-        [InverseProperty("ProfileVersions")]
+        [InverseProperty("TemplateVersions")]
         public virtual Company Company { get; set; }
-        [InverseProperty("ProfileVersion")]
+        [InverseProperty("TemplateVersion")]
         public virtual ICollection<DocumentTemplate> DocumentTemplates { get; set; }
-        [InverseProperty("ProfileVersion")]
+        [InverseProperty("TemplateVersion")]
         public virtual ICollection<Document> Documents { get; set; }
-        [InverseProperty("ProfileVersion")]
-        public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
+        [InverseProperty("TemplateVersion")]
+        public virtual ICollection<TemplateAttribute> TemplateAttributes { get; set; }
     }
 }

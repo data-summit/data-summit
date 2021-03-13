@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace DataSummitModels.DB
 {
-    public partial class ProfileAttributes
+    public partial class TemplateAttributes
     {
-        public ProfileAttributes()
+        public TemplateAttributes()
         {
             Properties = new HashSet<Properties>();
         }
 
-        public long ProfileAttributeId { get; set; }
+        public long TemplateAttributeId { get; set; }
         public string Name { get; set; }
         public int NameX { get; set; }
         public int NameY { get; set; }
@@ -18,7 +18,7 @@ namespace DataSummitModels.DB
         public short NameHeight { get; set; }
         public byte PaperSizeId { get; set; }
         public byte BlockPositionId { get; set; }
-        public int? ProfileVersionId { get; set; }
+        public int? TemplateVersionId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public long? UserId { get; set; }
         public string Value { get; set; }
@@ -30,7 +30,7 @@ namespace DataSummitModels.DB
 
         public virtual BlockPositions BlockPosition { get; set; }
         public virtual PaperSizes PaperSize { get; set; }
-        public virtual ProfileVersions ProfileVersion { get; set; }
+        public virtual TemplateVersions TemplateVersion { get; set; }
         public virtual StandardAttributes StandardAttribute { get; set; }
         public virtual ICollection<Properties> Properties { get; set; }
     }

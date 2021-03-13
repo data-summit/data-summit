@@ -7,7 +7,7 @@ namespace DataSummitModels.DB
     {
         public BlockPositions()
         {
-            ProfileAttributes = new HashSet<ProfileAttributes>();
+            TemplateAttributes = new HashSet<TemplateAttributes>();
         }
 
         public byte BlockPositionId { get; set; }
@@ -15,6 +15,6 @@ namespace DataSummitModels.DB
         public DateTime? CreatedDate { get; set; }
         public long? UserId { get; set; }
 
-        public virtual ICollection<ProfileAttributes> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttributes> TemplateAttributes { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace DataSummitDbModels
     {
         public BlockPosition()
         {
-            ProfileAttributes = new HashSet<ProfileAttribute>();
+            TemplateAttributes = new HashSet<TemplateAttribute>();
         }
 
         public byte BlockPositionId { get; set; }
@@ -22,6 +22,6 @@ namespace DataSummitDbModels
         public long? UserId { get; set; }
 
         [InverseProperty("BlockPosition")]
-        public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttribute> TemplateAttributes { get; set; }
     }
 }

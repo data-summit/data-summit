@@ -12,25 +12,25 @@ namespace DataSummitWeb.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
-    public class ProfileVersionsController : Controller
+    public class TemplateVersionsController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public ProfileVersionsController(IDataSummitHelperService dataSummitHelper)
+        public TemplateVersionsController(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
-        // GET api/profileVersion/company/5
+        // GET api/templateVersion/company/5
         [HttpGet("company/{id}")]
         public async Task<IActionResult> GetCompanyTemplates(int id)
         {
-            var profileVersions = await _dataSummitHelper.GetAllCompanyTemplates(id);
+            var templateVersions = await _dataSummitHelper.GetAllCompanyTemplates(id);
 
-            return Ok(profileVersions);
+            return Ok(templateVersions);
         }
 
-        // GET api/profileVersion/project/5
+        // GET api/templateVersion/project/5
         [HttpGet("project/{id}")]
         public async Task<IActionResult> GetProjectTemplates(int id)
         {
@@ -39,36 +39,36 @@ namespace DataSummitWeb.Controllers
             return Ok(templates);
         }
 
-        // POST api/profileVersion
+        // POST api/templateVersion
         [HttpPost]
-        public string Post([FromBody] ProfileVersionDTO profileVersion)
+        public string Post([FromBody] TemplateVersionDTO templateVersion)
         {
             int id = 0;
             try
             {
-                ProfileVersions pv = null;
-                List<ProfileAttributes> lPa = new List<ProfileAttributes>();
-                pv = new ProfileVersions
+                TemplateVersions pv = null;
+                List<TemplateAttributes> lPa = new List<TemplateAttributes>();
+                pv = new TemplateVersions
                 {
-                    CompanyId = profileVersion.CompanyId,
-                    Name = profileVersion.Name,
+                    CompanyId = templateVersion.CompanyId,
+                    Name = templateVersion.Name,
                     CreatedDate = DateTime.Now,
-                    HeightOriginal = (int)profileVersion.Height,
-                    WidthOriginal = (int)profileVersion.Width,
-                    Height = (int)profileVersion.Height,
-                    Width = (int)profileVersion.Width,
+                    HeightOriginal = (int)templateVersion.Height,
+                    WidthOriginal = (int)templateVersion.Width,
+                    Height = (int)templateVersion.Height,
+                    Width = (int)templateVersion.Width,
                     //TODO this needs to updated with actual logged in user id
                     UserId = 1
                 };
                 Task t = Task.Factory.StartNew(() =>
                 {
-                    string i = profileVersion.ImageString.Replace("data:image/jpeg;base64,", "");
+                    string i = templateVersion.ImageString.Replace("data:image/jpeg;base64,", "");
                     pv.Image = Convert.FromBase64String(i);
                 });
                 
-                foreach (ProfileAttributes pa in profileVersion.ProfileAttributes)
+                foreach (TemplateAttributes pa in templateVersion.TemplateAttributes)
                 {
-                    ProfileAttributes npa = new ProfileAttributes
+                    TemplateAttributes npa = new TemplateAttributes
                     {
                         BlockPositionId = pa.BlockPositionId,
                         CreatedDate = DateTime.Now,
@@ -87,9 +87,9 @@ namespace DataSummitWeb.Controllers
                     };
                     lPa.Add(npa);
                 }
-                pv.ProfileAttributes = lPa;
+                pv.TemplateAttributes = lPa;
                 t.Wait();
-                //id = profileVersionsService.CreateProfileVersion(pv);
+                //id = templateVersionsService.CreateTemplateVersion(pv);
             }
             catch (Exception ae)
             { string strError = ae.Message.ToString(); }
@@ -98,20 +98,20 @@ namespace DataSummitWeb.Controllers
             return JsonConvert.SerializeObject(id);
         }
 
-        // PUT api/profileVersion/5
+        // PUT api/templateVersion/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]ProfileVersions profileVersion)
+        public void Put(int id, [FromBody]TemplateVersions templateVersion)
         {
             //Update
-            //profileVersionsService.UpdateProfileVersion(id, profileVersion);
+            //templateVersionsService.UpdateTemplateVersion(id, templateVersion);
             return;
         }
 
-        // DELETE api/profileVersion/5
+        // DELETE api/templateVersion/5
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            //profileVersionsService.DeleteProfileVersion(id);
+            //templateVersionsService.DeleteTemplateVersion(id);
             return JsonConvert.SerializeObject("Ok");
         }
 

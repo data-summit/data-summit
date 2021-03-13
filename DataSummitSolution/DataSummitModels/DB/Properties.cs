@@ -6,9 +6,9 @@ namespace DataSummitModels.DB
     {
         public long PropertyId { get; set; }
         public Guid SentenceId { get; set; }
-        public long ProfileAttributeId { get; set; }
+        public long TemplateAttributeId { get; set; }
 
-        public virtual ProfileAttributes ProfileAttribute { get; set; }
+        public virtual TemplateAttributes TemplateAttribute { get; set; }
         public virtual Sentences Sentence { get; set; }
     }
 }

@@ -10,14 +10,14 @@ using System.Linq;
 namespace DataSummitTests
 {
     [TestClass]
-    public class ProfileVersionTests
+    public class TemplateVersionTests
     {
         [TestMethod]
-        public void Create_new_profileVersion()
+        public void Create_new_templateVersion()
         {
-            ProfileVersions profileVersion = new ProfileVersions
+            TemplateVersions templateVersion = new TemplateVersions
             {
-                ProfileVersionId = 1,
+                TemplateVersionId = 1,
                 Height = 100,
                 HeightOriginal = 1000,
                 Name = "00001",
@@ -30,28 +30,28 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockProfileVersionsDbSet = new Mock<DbSet<ProfileVersions>>();
+            var mockTemplateVersionsDbSet = new Mock<DbSet<TemplateVersions>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
-            mockContext.Setup(m => m.ProfileVersions).Returns(mockProfileVersionsDbSet.Object);
-            var mockProfileVersions = new ProfileVersion(mockContext.Object);
+            mockContext.Setup(m => m.TemplateVersions).Returns(mockTemplateVersionsDbSet.Object);
+            var mockTemplateVersions = new TemplateVersion(mockContext.Object);
 
-            mockProfileVersions.CreateProfileVersion(profileVersion);
+            mockTemplateVersions.CreateTemplateVersion(templateVersion);
 
-            mockProfileVersionsDbSet.Verify(m => m.Add(It.IsAny<ProfileVersions>()), Times.Once());
+            mockTemplateVersionsDbSet.Verify(m => m.Add(It.IsAny<TemplateVersions>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
-        public void Get_profileVersion_by_id()
+        public void Get_templateVersion_by_id()
         {
-            var testProfileVersions = new List<ProfileVersions>
+            var testTemplateVersions = new List<TemplateVersions>
             {
-                new ProfileVersions
+                new TemplateVersions
                 {
-                    ProfileVersionId = 1,
+                    TemplateVersionId = 1,
                     Height = 100,
                     HeightOriginal = 1000,
                     Name = "00001",
@@ -63,9 +63,9 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new ProfileVersions
+                new TemplateVersions
                 {
-                    ProfileVersionId = 2,
+                    TemplateVersionId = 2,
                     Height = 200,
                     HeightOriginal = 2000,
                     Name = "00002",
@@ -77,9 +77,9 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new ProfileVersions
+                new TemplateVersions
                 {
-                    ProfileVersionId = 3,
+                    TemplateVersionId = 3,
                     Height = 300,
                     HeightOriginal = 3000,
                     Name = "00003",
@@ -93,21 +93,21 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockProfileVersionDbSet = new Mock<DbSet<ProfileVersions>>();
-            mockProfileVersionDbSet.As<IQueryable<ProfileVersions>>().Setup(m => m.Provider).Returns(testProfileVersions.Provider);
-            mockProfileVersionDbSet.As<IQueryable<ProfileVersions>>().Setup(m => m.Expression).Returns(testProfileVersions.Expression);
-            mockProfileVersionDbSet.As<IQueryable<ProfileVersions>>().Setup(m => m.ElementType).Returns(testProfileVersions.ElementType);
-            mockProfileVersionDbSet.As<IQueryable<ProfileVersions>>().Setup(m => m.GetEnumerator()).Returns(testProfileVersions.GetEnumerator());
+            var mockTemplateVersionDbSet = new Mock<DbSet<TemplateVersions>>();
+            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.Provider).Returns(testTemplateVersions.Provider);
+            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.Expression).Returns(testTemplateVersions.Expression);
+            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.ElementType).Returns(testTemplateVersions.ElementType);
+            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.GetEnumerator()).Returns(testTemplateVersions.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
-            mockContext.Setup(c => c.ProfileVersions).Returns(mockProfileVersionDbSet.Object);
+            mockContext.Setup(c => c.TemplateVersions).Returns(mockTemplateVersionDbSet.Object);
 
-            var mockProfileVersionService = new ProfileVersion(mockContext.Object);
-            var mockProfileVersion = mockProfileVersionService.GetAllCompanyProfileVersions(1);
-            Assert.AreEqual(mockProfileVersion.FirstOrDefault().ProfileVersionId, testProfileVersions.ToList()[0].ProfileVersionId);
+            var mockTemplateVersionService = new TemplateVersion(mockContext.Object);
+            var mockTemplateVersion = mockTemplateVersionService.GetAllCompanyTemplateVersions(1);
+            Assert.AreEqual(mockTemplateVersion.FirstOrDefault().TemplateVersionId, testTemplateVersions.ToList()[0].TemplateVersionId);
         }
     }
 }

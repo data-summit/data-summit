@@ -125,7 +125,7 @@ namespace DataSummitWeb.Controllers
                     var imageUpload = new ImageUpload
                     {
                         ProjectId = documentUpload.ProjectId,
-                        ProfileVersionId = documentUpload.TemplateId,
+                        TemplateVersionId = documentUpload.TemplateId,
                         FileName = documentUpload.FileName,
                         File = documentUpload.File,
                         Format = mimeType

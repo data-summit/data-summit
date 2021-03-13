@@ -11,7 +11,7 @@ namespace DataSummitDbModels
         public PaperSize()
         {
             Documents = new HashSet<Document>();
-            ProfileAttributes = new HashSet<ProfileAttribute>();
+            TemplateAttributes = new HashSet<TemplateAttribute>();
         }
 
         public byte PaperSizeId { get; set; }
@@ -28,6 +28,6 @@ namespace DataSummitDbModels
         [InverseProperty("PaperSize")]
         public virtual ICollection<Document> Documents { get; set; }
         [InverseProperty("PaperSize")]
-        public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
+        public virtual ICollection<TemplateAttribute> TemplateAttributes { get; set; }
     }
 }
