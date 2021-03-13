@@ -1,5 +1,4 @@
-﻿using DataSummitModels.DB;
-using System;
+﻿using System;
 
 namespace DataSummitHelper.Interfaces
 {
@@ -12,7 +11,7 @@ namespace DataSummitHelper.Interfaces
         public int? Width { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public TemplateDto(TemplateVersions templateVersions)
+        public TemplateDto(DataSummitModels.DB.TemplateVersion templateVersions)
         {
             TemplateVersionId = templateVersions.TemplateVersionId;
             TemplateName = templateVersions.Name;

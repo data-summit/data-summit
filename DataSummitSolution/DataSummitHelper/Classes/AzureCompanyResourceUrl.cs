@@ -14,20 +14,20 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<AzureCompanyResourceUrls> GetAllCompanyAzureCompanyResourceUrls(int companyId)
+        public List<DataSummitModels.DB.AzureCompanyResourceUrl> GetAllCompanyAzureCompanyResourceUrl(int companyId)
         {
-            List<AzureCompanyResourceUrls> AzureCompanyResourceUrls = new List<AzureCompanyResourceUrls>();
+            List<DataSummitModels.DB.AzureCompanyResourceUrl> AzureCompanyResourceUrl = new List<DataSummitModels.DB.AzureCompanyResourceUrl>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                AzureCompanyResourceUrls = dataSummitDbContext.AzureCompanyResourceUrls.Where(
+                AzureCompanyResourceUrl = dataSummitDbContext.AzureCompanyResourceUrls.Where(
                                     e => e.CompanyId == companyId).ToList();
             }
             catch (Exception ae)
             {
                 string strError = ae.Message.ToString();
             }
-            return AzureCompanyResourceUrls;
+            return AzureCompanyResourceUrl;
         }
 
         public Uri GetIndividualUrl(int companyId, AzureResource azureResource)
@@ -35,7 +35,7 @@ namespace DataSummitHelper
             Uri uri = null;
             try
             {
-                AzureCompanyResourceUrls res = dataSummitDbContext.AzureCompanyResourceUrls.First(
+                DataSummitModels.DB.AzureCompanyResourceUrl res = dataSummitDbContext.AzureCompanyResourceUrls.First(
                             e => e.CompanyId == companyId &&
                             e.Name == azureResource.ToString());
                 uri = new Uri(res.Url + "?code=" + res.Key);

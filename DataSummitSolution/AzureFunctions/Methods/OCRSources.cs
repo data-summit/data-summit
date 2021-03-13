@@ -9,7 +9,7 @@ namespace AzureFunctions.Methods
 {
     public class OCRSources
     {
-        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitModels.DB.ImageGrids im)
+        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitModels.DB.ImageGrid im)
         {
             List<Sentences> Sentences = new List<Sentences>();
             try

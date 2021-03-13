@@ -12,7 +12,7 @@ namespace DataSummitHelper.Dto
         public string ContainerUrl { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public DocumentDto(Documents document)
+        public DocumentDto(DataSummitModels.DB.Document document)
         {
             DocumentId = document.DocumentId;
             Name = document.FileName;

@@ -18,9 +18,9 @@ namespace DataSummitHelper
             authenticationRepository = new AuthenticationRepository();
         }
 
-        public List<AspNetUsers> GetAllCompanyUsers(int companyId)
+        public List<AspNetUser> GetAllCompanyUsers(int companyId)
         {
-            List<AspNetUsers> Users = new List<AspNetUsers>();
+            List<AspNetUser> Users = new List<AspNetUser>();
             try
             {
                 Users = dataSummitDbContext.AspNetUsers.Where(e => e.CompanyId == companyId).ToList();
@@ -33,7 +33,7 @@ namespace DataSummitHelper
             return Users;
         }
 
-        public async Task<long> CreateUsers(AspNetUsers users, DataSummitUser dataSummitUsers, string password)
+        public async Task<long> CreateUsers(AspNetUser users, DataSummitUser dataSummitUsers, string password)
         {
             long returnid = 0;
 
@@ -51,7 +51,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateUsers(string id, AspNetUsers users)
+        public void UpdateUsers(string id, AspNetUser users)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace DataSummitHelper
         {
             try
             {
-                AspNetUsers aspNetUsers = dataSummitDbContext.AspNetUsers.First(p => p.Id == aspNetUsersId);
+                AspNetUser aspNetUsers = dataSummitDbContext.AspNetUsers.First(p => p.Id == aspNetUsersId);
                 dataSummitDbContext.AspNetUsers.Remove(aspNetUsers);
             }
             catch (Exception ae)

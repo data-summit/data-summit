@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
+using DataSummitModels.DTO;
 
 namespace AzureFunctions
 {
@@ -35,10 +36,11 @@ namespace AzureFunctions
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
 
-                List<Task> lTasks = new List<Task>();
+                List<FunctionTask> Tasks = new List<FunctionTask>();
+                List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
 
-                if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayers>();
+                //if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
 
                 if (jsonContent.Length == 0) return new BadRequestObjectResult("Illegal input: No content");
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
@@ -76,14 +78,14 @@ namespace AzureFunctions
                 await cbc.SetPermissionsAsync(permissions);
 
                 //Add event checking that whether it is the first event to exist in list
-                if (imgUp.Tasks.Count == 0)
-                { imgUp.Tasks.Add(new Tasks("Container created", DateTime.Now)); }
+                if (Tasks.Count == 0)
+                { Tasks.Add(new FunctionTask("Container created", DateTime.Now)); }
                 else
-                { imgUp.Tasks.Add(new Tasks("Container created", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp)); }
-                log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                { Tasks.Add(new FunctionTask("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                 CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
-                lTasks.Add(Task.Run(async () =>
+                lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
                 {
                     await cbbImage.UploadFromByteArrayAsync(imgUp.File, 0, imgUp.File.Length);
                     //Export image to blockBlob
@@ -95,8 +97,8 @@ namespace AzureFunctions
                     cbbImage.Metadata.Add("Height", imgUp.HeightOriginal.ToString());
                     await cbbImage .SetMetadataAsync();
 
-                    imgUp.Tasks.Add(new Tasks("Image uploaded to blob", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                    Tasks.Add(new FunctionTask("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                     //Clear heavy payload content
                     imgUp.File = null;
@@ -104,7 +106,7 @@ namespace AzureFunctions
                     imgUp.BlobUrl = cbbImage.Uri.ToString();
                 }));
 
-                lTasks.Add(Task.Run(() =>
+                lTasks.Add(System.Threading.Tasks.Task.Run(() =>
                 {
                     //Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
                     using (var ms = new MemoryStream(imgUp.File))
@@ -113,12 +115,12 @@ namespace AzureFunctions
                         imgUp.WidthOriginal = bmp.Width;
                         imgUp.HeightOriginal = bmp.Height;
 
-                        imgUp.Tasks.Add(new Tasks("Image dimensions assessed", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                        log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                        Tasks.Add(new FunctionTask("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
                     }
                 }));
 
-                Task.WaitAll(lTasks.ToArray());
+                System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
 
                 //Return single image object
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);

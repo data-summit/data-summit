@@ -14,9 +14,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<StandardAttributes> GetAllCompanyStandardAttributes(int id)
+        public List<DataSummitModels.DB.StandardAttribute> GetAllCompanyStandardAttributes(int id)
         {
-            List<StandardAttributes> lStandardAttributes = new List<StandardAttributes>();
+            List<DataSummitModels.DB.StandardAttribute> lStandardAttributes = new List<DataSummitModels.DB.StandardAttribute>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -30,9 +30,9 @@ namespace DataSummitHelper
             return lStandardAttributes;
         }
 
-        public StandardAttributes GetStandardAttributesById(short standardAttributeId)
+        public DataSummitModels.DB.StandardAttribute GetStandardAttributesById(short standardAttributeId)
         {
-            StandardAttributes StandardAttributes = new StandardAttributes();
+            DataSummitModels.DB.StandardAttribute StandardAttributes = new DataSummitModels.DB.StandardAttribute();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper
             return StandardAttributes;
         }
 
-        public long CreateStandardAttribute(StandardAttributes standardAttribute)
+        public long CreateStandardAttribute(DataSummitModels.DB.StandardAttribute standardAttribute)
         {
             long returnid = 0;
             try
@@ -62,7 +62,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateStandardAttribute(short id, StandardAttributes standardAttribute)
+        public void UpdateStandardAttribute(short id, DataSummitModels.DB.StandardAttribute standardAttribute)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                StandardAttributes StandardAttributes = dataSummitDbContext.StandardAttributes.First(p => p.StandardAttributeId == standardAttributeId);
+                DataSummitModels.DB.StandardAttribute StandardAttributes = dataSummitDbContext.StandardAttributes.First(p => p.StandardAttributeId == standardAttributeId);
                 dataSummitDbContext.StandardAttributes.Remove(StandardAttributes);
                 dataSummitDbContext.SaveChanges();
             }

@@ -14,9 +14,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<TemplateVersions> GetAllCompanyTemplateVersions(int companyId)
+        public List<DataSummitModels.DB.TemplateVersion> GetAllCompanyTemplateVersions(int companyId)
         {
-            List<TemplateVersions> templateversions = new List<TemplateVersions>();
+            List<DataSummitModels.DB.TemplateVersion> templateversions = new List<DataSummitModels.DB.TemplateVersion>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -29,9 +29,9 @@ namespace DataSummitHelper
             return templateversions;
         }
 
-        public TemplateVersions GetTemplateVersion(int templateVersionId)
+        public DataSummitModels.DB.TemplateVersion GetTemplateVersion(int templateVersionId)
         {
-            TemplateVersions templateVersion = new TemplateVersions();
+            DataSummitModels.DB.TemplateVersion templateVersion = new DataSummitModels.DB.TemplateVersion();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -41,7 +41,7 @@ namespace DataSummitHelper
                 templateVersion.TemplateAttributes = dataSummitDbContext.TemplateAttributes
                                     .Where(e => e.TemplateVersionId == templateVersion.TemplateVersionId).ToList();
 
-                foreach (TemplateAttributes pa in templateVersion.TemplateAttributes)
+                foreach (DataSummitModels.DB.TemplateAttribute pa in templateVersion.TemplateAttributes)
                 {
                     pa.StandardAttribute = dataSummitDbContext.StandardAttributes
                                             .FirstOrDefault(e => e.StandardAttributeId == pa.StandardAttributeId);
@@ -55,7 +55,7 @@ namespace DataSummitHelper
             return templateVersion;
         }
 
-        public int CreateTemplateVersion(TemplateVersions templateVersion)
+        public int CreateTemplateVersion(DataSummitModels.DB.TemplateVersion templateVersion)
         {
             int returnid = 0;
             try
@@ -72,7 +72,7 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateTemplateVersion(int id, TemplateVersions templateVersion)
+        public void UpdateTemplateVersion(int id, DataSummitModels.DB.TemplateVersion templateVersion)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                TemplateVersions templateversion = dataSummitDbContext.TemplateVersions.First(p => p.TemplateVersionId == templateVersionId);
+                DataSummitModels.DB.TemplateVersion templateversion = dataSummitDbContext.TemplateVersions.First(p => p.TemplateVersionId == templateVersionId);
                 dataSummitDbContext.TemplateVersions.Remove(templateversion);
                 dataSummitDbContext.SaveChanges();
             }

@@ -16,9 +16,9 @@ namespace AzureFunctions.Methods
 {
     public class Google
     {
-        public Documents Run(List<System.Drawing.Image> images)
+        public DataSummitModels.DB.Document Run(List<System.Drawing.Image> images)
         {
-            Documents cOCR = new Documents();
+            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -42,9 +42,9 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public Documents Run(List<ImageGrids> lDocuments)
+        public DataSummitModels.DB.Document Run(List<ImageGrids> lDocuments)
         {
-            Documents cOCR = new Documents();
+            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -68,9 +68,9 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public Documents Run(List<string> lfilepaths)
+        public DataSummitModels.DB.Document Run(List<string> lfilepaths)
         {
-            Documents cOCR = new Documents();
+            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -96,9 +96,9 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public async System.Threading.Tasks.Task<Documents> RunAsync(List<Uri> lblobs)
+        public async System.Threading.Tasks.Task<DataSummitModels.DB.Document> RunAsync(List<Uri> lblobs)
         {
-            Documents cOCR = new Documents();
+            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
             try
             {
                 Cloud gCloud = new Cloud();

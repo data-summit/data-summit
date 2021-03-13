@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using DataSummitModels.DB;
+using DataSummitModels.DTO;
 
 namespace AzureFunctions
 {
@@ -31,7 +32,7 @@ namespace AzureFunctions
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 int Tolerance = 3;
 
-                foreach (TemplateAttributes pa in iu.TemplateAttributes)
+                foreach (TemplateAttribute pa in iu.TemplateAttributes)
                 {
                     string name = pa.Name;
                     var instances = iu.Sentences.Count(b =>
@@ -43,11 +44,11 @@ namespace AzureFunctions
                         var sentences = iu.Sentences.Where(b =>
                                               (b.Left > (pa.ValueX - Tolerance) && b.Left < (pa.ValueX + pa.ValueWidth) + Tolerance) &&
                                               (b.Top > (pa.ValueY - Tolerance) && b.Top < (pa.ValueY + pa.ValueHeight) + Tolerance)).ToList();
-                        if (pa.Properties == null) pa.Properties = new List<Properties>();
+                        if (pa.Properties == null) pa.Properties = new List<Property>();
                         if (instances == 1)
                         {
                             pa.Value = sentences[0].Words;
-                            Properties p = new Properties();
+                            Property p = new Property();
                             p.SentenceId = sentences[0].SentenceId;
                             p.TemplateAttributeId = pa.TemplateAttributeId;
                             pa.Properties.Add(p);
@@ -60,7 +61,7 @@ namespace AzureFunctions
                             // or whether specific words are to be split
                             foreach (var s in sentences)
                             {
-                                Properties p = new Properties();
+                                Property p = new Property();
                                 p.SentenceId = s.SentenceId;
                                 p.TemplateAttributeId = pa.TemplateAttributeId;
                                 pa.Properties.Add(p);

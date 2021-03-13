@@ -1,5 +1,4 @@
 using DataSummitHelper.Classes;
-using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,35 +8,35 @@ namespace DataSummitHelper.Dao.Interfaces
     public interface IDataSummitDao
     {
         #region Companies
-        Task<List<Companies>> GetAllCompanies();
-        Task<Companies> GetCompanyById(int id);
-        Task CreateCompany(Companies company);
-        Task UpdateCompany(Companies company);
-        Task DeleteCompany(int id);
+        Task<List<DataSummitModels.DB.Company>> GetAllCompanies();
+        Task<DataSummitModels.DB.Company> GetCompanyById(int id);
+        System.Threading.Tasks.Task CreateCompany(DataSummitModels.DB.Company company);
+        System.Threading.Tasks.Task UpdateCompany(DataSummitModels.DB.Company company);
+        System.Threading.Tasks.Task DeleteCompany(int id);
         #endregion
 
         #region Projects
-        Task<List<Projects>> GetAllCompanyProjects(int companyId);
-        Task<Projects> GetProjectById(int id);
-        Task CreateProject(Projects company);
-        Task UpdateProjectName(Projects company);
-        Task DeleteProject(int id);
+        Task<List<DataSummitModels.DB.Project>> GetAllCompanyProjects(int companyId);
+        Task<DataSummitModels.DB.Project> GetProjectById(int id);
+        System.Threading.Tasks.Task CreateProject(DataSummitModels.DB.Project company);
+        System.Threading.Tasks.Task UpdateProjectName(DataSummitModels.DB.Project company);
+        System.Threading.Tasks.Task DeleteProject(int id);
         #endregion
 
-        Task<List<Documents>> GetProjectDocuments(int companyId);
+        Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int companyId);
 
         #region Templates
-        Task<List<TemplateVersions>> GetCompanyTemplateVersions(int companyId);
-        Task<List<TemplateVersions>> GetProjectTemplateVersions(int projectId);
+        Task<List<DataSummitModels.DB.TemplateVersion>> GetCompanyTemplateVersions(int companyId);
+        Task<List<DataSummitModels.DB.TemplateVersion>> GetProjectTemplateVersions(int projectId);
         #endregion
 
 
-        Task<List<TemplateAttributes>> GetTemplateAttribtesForTemplateId(int templateId);
+        Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttribtesForTemplateId(int templateId);
 
-        Task DeleteTemplateAttribute(long templateAttributeId);
-        Task<List<Documents>> GetAllProjectDocuments(int projectId);
+        System.Threading.Tasks.Task DeleteTemplateAttribute(long templateAttributeId);
+        Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId);
         Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId);
-        Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue);
-        Task<List<TemplateAttributes>> GetTemplateAttributesForDocumentId(int documentId);
+        System.Threading.Tasks.Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue);
+        Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttributesForDocumentId(int documentId);
     }
 }

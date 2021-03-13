@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace DataSummitModels.Enums
 {
     public class Image
@@ -9,7 +6,8 @@ namespace DataSummitModels.Enums
         public enum Type
         {
             Normal = 1,
-            Overlap = 2
+            Overlap = 2,
+            Unknown = 3
         }
     }
 }

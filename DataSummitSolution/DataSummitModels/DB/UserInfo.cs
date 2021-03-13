@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace DataSummitModels.DB
 {
@@ -10,7 +13,7 @@ namespace DataSummitModels.DB
         public string Id { get; set; }
         public byte? UserInfoTypeId { get; set; }
 
-        public virtual AspNetUsers IdNavigation { get; set; }
-        public virtual UserInfoTypes UserInfoType { get; set; }
+        public virtual AspNetUser IdNavigation { get; set; }
+        public virtual UserInfoType UserInfoType { get; set; }
     }
 }

@@ -3,18 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using Castle.Core.Configuration;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
-using Microsoft.Azure.Management.ResourceManager.Fluent;
-using Microsoft.Azure.Management.ResourceManager.Models;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
-using Microsoft.Rest;
 
 namespace DataSummitHelper.Services
 {
@@ -45,7 +39,7 @@ namespace DataSummitHelper.Services
             return new CompanyDto(company);
         }
 
-        public async Task CreateCompany(CompanyDto companyDto)
+        public async System.Threading.Tasks.Task CreateCompany(CompanyDto companyDto)
         {
             AzureResources azr = new AzureResources(_configuration);
             var company = companyDto.ToCompany();
@@ -53,7 +47,7 @@ namespace DataSummitHelper.Services
             company.ResourceGroup = await azr.CreateResourceGroup(company.Name);
         }
 
-        public async Task UpdateCompany(CompanyDto company)
+        public async System.Threading.Tasks.Task UpdateCompany(CompanyDto company)
         {
             AzureResources azr = new AzureResources(_configuration);
             var companyDto = company.ToCompany();
@@ -61,7 +55,7 @@ namespace DataSummitHelper.Services
             companyDto.ResourceGroup = await azr.UpdateResourceGroup(companyDto.ResourceGroup, companyDto.Name);
         }
 
-        public async Task DeleteCompany(int id)
+        public async System.Threading.Tasks.Task DeleteCompany(int id)
         {
             AzureResources azr = new AzureResources(_configuration);
             var company = await _dao.GetCompanyById(id);
@@ -80,7 +74,7 @@ namespace DataSummitHelper.Services
             return projectDtos;
         }
 
-        public async Task CreateProject(ProjectDto projectDto)
+        public async System.Threading.Tasks.Task CreateProject(ProjectDto projectDto)
         {
             AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
@@ -89,7 +83,7 @@ namespace DataSummitHelper.Services
             await _dao.CreateProject(project);
         }
 
-        public async Task UpdateProject(ProjectDto projectDto)
+        public async System.Threading.Tasks.Task UpdateProject(ProjectDto projectDto)
         {
             AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
@@ -98,7 +92,7 @@ namespace DataSummitHelper.Services
             await _dao.UpdateProjectName(project);
         }
 
-        public async Task DeleteProject(int id)
+        public async System.Threading.Tasks.Task DeleteProject(int id)
         {
             AzureResources azr = new AzureResources(_configuration);
             var project = await _dao.GetProjectById(id);
@@ -109,7 +103,7 @@ namespace DataSummitHelper.Services
         #endregion
 
         #region Documents
-        public async Task<bool> IsDocumentDocument(int documentId)
+        public async Task<bool> IsDocument(int documentId)
         {
             var documentClassification = _configuration["DocumentClassification"];
 
@@ -117,7 +111,7 @@ namespace DataSummitHelper.Services
 
             return false;
         }
-        public async Task DeleteDocumentProperty(long documentPropertyId)
+        public async System.Threading.Tasks.Task DeleteDocumentProperty(long documentPropertyId)
         {
             await _dao.DeleteTemplateAttribute(documentPropertyId);
         }
@@ -143,7 +137,7 @@ namespace DataSummitHelper.Services
         #endregion
 
         #region Properties
-        public async Task UpdateDocumentPropertyValue(DocumentPropertyDto documentProperty)
+        public async System.Threading.Tasks.Task UpdateDocumentPropertyValue(DocumentPropertyDto documentProperty)
         {
             await _dao.UpdateDocumentPropertyValue(documentProperty.SentenceId, documentProperty.WordValue);
         }

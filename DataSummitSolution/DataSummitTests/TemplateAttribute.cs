@@ -15,7 +15,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_templateAttribute()
         {
-            TemplateAttributes templateAttribute = new TemplateAttributes
+            DataSummitModels.DB.TemplateAttribute templateAttribute = new DataSummitModels.DB.TemplateAttribute
             {
                 TemplateAttributeId = 1,
                 Name = "Unit Test TemplateAttribute1",
@@ -35,24 +35,24 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockTemplateAttributesDbSet = new Mock<DbSet<TemplateAttributes>>();
+            var mockTemplateAttributesDbSet = new Mock<DbSet<DataSummitModels.DB.TemplateAttribute>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.TemplateAttributes).Returns(mockTemplateAttributesDbSet.Object);
-            var mockTemplateAttributes = new TemplateAttribute(mockContext.Object);
+            var mockTemplateAttributes = new DataSummitHelper.TemplateAttribute(mockContext.Object);
 
             mockTemplateAttributes.CreateTemplateAttribute(templateAttribute);
 
-            mockTemplateAttributesDbSet.Verify(m => m.Add(It.IsAny<TemplateAttributes>()), Times.Once());
+            mockTemplateAttributesDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.TemplateAttribute>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_templateAttribute_by_id()
         {
-            TemplateVersions templateVersion1 = new TemplateVersions
+            DataSummitModels.DB.TemplateVersion templateVersion1 = new TemplateVersion
             {
                 TemplateVersionId = 1,
                 Name = "Unit Test TemplateVersion1",
@@ -66,7 +66,7 @@ namespace DataSummitTests
                 Y = 100
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            TemplateVersions templateVersion2 = new TemplateVersions
+            DataSummitModels.DB.TemplateVersion templateVersion2 = new DataSummitModels.DB.TemplateVersion
             {
                 TemplateVersionId = 2,
                 Name = "Unit Test TemplateVersion2",
@@ -81,9 +81,9 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testTemplateAttributes = new List<TemplateAttributes>
+            var testTemplateAttributes = new List<DataSummitModels.DB.TemplateAttribute>
             {
-                new TemplateAttributes
+                new DataSummitModels.DB.TemplateAttribute
                 {
                     TemplateAttributeId = 1,
                     Name = "Unit Test TemplateAttribute1",
@@ -103,7 +103,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new TemplateAttributes
+                new DataSummitModels.DB.TemplateAttribute
                 {
                     TemplateAttributeId = 2,
                     Name = "Unit Test TemplateAttribute2",
@@ -123,7 +123,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new TemplateAttributes
+                new DataSummitModels.DB.TemplateAttribute
                 {
                     TemplateAttributeId = 3,
                     Name = "Unit Test TemplateAttribute3",
@@ -145,11 +145,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockTemplateAttributeDbSet = new Mock<DbSet<TemplateAttributes>>();
-            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.Provider).Returns(testTemplateAttributes.Provider);
-            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.Expression).Returns(testTemplateAttributes.Expression);
-            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.ElementType).Returns(testTemplateAttributes.ElementType);
-            mockTemplateAttributeDbSet.As<IQueryable<TemplateAttributes>>().Setup(m => m.GetEnumerator()).Returns(testTemplateAttributes.GetEnumerator());
+            var mockTemplateAttributeDbSet = new Mock<DbSet<DataSummitModels.DB.TemplateAttribute>>();
+            mockTemplateAttributeDbSet.As<IQueryable<DataSummitModels.DB.TemplateAttribute>>().Setup(m => m.Provider).Returns(testTemplateAttributes.Provider);
+            mockTemplateAttributeDbSet.As<IQueryable<DataSummitModels.DB.TemplateAttribute>>().Setup(m => m.Expression).Returns(testTemplateAttributes.Expression);
+            mockTemplateAttributeDbSet.As<IQueryable<DataSummitModels.DB.TemplateAttribute>>().Setup(m => m.ElementType).Returns(testTemplateAttributes.ElementType);
+            mockTemplateAttributeDbSet.As<IQueryable<DataSummitModels.DB.TemplateAttribute>>().Setup(m => m.GetEnumerator()).Returns(testTemplateAttributes.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -157,7 +157,7 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.TemplateAttributes).Returns(mockTemplateAttributeDbSet.Object);
 
-            var mockTemplateAttributeService = new TemplateAttribute(mockContext.Object);
+            var mockTemplateAttributeService = new DataSummitHelper.TemplateAttribute(mockContext.Object);
             var mockTemplateAttribute = mockTemplateAttributeService.GetTemplateAttributesById(1);
             Assert.AreEqual(mockTemplateAttribute.TemplateAttributeId, testTemplateAttributes.ToList()[0].TemplateAttributeId);
         }

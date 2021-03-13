@@ -1,5 +1,4 @@
-﻿using DataSummitModels.DB;
-using System;
+﻿using System;
 
 namespace DataSummitHelper.Interfaces
 {
@@ -13,7 +12,7 @@ namespace DataSummitHelper.Interfaces
         public ProjectDto()
         { ; }
 
-        public ProjectDto(Projects project)
+        public ProjectDto(DataSummitModels.DB.Project project)
         {
             ProjectId = project.ProjectId;
             ProjectName = project.Name;
@@ -21,7 +20,7 @@ namespace DataSummitHelper.Interfaces
             CreatedDate = project.CreatedDate;
         }
 
-        public Projects ToProject() => new Projects
+        public DataSummitModels.DB.Project ToProject() => new DataSummitModels.DB.Project
         {
             ProjectId = ProjectId,
             Name = ProjectName,

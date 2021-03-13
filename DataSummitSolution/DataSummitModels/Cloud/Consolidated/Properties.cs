@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataSummitModels.DB;
+using System;
 using System.Collections.Generic;
 
 namespace DataSummitModels.Cloud.Consolidated
@@ -9,12 +10,12 @@ namespace DataSummitModels.Cloud.Consolidated
         public Guid SentenceId { get; set; }
         public long TemplateAttributeId { get; set; }
 
-        //public virtual TemplateAttributes TemplateAttribute { get; set; }
+        public virtual TemplateAttribute TemplateAttribute { get; set; }
         public virtual Sentences Sentence { get; set; }
 
-        public List<DB.Properties> ToModel(List<Properties> props)
+        public List<DB.Property> ToModel(List<Properties> props)
         {
-            List<DB.Properties> lp = new List<DB.Properties>();
+            List<DB.Property> lp = new List<DB.Property>();
             foreach(Properties p in props)
             {
                 lp.Add(p.ToModel());
@@ -22,9 +23,9 @@ namespace DataSummitModels.Cloud.Consolidated
             return lp;
         }
 
-        public DB.Properties ToModel()
+        public DB.Property ToModel()
         {
-            DB.Properties p = new DB.Properties();
+            DB.Property p = new DB.Property();
 
             p.TemplateAttributeId = TemplateAttributeId;
             p.PropertyId = PropertyId;

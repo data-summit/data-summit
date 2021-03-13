@@ -1,4 +1,4 @@
-using DataSummitModels.DB;
+using DataSummitModels.Cloud.Consolidated;
 
 namespace DataSummitHelper.Classes
 {
@@ -7,6 +7,6 @@ namespace DataSummitHelper.Classes
     public sealed class DocumentProperty
     {
         public Sentences Sentences { get; set; }
-        public TemplateAttributes TemplateAttributes { get; set; }
+        public DataSummitModels.DB.TemplateAttribute TemplateAttributes { get; set; }
     }
 }

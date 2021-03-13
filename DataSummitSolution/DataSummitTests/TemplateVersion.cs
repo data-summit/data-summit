@@ -15,7 +15,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_templateVersion()
         {
-            TemplateVersions templateVersion = new TemplateVersions
+            DataSummitModels.DB.TemplateVersion templateVersion = new DataSummitModels.DB.TemplateVersion
             {
                 TemplateVersionId = 1,
                 Height = 100,
@@ -30,26 +30,26 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockTemplateVersionsDbSet = new Mock<DbSet<TemplateVersions>>();
+            var mockTemplateVersionsDbSet = new Mock<DbSet<DataSummitModels.DB.TemplateVersion>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.TemplateVersions).Returns(mockTemplateVersionsDbSet.Object);
-            var mockTemplateVersions = new TemplateVersion(mockContext.Object);
+            var mockTemplateVersions = new DataSummitHelper.TemplateVersion(mockContext.Object);
 
             mockTemplateVersions.CreateTemplateVersion(templateVersion);
 
-            mockTemplateVersionsDbSet.Verify(m => m.Add(It.IsAny<TemplateVersions>()), Times.Once());
+            mockTemplateVersionsDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.TemplateVersion>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_templateVersion_by_id()
         {
-            var testTemplateVersions = new List<TemplateVersions>
+            var testTemplateVersions = new List<DataSummitModels.DB.TemplateVersion>
             {
-                new TemplateVersions
+                new DataSummitModels.DB.TemplateVersion
                 {
                     TemplateVersionId = 1,
                     Height = 100,
@@ -63,7 +63,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new TemplateVersions
+                new DataSummitModels.DB.TemplateVersion
                 {
                     TemplateVersionId = 2,
                     Height = 200,
@@ -77,7 +77,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new TemplateVersions
+                new DataSummitModels.DB.TemplateVersion
                 {
                     TemplateVersionId = 3,
                     Height = 300,
@@ -93,11 +93,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockTemplateVersionDbSet = new Mock<DbSet<TemplateVersions>>();
-            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.Provider).Returns(testTemplateVersions.Provider);
-            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.Expression).Returns(testTemplateVersions.Expression);
-            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.ElementType).Returns(testTemplateVersions.ElementType);
-            mockTemplateVersionDbSet.As<IQueryable<TemplateVersions>>().Setup(m => m.GetEnumerator()).Returns(testTemplateVersions.GetEnumerator());
+            var mockTemplateVersionDbSet = new Mock<DbSet<DataSummitModels.DB.TemplateVersion>>();
+            mockTemplateVersionDbSet.As<IQueryable<DataSummitModels.DB.TemplateVersion>>().Setup(m => m.Provider).Returns(testTemplateVersions.Provider);
+            mockTemplateVersionDbSet.As<IQueryable<DataSummitModels.DB.TemplateVersion>>().Setup(m => m.Expression).Returns(testTemplateVersions.Expression);
+            mockTemplateVersionDbSet.As<IQueryable<DataSummitModels.DB.TemplateVersion>>().Setup(m => m.ElementType).Returns(testTemplateVersions.ElementType);
+            mockTemplateVersionDbSet.As<IQueryable<DataSummitModels.DB.TemplateVersion>>().Setup(m => m.GetEnumerator()).Returns(testTemplateVersions.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -105,7 +105,7 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.TemplateVersions).Returns(mockTemplateVersionDbSet.Object);
 
-            var mockTemplateVersionService = new TemplateVersion(mockContext.Object);
+            var mockTemplateVersionService = new DataSummitHelper.TemplateVersion(mockContext.Object);
             var mockTemplateVersion = mockTemplateVersionService.GetAllCompanyTemplateVersions(1);
             Assert.AreEqual(mockTemplateVersion.FirstOrDefault().TemplateVersionId, testTemplateVersions.ToList()[0].TemplateVersionId);
         }

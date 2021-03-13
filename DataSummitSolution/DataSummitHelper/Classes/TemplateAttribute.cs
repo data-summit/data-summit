@@ -14,9 +14,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<TemplateAttributes> GetAllTemplateVersionTemplateAttributes(int templateVersionId)
+        public List<DataSummitModels.DB.TemplateAttribute> GetAllTemplateVersionTemplateAttributes(int templateVersionId)
         {
-            List<TemplateAttributes> templateattributes = new List<TemplateAttributes>();
+            List<DataSummitModels.DB.TemplateAttribute> templateattributes = new List<DataSummitModels.DB.TemplateAttribute>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -29,9 +29,9 @@ namespace DataSummitHelper
             return templateattributes;
         }
 
-        public TemplateAttributes GetTemplateAttributesById(int templateAttributeId)
+        public DataSummitModels.DB.TemplateAttribute GetTemplateAttributesById(int templateAttributeId)
         {
-            TemplateAttributes templateattributes = new TemplateAttributes();
+            DataSummitModels.DB.TemplateAttribute templateattributes = new DataSummitModels.DB.TemplateAttribute();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -44,7 +44,7 @@ namespace DataSummitHelper
             return templateattributes;
         }
 
-        public long CreateTemplateAttribute(TemplateAttributes templateAttribute)
+        public long CreateTemplateAttribute(DataSummitModels.DB.TemplateAttribute templateAttribute)
         {
             long returnid = 0;
             try
@@ -62,7 +62,7 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-        public void UpdateTemplateAttribute(long id, TemplateAttributes templateAttribute)
+        public void UpdateTemplateAttribute(long id, DataSummitModels.DB.TemplateAttribute templateAttribute)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                TemplateAttributes templateattribute = dataSummitDbContext.TemplateAttributes.First(p => p.TemplateAttributeId == templateAttributeId);
+                DataSummitModels.DB.TemplateAttribute templateattribute = dataSummitDbContext.TemplateAttributes.First(p => p.TemplateAttributeId == templateAttributeId);
                 dataSummitDbContext.TemplateAttributes.Remove(templateattribute);
             }
             catch (Exception ae)

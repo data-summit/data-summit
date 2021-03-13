@@ -14,9 +14,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<PaperSizes> GetAllPaperSizes()
+        public List<DataSummitModels.DB.PaperSize> GetAllPaperSizes()
         {
-            List<PaperSizes> PaperSizes = new List<PaperSizes>();
+            List<DataSummitModels.DB.PaperSize> PaperSizes = new List<DataSummitModels.DB.PaperSize>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -29,9 +29,9 @@ namespace DataSummitHelper
             return PaperSizes;
         }
 
-        public PaperSizes GetPaperSizesById(int paperSizeId)
+        public DataSummitModels.DB.PaperSize GetPaperSizesById(int paperSizeId)
         {
-            PaperSizes PaperSizes = new PaperSizes();
+            DataSummitModels.DB.PaperSize PaperSizes = new DataSummitModels.DB.PaperSize();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -44,7 +44,7 @@ namespace DataSummitHelper
             return PaperSizes;
         }
 
-        public long CreatePaperSize(PaperSizes paperSize)
+        public long CreatePaperSize(DataSummitModels.DB.PaperSize paperSize)
         {
             long returnid = 0;
             try
@@ -61,7 +61,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdatePaperSize(int id, PaperSizes paperSize)
+        public void UpdatePaperSize(int id, DataSummitModels.DB.PaperSize paperSize)
         {
             try
             {
@@ -81,7 +81,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                PaperSizes PaperSizes = dataSummitDbContext.PaperSizes.First(p => p.PaperSizeId == paperSizeId);
+                DataSummitModels.DB.PaperSize PaperSizes = dataSummitDbContext.PaperSizes.First(p => p.PaperSizeId == paperSizeId);
                 dataSummitDbContext.PaperSizes.Remove(PaperSizes);
                 dataSummitDbContext.SaveChanges();
             }

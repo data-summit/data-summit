@@ -14,9 +14,9 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<Sentences> GetAllDocumentSentences(int documentId, bool IsProdEnvironment = false)
+        public List<DataSummitModels.DB.Sentence> GetAllDocumentSentences(int documentId, bool IsProdEnvironment = false)
         {
-            List<Sentences> Sentences = new List<Sentences>();
+            List<DataSummitModels.DB.Sentence> Sentences = new List<DataSummitModels.DB.Sentence>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -31,7 +31,7 @@ namespace DataSummitHelper
             return Sentences;
         }
 
-        public Guid CreateSentence(Sentences sentence, bool IsProdEnvironment = false)
+        public Guid CreateSentence(DataSummitModels.DB.Sentence sentence, bool IsProdEnvironment = false)
         {
             Guid returnGuid = Guid.NewGuid();
             try
@@ -48,7 +48,7 @@ namespace DataSummitHelper
             return returnGuid;
         }
 
-        public void UpdateSentence(int id, Sentences sentence, bool IsProdEnvironment = false)
+        public void UpdateSentence(int id, DataSummitModels.DB.Sentence sentence, bool IsProdEnvironment = false)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                Sentences sentence = dataSummitDbContext.Sentences.First(p => p.SentenceId == SentenceId);
+                DataSummitModels.DB.Sentence sentence = dataSummitDbContext.Sentences.First(p => p.SentenceId == SentenceId);
                 dataSummitDbContext.Sentences.Remove(sentence);
             }
             catch (Exception ae)

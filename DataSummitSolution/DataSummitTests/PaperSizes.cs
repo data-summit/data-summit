@@ -14,14 +14,14 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_project()
         {
-            Projects project = new Projects
+            Project project = new Project
             {
                 Name = "Unit Test Project",
                 CreatedDate = DateTime.Now
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var mockProjectsDbSet = new Mock<DbSet<Projects>>();
+            var mockProjectsDbSet = new Mock<DbSet<Project>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
@@ -31,14 +31,14 @@ namespace DataSummitTests
 
             mockProjects.CreateProject(project);
 
-            mockProjectsDbSet.Verify(m => m.Add(It.IsAny<Projects>()), Times.Once());
+            mockProjectsDbSet.Verify(m => m.Add(It.IsAny<Project>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_project_by_id()
         {
-            Companies company1 = new Companies
+            Company company1 = new Company
             {
                 CompanyId = 1,
                 Name = "Unit Test Company1",
@@ -48,7 +48,7 @@ namespace DataSummitTests
                 Website = "www.UnitTestCompany1.com"
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
-            Companies company2 = new Companies
+            Company company2 = new Company
             {
                 CompanyId = 2,
                 Name = "Unit Test Company2",
@@ -59,9 +59,9 @@ namespace DataSummitTests
                 //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
             };
 
-            var testProjects = new List<Projects>
+            var testProjects = new List<Project>
             {
-                new Projects
+                new Project
                 {
                     ProjectId = 1,
                     Name = "Unit Test Project1",
@@ -70,7 +70,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new Projects
+                new Project
                 {
                     ProjectId = 2,
                     Name = "Unit Test Project2",
@@ -79,7 +79,7 @@ namespace DataSummitTests
                     CreatedDate = DateTime.Now
                     //UserId = "160e488d-2288-413a-935e-d3e339f8dd80"
                 },
-                new Projects
+                new Project
                 {
                     ProjectId = 3,
                     Name = "Unit Test Project3",
@@ -90,11 +90,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockProjectDbSet = new Mock<DbSet<Projects>>();
-            mockProjectDbSet.As<IQueryable<Projects>>().Setup(m => m.Provider).Returns(testProjects.Provider);
-            mockProjectDbSet.As<IQueryable<Projects>>().Setup(m => m.Expression).Returns(testProjects.Expression);
-            mockProjectDbSet.As<IQueryable<Projects>>().Setup(m => m.ElementType).Returns(testProjects.ElementType);
-            mockProjectDbSet.As<IQueryable<Projects>>().Setup(m => m.GetEnumerator()).Returns(testProjects.GetEnumerator());
+            var mockProjectDbSet = new Mock<DbSet<Project>>();
+            mockProjectDbSet.As<IQueryable<Project>>().Setup(m => m.Provider).Returns(testProjects.Provider);
+            mockProjectDbSet.As<IQueryable<Project>>().Setup(m => m.Expression).Returns(testProjects.Expression);
+            mockProjectDbSet.As<IQueryable<Project>>().Setup(m => m.ElementType).Returns(testProjects.ElementType);
+            mockProjectDbSet.As<IQueryable<Project>>().Setup(m => m.GetEnumerator()).Returns(testProjects.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible

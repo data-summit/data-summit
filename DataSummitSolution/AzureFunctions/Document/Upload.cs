@@ -33,7 +33,8 @@ namespace AzureFunctions.Document
                 dynamic data = JsonConvert.DeserializeObject<DocumentUpload>(jsonContent);
                 DocumentUpload docUp = (DocumentUpload)data;
 
-                List<Task> lTasks = new List<Task>();
+                List<FunctionTask> Tasks = new List<FunctionTask>();
+                List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
 
                 if (jsonContent.Length == 0) return new BadRequestObjectResult("Illegal input: No content");
                 if (docUp.File.Length == 0) return new BadRequestObjectResult("Illegal input: PDF/Image is empty.");
@@ -64,14 +65,14 @@ namespace AzureFunctions.Document
                 await cbc.SetPermissionsAsync(permissions);
 
                 //Add event checking that whether it is the first event to exist in list
-                if (docUp.Tasks.Count == 0)
-                { docUp.Tasks.Add(new Tasks("Container created", DateTime.Now)); }
+                if (Tasks.Count == 0)
+                { Tasks.Add(new FunctionTask("Container created", DateTime.Now)); }
                 else
-                { docUp.Tasks.Add(new Tasks("Container created", docUp.Tasks[docUp.Tasks.Count - 1].TimeStamp)); }
-                log.LogInformation(docUp.Tasks[docUp.Tasks.Count - 1].Name);
+                { Tasks.Add(new FunctionTask("Container created", docUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                log.LogInformation(docUp.Tasks[Tasks.Count - 1].Name);
 
                 CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
-                lTasks.Add(Task.Run(async () =>
+                lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
                 {
                     AccessCondition ac = new AccessCondition();
                     BlobRequestOptions brq = new BlobRequestOptions();
@@ -87,8 +88,8 @@ namespace AzureFunctions.Document
                     cbbImage.Metadata.Add("PaymentPlan", docUp.PaymentPlan.ToString());
                     await cbbImage.SetMetadataAsync();
 
-                    docUp.Tasks.Add(new Tasks("Image uploaded to blob", docUp.Tasks[docUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation(docUp.Tasks[docUp.Tasks.Count - 1].Name);
+                    Tasks.Add(new FunctionTask("Image uploaded to blob", docUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    log.LogInformation(docUp.Tasks[Tasks.Count - 1].Name);
 
                     //Clear heavy payload content
                     docUp.File = null;
@@ -96,7 +97,9 @@ namespace AzureFunctions.Document
                     docUp.BlobUrl = cbbImage.Uri.ToString();
                 }));
 
-                Task.WaitAll(lTasks.ToArray());
+
+
+                System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
 
                 //Return single image object
                 string jsonToReturn = JsonConvert.SerializeObject(docUp);

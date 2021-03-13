@@ -15,7 +15,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_Sentence()
         {
-            Sentences Sentence = new Sentences
+            DataSummitModels.DB.Sentence Sentence = new DataSummitModels.DB.Sentence
             {
                 SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Confidence = (decimal)0.1,
@@ -26,17 +26,17 @@ namespace DataSummitTests
                 Words = "0001"
             };
 
-            var mockSentenceDbSet = new Mock<DbSet<Sentences>>();
+            var mockSentenceDbSet = new Mock<DbSet<DataSummitModels.DB.Sentence>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.Sentences).Returns(mockSentenceDbSet.Object);
-            var mockSentence = new Sentence(mockContext.Object);
+            var mockSentence = new DataSummitHelper.Sentence(mockContext.Object);
 
             mockSentence.CreateSentence(Sentence);
 
-            mockSentenceDbSet.Verify(m => m.Add(It.IsAny<Sentences>()), Times.Once());
+            mockSentenceDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.Sentence>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
@@ -58,9 +58,9 @@ namespace DataSummitTests
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002")
             //};
 
-            var testSentence = new List<Sentences>
+            var testSentence = new List<DataSummitModels.DB.Sentence>
             {
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Confidence = (decimal)0.1,
@@ -70,7 +70,7 @@ namespace DataSummitTests
                     Vendor = "Test",
                     Words = "0001"
                 },
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Confidence = (decimal)0.2,
@@ -80,7 +80,7 @@ namespace DataSummitTests
                     Vendor = "Test",
                     Words = "0002"
                 },
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Confidence = (decimal)0.3,
@@ -92,11 +92,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockSentenceDbSet = new Mock<DbSet<Sentences>>();
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.Provider).Returns(testSentence.Provider);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.Expression).Returns(testSentence.Expression);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.ElementType).Returns(testSentence.ElementType);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.GetEnumerator()).Returns(testSentence.GetEnumerator());
+            var mockSentenceDbSet = new Mock<DbSet<DataSummitModels.DB.Sentence>>();
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.Provider).Returns(testSentence.Provider);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.Expression).Returns(testSentence.Expression);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.ElementType).Returns(testSentence.ElementType);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.GetEnumerator()).Returns(testSentence.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -104,7 +104,7 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.Sentences).Returns(mockSentenceDbSet.Object);
 
-            var mockSentenceService = new Sentence(mockContext.Object);
+            var mockSentenceService = new DataSummitHelper.Sentence(mockContext.Object);
             var mockSentence = mockSentenceService.GetAllDocumentSentences(1);
             Assert.AreEqual(mockSentence.FirstOrDefault().SentenceId, testSentence.ToList()[0].SentenceId);
         }

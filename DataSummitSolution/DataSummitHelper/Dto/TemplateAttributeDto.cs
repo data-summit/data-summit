@@ -1,5 +1,4 @@
-﻿using DataSummitModels.DB;
-using System;
+﻿using System;
 
 namespace DataSummitHelper.Dto
 {
@@ -14,7 +13,7 @@ namespace DataSummitHelper.Dto
         public short? Height { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public TemplateAttributeDto(TemplateAttributes templateAttribute)
+        public TemplateAttributeDto(DataSummitModels.DB.TemplateAttribute templateAttribute)
         {
             TemplateAttributeId = templateAttribute.TemplateAttributeId;
             StandardAttributeName = templateAttribute.StandardAttribute.Name;

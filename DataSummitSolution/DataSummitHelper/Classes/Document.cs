@@ -19,9 +19,9 @@ namespace DataSummitHelper
             return dataSummitDbContext.Documents.Count();
         }
 
-        public List<Documents> GetAllCompanyDocuments(int projectId)
+        public List<DataSummitModels.DB.Document> GetAllCompanyDocuments(int projectId)
         {
-            var documents = new List<Documents>();
+            var documents = new List<DataSummitModels.DB.Document>();
             try
             {
                 documents = dataSummitDbContext.Documents
@@ -35,13 +35,13 @@ namespace DataSummitHelper
             return documents;
         }
 
-        public long CreateDocument(List<Documents> documents)
+        public long CreateDocument(List<DataSummitModels.DB.Document> documents)
         {
             long returnid = 0;
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                foreach (Documents document in documents)
+                foreach (DataSummitModels.DB.Document document in documents)
                 {
                     dataSummitDbContext.Documents.Add(document);
                     dataSummitDbContext.SaveChanges();
@@ -56,7 +56,7 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateDocument(long id, Documents document)
+        public void UpdateDocument(long id, DataSummitModels.DB.Document document)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace DataSummitHelper
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                Documents document = dataSummitDbContext.Documents.First(p => p.DocumentId == documentId);
+                DataSummitModels.DB.Document document = dataSummitDbContext.Documents.First(p => p.DocumentId == documentId);
                 dataSummitDbContext.Documents.Remove(document);
             }
             catch (Exception ae)

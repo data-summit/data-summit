@@ -1,5 +1,5 @@
 using DataSummitModels.DB;
-
+using DataSummitModels.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -47,9 +47,10 @@ namespace AzureFunctions.Document
             }
             try
             {
+                List<FunctionTask> Tasks = new List<FunctionTask>();
 
-                if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayers>();
+                if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.Task>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
 
                 if (imgUp.CompanyId <= 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 if (imgUp.ProjectId <= 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
@@ -81,10 +82,10 @@ namespace AzureFunctions.Document
                 if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
-                if (imgUp.Tasks.Count == 0)
-                { imgUp.Tasks.Add(new Tasks("Connected to storage account", DateTime.Now)); }
+                if (Tasks.Count == 0)
+                { Tasks.Add(new FunctionTask("Connected to storage account", DateTime.Now)); }
                 else
-                { imgUp.Tasks.Add(new Tasks("Connected to storage account", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new FunctionTask("Connected to storage account", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
 
                 //create a pdf document.
                 MemoryStream ms = new MemoryStream();
@@ -110,20 +111,20 @@ namespace AzureFunctions.Document
                     bcp.PublicAccess = BlobContainerPublicAccessType.Container;
                     await blobContainer.SetPermissionsAsync(bcp);
 
-                    imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": Container created", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation("(Total: " + TimeSpan.FromTicks(imgUp.Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
-                                       " Delta: " + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
-                                       imgUp.Tasks[imgUp.Tasks.Count - 1].Name.ToString());
+                    Tasks.Add(new FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
+                                       " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
+                                       imgUp.Tasks[Tasks.Count - 1].Name.ToString());
 
-                    List<Task> lTasks = new List<Task>();
+                    List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
                     List<string> lLayers = new List<string>();
                     SelectPdf.PdfDocument pdfSingle = new SelectPdf.PdfDocument();
                     Spire.Pdf.PdfDocument spdfSingle = new Spire.Pdf.PdfDocument();
                     Spire.Pdf.PdfPageBase sPage;
                     CloudBlockBlob blockBlobJPG = null;
-                    DataSummitModels.DB.Paper.Types paperType = new DataSummitModels.DB.Paper.Types();
+                    DataSummitModels.DTO.Paper.Types paperType = new DataSummitModels.DTO.Paper.Types();
 
-                    lTasks.Add(Task.Run(async () =>
+                    lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
                     {
                         //Ensure that each page is orientated correctly, which doesn't show in viewers
                         bool HasRotationIssue = false;
@@ -170,8 +171,8 @@ namespace AzureFunctions.Document
                             }
                         }
 
-                        DataSummitModels.Enums.Paper.Size psCur = DataSummitModels.DB.Paper.Sizes.Match(pdfSingle.Pages[0].PageSize.Width, pdfSingle.Pages[0].PageSize.Height);
-                        paperType = DataSummitModels.DB.Paper.Sizes.All.FirstOrDefault(p => p.Size == psCur);
+                        DataSummitModels.Enums.Paper.Size psCur = DataSummitModels.DTO.Paper.Sizes.Match(pdfSingle.Pages[0].PageSize.Width, pdfSingle.Pages[0].PageSize.Height);
+                        paperType = DataSummitModels.DTO.Paper.Sizes.All.FirstOrDefault(p => p.Size == psCur);
                         //Create image block blob
                         blockBlobJPG = blobContainer.GetBlockBlobReference("Original.jpg");
 
@@ -206,19 +207,19 @@ namespace AzureFunctions.Document
                             byte[] imgBytes = rasterizer.ConvertToTiff();
                             //List<Image> lImages = rasterizer.ConvertToImages().ToList();
 
-                            imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": pdf converted to jpg'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                            log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                            Tasks.Add(new FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": pdf converted to jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                            log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                             await blockBlobJPG.UploadFromByteArrayAsync(imgBytes, 0, imgBytes.Length);
                         }
 
-                        imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.jpg'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                        log.LogInformation("(Total: " + TimeSpan.FromTicks(imgUp.Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
-                                       " Delta: " + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
-                                       imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                        Tasks.Add(new FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
+                                       " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
+                                       imgUp.Tasks[Tasks.Count - 1].Name);
                     }));
 
-                    lTasks.Add(Task.Run(async () =>
+                    lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
                     {
                         //via MemoryStream from SpirePDF (use Spire maintain layers)
                         MemoryStream msSpirePDF = new MemoryStream();
@@ -245,15 +246,15 @@ namespace AzureFunctions.Document
                         }
                         lLayers.Distinct().OrderBy(l => l);
 
-                        imgUp.Tasks.Add(new Tasks("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.pdf'", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                        log.LogInformation("(Total: " + TimeSpan.FromTicks(imgUp.Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
-                                           " Delta: " + imgUp.Tasks[imgUp.Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
-                                           imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                        Tasks.Add(new FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.pdf'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
+                                           " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
+                                           imgUp.Tasks[Tasks.Count - 1].Name);
                     }));
 
                     //Ensure that all processes are finished
-                    Task.WaitAll(lTasks.ToArray());
-                    imgUp.Tasks.OrderBy(e => e.TimeStamp);
+                    System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
+                    Tasks.OrderBy(e => e.TimeStamp);
 
                     ImageUpload iu = new ImageUpload
                     {
@@ -270,11 +271,11 @@ namespace AzureFunctions.Document
                         Y = 0,
                         File = null,
                         FileName = imgUp.FileName,
-                        Tasks = imgUp.Tasks.ToList(),
+                        Tasks = Tasks.Select(t => t.ToModel(t)).ToList(),
                         Format = DataSummitModels.Enums.Document.Format.PDF,
-                        Layers = new List<DocumentLayers>()
+                        Layers = new List<DocumentLayer>()
                         { 
-                            new DocumentLayers()
+                            new DocumentLayer()
                             {
                                 Name = lLayers.First()
                             }

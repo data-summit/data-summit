@@ -17,7 +17,7 @@ namespace DataSummitHelper.Dto
         public CompanyDto()
         { ; }
 
-        public CompanyDto(Companies company)
+        public CompanyDto(Company company)
         {
             CompanyId = company.CompanyId;
             CompanyName = company.Name;
@@ -27,7 +27,7 @@ namespace DataSummitHelper.Dto
             CreatedDate = company.CreatedDate;
         }
 
-        public Companies ToCompany() => new Companies()
+        public Company ToCompany() => new Company()
         {
             CompanyId = CompanyId,
             Name = CompanyName,

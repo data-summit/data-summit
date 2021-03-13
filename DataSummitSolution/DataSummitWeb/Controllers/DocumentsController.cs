@@ -1,6 +1,6 @@
 ﻿using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
-using DataSummitWeb.DTO;
+using DataSummitModels.DTO;
 using DataSummitModels.Enums;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using DataSummitWeb.Enums;
+using DataSummitModels.DTO;
 
 namespace DataSummitWeb.Controllers
 {
@@ -56,7 +57,7 @@ namespace DataSummitWeb.Controllers
             var returnIds = new List<long>();
             try
             {
-                var documents = new List<Documents>();
+                var documents = new List<DataSummitModels.DB.Document>();
                 if (documents == null)
                 {
                     return "Invalid document upload";
@@ -67,11 +68,11 @@ namespace DataSummitWeb.Controllers
                     if (documentUpload.File != null)
                     {
                         var processedDocument = ProcessDocumentUpload(documentUpload);
-                        documents.AddRange(processedDocument);
+                        documents.AddRange(processedDocument.ToList());
                     }
                 }
 
-                foreach(Documents d in documents)
+                foreach(DataSummitModels.DB.Document d in documents)
                 {
                     // long id = _dataSummitHelper.CreateDocument(documents);
                     // if (id > 0) returnIds.Add(id);
@@ -84,7 +85,7 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Documents project)
+        public void Put(int id, [FromBody] Document project)
         {
             //Update
             //_dataSummitHelper.UpdateDocument(id, project);
@@ -98,15 +99,16 @@ namespace DataSummitWeb.Controllers
             return JsonConvert.SerializeObject("Ok");
         }
 
-        private List<Documents> ProcessDocumentUpload (DocumentUpload documentUpload)
+        private List<Document> ProcessDocumentUpload (DocumentUpload documentUpload)
         {
-            var documents = new List<Documents>();
+            var documents = new List<Document>();
             try
             {
                 if (AuditUploadIds(documentUpload))
                 {
-                    var mimeType = Document.Format.Unknown;
-                    switch (documentUpload.FileType)
+                    var mimeType = DataSummitModels.Enums.Document.Format.Unknown;
+                    //switch (documentUpload.DocumentFormat)
+                    switch ("")
                     {
                         case "application/pdf":
                             mimeType = DataSummitModels.Enums.Document.Format.PDF;
@@ -327,9 +329,9 @@ namespace DataSummitWeb.Controllers
         }
 
         // TODO: This method makes absolutely NO SENSE!
-        private List<Tasks> VerifyTaskList(List<Tasks> tasks)
+        private List<FunctionTask> VerifyTaskList(List<FunctionTask> tasks)
         {
-            var taskList = tasks ?? new List<Tasks>();
+            var taskList = tasks ?? new List<FunctionTask>();
             try
             {
                 if (taskList.Count == 0)
@@ -340,7 +342,7 @@ namespace DataSummitWeb.Controllers
                     if (tasks.Count == 0)
                     {
                         tasks.Add(
-                          new Tasks
+                          new FunctionTask
                           {
                               Name = "Azure Task Count byPass (to be deleted)",
                               TaskId = (long)1,
