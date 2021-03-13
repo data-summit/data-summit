@@ -19,10 +19,10 @@ namespace DataSummitModels.DB
         public bool ProcessedAzure { get; set; }
         public bool ProcessedGoogle { get; set; }
         public Enums.Image.Type Type { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public Image Image { get; set; }
         public List<Sentences> Sentences { get; set; }
 
-        public virtual Drawings Drawing { get; set; }
+        public virtual Documents Document { get; set; }
     }
 }

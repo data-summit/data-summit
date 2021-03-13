@@ -45,7 +45,7 @@ export class ProjectsComponent implements OnInit {
     initProjectsTable() {
         this.headers = [
             "Name",
-            "Drawings",
+            "Documents",
             "Project Templates",
             "Company Templates",
             "Created Date",
@@ -93,8 +93,8 @@ export class ProjectsComponent implements OnInit {
         this.addProject(project);
     }
 
-    goToDrawings(projectId: number) {
-        this.router.navigate(['companies', this.companyId, 'projects', projectId, 'drawings']);
+    goToDocuments(projectId: number) {
+        this.router.navigate(['companies', this.companyId, 'projects', projectId, 'documents']);
     }
 
     goToProjectTemplates(projectId: number) {

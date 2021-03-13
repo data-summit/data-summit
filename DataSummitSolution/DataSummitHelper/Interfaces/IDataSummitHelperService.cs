@@ -23,11 +23,11 @@ namespace DataSummitHelper.Interfaces
         Task DeleteProject(int id);
         #endregion
 
-        #region Drawings
-        Task<List<DrawingDto>> GetProjectDrawings(int projectId);
-        Task DeleteDrawingProperty(long drawingPropertyId);
-        Task<List<DrawingPropertyDto>> GetDrawingProperties(int drawingId);
-        Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty);
+        #region Documents
+        Task<List<DocumentDto>> GetProjectDocuments(int projectId);
+        Task DeleteDocumentProperty(long documentPropertyId);
+        Task<List<DocumentPropertyDto>> GetDocumentProperties(int documentId);
+        Task UpdateDocumentPropertyValue(DocumentPropertyDto documentProperty);
         #endregion
 
         Uri GetIndividualUrl(int companyId, string azureResource);

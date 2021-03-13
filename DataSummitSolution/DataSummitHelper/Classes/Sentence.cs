@@ -14,14 +14,14 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public List<Sentences> GetAllDrawingSentences(int drawingId, bool IsProdEnvironment = false)
+        public List<Sentences> GetAllDocumentSentences(int documentId, bool IsProdEnvironment = false)
         {
             List<Sentences> Sentences = new List<Sentences>();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
                 Sentences = dataSummitDbContext.Sentences
-                                .Where(e => e.DrawingId == drawingId)
+                                .Where(e => e.DocumentId == documentId)
                                 .ToList();
             }
             catch (Exception ae)

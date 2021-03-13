@@ -108,8 +108,8 @@ namespace DataSummitHelper.Services
         }
         #endregion
 
-        #region Drawings
-        public async Task<bool> IsDrawingDocument(int drawingId)
+        #region Documents
+        public async Task<bool> IsDocumentDocument(int documentId)
         {
             var documentClassification = _configuration["DocumentClassification"];
 
@@ -117,44 +117,44 @@ namespace DataSummitHelper.Services
 
             return false;
         }
-        public async Task DeleteDrawingProperty(long drawingPropertyId)
+        public async Task DeleteDocumentProperty(long documentPropertyId)
         {
-            await _dao.DeleteProfileAttribute(drawingPropertyId);
+            await _dao.DeleteProfileAttribute(documentPropertyId);
         }
 
-        public async Task<List<DrawingDto>> GetDrawingsForProjectId(int projectId)
+        public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
         {
-            var drawings = await _dao.GetAllProjectDrawings(projectId);
+            var documents = await _dao.GetAllProjectDocuments(projectId);
 
-            var drawingDtos = drawings.Select(d => new DrawingDto(d))
+            var documentDtos = documents.Select(d => new DocumentDto(d))
                 .ToList();
 
-            return drawingDtos;
+            return documentDtos;
         }
 
-        public async Task<List<DrawingDto>> GetProjectDrawings(int projectId)
+        public async Task<List<DocumentDto>> GetProjectDocuments(int projectId)
         {
-            var drawings = await _dao.GetProjectDrawings(projectId);
-            var drawingDtos = drawings.Select(d => new DrawingDto(d))
+            var documents = await _dao.GetProjectDocuments(projectId);
+            var documentDtos = documents.Select(d => new DocumentDto(d))
                 .ToList();
 
-            return drawingDtos;
+            return documentDtos;
         }
         #endregion
 
         #region Properties
-        public async Task UpdateDrawingPropertyValue(DrawingPropertyDto drawingProperty)
+        public async Task UpdateDocumentPropertyValue(DocumentPropertyDto documentProperty)
         {
-            await _dao.UpdateDrawingPropertyValue(drawingProperty.SentenceId, drawingProperty.WordValue);
+            await _dao.UpdateDocumentPropertyValue(documentProperty.SentenceId, documentProperty.WordValue);
         }
 
-        public async Task<List<DrawingPropertyDto>> GetDrawingProperties(int drawingId)
+        public async Task<List<DocumentPropertyDto>> GetDocumentProperties(int documentId)
         {
-            var drawingProperties = await _dao.GetDrawingPropertiesByDrawingId(drawingId);
-            var drawingPropertyDtos = drawingProperties.Select(d => new DrawingPropertyDto(d))
+            var documentProperties = await _dao.GetDocumentPropertiesByDocumentId(documentId);
+            var documentPropertyDtos = documentProperties.Select(d => new DocumentPropertyDto(d))
                 .ToList();
 
-            return drawingPropertyDtos;
+            return documentPropertyDtos;
         }
         #endregion
 

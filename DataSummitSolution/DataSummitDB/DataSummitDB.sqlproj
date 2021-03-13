@@ -131,7 +131,7 @@
     <Build Include="dbo\Tables\DocumentTemplates.sql" />
     <None Include="dbo\Data\Documents.sql" />
     <Build Include="dbo\Tables\DocumentTypes.sql" />
-    <None Include="dbo\Data\DocumentsTypes.sql" />
+    <None Include="dbo\Data\DocumentTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataSummitDB.refactorlog" />

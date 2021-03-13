@@ -1,6 +1,6 @@
 ﻿namespace DataSummitWeb.DTO
 {
-    public class DrawingUpload
+    public class DocumentUpload
     {
         public int ProjectId { get; set; }
         public int TemplateId { get; set; }
@@ -9,7 +9,7 @@
         public string FileType { get; set; }
         public byte[] File { get; set; }
 
-        public DrawingUpload()
+        public DocumentUpload()
         { }
     }
 }

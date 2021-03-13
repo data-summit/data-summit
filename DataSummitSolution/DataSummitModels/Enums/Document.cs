@@ -17,7 +17,8 @@ namespace DataSummitModels.Enums
             Unknown = 4,
             JPG = 1,
             PNG = 2,
-            PDF = 3
+            PDF = 3,
+            GIF = 4
         }
     }
 }

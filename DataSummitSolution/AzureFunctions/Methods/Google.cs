@@ -16,9 +16,9 @@ namespace AzureFunctions.Methods
 {
     public class Google
     {
-        public Drawings Run(List<System.Drawing.Image> images)
+        public Documents Run(List<System.Drawing.Image> images)
         {
-            Drawings cOCR = new Drawings();
+            Documents cOCR = new Documents();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -42,14 +42,14 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public Drawings Run(List<ImageGrids> lDrawings)
+        public Documents Run(List<ImageGrids> lDocuments)
         {
-            Drawings cOCR = new Drawings();
+            Documents cOCR = new Documents();
             try
             {
                 Cloud gCloud = new Cloud();
                 OCRSources ocrMethods = new OCRSources();
-                foreach (ImageGrids ig in lDrawings)
+                foreach (ImageGrids ig in lDocuments)
                 {
                     using (MemoryStream m = new MemoryStream())
                     {
@@ -68,9 +68,9 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public Drawings Run(List<string> lfilepaths)
+        public Documents Run(List<string> lfilepaths)
         {
-            Drawings cOCR = new Drawings();
+            Documents cOCR = new Documents();
             try
             {
                 Cloud gCloud = new Cloud();
@@ -96,9 +96,9 @@ namespace AzureFunctions.Methods
             return cOCR;
         }
 
-        public async System.Threading.Tasks.Task<Drawings> RunAsync(List<Uri> lblobs)
+        public async System.Threading.Tasks.Task<Documents> RunAsync(List<Uri> lblobs)
         {
-            Drawings cOCR = new Drawings();
+            Documents cOCR = new Documents();
             try
             {
                 Cloud gCloud = new Cloud();

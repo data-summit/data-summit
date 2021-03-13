@@ -11,7 +11,7 @@ namespace DataSummitDbModels
         public Project()
         {
             Addresses = new HashSet<Address>();
-            Drawings = new HashSet<Drawing>();
+            Documents = new HashSet<Document>();
         }
 
         public int ProjectId { get; set; }
@@ -35,6 +35,6 @@ namespace DataSummitDbModels
         [InverseProperty("Project")]
         public virtual ICollection<Address> Addresses { get; set; }
         [InverseProperty("Project")]
-        public virtual ICollection<Drawing> Drawings { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
     }
 }

@@ -31,10 +31,10 @@ namespace DataSummitDbModels.Context
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
-        public virtual DbSet<Drawing> Drawings { get; set; }
-        public virtual DbSet<DrawingFeature> DrawingFeatures { get; set; }
-        public virtual DbSet<DrawingLayer> DrawingLayers { get; set; }
-        public virtual DbSet<DrawingTemplate> DrawingTemplates { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<DocumentFeature> DocumentFeatures { get; set; }
+        public virtual DbSet<DocumentLayer> DocumentLayers { get; set; }
+        public virtual DbSet<DocumentTemplate> DocumentTemplates { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
@@ -220,61 +220,61 @@ namespace DataSummitDbModels.Context
                 entity.Property(e => e.NumericCode).IsUnicode(false);
             });
 
-            modelBuilder.Entity<Drawing>(entity =>
+            modelBuilder.Entity<Document>(entity =>
             {
                 entity.HasOne(d => d.PaperOrientation)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.PaperOrientationId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Drawings_PaperOrientations");
+                    .HasConstraintName("FK_Documents_PaperOrientations");
 
                 entity.HasOne(d => d.PaperSize)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.PaperSizeId)
-                    .HasConstraintName("FK_Drawings_PaperSizes");
+                    .HasConstraintName("FK_Documents_PaperSizes");
 
                 entity.HasOne(d => d.ProfileVersion)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.ProfileVersionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Drawings_ProfileVersions");
+                    .HasConstraintName("FK_Documents_ProfileVersions");
 
                 entity.HasOne(d => d.Project)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Drawings_Projects");
+                    .HasConstraintName("FK_Documents_Projects");
             });
 
-            modelBuilder.Entity<DrawingFeature>(entity =>
+            modelBuilder.Entity<DocumentFeature>(entity =>
             {
-                entity.HasOne(d => d.Drawing)
-                    .WithMany(p => p.DrawingFeatures)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_DrawingFeatures_Drawings");
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.DocumentFeatures)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_DocumentFeatures_Documents");
             });
 
-            modelBuilder.Entity<DrawingLayer>(entity =>
+            modelBuilder.Entity<DocumentLayer>(entity =>
             {
-                entity.HasOne(d => d.Drawing)
-                    .WithMany(p => p.DrawingLayers)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_DrawingLayers_Drawings");
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.DocumentLayers)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_DocumentLayers_Documents");
             });
 
-            modelBuilder.Entity<DrawingTemplate>(entity =>
+            modelBuilder.Entity<DocumentTemplate>(entity =>
             {
-                entity.Property(e => e.DrawingTemplateId).ValueGeneratedNever();
+                entity.Property(e => e.DocumentTemplateId).ValueGeneratedNever();
 
-                entity.HasOne(d => d.Drawing)
-                    .WithMany(p => p.DrawingTemplates)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_DrawingTemplates_Drawings");
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.DocumentTemplates)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_DocumentTemplates_Documents");
 
                 entity.HasOne(d => d.ProfileVersion)
-                    .WithMany(p => p.DrawingTemplates)
+                    .WithMany(p => p.DocumentTemplates)
                     .HasForeignKey(d => d.ProfileVersionId)
-                    .HasConstraintName("FK_DrawingTemplates_ProfileVersions");
+                    .HasConstraintName("FK_DocumentTemplates_ProfileVersions");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -294,11 +294,11 @@ namespace DataSummitDbModels.Context
 
             modelBuilder.Entity<ImageGrid>(entity =>
             {
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.ImageGrids)
-                    .HasForeignKey(d => d.DrawingId)
+                    .HasForeignKey(d => d.DocumentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ImageGrids_Drawings");
+                    .HasConstraintName("FK_ImageGrids_Documents");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -393,18 +393,18 @@ namespace DataSummitDbModels.Context
 
                 entity.Property(e => e.SlendernessRatio).HasDefaultValueSql("0");
 
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.Sentences)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_Sentences_Drawings");
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_Sentences_Documents");
             });
 
             modelBuilder.Entity<Task>(entity =>
             {
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_Tasks_Drawing");
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_Tasks_Document");
             });
 
             modelBuilder.Entity<UserInfo>(entity =>

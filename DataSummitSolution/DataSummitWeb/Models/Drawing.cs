@@ -4,24 +4,24 @@ using DataSummitHelper.Dto;
 
 namespace DataSummitWeb.Models
 {
-    public class Drawing
+    public class Document
     {
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public string Name { get; set; }
         public string ContainerUrl { get; set; }
         public HashSet<int> PropertieIds { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public static Drawing FromDto(DrawingDto dto)
+        public static Document FromDto(DocumentDto dto)
         {
             if (dto == null)
             {
                 return null;
             }
 
-            return new Drawing
+            return new Document
             {
-                DrawingId = dto.DrawingId,
+                DocumentId = dto.DocumentId,
                 Name = dto.Name,
                 ContainerUrl = dto.ContainerUrl,
                 CreatedDate = dto.CreatedDate

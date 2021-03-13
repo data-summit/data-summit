@@ -28,12 +28,12 @@ namespace DataSummitDbModels
         public decimal? Confidence { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
         public decimal? SlendernessRatio { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public string ModifiedWords { get; set; }
 
-        [ForeignKey("DrawingId")]
+        [ForeignKey("DocumentId")]
         [InverseProperty("Sentences")]
-        public virtual Drawing Drawing { get; set; }
+        public virtual Document Document { get; set; }
         [InverseProperty("Sentence")]
         public virtual ICollection<Property> Properties { get; set; }
     }

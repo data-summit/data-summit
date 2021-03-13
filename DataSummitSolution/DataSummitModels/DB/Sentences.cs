@@ -20,9 +20,9 @@ namespace DataSummitModels.DB
         public bool IsUsed { get; set; }
         public decimal? Confidence { get; set; }
         public decimal? SlendernessRatio { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
 
-        public virtual Drawings Drawing { get; set; }
+        public virtual Documents Document { get; set; }
         public virtual ICollection<Properties> Properties { get; set; }
     }
 }

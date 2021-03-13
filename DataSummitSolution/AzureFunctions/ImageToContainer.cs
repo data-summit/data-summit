@@ -38,16 +38,16 @@ namespace AzureFunctions
                 List<Task> lTasks = new List<Task>();
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayers>();
 
                 if (jsonContent.Length == 0) return new BadRequestObjectResult("Illegal input: No content");
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
-                if (imgUp.DrawingId < 0) return new BadRequestObjectResult("Illegal input: DrawingId is less than zero.");
+                if (imgUp.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == null) return new BadRequestObjectResult("Illegal input: File name is empty.");
-                if (imgUp.Type == "") return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.File.Length == 0) return new BadRequestObjectResult("Illegal input: PDF/Image is empty.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");

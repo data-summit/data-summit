@@ -6,7 +6,7 @@ namespace DataSummitModels.DB
     {
         public PaperSizes()
         {
-            Drawings = new HashSet<Drawings>();
+            Documents = new HashSet<Documents>();
             ProfileAttributes = new HashSet<ProfileAttributes>();
         }
 
@@ -17,7 +17,7 @@ namespace DataSummitModels.DB
         public decimal? PhysicalWidth { get; set; }
         public decimal? PhysicalHeight { get; set; }
 
-        public virtual ICollection<Drawings> Drawings { get; set; }
+        public virtual ICollection<Documents> Documents { get; set; }
         public virtual ICollection<ProfileAttributes> ProfileAttributes { get; set; }
     }
 }

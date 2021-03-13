@@ -14,11 +14,11 @@ namespace DataSummitDbModels
         public string Name { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime TimeStamp { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public TimeSpan Duration { get; set; }
 
-        [ForeignKey("DrawingId")]
+        [ForeignKey("DocumentId")]
         [InverseProperty("Tasks")]
-        public virtual Drawing Drawing { get; set; }
+        public virtual Document Document { get; set; }
     }
 }

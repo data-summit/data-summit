@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { PropertiesComponent } from "./components/properties.component";
 
 const archiveRoutes: Routes = [
-  { path: ":drawingId", component: PropertiesComponent },
+  { path: ":documentId", component: PropertiesComponent },
 ];
 
 @NgModule({

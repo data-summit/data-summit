@@ -24,7 +24,7 @@ namespace DataSummitHelper.Dao.Interfaces
         Task DeleteProject(int id);
         #endregion
 
-        Task<List<Drawings>> GetProjectDrawings(int companyId);
+        Task<List<Documents>> GetProjectDocuments(int companyId);
 
         #region Templates
         Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId);
@@ -35,9 +35,9 @@ namespace DataSummitHelper.Dao.Interfaces
         Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int profileId);
 
         Task DeleteProfileAttribute(long profileAttributeId);
-        Task<List<Drawings>> GetAllProjectDrawings(int projectId);
-        Task<List<DrawingProperty>> GetDrawingPropertiesByDrawingId(int drawingId);
-        Task UpdateDrawingPropertyValue(Guid drawingPropertyId, string drawingPropertyValue);
-        Task<List<ProfileAttributes>> GetProfileAttributesForDrawingId(int drawingId);
+        Task<List<Documents>> GetAllProjectDocuments(int projectId);
+        Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId);
+        Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue);
+        Task<List<ProfileAttributes>> GetProfileAttributesForDocumentId(int documentId);
     }
 }

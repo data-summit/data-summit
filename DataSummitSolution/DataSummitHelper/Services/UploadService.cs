@@ -32,7 +32,7 @@ namespace DataSummitHelper.Services
                 Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(1, Azure.Functions.ImageToContainer.ToString());
                 if (IsAcceptedFormat(file.Name))
                 {
-                    Document.Format format = GetFormat(file.Name);
+                    DataSummitModels.Enums.Document.Format format = GetFormat(file.Name);
                     var doc = new DocumentUpload();
 
                     //Upload image to Azure storage and create container if necessary
@@ -66,26 +66,26 @@ namespace DataSummitHelper.Services
             return false;
         }
 
-        private Document.Format GetFormat(string filename)
+        private DataSummitModels.Enums.Document.Format GetFormat(string filename)
         {
             try
             {
                 string extension = filename.Substring(filename.LastIndexOf("."), filename.Length - filename.LastIndexOf(".")).ToLower();
                 if (extension == ".pdf")
                 {
-                    return Document.Format.PDF;
+                    return DataSummitModels.Enums.Document.Format.PDF;
                 }
                 else if (extension == ".jpg")
                 {
-                    return Document.Format.JPG;
+                    return DataSummitModels.Enums.Document.Format.JPG;
                 }
                 else if (extension == ".png")
                 {
-                    return Document.Format.PNG;
+                    return DataSummitModels.Enums.Document.Format.PNG;
                 }
 
                 //var mimeType = string.Empty;
-                //switch (drawingUpload.FileType)
+                //switch (documentUpload.FileType)
                 //{
                 //    case "application/pdf":
                 //        mimeType = Document.Format.PDF.ToString();
@@ -103,7 +103,7 @@ namespace DataSummitHelper.Services
             }
             catch (Exception)
             { }
-            return Document.Format.Unknown;
+            return DataSummitModels.Enums.Document.Format.Unknown;
         }
 
 

@@ -3,7 +3,7 @@ using System;
 
 namespace DataSummitWeb.Models
 {
-    public class DrawingProperty
+    public class DocumentProperty
     {
         public long ProfileAttributeId { get; set; }
         public string StandardName { get; set; }
@@ -12,14 +12,14 @@ namespace DataSummitWeb.Models
         public Guid SentenceId { get; set; }
         public string WordValue { get; set; }
 
-        public static DrawingProperty FromDto(DrawingPropertyDto dto)
+        public static DocumentProperty FromDto(DocumentPropertyDto dto)
         {
             if (dto == null)
             {
                 return null;
             }
 
-            return new DrawingProperty
+            return new DocumentProperty
             {
                 ProfileAttributeId = dto.ProfileAttributeId,
                 StandardName = dto.StandardName,

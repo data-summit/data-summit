@@ -10,7 +10,7 @@ namespace DataSummitDbModels
     {
         public PaperOrientation()
         {
-            Drawings = new HashSet<Drawing>();
+            Documents = new HashSet<Document>();
         }
 
         public byte PaperOrientationId { get; set; }
@@ -19,6 +19,6 @@ namespace DataSummitDbModels
         public string Orientation { get; set; }
 
         [InverseProperty("PaperOrientation")]
-        public virtual ICollection<Drawing> Drawings { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
     }
 }

@@ -33,9 +33,10 @@ namespace DataSummitModels.DB
         public virtual DbSet<Companies> Companies { get; set; }
         public virtual DbSet<Countries> Countries { get; set; }
         public virtual DbSet<Currencies> Currencies { get; set; }
-        public virtual DbSet<DrawingFeatures> DrawingFeatures { get; set; }
-        public virtual DbSet<DrawingLayers> DrawingLayers { get; set; }
-        public virtual DbSet<Drawings> Drawings { get; set; }
+        public virtual DbSet<DocumentFeatures> DocumentFeatures { get; set; }
+        public virtual DbSet<DocumentLayers> DocumentLayers { get; set; }
+        public virtual DbSet<Documents> Documents { get; set; }
+        public virtual DbSet<DocumentTypes> DocumentTypes { get; set; }
         public virtual DbSet<EmployeeTerritories> EmployeeTerritories { get; set; }
         public virtual DbSet<Employees> Employees { get; set; }
         public virtual DbSet<Genders> Genders { get; set; }
@@ -397,10 +398,10 @@ namespace DataSummitModels.DB
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<DrawingFeatures>(entity =>
+            modelBuilder.Entity<DocumentFeatures>(entity =>
             {
-                entity.HasKey(e => e.DrawingFeatureId)
-                    .HasName("PK_DrawingFeatureId");
+                entity.HasKey(e => e.DocumentFeatureId)
+                    .HasName("PK_DocumentFeatureId");
 
                 entity.Property(e => e.Value)
                     .IsRequired()
@@ -410,31 +411,31 @@ namespace DataSummitModels.DB
                     .IsRequired()
                     .HasMaxLength(255);
 
-                entity.HasOne(d => d.Drawing)
-                    .WithMany(p => p.DrawingFeatures)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_DrawingFeatures_Drawings");
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.DocumentFeatures)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_DocumentFeatures_Documents");
             });
 
-            modelBuilder.Entity<DrawingLayers>(entity =>
+            modelBuilder.Entity<DocumentLayers>(entity =>
             {
-                entity.HasKey(e => e.DrawingLayerId)
-                    .HasName("PK_DrawingLayerId");
+                entity.HasKey(e => e.DocumentLayerId)
+                    .HasName("PK_DocumentLayerId");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(1023);
 
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.Layers)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_DrawingLayers_Drawings");
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_DocumentLayers_Documents");
             });
 
-            modelBuilder.Entity<Drawings>(entity =>
+            modelBuilder.Entity<Documents>(entity =>
             {
-                entity.HasKey(e => e.DrawingId)
-                    .HasName("PK_Drawing");
+                entity.HasKey(e => e.DocumentId)
+                    .HasName("PK_Document");
 
                 entity.Property(e => e.AmazonConfidence).HasColumnType("decimal(3, 2)");
 
@@ -460,16 +461,31 @@ namespace DataSummitModels.DB
 
                 entity.Property(e => e.UserId).HasMaxLength(50);
 
+                //entity.HasOne(d => d.DocumentTypes)
+                //    .WithMany(p => p.Documents)
+                //    .HasForeignKey(d => d.DocumentTypeId)
+                //    .HasConstraintName("FK_Documents_DocumentTypes");
+
                 entity.HasOne(d => d.PaperSize)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.PaperSizeId)
-                    .HasConstraintName("FK_Drawings_PaperSizes");
+                    .HasConstraintName("FK_Documents_PaperSizes");
 
                 entity.HasOne(d => d.Project)
-                    .WithMany(p => p.Drawings)
+                    .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.ProjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Drawings_Projects");
+                    .HasConstraintName("FK_Documents_Projects");
+            });
+
+            modelBuilder.Entity<DocumentTypes>(entity =>
+            {
+                entity.HasKey(e => e.DocumentTypeId)
+                    .HasName("PK_DocumentId");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(1023);
             });
 
             modelBuilder.Entity<EmployeeTerritories>(entity =>
@@ -560,11 +576,11 @@ namespace DataSummitModels.DB
 
                 entity.Property(e => e.Name).IsRequired();
 
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.ImageGrids)
-                    .HasForeignKey(d => d.DrawingId)
+                    .HasForeignKey(d => d.DocumentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_ImageGrids_Drawings");
+                    .HasConstraintName("FK_ImageGrids_Documents");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>
@@ -768,10 +784,10 @@ namespace DataSummitModels.DB
 
                 entity.Property(e => e.Words).IsRequired();
 
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.Sentences)
-                    .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK_Sentences_Drawings");
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_Sentences_Documents");
             });
 
             modelBuilder.Entity<StandardAttributes>(entity =>
@@ -794,11 +810,11 @@ namespace DataSummitModels.DB
 
                 entity.Property(e => e.TimeStamp).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Drawing)
+                entity.HasOne(d => d.Document)
                     .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.DrawingId)
+                    .HasForeignKey(d => d.DocumentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tasks_Drawing");
+                    .HasConstraintName("FK_Tasks_Document");
             });
 
             modelBuilder.Entity<UserInfo>(entity =>

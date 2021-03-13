@@ -5,7 +5,7 @@ namespace DataSummitHelper.Dto
 {
     /// <summary>
     /// </summary>
-    public sealed class DrawingPropertyDto
+    public sealed class DocumentPropertyDto
     {
         public long ProfileAttributeId { get; set; }
         public string StandardName { get; set; }
@@ -14,17 +14,17 @@ namespace DataSummitHelper.Dto
         public Guid SentenceId { get; set; }
         public string WordValue { get; set; }
 
-        public DrawingPropertyDto()
+        public DocumentPropertyDto()
         { ; }
 
-        public DrawingPropertyDto(DrawingProperty drawingProperty)
+        public DocumentPropertyDto(DocumentProperty documentProperty)
         {
-            ProfileAttributeId = drawingProperty.ProfileAttributes.ProfileAttributeId;
-            StandardName = drawingProperty.ProfileAttributes.StandardAttribute.Name;
-            Name = drawingProperty.ProfileAttributes.Name;
+            ProfileAttributeId = documentProperty.ProfileAttributes.ProfileAttributeId;
+            StandardName = documentProperty.ProfileAttributes.StandardAttribute.Name;
+            Name = documentProperty.ProfileAttributes.Name;
             Confidence = null;
-            SentenceId = drawingProperty.Sentences.SentenceId;
-            WordValue = drawingProperty.Sentences.Words;
+            SentenceId = documentProperty.Sentences.SentenceId;
+            WordValue = documentProperty.Sentences.Words;
         }
     }
 }

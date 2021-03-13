@@ -6,16 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class DrawingFeature
+    public partial class DocumentFeature
     {
-        public long DrawingFeatureId { get; set; }
+        public long DocumentFeatureId { get; set; }
         [Required]
         [StringLength(255)]
         public string Vendor { get; set; }
         [Required]
         [StringLength(1023)]
         public string Value { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public long? Left { get; set; }
         public long? Top { get; set; }
         public long? Width { get; set; }
@@ -23,8 +23,8 @@ namespace DataSummitDbModels
         public byte? Feature { get; set; }
         public long? Center { get; set; }
 
-        [ForeignKey("DrawingId")]
-        [InverseProperty("DrawingFeatures")]
-        public virtual Drawing Drawing { get; set; }
+        [ForeignKey("DocumentId")]
+        [InverseProperty("DocumentFeatures")]
+        public virtual Document Document { get; set; }
     }
 }

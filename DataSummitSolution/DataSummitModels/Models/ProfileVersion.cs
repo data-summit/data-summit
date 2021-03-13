@@ -10,8 +10,8 @@ namespace DataSummitDbModels
     {
         public ProfileVersion()
         {
-            DrawingTemplates = new HashSet<DrawingTemplate>();
-            Drawings = new HashSet<Drawing>();
+            DocumentTemplates = new HashSet<DocumentTemplate>();
+            Documents = new HashSet<Document>();
             ProfileAttributes = new HashSet<ProfileAttribute>();
         }
 
@@ -36,9 +36,9 @@ namespace DataSummitDbModels
         [InverseProperty("ProfileVersions")]
         public virtual Company Company { get; set; }
         [InverseProperty("ProfileVersion")]
-        public virtual ICollection<DrawingTemplate> DrawingTemplates { get; set; }
+        public virtual ICollection<DocumentTemplate> DocumentTemplates { get; set; }
         [InverseProperty("ProfileVersion")]
-        public virtual ICollection<Drawing> Drawings { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
         [InverseProperty("ProfileVersion")]
         public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
     }

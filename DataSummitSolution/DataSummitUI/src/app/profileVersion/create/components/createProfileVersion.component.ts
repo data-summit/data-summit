@@ -156,10 +156,10 @@ export class CreateProfileVersionComponent implements OnInit, AfterViewInit {
     this.standardAttributes.push(new StandardAttribute(1, "Project Number"));
     this.standardAttributes.push(new StandardAttribute(2, "Project Name"));
     this.standardAttributes.push(new StandardAttribute(3, "Project Address"));
-    this.standardAttributes.push(new StandardAttribute(4, "Drawing Title"));
-    this.standardAttributes.push(new StandardAttribute(5, "Drawing Number"));
-    this.standardAttributes.push(new StandardAttribute(6, "Drawing Revision"));
-    this.standardAttributes.push(new StandardAttribute(7, "Drawing Date"));
+    this.standardAttributes.push(new StandardAttribute(4, "Document Title"));
+    this.standardAttributes.push(new StandardAttribute(5, "Document Number"));
+    this.standardAttributes.push(new StandardAttribute(6, "Document Revision"));
+    this.standardAttributes.push(new StandardAttribute(7, "Document Date"));
     this.standardAttributes.push(new StandardAttribute(8, "Design Stage"));
     this.standardAttributes.push(new StandardAttribute(9, "Discipline"));
     this.standardAttributes.push(new StandardAttribute(10, "Size"));

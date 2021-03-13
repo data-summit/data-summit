@@ -13,7 +13,7 @@ import { ApiService } from '../shared/services/api.service';
 import { FileUploadModule } from "primeng/fileupload"
 import { ButtonModule } from "primeng/button"
 import { TooltipModule } from "primeng/tooltip"
-import { DrawingsModule } from '../drawings/drawings.module';
+import { DocumentsModule } from '../documents/documents.module';
 
 @NgModule({
     imports: [
@@ -21,7 +21,7 @@ import { DrawingsModule } from '../drawings/drawings.module';
         FormsModule,
         ReactiveFormsModule,
         ProjectsRoutingModule,
-        DrawingsModule,
+        DocumentsModule,
         DataSummitSharedModule,
         MDBBootstrapModule,
         FileUploadModule,

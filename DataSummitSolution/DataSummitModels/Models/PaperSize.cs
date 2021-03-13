@@ -10,7 +10,7 @@ namespace DataSummitDbModels
     {
         public PaperSize()
         {
-            Drawings = new HashSet<Drawing>();
+            Documents = new HashSet<Document>();
             ProfileAttributes = new HashSet<ProfileAttribute>();
         }
 
@@ -26,7 +26,7 @@ namespace DataSummitDbModels
         public decimal? PhysicalHeight { get; set; }
 
         [InverseProperty("PaperSize")]
-        public virtual ICollection<Drawing> Drawings { get; set; }
+        public virtual ICollection<Document> Documents { get; set; }
         [InverseProperty("PaperSize")]
         public virtual ICollection<ProfileAttribute> ProfileAttributes { get; set; }
     }

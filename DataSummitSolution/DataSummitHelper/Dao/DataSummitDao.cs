@@ -41,13 +41,13 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async Task<List<Drawings>> GetAllProjectDrawings(int projectId)
+        public async Task<List<Documents>> GetAllProjectDocuments(int projectId)
         {
-            var drawings = new List<Drawings>();
+            var documents = new List<Documents>();
 
             try
             {
-                drawings = await _context.Drawings
+                documents = await _context.Documents
                     .Where(d => d.ProjectId == projectId)
                     .ToListAsync();
             }
@@ -55,17 +55,17 @@ namespace DataSummitHelper.Dao
             {
             }
 
-            return drawings;
+            return documents;
         }
 
-        public async Task<List<ProfileAttributes>> GetProfileAttributesForDrawingId(int drawingId)
+        public async Task<List<ProfileAttributes>> GetProfileAttributesForDocumentId(int documentId)
         {
             var profileAttributes = new List<ProfileAttributes>();
 
             try
             {
-                var drawing = await _context.Drawings.FirstOrDefaultAsync(d => d.DrawingId == drawingId);
-                var profileVersion = await _context.ProfileVersions.FirstOrDefaultAsync(p => p.ProfileVersionId == drawing.ProfileVersionId);
+                var document = await _context.Documents.FirstOrDefaultAsync(d => d.DocumentId == documentId);
+                var profileVersion = await _context.ProfileVersions.FirstOrDefaultAsync(p => p.ProfileVersionId == document.ProfileVersionId);
                 profileAttributes = profileVersion.ProfileAttributes.ToList();
             }
             catch (Exception ae)
@@ -76,22 +76,22 @@ namespace DataSummitHelper.Dao
             return profileAttributes;
         }
 
-        public async Task<List<DrawingProperty>> GetDrawingPropertiesByDrawingId(int drawingId)
+        public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
         {
-            var drawingProperties = new List<DrawingProperty>();
+            var documentProperties = new List<DocumentProperty>();
             
             try
             {
-                var drawing = await _context.Drawings
-                    .FirstOrDefaultAsync(d => d.DrawingId == drawingId);
+                var document = await _context.Documents
+                    .FirstOrDefaultAsync(d => d.DocumentId == documentId);
 
-                drawingProperties = await _context.Properties
+                documentProperties = await _context.Properties
                     .Select(p => new { p.ProfileAttribute, p.Sentence })
                     .Where(profAtrrWords => 
-                        profAtrrWords.ProfileAttribute.ProfileVersionId == drawing.ProfileVersionId 
-                        && profAtrrWords.Sentence.DrawingId == drawing.DrawingId
+                        profAtrrWords.ProfileAttribute.ProfileVersionId == document.ProfileVersionId 
+                        && profAtrrWords.Sentence.DocumentId == document.DocumentId
                     )
-                    .Select(a => new DrawingProperty()
+                    .Select(a => new DocumentProperty()
                     {
                         Sentences =  a.Sentence,
                         ProfileAttributes = a.ProfileAttribute
@@ -103,15 +103,15 @@ namespace DataSummitHelper.Dao
                 throw;
             }
 
-            return drawingProperties;
+            return documentProperties;
         }
 
-        public async Task UpdateDrawingPropertyValue(Guid drawingPropertyId, string drawingPropertyValue)
+        public async Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
         {
             try
             {
-                var sentence = new Sentences() { SentenceId = drawingPropertyId };
-                sentence.Words = drawingPropertyValue;
+                var sentence = new Sentences() { SentenceId = documentPropertyId };
+                sentence.Words = documentPropertyValue;
                 _context.Sentences.Attach(sentence);
                 _context.Entry(sentence).Property("Words").IsModified = true;
                 await _context.SaveChangesAsync();
@@ -282,13 +282,13 @@ namespace DataSummitHelper.Dao
         }
         #endregion
 
-        public async Task<List<Drawings>> GetProjectDrawings(int projectId)
+        public async Task<List<Documents>> GetProjectDocuments(int projectId)
         {
-            var drawings = new List<Drawings>();
+            var documents = new List<Documents>();
 
             try
             {
-                drawings = await _context.Drawings
+                documents = await _context.Documents
                     .Where(d => d.ProjectId == projectId)
                     .ToListAsync();
             }
@@ -296,7 +296,7 @@ namespace DataSummitHelper.Dao
             {
             }
 
-            return drawings;
+            return documents;
         }
 
         public async Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int templateId)

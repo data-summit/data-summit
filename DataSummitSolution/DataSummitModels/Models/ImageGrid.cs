@@ -26,10 +26,10 @@ namespace DataSummitDbModels
         public bool ProcessedAzure { get; set; }
         public bool ProcessedGoogle { get; set; }
         public byte Type { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
 
-        [ForeignKey("DrawingId")]
+        [ForeignKey("DocumentId")]
         [InverseProperty("ImageGrids")]
-        public virtual Drawing Drawing { get; set; }
+        public virtual Document Document { get; set; }
     }
 }

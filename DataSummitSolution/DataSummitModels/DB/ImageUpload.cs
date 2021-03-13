@@ -2,7 +2,7 @@
 
 namespace DataSummitModels.DB
 {
-    public class ImageUpload : DrawingBase
+    public class ImageUpload : DocumentBase
     {
         public int CompanyId { get; set; }
         public int WidthOriginal { get; set; }
@@ -21,16 +21,16 @@ namespace DataSummitModels.DB
         public ImageUpload()
         { }
 
-        public Drawings ToDrawing()
+        public Documents ToDocument()
         {
-            Drawings draw = new Drawings
+            Documents draw = new Documents
             {
                 AmazonConfidence = AmazonConfidence,
                 AzureConfidence = AzureConfidence,
                 BlobUrl = BlobUrl,
                 ContainerName = ContainerName,
                 CreatedDate = CreatedDate,
-                DrawingId = DrawingId,
+                DocumentId = DocumentId,
                 File = File,
                 FileName = FileName,
                 GoogleConfidence = GoogleConfidence,

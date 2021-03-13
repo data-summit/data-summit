@@ -1,7 +1,7 @@
 // Angular Imports
 import { NgModule } from '@angular/core';
 
-import { DrawingsComponent } from '../drawings/components/drawings.component';
+import { DocumentsComponent } from '../documents/components/documents.component';
 import { CommonModule } from '@angular/common';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -26,13 +26,13 @@ import { PropertiesModule } from '../properties/properties.module';
         TooltipModule
     ],
     exports: [
-        DrawingsComponent
+        DocumentsComponent
     ],
     declarations: [
-        DrawingsComponent
+        DocumentsComponent
     ],
     providers: [
         ApiService
     ],
 })
-export class DrawingsModule { }
+export class DocumentsModule { }

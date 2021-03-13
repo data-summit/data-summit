@@ -6,17 +6,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class DrawingTemplate
+    public partial class DocumentTemplate
     {
-        public int DrawingTemplateId { get; set; }
-        public long? DrawingId { get; set; }
+        public int DocumentTemplateId { get; set; }
+        public long? DocumentId { get; set; }
         public int? ProfileVersionId { get; set; }
 
-        [ForeignKey("DrawingId")]
-        [InverseProperty("DrawingTemplates")]
-        public virtual Drawing Drawing { get; set; }
+        [ForeignKey("DocumentId")]
+        [InverseProperty("DocumentTemplates")]
+        public virtual Document Document { get; set; }
         [ForeignKey("ProfileVersionId")]
-        [InverseProperty("DrawingTemplates")]
+        [InverseProperty("DocumentTemplates")]
         public virtual ProfileVersion ProfileVersion { get; set; }
     }
 }

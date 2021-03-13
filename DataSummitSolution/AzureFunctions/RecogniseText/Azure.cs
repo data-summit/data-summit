@@ -44,7 +44,7 @@ namespace AzureFunctions.RecogniseText
 
                 //Validate entry data
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                if (imgUp.Type == "") return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
@@ -56,7 +56,7 @@ namespace AzureFunctions.RecogniseText
                 if (imgUp.Tasks.Count == 0) return new BadRequestObjectResult("Illegal input: 'Tasks' list is empty");
 
                 List<BlobOCR> lRes = new List<BlobOCR>();
-                Drawings ocrRes = new Drawings();
+                Documents ocrRes = new Documents();
 
                 string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
                                            ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";

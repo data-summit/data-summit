@@ -5,7 +5,7 @@ SET IDENTITY_INSERT [dbo].[DocumentTypes] ON
 GO
 INSERT [dbo].[DocumentTypes] ([DocumentTypeId], [Name]) VALUES (1, N'Unknown')
 GO
-INSERT [dbo].[DocumentTypes] ([DocumentTypeId], [Name]) VALUES (2, N'DrawingPlanView')
+INSERT [dbo].[DocumentTypes] ([DocumentTypeId], [Name]) VALUES (2, N'DocumentPlanView')
 GO
 INSERT [dbo].[DocumentTypes] ([DocumentTypeId], [Name]) VALUES (3, N'Gantt')
 GO

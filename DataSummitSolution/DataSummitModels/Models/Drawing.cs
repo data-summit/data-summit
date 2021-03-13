@@ -6,19 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class Drawing
+    public partial class Document
     {
-        public Drawing()
+        public Document()
         {
-            DrawingFeatures = new HashSet<DrawingFeature>();
-            DrawingLayers = new HashSet<DrawingLayer>();
-            DrawingTemplates = new HashSet<DrawingTemplate>();
+            DocumentFeatures = new HashSet<DocumentFeature>();
+            DocumentLayers = new HashSet<DocumentLayer>();
+            DocumentTemplates = new HashSet<DocumentTemplate>();
             ImageGrids = new HashSet<ImageGrid>();
             Sentences = new HashSet<Sentence>();
             Tasks = new HashSet<Task>();
         }
 
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         [Required]
         [StringLength(1023)]
         public string FileName { get; set; }
@@ -49,28 +49,28 @@ namespace DataSummitDbModels
         public byte[] File { get; set; }
 
         [ForeignKey("PaperOrientationId")]
-        [InverseProperty("Drawings")]
+        [InverseProperty("Documents")]
         public virtual PaperOrientation PaperOrientation { get; set; }
         [ForeignKey("PaperSizeId")]
-        [InverseProperty("Drawings")]
+        [InverseProperty("Documents")]
         public virtual PaperSize PaperSize { get; set; }
         [ForeignKey("ProfileVersionId")]
-        [InverseProperty("Drawings")]
+        [InverseProperty("Documents")]
         public virtual ProfileVersion ProfileVersion { get; set; }
         [ForeignKey("ProjectId")]
-        [InverseProperty("Drawings")]
+        [InverseProperty("Documents")]
         public virtual Project Project { get; set; }
-        [InverseProperty("Drawing")]
-        public virtual ICollection<DrawingFeature> DrawingFeatures { get; set; }
-        [InverseProperty("Drawing")]
-        public virtual ICollection<DrawingLayer> DrawingLayers { get; set; }
-        [InverseProperty("Drawing")]
-        public virtual ICollection<DrawingTemplate> DrawingTemplates { get; set; }
-        [InverseProperty("Drawing")]
+        [InverseProperty("Document")]
+        public virtual ICollection<DocumentFeature> DocumentFeatures { get; set; }
+        [InverseProperty("Document")]
+        public virtual ICollection<DocumentLayer> DocumentLayers { get; set; }
+        [InverseProperty("Document")]
+        public virtual ICollection<DocumentTemplate> DocumentTemplates { get; set; }
+        [InverseProperty("Document")]
         public virtual ICollection<ImageGrid> ImageGrids { get; set; }
-        [InverseProperty("Drawing")]
+        [InverseProperty("Document")]
         public virtual ICollection<Sentence> Sentences { get; set; }
-        [InverseProperty("Drawing")]
+        [InverseProperty("Document")]
         public virtual ICollection<Task> Tasks { get; set; }
     }
 }

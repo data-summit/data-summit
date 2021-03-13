@@ -14,13 +14,13 @@ namespace DataSummitTests
     public class DocumentUploadTests
     {
         [TestMethod]
-        public void Create_new_drawing()
+        public void Create_new_document()
         {
-            List<DocumentUpload> ldrawings = new List<DocumentUpload>();
-            DocumentUpload drawing = new DocumentUpload();
+            List<DocumentUpload> ldocuments = new List<DocumentUpload>();
+            DocumentUpload document = new DocumentUpload();
             
 
-            ldrawings.Add(drawing);
+            ldocuments.Add(document);
 
             var mockDocumentUploadsDbSet = new Mock<DbSet<DocumentUpload>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
@@ -32,7 +32,7 @@ namespace DataSummitTests
             //mockContext.Setup(m => m.DocumentUpload).Returns(mockDocumentUploadsDbSet.Object);
             //var mockDocumentUploads = new DocumentUpload(mockContext.Object);
 
-            //mockDocumentUploads.(ldrawings);
+            //mockDocumentUploads.(ldocuments);
 
             //mockDocumentUploadsDbSet.Verify((DbSet<DocumentUpload> m) => m.Add(It.IsAny<DocumentUpload>()), Times.Once());
             //mockContext.Verify(m => m.SaveChanges(), Times.Once());

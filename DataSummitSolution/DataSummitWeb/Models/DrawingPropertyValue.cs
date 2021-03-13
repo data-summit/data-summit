@@ -3,12 +3,12 @@ using System;
 
 namespace DataSummitWeb.Models
 {
-    public class DrawingPropertyValue
+    public class DocumentPropertyValue
     {
         public string Id { get; set; }
         public string Value { get; set; }
 
-        public DrawingPropertyDto ToDto() => new DrawingPropertyDto()
+        public DocumentPropertyDto ToDto() => new DocumentPropertyDto()
         {
             SentenceId = Guid.Parse(Id),
             WordValue = Value

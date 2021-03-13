@@ -17,10 +17,10 @@ namespace DataSummitWeb.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
-    public partial class DrawingsController : Controller
+    public partial class DocumentsController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
-        private const int maxTrialDrawingUploads = 100;
+        private const int maxTrialDocumentUploads = 100;
 
         private enum ImageUploadTypes
         {
@@ -31,7 +31,7 @@ namespace DataSummitWeb.Controllers
             PNG
         }
 
-        public DrawingsController(IDataSummitHelperService dataSummitHelper)
+        public DocumentsController(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
@@ -39,8 +39,8 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var drawings = await _dataSummitHelper.GetProjectDrawings(id);
-            return Ok(drawings);
+            var documents = await _dataSummitHelper.GetProjectDocuments(id);
+            return Ok(documents);
         }
 
         [HttpGet("templates/{id}")]
@@ -51,29 +51,29 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost]
-        public string Post([FromBody] List<DrawingUpload> drawingUploads)
+        public string Post([FromBody] List<DocumentUpload> documentUploads)
         {
             var returnIds = new List<long>();
             try
             {
-                var drawings = new List<Drawings>();
-                if (drawings == null)
+                var documents = new List<Documents>();
+                if (documents == null)
                 {
-                    return "Invalid drawing upload";
+                    return "Invalid document upload";
                 }
 
-                foreach (DrawingUpload drawingUpload in drawingUploads)
+                foreach (DocumentUpload documentUpload in documentUploads)
                 {
-                    if (drawingUpload.File != null)
+                    if (documentUpload.File != null)
                     {
-                        var processedDrawing = ProcessDrawingUpload(drawingUpload);
-                        drawings.AddRange(processedDrawing);
+                        var processedDocument = ProcessDocumentUpload(documentUpload);
+                        documents.AddRange(processedDocument);
                     }
                 }
 
-                foreach(Drawings d in drawings)
+                foreach(Documents d in documents)
                 {
-                    // long id = _dataSummitHelper.CreateDrawing(drawings);
+                    // long id = _dataSummitHelper.CreateDocument(documents);
                     // if (id > 0) returnIds.Add(id);
                 }
             }
@@ -84,63 +84,63 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Drawings project)
+        public void Put(int id, [FromBody] Documents project)
         {
             //Update
-            //_dataSummitHelper.UpdateDrawing(id, project);
+            //_dataSummitHelper.UpdateDocument(id, project);
             return;
         }
 
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            //_dataSummitHelper.DeleteDrawing(id);
+            //_dataSummitHelper.DeleteDocument(id);
             return JsonConvert.SerializeObject("Ok");
         }
 
-        private List<Drawings> ProcessDrawingUpload (DrawingUpload drawingUpload)
+        private List<Documents> ProcessDocumentUpload (DocumentUpload documentUpload)
         {
-            var drawings = new List<Drawings>();
+            var documents = new List<Documents>();
             try
             {
-                if (AuditUploadIds(drawingUpload))
+                if (AuditUploadIds(documentUpload))
                 {
-                    var mimeType = string.Empty;
-                    switch (drawingUpload.FileType)
+                    var mimeType = Document.Format.Unknown;
+                    switch (documentUpload.FileType)
                     {
                         case "application/pdf":
-                            mimeType = ImageUploadTypes.PDF.ToString();
+                            mimeType = DataSummitModels.Enums.Document.Format.PDF;
                             break;
                         case "image/jpeg":
-                            mimeType = ImageUploadTypes.JPG.ToString();
+                            mimeType = DataSummitModels.Enums.Document.Format.JPG;
                             break;
                         case "image/x-png":
-                            mimeType = ImageUploadTypes.PNG.ToString();
+                            mimeType = DataSummitModels.Enums.Document.Format.PNG;
                             break;
                         case "image/gif":
-                            mimeType = ImageUploadTypes.GIF.ToString();
+                            mimeType = DataSummitModels.Enums.Document.Format.GIF;
                             break;
                     }
 
                     var imageUpload = new ImageUpload
                     {
-                        ProjectId = drawingUpload.ProjectId,
-                        ProfileVersionId = drawingUpload.TemplateId,
-                        FileName = drawingUpload.FileName,
-                        File = drawingUpload.File,
-                        Type = mimeType
+                        ProjectId = documentUpload.ProjectId,
+                        ProfileVersionId = documentUpload.TemplateId,
+                        FileName = documentUpload.FileName,
+                        File = documentUpload.File,
+                        Format = mimeType
                     };
 
-                    drawings.AddRange(ProcessDrawings(imageUpload));
+                    documents.AddRange(ProcessDocuments(imageUpload));
                 }
             }
             catch (Exception ae)
             { }
 
-            return drawings;
+            return documents;
         }
 
-        private bool AuditUploadIds(DrawingUpload imgU)
+        private bool AuditUploadIds(DocumentUpload imgU)
         {
             bool idsAreValid = false;
 
@@ -152,24 +152,24 @@ namespace DataSummitWeb.Controllers
 
         private int TrialRemaining()
         {
-            int trialRemainingDrawingCount = 0;
+            int trialRemainingDocumentCount = 0;
 
             try
             {
                 //Remaining trial documents
-                trialRemainingDrawingCount = trialRemainingDrawingCount > 0 && trialRemainingDrawingCount < maxTrialDrawingUploads 
-                    ? 100 - trialRemainingDrawingCount 
-                    : trialRemainingDrawingCount;
+                trialRemainingDocumentCount = trialRemainingDocumentCount > 0 && trialRemainingDocumentCount < maxTrialDocumentUploads 
+                    ? 100 - trialRemainingDocumentCount 
+                    : trialRemainingDocumentCount;
             }
             catch (Exception ae)
             { }
 
-            return trialRemainingDrawingCount;
+            return trialRemainingDocumentCount;
         }
 
-        private List<Drawings> ProcessPDF(ImageUpload drawData, Projects cProject)
+        private List<Documents> ProcessPDF(ImageUpload drawData, Projects cProject)
         {
-            List<Drawings> drawingss = new List<Drawings>();
+            List<Documents> documentss = new List<Documents>();
             try
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();
@@ -194,12 +194,12 @@ namespace DataSummitWeb.Controllers
             catch (Exception ae)
             { }
 
-            return drawingss;
+            return documentss;
         }
 
-        private List<Drawings> ProcessDrawings(ImageUpload imageUpload)
+        private List<Documents> ProcessDocuments(ImageUpload imageUpload)
         {
-            List<Drawings> drawingss = new List<Drawings>();
+            List<Documents> documentss = new List<Documents>();
             try
             {
                 List<ImageUpload> imageUploads = new List<ImageUpload>();
@@ -222,9 +222,9 @@ namespace DataSummitWeb.Controllers
                 //Extract title block properties
                 Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
 
-                if (imageUpload.Type == ImageUploadTypes.PDF.ToString())
+                if (imageUpload.Format == DataSummitModels.Enums.Document.Format.PDF)
                 {
-                    //Ensure that each PDF is split into a single drawing
+                    //Ensure that each PDF is split into a single document
                     var httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(imageUpload));
                     var pdfImages = new List<ImageUpload>();
                     try
@@ -274,7 +274,7 @@ namespace DataSummitWeb.Controllers
                     imageUploads[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, imageUploads[i]);
                 }
 
-                //Convert ImageUpload object data to a Drawing object data
+                //Convert ImageUpload object data to a Document object data
                 foreach (ImageUpload f in imageUploads)
                 {
                     if (f.WidthOriginal >= f.HeightOriginal)
@@ -282,12 +282,12 @@ namespace DataSummitWeb.Controllers
                     else
                     { f.PaperOrientationId = 1; }
                     f.CreatedDate = DateTime.Now;
-                    drawingss.Add(f.ToDrawing());
+                    documentss.Add(f.ToDocument());
                 }
             }
             catch (Exception ae)
             { }
-            return drawingss;
+            return documentss;
         }
 
         private ImageUpload StartPostProcessing(Uri uriPostProcessing, ImageUpload im)

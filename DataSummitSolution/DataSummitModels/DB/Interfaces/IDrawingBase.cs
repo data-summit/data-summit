@@ -1,11 +1,12 @@
-﻿using System;
+﻿using DataSummitModels.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace DataSummitModels.DB
 {
-    public interface IDrawingBase
+    public interface IDocumentBase
     {
-        long DrawingId { get; set; }
+        long DocumentId { get; set; }
         string FileName { get; set; }
         string BlobUrl { get; set; }
         string ContainerName { get; set; }
@@ -20,8 +21,8 @@ namespace DataSummitModels.DB
         bool Processed { get; set; }
         DateTime? CreatedDate { get; set; }
         string UserId { get; set; }
-        string Type { get; set; }
-        List<DrawingLayers> Layers { get; set; }
+        Document.Type Type { get; set; }
+        List<DocumentLayers> Layers { get; set; }
         List<Sentences> Sentences { get; set; }
         List<Tasks> Tasks { get; set; }
 

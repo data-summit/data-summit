@@ -19,24 +19,24 @@ namespace DataSummitWeb.Controllers
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
-        // GET api/properties/drawing/{id}
-        [HttpGet("drawing/{id}")]
-        public async Task<IActionResult> GetDrawingProperties([FromRoute] string id)
+        // GET api/properties/document/{id}
+        [HttpGet("document/{id}")]
+        public async Task<IActionResult> GetDocumentProperties([FromRoute] string id)
         {
-            var drawingId = int.Parse(id);
-            var drawingPropertyRows = await _dataSummitHelper.GetDrawingProperties(drawingId);
+            var documentId = int.Parse(id);
+            var documentPropertyRows = await _dataSummitHelper.GetDocumentProperties(documentId);
 
-            var drawingProperties = drawingPropertyRows
-                .Select(row => DrawingProperty.FromDto(row))
+            var documentProperties = documentPropertyRows
+                .Select(row => DocumentProperty.FromDto(row))
                 .ToList();
 
-            return Ok(drawingProperties);
+            return Ok(documentProperties);
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateDrawingPropertyValue([FromBody] DrawingPropertyValue drawingPropertyValue)
+        public async Task<IActionResult> UpdateDocumentPropertyValue([FromBody] DocumentPropertyValue documentPropertyValue)
         {
-            await _dataSummitHelper.UpdateDrawingPropertyValue(drawingPropertyValue.ToDto());
+            await _dataSummitHelper.UpdateDocumentPropertyValue(documentPropertyValue.ToDto());
             return Ok();
         }
 
@@ -44,7 +44,7 @@ namespace DataSummitWeb.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            await _dataSummitHelper.DeleteDrawingProperty(id);
+            await _dataSummitHelper.DeleteDocumentProperty(id);
             return Ok();
         }
     }

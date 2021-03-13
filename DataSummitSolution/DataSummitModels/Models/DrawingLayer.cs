@@ -6,16 +6,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataSummitDbModels
 {
-    public partial class DrawingLayer
+    public partial class DocumentLayer
     {
-        public long DrawingLayerId { get; set; }
+        public long DocumentLayerId { get; set; }
         [Required]
         [StringLength(1023)]
         public string Name { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
 
-        [ForeignKey("DrawingId")]
-        [InverseProperty("DrawingLayers")]
-        public virtual Drawing Drawing { get; set; }
+        [ForeignKey("DocumentId")]
+        [InverseProperty("DocumentLayers")]
+        public virtual Document Document { get; set; }
     }
 }

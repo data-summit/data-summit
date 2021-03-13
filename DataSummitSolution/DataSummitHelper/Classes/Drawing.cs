@@ -5,26 +5,26 @@ using System.Linq;
 
 namespace DataSummitHelper
 {
-    public class Drawing
+    public class Document
     {
         DataSummitDbContext dataSummitDbContext;
 
-        public Drawing(DataSummitDbContext dbContext)
+        public Document(DataSummitDbContext dbContext)
         {
             dataSummitDbContext = dbContext;
         }
 
-        public long DrawingCount()
+        public long DocumentCount()
         {
-            return dataSummitDbContext.Drawings.Count();
+            return dataSummitDbContext.Documents.Count();
         }
 
-        public List<Drawings> GetAllCompanyDrawings(int projectId)
+        public List<Documents> GetAllCompanyDocuments(int projectId)
         {
-            var drawings = new List<Drawings>();
+            var documents = new List<Documents>();
             try
             {
-                drawings = dataSummitDbContext.Drawings
+                documents = dataSummitDbContext.Documents
                     .Where(e => e.ProjectId == projectId)
                     .ToList();
             }
@@ -32,20 +32,20 @@ namespace DataSummitHelper
             {
                 string strError = ae.Message.ToString();
             }
-            return drawings;
+            return documents;
         }
 
-        public long CreateDrawing(List<Drawings> drawings)
+        public long CreateDocument(List<Documents> documents)
         {
             long returnid = 0;
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                foreach (Drawings drawing in drawings)
+                foreach (Documents document in documents)
                 {
-                    dataSummitDbContext.Drawings.Add(drawing);
+                    dataSummitDbContext.Documents.Add(document);
                     dataSummitDbContext.SaveChanges();
-                    returnid = drawing.DrawingId;
+                    returnid = document.DocumentId;
                 }
             }
             catch (Exception ae)
@@ -56,12 +56,12 @@ namespace DataSummitHelper
             return returnid;
         }
 
-        public void UpdateDrawing(long id, Drawings drawing)
+        public void UpdateDocument(long id, Documents document)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                dataSummitDbContext.Drawings.Update(drawing);
+                dataSummitDbContext.Documents.Update(document);
             }
             catch (Exception ae)
             {
@@ -69,13 +69,13 @@ namespace DataSummitHelper
             }
             return;
         }
-        public void DeleteDrawing(long drawingId)
+        public void DeleteDocument(long documentId)
         {
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                Drawings drawing = dataSummitDbContext.Drawings.First(p => p.DrawingId == drawingId);
-                dataSummitDbContext.Drawings.Remove(drawing);
+                Documents document = dataSummitDbContext.Documents.First(p => p.DocumentId == documentId);
+                dataSummitDbContext.Documents.Remove(document);
             }
             catch (Exception ae)
             {

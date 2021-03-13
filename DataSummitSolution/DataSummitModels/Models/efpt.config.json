@@ -70,19 +70,19 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[DrawingFeatures]"
+         "Name": "[dbo].[DocumentFeatures]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[DrawingLayers]"
+         "Name": "[dbo].[DocumentLayers]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[Drawings]"
+         "Name": "[dbo].[Documents]"
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[DrawingTemplates]"
+         "Name": "[dbo].[DocumentTemplates]"
       },
       {
          "HasPrimaryKey": true,

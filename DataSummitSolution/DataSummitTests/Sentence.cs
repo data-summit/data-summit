@@ -19,7 +19,7 @@ namespace DataSummitTests
             {
                 SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Confidence = (decimal)0.1,
-                DrawingId = 1,
+                DocumentId = 1,
                 //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                 IsUsed = true,
                 Vendor = "Test",
@@ -43,16 +43,16 @@ namespace DataSummitTests
         [TestMethod]
         public void Get_Sentence_by_id()
         {
-            //DrawingVTemplate drawingVTemplate1 = new DrawingVTemplate
+            //DocumentVTemplate documentVTemplate1 = new DocumentVTemplate
             //{
-            //    DrawingId = 1,
+            //    DocumentId = 1,
             //    DrawVtempId = 1,
             //    ProfileAttributeId = 1,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             //};
-            //DrawingVTemplate drawingVTemplate2 = new DrawingVTemplate
+            //DocumentVTemplate documentVTemplate2 = new DocumentVTemplate
             //{
-            //    DrawingId = 2,
+            //    DocumentId = 2,
             //    DrawVtempId = 2,
             //    ProfileAttributeId = 2,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002")
@@ -64,7 +64,7 @@ namespace DataSummitTests
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Confidence = (decimal)0.1,
-                    DrawingId = 1,
+                    DocumentId = 1,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                     IsUsed = true,
                     Vendor = "Test",
@@ -74,7 +74,7 @@ namespace DataSummitTests
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Confidence = (decimal)0.2,
-                    DrawingId = 2,
+                    DocumentId = 2,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-200000000000"),
                     IsUsed = true,
                     Vendor = "Test",
@@ -84,7 +84,7 @@ namespace DataSummitTests
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Confidence = (decimal)0.3,
-                    DrawingId = 3,
+                    DocumentId = 3,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-300000000000"),
                     IsUsed = true,
                     Vendor = "Test",
@@ -105,7 +105,7 @@ namespace DataSummitTests
             mockContext.Setup(c => c.Sentences).Returns(mockSentenceDbSet.Object);
 
             var mockSentenceService = new Sentence(mockContext.Object);
-            var mockSentence = mockSentenceService.GetAllDrawingSentences(1);
+            var mockSentence = mockSentenceService.GetAllDocumentSentences(1);
             Assert.AreEqual(mockSentence.FirstOrDefault().SentenceId, testSentence.ToList()[0].SentenceId);
         }
     }

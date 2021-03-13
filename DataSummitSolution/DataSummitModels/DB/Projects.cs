@@ -8,7 +8,7 @@ namespace DataSummitModels.DB
         public Projects()
         {
             Addresses = new HashSet<Addresses>();
-            Drawings = new HashSet<Drawings>();
+            Documents = new HashSet<Documents>();
         }
 
         public int ProjectId { get; set; }
@@ -21,6 +21,6 @@ namespace DataSummitModels.DB
 
         public virtual Companies Company { get; set; }
         public virtual ICollection<Addresses> Addresses { get; set; }
-        public virtual ICollection<Drawings> Drawings { get; set; }
+        public virtual ICollection<Documents> Documents { get; set; }
     }
 }

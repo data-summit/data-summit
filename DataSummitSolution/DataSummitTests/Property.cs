@@ -48,7 +48,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Sentence = new Sentences
                     {
-                        DrawingId = 1
+                        DocumentId = 1
                     }
                 },
                 new Properties
@@ -58,7 +58,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Sentence = new Sentences
                     {
-                        DrawingId = 1
+                        DocumentId = 1
                     }
                 },
                 new Properties
@@ -68,7 +68,7 @@ namespace DataSummitTests
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Sentence = new Sentences
                     {
-                        DrawingId = 1
+                        DocumentId = 1
                     }
                 }
             }.AsQueryable();

@@ -3,12 +3,12 @@
       <table>
         <tr style="width: 100%;">
           <td style="width: 30%;">
-            <h2 class="h1 py-5 font-weight-bold">Drawings</h2>
+            <h2 class="h1 py-5 font-weight-bold">Documents</h2>
           </td>
           <td style="width: 60%;"></td>
           <td style="width: 30%;">
             <button type="button" style="width: 170px;" mdbBtn color="primary" class="btn pull-right"
-              (click)="addDrawing()" mdbWavesEffect>Add Drawings</button>
+              (click)="addDocument()" mdbWavesEffect>Add Documents</button>
           </td>
         </tr>
     </table>
@@ -19,29 +19,29 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="text-center" mdbTableCol *ngFor="let drawingRow of drawingTableRows">
-              <td>{{drawingRow.Name}}</td>
-              <td>{{drawingRow.ContainerUrl}}</td>
-              <td (click)="goToProperties(drawingRow.DrawingId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + drawingRow.Name + ' properties'"></i></td>
-              <td>{{drawingRow.CreatedDate | date: 'd-MMM-yyyy'}}</td>
+            <tr class="text-center" mdbTableCol *ngFor="let documentRow of documentTableRows">
+              <td>{{documentRow.Name}}</td>
+              <td>{{documentRow.ContainerUrl}}</td>
+              <td (click)="goToProperties(documentRow.DocumentId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + documentRow.Name + ' properties'"></i></td>
+              <td>{{documentRow.CreatedDate | date: 'd-MMM-yyyy'}}</td>
               <td class="text-center">
-                <i class="fa fa-trash-alt pointer" (click)="deleteDrawing(drawingRow)" [mdbTooltip]="'Delete ' + drawingRow.name"></i>
+                <i class="fa fa-trash-alt pointer" (click)="deleteDocument(documentRow)" [mdbTooltip]="'Delete ' + documentRow.name"></i>
               </td>
             </tr>
           </tbody>
         </table>
     </section>
     
-    <div mdbModal #drawingModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+    <div mdbModal #documentModal="mdbModal" class="modal fade right" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
       aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" >
           <div class="modal-header">
             <div>
-              <button type="button" class="close pull-right" aria-label="Close" (click)="drawingModal.hide()">
+              <button type="button" class="close pull-right" aria-label="Close" (click)="documentModal.hide()">
                 <span aria-hidden="true">×</span>
               </button>
-              <h4 class="modal-title w-100" id="myModalLabel">Upload Drawings</h4>
+              <h4 class="modal-title w-100" id="myModalLabel">Upload Documents</h4>
             </div>
           </div>
           <div class="modal-body">
@@ -75,14 +75,14 @@
             <div class="ui-g-12">
                 <!-- Line 1 -->
                 <p-fileUpload [style]="{'width': '100%'}" #uploadControl mode="advanced" name="demo[]" 
-                    customUpload="false" [multiple]="true" maxFileSize="10000000" (uploadHandler)="readDrawings($event)"
+                    customUpload="false" [multiple]="true" maxFileSize="10000000" (uploadHandler)="readDocuments($event)"
                     [showUploadButton]="false" accept="image/x-png,image/gif,image/jpeg,application/pdf" 
                     [showCancelButton]="true" [chooseLabel]="'Select File(s)'">
                 </p-fileUpload>
             </div>
           </div>
           <div class="modal-footer justify-content-center">
-            <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="uploadControl.clear(); drawingModal.hide()"
+            <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="uploadControl.clear(); documentModal.hide()"
               mdbWavesEffect>Close</button>
             <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="upload()" mdbWavesEffect>Upload</button>
           </div>

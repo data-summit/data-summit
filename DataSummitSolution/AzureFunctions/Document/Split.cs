@@ -49,11 +49,11 @@ namespace AzureFunctions.Document
             {
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayers>();
 
                 if (imgUp.CompanyId <= 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 if (imgUp.ProjectId <= 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
-                if (imgUp.DrawingId < 0) return new BadRequestObjectResult("Illegal input: DrawingId is less than zero.");
+                if (imgUp.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: Name is ,less than zero.");
@@ -271,10 +271,10 @@ namespace AzureFunctions.Document
                         File = null,
                         FileName = imgUp.FileName,
                         Tasks = imgUp.Tasks.ToList(),
-                        Type = "PDF",
-                        Layers = new List<DrawingLayers>()
+                        Format = DataSummitModels.Enums.Document.Format.PDF,
+                        Layers = new List<DocumentLayers>()
                         { 
-                            new DrawingLayers()
+                            new DocumentLayers()
                             {
                                 Name = lLayers.First()
                             }

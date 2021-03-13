@@ -1,4 +1,5 @@
 using DataSummitModels.DB;
+using DataSummitModels.Enums;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -37,15 +38,15 @@ namespace AzureFunctions
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayers>();
 
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
-                if (imgUp.DrawingId < 0) return new BadRequestObjectResult("Illegal input: DrawingId is less than zero.");
+                if (imgUp.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                if (imgUp.Type == "") return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
@@ -115,7 +116,7 @@ namespace AzureFunctions
                     MemoryStream ms = new MemoryStream();
                     await cbbOrig.DownloadToStreamAsync(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-                    Image img = Image.FromStream(ms);
+                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
 
                     //Split images prior to upload
                     if (imgUp.SplitImages == null) imgUp.SplitImages = new List<ImageGrids>();

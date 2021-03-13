@@ -1,7 +1,7 @@
 ﻿USE [DataSummitDB]
 GO
 
-INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'cc047efd-ec10-4f7b-8b2d-0034004e838c', N'Where an item is covered by drawings to different scales, the larger scale drawing is to be', 658, 16, 4122, 4427, N'Azure', 1, NULL, CAST(41 AS Decimal(18, 0)), 10013)
+INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'cc047efd-ec10-4f7b-8b2d-0034004e838c', N'Where an item is covered by documents to different scales, the larger scale document is to be', 658, 16, 4122, 4427, N'Azure', 1, NULL, CAST(41 AS Decimal(18, 0)), 10013)
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'098cb852-4f12-4bff-9423-011a37be7037', N'to W-HB', 59, 12, 3386, 1942, N'Azure', 1, NULL, CAST(4 AS Decimal(18, 0)), 10013)
 GO
@@ -459,7 +459,7 @@ INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'46dcfb28-450f-4141-adb8-7b53b2ecea07', N'20mma', 58, 12, 2004, 2520, N'Azure', 1, NULL, CAST(4 AS Decimal(18, 0)), 10013)
 GO
-INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'634c3376-1df1-4f75-997e-7b7fdff15b23', N'Do not scale drawing& Figured dimensions to be worked to in all cases', 521, 16, 4122, 4486, N'Azure', 1, NULL, CAST(32 AS Decimal(18, 0)), 10013)
+INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'634c3376-1df1-4f75-997e-7b7fdff15b23', N'Do not scale document& Figured dimensions to be worked to in all cases', 521, 16, 4122, 4486, N'Azure', 1, NULL, CAST(32 AS Decimal(18, 0)), 10013)
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'1afc9bfb-d101-432b-9221-7bb6e7810eab', N'discrepancy to be notified to aaily Garner LLP and rectified before proceeding with the works', 680, 16, 4121, 4368, N'Azure', 1, NULL, CAST(42 AS Decimal(18, 0)), 10013)
 GO
@@ -631,7 +631,7 @@ INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'cddca89f-e010-4a30-9ee6-a2049ccbe2dc', N'2DrnmØ', 59, 12, 4455, 3057, N'Azure', 1, NULL, CAST(4 AS Decimal(18, 0)), 10013)
 GO
-INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'7f553584-8da0-45bf-807f-a256bc32b96d', N'This drawing and the copyrights and patents therein are the property of Bail)'' Garner L LP and', 680, 16, 4122, 4526, N'Azure', 1, NULL, CAST(42 AS Decimal(18, 0)), 10013)
+INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'7f553584-8da0-45bf-807f-a256bc32b96d', N'This document and the copyrights and patents therein are the property of Bail)'' Garner L LP and', 680, 16, 4122, 4526, N'Azure', 1, NULL, CAST(42 AS Decimal(18, 0)), 10013)
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'7c831f1b-0b45-43f2-98c4-a2c7c52d724f', N'TBV', 33, 12, 4229, 2689, N'Azure', 1, NULL, CAST(2 AS Decimal(18, 0)), 10013)
 GO
@@ -711,7 +711,7 @@ INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'3b3d2214-b328-4102-a45d-b3cad8d6fa0d', N'20mrnØ', 58, 12, 1848, 3036, N'Azure', 1, NULL, CAST(4 AS Decimal(18, 0)), 10013)
 GO
-INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'e73be58e-8177-4784-ab80-b450a98012fe', N'on site or shop drawings', 178, 16, 4121, 4388, N'Azure', 1, NULL, CAST(11 AS Decimal(18, 0)), 10013)
+INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'e73be58e-8177-4784-ab80-b450a98012fe', N'on site or shop documents', 178, 16, 4121, 4388, N'Azure', 1, NULL, CAST(11 AS Decimal(18, 0)), 10013)
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'12991910-fcc4-445d-8e6c-b4e88b238e46', N'DATE', 42, 12, 4008, 4592, N'Azure', 1, NULL, CAST(3 AS Decimal(18, 0)), 10013)
 GO
@@ -757,7 +757,7 @@ INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'0498b5fb-aa4c-48fc-a94c-c03077dfefaf', N'7.', 22, 22, 5417, 1849, N'Azure', 1, NULL, CAST(1 AS Decimal(18, 0)), 10013)
 GO
-INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'efe93f51-2404-4263-9761-c26fc53f92ad', N'drawing is to be read in conjunction with all relevant consultants or specialists drawing& Any', 686, 16, 4121, 4348, N'Azure', 1, NULL, CAST(42 AS Decimal(18, 0)), 10013)
+INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'efe93f51-2404-4263-9761-c26fc53f92ad', N'document is to be read in conjunction with all relevant consultants or specialists document& Any', 686, 16, 4121, 4348, N'Azure', 1, NULL, CAST(42 AS Decimal(18, 0)), 10013)
 GO
 INSERT [dbo].[Sentences] ([SentenceId], [Words], [Width], [Height], [Left], [Top], [Vendor], [IsUsed], [Confidence], [SlendernessRatio], [DocumentId]) VALUES (N'eb36057f-8613-438e-8b0e-c2892e9389b0', N'clean casing', 137, 23, 5469, 228, N'Azure', 1, NULL, CAST(5 AS Decimal(18, 0)), 10013)
 GO

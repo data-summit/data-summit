@@ -5,19 +5,19 @@ namespace DataSummitHelper.Dto
 {
     /// <summary>
     /// </summary>
-    public sealed class DrawingDto
+    public sealed class DocumentDto
     {
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
         public string Name { get; set; }
         public string ContainerUrl { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public DrawingDto(Drawings drawing)
+        public DocumentDto(Documents document)
         {
-            DrawingId = drawing.DrawingId;
-            Name = drawing.FileName;
-            ContainerUrl = drawing.ContainerName;
-            CreatedDate = drawing.CreatedDate;
+            DocumentId = document.DocumentId;
+            Name = document.FileName;
+            ContainerUrl = document.ContainerName;
+            CreatedDate = document.CreatedDate;
         }
     }
 }
