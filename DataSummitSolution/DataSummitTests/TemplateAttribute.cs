@@ -52,7 +52,7 @@ namespace DataSummitTests
         [TestMethod]
         public void Get_templateAttribute_by_id()
         {
-            DataSummitModels.DB.TemplateVersion templateVersion1 = new TemplateVersion
+            DataSummitModels.DB.TemplateVersion templateVersion1 = new DataSummitModels.DB.TemplateVersion
             {
                 TemplateVersionId = 1,
                 Name = "Unit Test TemplateVersion1",

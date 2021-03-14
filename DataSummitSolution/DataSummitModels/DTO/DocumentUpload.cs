@@ -19,6 +19,11 @@ namespace DataSummitModels.DTO
         public IFormFile File { get; set; }
         public virtual List<Task> Tasks { get; set; }
         public bool IsUploaded { get; set; } = false;
+        public int ProjectId { get; set; }
+        public int TemplateId { get; set; }
+        public string FileName { get; set; }
+        public string FileType { get; set; }
+
 
         public DocumentUpload()
         { ; }

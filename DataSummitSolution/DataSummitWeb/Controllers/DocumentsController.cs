@@ -7,12 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DataSummitWeb.Enums;
-using DataSummitModels.DTO;
 
 namespace DataSummitWeb.Controllers
 {
@@ -36,7 +35,7 @@ namespace DataSummitWeb.Controllers
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -72,7 +71,7 @@ namespace DataSummitWeb.Controllers
                     }
                 }
 
-                foreach(DataSummitModels.DB.Document d in documents)
+                foreach (DataSummitModels.DB.Document d in documents)
                 {
                     // long id = _dataSummitHelper.CreateDocument(documents);
                     // if (id > 0) returnIds.Add(id);
@@ -85,7 +84,7 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Document project)
+        public void Put(int id, [FromBody] DataSummitModels.DB.Document project)
         {
             //Update
             //_dataSummitHelper.UpdateDocument(id, project);
@@ -99,9 +98,9 @@ namespace DataSummitWeb.Controllers
             return JsonConvert.SerializeObject("Ok");
         }
 
-        private List<Document> ProcessDocumentUpload (DocumentUpload documentUpload)
+        private List<DataSummitModels.DB.Document> ProcessDocumentUpload(DocumentUpload documentUpload)
         {
-            var documents = new List<Document>();
+            var documents = new List<DataSummitModels.DB.Document>();
             try
             {
                 if (AuditUploadIds(documentUpload))
@@ -129,9 +128,12 @@ namespace DataSummitWeb.Controllers
                         ProjectId = documentUpload.ProjectId,
                         TemplateVersionId = documentUpload.TemplateId,
                         FileName = documentUpload.FileName,
-                        File = documentUpload.File,
                         Format = mimeType
                     };
+                    MemoryStream ms = new MemoryStream();
+                    documentUpload.File.OpenReadStream().CopyTo(ms);
+                    imageUpload.File = ms.ToArray();
+
 
                     documents.AddRange(ProcessDocuments(imageUpload));
                 }
@@ -159,8 +161,8 @@ namespace DataSummitWeb.Controllers
             try
             {
                 //Remaining trial documents
-                trialRemainingDocumentCount = trialRemainingDocumentCount > 0 && trialRemainingDocumentCount < maxTrialDocumentUploads 
-                    ? 100 - trialRemainingDocumentCount 
+                trialRemainingDocumentCount = trialRemainingDocumentCount > 0 && trialRemainingDocumentCount < maxTrialDocumentUploads
+                    ? 100 - trialRemainingDocumentCount
                     : trialRemainingDocumentCount;
             }
             catch (Exception ae)
@@ -169,9 +171,9 @@ namespace DataSummitWeb.Controllers
             return trialRemainingDocumentCount;
         }
 
-        private List<Documents> ProcessPDF(ImageUpload drawData, Projects cProject)
+        private List<DataSummitModels.DB.Document> ProcessPDF(ImageUpload drawData, Project cProject)
         {
-            List<Documents> documentss = new List<Documents>();
+            List<DataSummitModels.DB.Document> documentss = new List<DataSummitModels.DB.Document>();
             try
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();
@@ -199,13 +201,13 @@ namespace DataSummitWeb.Controllers
             return documentss;
         }
 
-        private List<Documents> ProcessDocuments(ImageUpload imageUpload)
+        private List<DataSummitModels.DB.Document> ProcessDocuments(ImageUpload imageUpload)
         {
-            List<Documents> documentss = new List<Documents>();
+            List<DataSummitModels.DB.Document> documentss = new List<DataSummitModels.DB.Document>();
             try
             {
                 List<ImageUpload> imageUploads = new List<ImageUpload>();
-                Projects projects = null;
+                Project projects = null;
                 imageUpload.StorageAccountName = projects.StorageAccountName;
                 imageUpload.StorageAccountKey = projects.StorageAccountKey;
                 imageUpload.CompanyId = projects.CompanyId;
@@ -214,13 +216,13 @@ namespace DataSummitWeb.Controllers
                 Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
                 Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
                 Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
-                
+
                 //OCR
                 Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
-                
+
                 //Post processing
                 Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
-                
+
                 //Extract title block properties
                 Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
 
@@ -252,14 +254,14 @@ namespace DataSummitWeb.Controllers
                     var httpImageUpload = ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(imageUploads[i]));
                     string imageUploadString = httpImageUpload.Content.ReadAsStringAsync().Result;
                     var imageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(imageUploadString);
-                    imageUploadObject.Tasks = VerifyTaskList(imageUploadObject.Tasks.ToList());
+                    imageUploadObject.Tasks = imageUploadObject.Tasks.ToList();
                     imageUploads[i] = imageUploadObject;
 
                     //Divide image into OCR acceptable sives
                     var divideImage = ProcessCall(uriDivideImage, JsonConvert.SerializeObject(imageUploads[i]));
                     string divideImageString = divideImage.Content.ReadAsStringAsync().Result;
                     var divideImageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(divideImageString);
-                    divideImageUploadObject.Tasks = VerifyTaskList(divideImageUploadObject.Tasks.ToList());
+                    divideImageUploadObject.Tasks = divideImageUploadObject.Tasks.ToList();
                     imageUploads[i] = divideImageUploadObject;
 
                     ///Self cleaning occurs in all 3 OCR functions
@@ -317,7 +319,7 @@ namespace DataSummitWeb.Controllers
                 HttpResponseMessage httpExtractTitleBlock = ProcessCall(uriExtractTitleBlock, JsonConvert.SerializeObject(imOut));
                 string sExtractTitleBlock = httpExtractTitleBlock.Content.ReadAsStringAsync().Result;
                 ImageUpload respExtractTitleBlock = JsonConvert.DeserializeObject<ImageUpload>(sExtractTitleBlock);
-                respExtractTitleBlock.Tasks = VerifyTaskList(respExtractTitleBlock.Tasks.ToList());
+                respExtractTitleBlock.Tasks = respExtractTitleBlock.Tasks.ToList();
                 imOut = respExtractTitleBlock;
             }
             catch (Exception ae)
@@ -328,34 +330,6 @@ namespace DataSummitWeb.Controllers
             return imOut;
         }
 
-        // TODO: This method makes absolutely NO SENSE!
-        private List<FunctionTask> VerifyTaskList(List<FunctionTask> tasks)
-        {
-            var taskList = tasks ?? new List<FunctionTask>();
-            try
-            {
-                if (taskList.Count == 0)
-                {
-                    foreach (var task in taskList)
-                    { taskList.Add(task); };
-                    
-                    if (tasks.Count == 0)
-                    {
-                        tasks.Add(
-                          new FunctionTask
-                          {
-                              Name = "Azure Task Count byPass (to be deleted)",
-                              TaskId = (long)1,
-                              TimeStamp = DateTime.Now
-                          }
-                        );
-                    }
-                }
-            }
-            catch (Exception ae)
-            { }
-            return tasks;
-        }
 
         public static HttpResponseMessage ProcessCall(Uri uri, string payload)
         {

@@ -31,7 +31,7 @@ namespace DataSummitWeb.Controllers
 
         // POST api/values
         [HttpPost]
-        public string Post([FromBody]TemplateAttributes templateAttribute)
+        public string Post([FromBody]TemplateAttribute templateAttribute)
         {
             //Create
             //return JsonConvert.SerializeObject(
@@ -41,7 +41,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/templateAttributes/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]TemplateAttributes templateAttribute)
+        public void Put(int id, [FromBody]TemplateAttribute templateAttribute)
         {
             //Update
             //templateAttributeService.UpdateTemplateAttribute(id, templateAttribute);

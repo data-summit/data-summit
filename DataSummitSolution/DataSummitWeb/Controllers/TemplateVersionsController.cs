@@ -46,9 +46,9 @@ namespace DataSummitWeb.Controllers
             int id = 0;
             try
             {
-                TemplateVersions pv = null;
-                List<TemplateAttributes> lPa = new List<TemplateAttributes>();
-                pv = new TemplateVersions
+                TemplateVersion pv = null;
+                List<TemplateAttribute> lPa = new List<TemplateAttribute>();
+                pv = new TemplateVersion
                 {
                     CompanyId = templateVersion.CompanyId,
                     Name = templateVersion.Name,
@@ -60,15 +60,15 @@ namespace DataSummitWeb.Controllers
                     //TODO this needs to updated with actual logged in user id
                     UserId = 1
                 };
-                Task t = Task.Factory.StartNew(() =>
+                System.Threading.Tasks.Task t = System.Threading.Tasks.Task.Run(() =>
                 {
                     string i = templateVersion.ImageString.Replace("data:image/jpeg;base64,", "");
                     pv.Image = Convert.FromBase64String(i);
                 });
                 
-                foreach (TemplateAttributes pa in templateVersion.TemplateAttributes)
+                foreach (TemplateAttribute pa in templateVersion.TemplateAttributes)
                 {
-                    TemplateAttributes npa = new TemplateAttributes
+                    TemplateAttribute npa = new TemplateAttribute
                     {
                         BlockPositionId = pa.BlockPositionId,
                         CreatedDate = DateTime.Now,
@@ -100,7 +100,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/templateVersion/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]TemplateVersions templateVersion)
+        public void Put(int id, [FromBody]TemplateVersion templateVersion)
         {
             //Update
             //templateVersionsService.UpdateTemplateVersion(id, templateVersion);
@@ -120,7 +120,7 @@ namespace DataSummitWeb.Controllers
             byte[] array = null;
             try
             {
-                Task t = Task.Factory.StartNew(() =>
+                System.Threading.Tasks.Task t = System.Threading.Tasks.Task.Run(() =>
                 {
                     array = Convert.FromBase64String(image);
                 });

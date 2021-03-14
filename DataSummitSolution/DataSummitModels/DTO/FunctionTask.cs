@@ -5,6 +5,9 @@ namespace DataSummitModels.DTO
 {
     public class FunctionTask : Task
     {
+        public FunctionTask()
+        { ; }
+
         public FunctionTask(string name, DateTime previous)
         {
             Name = name;
