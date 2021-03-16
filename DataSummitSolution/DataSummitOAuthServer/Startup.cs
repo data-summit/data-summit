@@ -32,7 +32,7 @@ namespace DataSummitOAuthServer
             .AddEntityFrameworkStores<AuthenticationDbContext>()
             .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddMvc(option => option.EnableEndpointRouting = false);
 
             // configure identity server with in-memory stores, keys, clients and scopes
             services.AddIdentityServer()
@@ -75,7 +75,7 @@ namespace DataSummitOAuthServer
                 });
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

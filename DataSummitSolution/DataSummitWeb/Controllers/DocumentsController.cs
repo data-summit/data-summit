@@ -5,8 +5,6 @@ using DataSummitModels.Enums;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,6 +13,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+
+
 
 namespace DataSummitWeb.Controllers
 {
@@ -67,46 +67,46 @@ namespace DataSummitWeb.Controllers
                     //{
                         if (file != null)
                         {
-                            var doc = new DocumentUpload();
-                            MemoryStream ms = new MemoryStream();
-                            file.OpenReadStream().CopyTo(ms);
+                            //var doc = new DocumentUpload();
+                            //MemoryStream ms = new MemoryStream();
+                            //file.OpenReadStream().CopyTo(ms);
 
-                            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + doc.StorageAccountName +
-                                               ";AccountKey=" + doc.StorageAccountKey + ";EndpointSuffix=core.windows.net";
+                            //string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + doc.StorageAccountName +
+                            //                   ";AccountKey=" + doc.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
-                            CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
-                            CloudBlobClient blobClient = account.CreateCloudBlobClient();
+                            //CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+                            //CloudBlobClient blobClient = account.CreateCloudBlobClient();
 
-                            //Initiate Azure container object
-                            doc.ContainerName = Guid.NewGuid().ToString();
-                            CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName);
+                            ////Initiate Azure container object
+                            //doc.ContainerName = Guid.NewGuid().ToString();
+                            //CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName);
 
-                            //Create container if it doesn't exist
-                            await cbc.CreateIfNotExistsAsync();
-                            BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
-                            permissions.PublicAccess = BlobContainerPublicAccessType.Container;
-                            await cbc.SetPermissionsAsync(permissions);
+                            ////Create container if it doesn't exist
+                            //await cbc.CreateIfNotExistsAsync();
+                            //BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
+                            //permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                            //await cbc.SetPermissionsAsync(permissions);
 
-                            CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
+                            //CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
 
-                            AccessCondition ac = new AccessCondition();
-                            BlobRequestOptions brq = new BlobRequestOptions();
-                            OperationContext oc = new OperationContext();
-                            oc.LogLevel = Microsoft.WindowsAzure.Storage.LogLevel.Informational;
-                            await cbbImage.UploadFromStreamAsync(doc.File.OpenReadStream(), ac, brq, oc);
-                            //Export image to blockBlob
-                            cbbImage.Metadata.Add("CompanyId", doc.CompanyId.ToString());
-                            cbbImage.Metadata.Add("UserId", doc.UserId.ToString());
-                            cbbImage.Metadata.Add("FileName", doc.File.FileName.ToString());
-                            cbbImage.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
-                            cbbImage.Metadata.Add("DocumentType", doc.DocumentType.ToString());
-                            cbbImage.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
-                            await cbbImage.SetMetadataAsync();
+                            //AccessCondition ac = new AccessCondition();
+                            //BlobRequestOptions brq = new BlobRequestOptions();
+                            //OperationContext oc = new OperationContext();
+                            //oc.LogLevel = Microsoft.WindowsAzure.Storage.LogLevel.Informational;
+                            //await cbbImage.UploadFromStreamAsync(doc.File.OpenReadStream(), ac, brq, oc);
+                            ////Export image to blockBlob
+                            //cbbImage.Metadata.Add("CompanyId", doc.CompanyId.ToString());
+                            //cbbImage.Metadata.Add("UserId", doc.UserId.ToString());
+                            //cbbImage.Metadata.Add("FileName", doc.File.FileName.ToString());
+                            //cbbImage.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
+                            //cbbImage.Metadata.Add("DocumentType", doc.DocumentType.ToString());
+                            //cbbImage.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
+                            //await cbbImage.SetMetadataAsync();
 
-                            //Clear heavy payload content
-                            doc.File = null;
-                            doc.IsUploaded = true;
-                            doc.BlobUrl = cbbImage.Uri.ToString();
+                            ////Clear heavy payload content
+                            //doc.File = null;
+                            //doc.IsUploaded = true;
+                            //doc.BlobUrl = cbbImage.Uri.ToString();
                         }
                     //}));
                 }
