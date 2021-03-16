@@ -2,8 +2,11 @@
 using DataSummitModels.DB;
 using DataSummitModels.DTO;
 using DataSummitModels.Enums;
+using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,14 +25,14 @@ namespace DataSummitWeb.Controllers
         private readonly IDataSummitHelperService _dataSummitHelper;
         private const int maxTrialDocumentUploads = 100;
 
-        private enum ImageUploadTypes
-        {
-            GIF,
-            JPG,
-            JPEG,
-            PDF,
-            PNG
-        }
+        //private enum ImageUploadTypes
+        //{
+        //    GIF,
+        //    JPG,
+        //    JPEG,
+        //    PDF,
+        //    PNG
+        //}
 
         public DocumentsController(IDataSummitHelperService dataSummitHelper)
         {
@@ -51,31 +54,63 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost]
-        public string Post([FromBody] List<DocumentUpload> documentUploads)
+        public async Task<string> Post([FromBody] ICollection<IFormFile> files)
         {
             var returnIds = new List<long>();
+            List<DocumentUpload> lDocs = new List<DocumentUpload>();
             try
             {
-                var documents = new List<DataSummitModels.DB.Document>();
-                if (documents == null)
+                List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
+                foreach (var file in files)
                 {
-                    return "Invalid document upload";
-                }
+                    //lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
+                    //{
+                        if (file != null)
+                        {
+                            var doc = new DocumentUpload();
+                            MemoryStream ms = new MemoryStream();
+                            file.OpenReadStream().CopyTo(ms);
 
-                foreach (DocumentUpload documentUpload in documentUploads)
-                {
-                    if (documentUpload.File != null)
-                    {
-                        var processedDocument = ProcessDocumentUpload(documentUpload);
-                        documents.AddRange(processedDocument.ToList());
-                    }
-                }
+                            string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + doc.StorageAccountName +
+                                               ";AccountKey=" + doc.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
-                foreach (DataSummitModels.DB.Document d in documents)
-                {
-                    // long id = _dataSummitHelper.CreateDocument(documents);
-                    // if (id > 0) returnIds.Add(id);
+                            CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+                            CloudBlobClient blobClient = account.CreateCloudBlobClient();
+
+                            //Initiate Azure container object
+                            doc.ContainerName = Guid.NewGuid().ToString();
+                            CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName);
+
+                            //Create container if it doesn't exist
+                            await cbc.CreateIfNotExistsAsync();
+                            BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
+                            permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                            await cbc.SetPermissionsAsync(permissions);
+
+                            CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
+
+                            AccessCondition ac = new AccessCondition();
+                            BlobRequestOptions brq = new BlobRequestOptions();
+                            OperationContext oc = new OperationContext();
+                            oc.LogLevel = Microsoft.WindowsAzure.Storage.LogLevel.Informational;
+                            await cbbImage.UploadFromStreamAsync(doc.File.OpenReadStream(), ac, brq, oc);
+                            //Export image to blockBlob
+                            cbbImage.Metadata.Add("CompanyId", doc.CompanyId.ToString());
+                            cbbImage.Metadata.Add("UserId", doc.UserId.ToString());
+                            cbbImage.Metadata.Add("FileName", doc.File.FileName.ToString());
+                            cbbImage.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
+                            cbbImage.Metadata.Add("DocumentType", doc.DocumentType.ToString());
+                            cbbImage.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
+                            await cbbImage.SetMetadataAsync();
+
+                            //Clear heavy payload content
+                            doc.File = null;
+                            doc.IsUploaded = true;
+                            doc.BlobUrl = cbbImage.Uri.ToString();
+                        }
+                    //}));
                 }
+                System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
             }
             catch (Exception ae)
             { }

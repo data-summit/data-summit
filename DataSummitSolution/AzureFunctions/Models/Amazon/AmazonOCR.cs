@@ -26,8 +26,8 @@ namespace AzureFunctions.Models.Amazon
             try
             {
                 AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(
-                    AzureFunctions.Keys.Amazon.AccessKeyID, 
-                    AzureFunctions.Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                    "AzureFunctions.Keys.Amazon.AccessKeyID", 
+                    "AzureFunctions.Keys.Amazon.SecretAccessKey", AWS.RegionEndpoint.EUWest1);  //Replace with actual key from Azure Secrets 
                 DetectTextRequest detectTextRequest = new DetectTextRequest();
 
                 String json = String.Empty;

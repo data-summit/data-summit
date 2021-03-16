@@ -144,7 +144,7 @@ namespace AzureFunctions.Methods
                 String json = JsonConvert.SerializeObject(r);
 
                 //Google's literal version:  Uri uri = new Uri("POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDMe0LtaxFvFvDCTaEV-05IT792tvxpmbA");
-                Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + Keys.Google.API_Key);
+                Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + "Keys.Google.API_Key"); //Replace 'Keys.Google.API_Key' with Azure Secret of actual key
 
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
                 //req1.Timeout = 3600;

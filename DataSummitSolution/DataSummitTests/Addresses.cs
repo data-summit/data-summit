@@ -3,6 +3,7 @@ using DataSummitModels.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using StackExchange.Redis.Extensions.Core.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace DataSummitTests
     [TestClass]
     public class AddressTests
     {
+        ////From https://github.com/moq/moq4/issues/589
+        //[TestInitialize]
+        //public void Startup()
+        //{
+        //    RedisConfigurationMock = new Mock<RedisConfiguration>();
+        //}
+
         [TestMethod]
         public void Create_new_Address()
         {

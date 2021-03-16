@@ -98,7 +98,7 @@ namespace AzureFunctions.RecogniseText
 
                 // Request headers.
                 client.DefaultRequestHeaders.Add(
-                    "Ocp-Apim-Subscription-Key", Keys.Azure.VisionKey);
+                    "Ocp-Apim-Subscription-Key", "Keys.Azure.VisionKey");  //Replace with actual key from Azure Secrets
 
                 // Request parameters. 
                 // The language parameter doesn't specify a language, so the 
@@ -108,7 +108,7 @@ namespace AzureFunctions.RecogniseText
                 string requestParameters = "language=unk&detectOrientation=true";
 
                 // Assemble the URI for the REST API method.
-                string uri = Keys.Azure.VisionUri + "?" + requestParameters;
+                string uri = "Keys.Azure.VisionUri" + "?" + requestParameters;  //Replace with actual key from Azure Secrets
 
                 List<System.Threading.Tasks.Task> lOCRTasks = new List<System.Threading.Tasks.Task>();
 

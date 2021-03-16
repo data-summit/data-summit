@@ -77,7 +77,8 @@ namespace AzureFunctions.RecogniseText
                 //string sOCRRes = "All OCR Results.json";
                 //CloudBlockBlob jsonSentencesBlob = cbc.GetBlockBlobReference(sOCRRes);
 
-                AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(Keys.Amazon.AccessKeyID, Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient("Keys.Amazon.AccessKeyID", "Keys.Amazon.SecretAccessKey", 
+                    AWS.RegionEndpoint.EUWest1);  //Replace with actual key from Azure Secrets
                 DetectTextRequest detectTextRequest = new DetectTextRequest();
 
                 List<Task> lOCRTasks = new List<Task>();
