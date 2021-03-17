@@ -35,13 +35,16 @@ namespace DataSummitHelper.Interfaces
         #region Templates
         Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId);
         Task<List<TemplateDto>> GetAllProjectTemplates(int companyId);
-
         Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId);
         #endregion
 
 
         #region Properties
 
+        #endregion
+
+        #region Secrets
+        string GetSecret(string secretName);
         #endregion
 
         Task<HttpResponseMessage> ProcessCall(Uri uri, string payload);

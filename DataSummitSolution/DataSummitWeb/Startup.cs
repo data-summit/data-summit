@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -106,12 +107,18 @@ namespace DataSummitWeb
 
                 options.User.RequireUniqueEmail = true;
             });
+
             services.AddScoped<IDataSummitHelperService, DataSummitHelperService>();
             services.AddScoped<IDataSummitDao, DataSummitDao>();
+
+            // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
+            // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing
+            services.AddControllers(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        //public void Configure(IApplicationBuilder app, IHostingEnvironment env)   //IHostingEnvironment to be deprecated
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -124,7 +131,14 @@ namespace DataSummitWeb
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
+            // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing
+            //app.UseMvc(); //Removed
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

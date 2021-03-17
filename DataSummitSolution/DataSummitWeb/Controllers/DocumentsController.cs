@@ -1,4 +1,7 @@
-﻿using DataSummitHelper.Interfaces;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
 using DataSummitModels.DTO;
 using DataSummitModels.Enums;
@@ -25,15 +28,6 @@ namespace DataSummitWeb.Controllers
         private readonly IDataSummitHelperService _dataSummitHelper;
         private const int maxTrialDocumentUploads = 100;
 
-        //private enum ImageUploadTypes
-        //{
-        //    GIF,
-        //    JPG,
-        //    JPEG,
-        //    PDF,
-        //    PNG
-        //}
-
         public DocumentsController(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
@@ -54,67 +48,90 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<string> Post([FromBody] ICollection<IFormFile> files)
+        //public async Task<string> Post([FromBody] ICollection<IFormFile> files)
+        //public async Task<string> Post(IFormFile files)
+        public async Task<string> Post(ICollection<IFormFile> files)
         {
             var returnIds = new List<long>();
-            List<DocumentUpload> lDocs = new List<DocumentUpload>();
             try
             {
+                List<DocumentUpload> lDocs = new List<DocumentUpload>();
                 List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
                 foreach (var file in files)
                 {
                     //lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
                     //{
-                        if (file != null)
+                    if (file != null)
+                    {
+                        var doc = new DocumentUpload();
+                        MemoryStream ms = new MemoryStream();
+                        file.OpenReadStream().CopyTo(ms);
+                        ms.Seek(0, SeekOrigin.Begin);
+
+                        doc.DocumentFormat = GetDocumentFormat(file.ContentType);
+
+                        // Get storage account connection string data from Azure Secrets store
+                        string connectionString = _dataSummitHelper.GetSecret("datasummitstorage");
+
+                        //Initiate Azure container object
+                        doc.ContainerName = Guid.NewGuid().ToString();
+                        //CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName); v11
+
+                        BlobServiceClient bsc = new BlobServiceClient(connectionString);    //v12
+                        BlobContainerClient bcc = await bsc.CreateBlobContainerAsync(doc.ContainerName);    //v12
+
+                        //Create container if it doesn't exist
+                        await bcc.CreateIfNotExistsAsync();
+                        //BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
+                        //permissions.PublicAccess = BlobContainerPublicAccessType.Container;
+                        //await cbc.SetPermissionsAsync(permissions);
+
+                        List<BlobSignedIdentifier> signedIdentifiers = new List<BlobSignedIdentifier>();
+                        var bi = new BlobSignedIdentifier()
                         {
-                            //var doc = new DocumentUpload();
-                            //MemoryStream ms = new MemoryStream();
-                            //file.OpenReadStream().CopyTo(ms);
+                            Id = "mysignedidentifier",
+                            AccessPolicy = new BlobAccessPolicy
+                            {
+                                StartsOn = DateTimeOffset.UtcNow.AddHours(-1),
+                                ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
+                                Permissions = "rw"
+                            }
+                        };
+                        signedIdentifiers.Add(bi);
 
-                            //string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + doc.StorageAccountName +
-                            //                   ";AccountKey=" + doc.StorageAccountKey + ";EndpointSuffix=core.windows.net";
+                        var ci = await bcc.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
 
-                            //CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
-                            //CloudBlobClient blobClient = account.CreateCloudBlobClient();
+                        BlockBlobClient bbc = bcc.GetBlockBlobClient(file.FileName);
+                        BlobUploadOptions buo = new BlobUploadOptions();
 
-                            ////Initiate Azure container object
-                            //doc.ContainerName = Guid.NewGuid().ToString();
-                            //CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName);
+                        // Export image to blockBlob
+                        //buo.AccessTier = AccessTier.;
+                        buo.Metadata = new Dictionary<string, string>();
+                        buo.Metadata.Add("CompanyId", doc.CompanyId.ToString());
+                        buo.Metadata.Add("UserId", doc.UserId.ToString());
+                        buo.Metadata.Add("FileName", file.FileName.ToString());
+                        buo.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
+                        buo.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
 
-                            ////Create container if it doesn't exist
-                            //await cbc.CreateIfNotExistsAsync();
-                            //BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
-                            //permissions.PublicAccess = BlobContainerPublicAccessType.Container;
-                            //await cbc.SetPermissionsAsync(permissions);
+                        await bbc.UploadAsync(ms, buo);
 
-                            //CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
+                        //Clear heavy payload content
+                        doc.File = null;
+                        doc.IsUploaded = true;
+                        doc.BlobUrl = bcc.Uri.ToString();
 
-                            //AccessCondition ac = new AccessCondition();
-                            //BlobRequestOptions brq = new BlobRequestOptions();
-                            //OperationContext oc = new OperationContext();
-                            //oc.LogLevel = Microsoft.WindowsAzure.Storage.LogLevel.Informational;
-                            //await cbbImage.UploadFromStreamAsync(doc.File.OpenReadStream(), ac, brq, oc);
-                            ////Export image to blockBlob
-                            //cbbImage.Metadata.Add("CompanyId", doc.CompanyId.ToString());
-                            //cbbImage.Metadata.Add("UserId", doc.UserId.ToString());
-                            //cbbImage.Metadata.Add("FileName", doc.File.FileName.ToString());
-                            //cbbImage.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
-                            //cbbImage.Metadata.Add("DocumentType", doc.DocumentType.ToString());
-                            //cbbImage.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
-                            //await cbbImage.SetMetadataAsync();
-
-                            ////Clear heavy payload content
-                            //doc.File = null;
-                            //doc.IsUploaded = true;
-                            //doc.BlobUrl = cbbImage.Uri.ToString();
-                        }
+                        //buo.Metadata.Add("DocumentType", doc.DocumentType.ToString());
+                        
+                        lDocs.Add(doc);
+                    }
                     //}));
                 }
                 System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
             }
             catch (Exception ae)
-            { }
-
+            {
+                return JsonConvert.SerializeObject(new BadRequestObjectResult(ae));
+            }
             return JsonConvert.SerializeObject(returnIds);
         }
 
@@ -179,6 +196,29 @@ namespace DataSummitWeb.Controllers
             return documents;
         }
 
+        private DataSummitModels.Enums.Document.Format GetDocumentFormat(string mimeType)
+        {
+            var format = DataSummitModels.Enums.Document.Format.Unknown;
+
+            switch (mimeType)
+            {
+                case "application/pdf":
+                    format = DataSummitModels.Enums.Document.Format.PDF;
+                    break;
+                case "image/jpeg":
+                    format = DataSummitModels.Enums.Document.Format.JPG;
+                    break;
+                case "image/x-png":
+                    format = DataSummitModels.Enums.Document.Format.PNG;
+                    break;
+                case "image/gif":
+                    format = DataSummitModels.Enums.Document.Format.GIF;
+                    break;
+            }
+
+            return format;
+        }
+
         private bool AuditUploadIds(DocumentUpload imgU)
         {
             bool idsAreValid = false;
@@ -213,7 +253,7 @@ namespace DataSummitWeb.Controllers
             {
                 List<ImageUpload> lFiles = new List<ImageUpload>();
 
-                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, Azure.Functions.SplitDocument.ToString());
+                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(drawData.CompanyId, ""); //AzureFunctions.SplitDocument.ToString());
                 drawData.StorageAccountName = cProject.StorageAccountName;
                 drawData.StorageAccountKey = cProject.StorageAccountKey;
                 drawData.CompanyId = cProject.CompanyId;
@@ -241,88 +281,88 @@ namespace DataSummitWeb.Controllers
             List<DataSummitModels.DB.Document> documentss = new List<DataSummitModels.DB.Document>();
             try
             {
-                List<ImageUpload> imageUploads = new List<ImageUpload>();
-                Project projects = null;
-                imageUpload.StorageAccountName = projects.StorageAccountName;
-                imageUpload.StorageAccountKey = projects.StorageAccountKey;
-                imageUpload.CompanyId = projects.CompanyId;
+                //    List<ImageUpload> imageUploads = new List<ImageUpload>();
+                //    Project projects = null;
+                //    imageUpload.StorageAccountName = projects.StorageAccountName;
+                //    imageUpload.StorageAccountKey = projects.StorageAccountKey;
+                //    imageUpload.CompanyId = projects.CompanyId;
 
-                //Document manipulation
-                Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
-                Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
-                Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
+                //    //Document manipulation
+                //    Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
+                //    Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
+                //    Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
 
-                //OCR
-                Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
+                //    //OCR
+                //    Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
 
-                //Post processing
-                Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
+                //    //Post processing
+                //    Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
 
-                //Extract title block properties
-                Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
+                //    //Extract title block properties
+                //    Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
 
-                if (imageUpload.Format == DataSummitModels.Enums.Document.Format.PDF)
-                {
-                    //Ensure that each PDF is split into a single document
-                    var httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(imageUpload));
-                    var pdfImages = new List<ImageUpload>();
-                    try
-                    {
-                        string pdfImageStrings = httpPDFImages.Content.ReadAsStringAsync().Result;
-                        pdfImages = JsonConvert.DeserializeObject<List<ImageUpload>>(pdfImageStrings);
-                        if (pdfImages.Count > 0)
-                        { imageUploads.AddRange(pdfImages); }
-                    }
-                    catch (Exception ae1)
-                    { }
-                }
-                else
-                {
-                    //Single image file, no manipulation required
-                    imageUploads.Add(imageUpload);
-                }
+                //    if (imageUpload.Format == DataSummitModels.Enums.Document.Format.PDF)
+                //    {
+                //        //Ensure that each PDF is split into a single document
+                //        var httpPDFImages = ProcessCall(uriSplitDocument, JsonConvert.SerializeObject(imageUpload));
+                //        var pdfImages = new List<ImageUpload>();
+                //        try
+                //        {
+                //            string pdfImageStrings = httpPDFImages.Content.ReadAsStringAsync().Result;
+                //            pdfImages = JsonConvert.DeserializeObject<List<ImageUpload>>(pdfImageStrings);
+                //            if (pdfImages.Count > 0)
+                //            { imageUploads.AddRange(pdfImages); }
+                //        }
+                //        catch (Exception ae1)
+                //        { }
+                //    }
+                //    else
+                //    {
+                //        //Single image file, no manipulation required
+                //        imageUploads.Add(imageUpload);
+                //    }
 
-                //Upload, split, OCR and list title block properties for each image
-                for (int i = 0; i < imageUploads.Count; i++)
-                {
-                    //Upload image to Azure storage and create container if necessary
-                    var httpImageUpload = ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(imageUploads[i]));
-                    string imageUploadString = httpImageUpload.Content.ReadAsStringAsync().Result;
-                    var imageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(imageUploadString);
-                    imageUploadObject.Tasks = imageUploadObject.Tasks.ToList();
-                    imageUploads[i] = imageUploadObject;
+                //    //Upload, split, OCR and list title block properties for each image
+                //    for (int i = 0; i < imageUploads.Count; i++)
+                //    {
+                //        //Upload image to Azure storage and create container if necessary
+                //        var httpImageUpload = ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(imageUploads[i]));
+                //        string imageUploadString = httpImageUpload.Content.ReadAsStringAsync().Result;
+                //        var imageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(imageUploadString);
+                //        imageUploadObject.Tasks = imageUploadObject.Tasks.ToList();
+                //        imageUploads[i] = imageUploadObject;
 
-                    //Divide image into OCR acceptable sives
-                    var divideImage = ProcessCall(uriDivideImage, JsonConvert.SerializeObject(imageUploads[i]));
-                    string divideImageString = divideImage.Content.ReadAsStringAsync().Result;
-                    var divideImageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(divideImageString);
-                    divideImageUploadObject.Tasks = divideImageUploadObject.Tasks.ToList();
-                    imageUploads[i] = divideImageUploadObject;
+                //        //Divide image into OCR acceptable sives
+                //        var divideImage = ProcessCall(uriDivideImage, JsonConvert.SerializeObject(imageUploads[i]));
+                //        string divideImageString = divideImage.Content.ReadAsStringAsync().Result;
+                //        var divideImageUploadObject = JsonConvert.DeserializeObject<ImageUpload>(divideImageString);
+                //        divideImageUploadObject.Tasks = divideImageUploadObject.Tasks.ToList();
+                //        imageUploads[i] = divideImageUploadObject;
 
-                    ///Self cleaning occurs in all 3 OCR functions
-                    byte iAzureIt = 0;
+                //        ///Self cleaning occurs in all 3 OCR functions
+                //        byte iAzureIt = 0;
 
-                    //Azure
-                    while (iAzureIt < 10 && imageUploads[i].SplitImages.Count(si => si.ProcessedAzure == false) > 0)
-                    {
-                        imageUploads[i] = StartPostProcessing(uriAzureOCR, imageUploads[i]);
-                        iAzureIt = (byte)(iAzureIt + 1);
-                    }
+                //        //Azure
+                //        while (iAzureIt < 10 && imageUploads[i].SplitImages.Count(si => si.ProcessedAzure == false) > 0)
+                //        {
+                //            imageUploads[i] = StartPostProcessing(uriAzureOCR, imageUploads[i]);
+                //            iAzureIt = (byte)(iAzureIt + 1);
+                //        }
 
-                    //Extract title block properties
-                    imageUploads[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, imageUploads[i]);
-                }
+                //        //Extract title block properties
+                //        imageUploads[i] = ExtractTitleBlockProperties(uriExtractTitleBlock, imageUploads[i]);
+                //    }
 
-                //Convert ImageUpload object data to a Document object data
-                foreach (ImageUpload f in imageUploads)
-                {
-                    if (f.WidthOriginal >= f.HeightOriginal)
-                    { f.PaperOrientationId = 2; }
-                    else
-                    { f.PaperOrientationId = 1; }
-                    f.CreatedDate = DateTime.Now;
-                    documentss.Add(f.ToDocument());
-                }
+                //    //Convert ImageUpload object data to a Document object data
+                //    foreach (ImageUpload f in imageUploads)
+                //    {
+                //        if (f.WidthOriginal >= f.HeightOriginal)
+                //        { f.PaperOrientationId = 2; }
+                //        else
+                //        { f.PaperOrientationId = 1; }
+                //        f.CreatedDate = DateTime.Now;
+                //        documentss.Add(f.ToDocument());
+                //    }
             }
             catch (Exception ae)
             { }

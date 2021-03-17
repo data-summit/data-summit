@@ -186,6 +186,22 @@ namespace DataSummitHelper.Services
             throw new NotImplementedException();
         }
 
+        #region Secrets
+        public string GetSecret(string secretName)
+        {
+            string key = "";
+            try
+            {
+                key = _configuration[secretName];
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+            return key;
+        }
+        #endregion
+
         public async Task<HttpResponseMessage> ProcessCall(Uri uri, string payload)
         {
             var client = new HttpClient();
