@@ -28,20 +28,20 @@ namespace DataSummitHelper.Services
             List<DocumentUpload> docs = new List<DocumentUpload>();
             try
             {
-                var documentClassification = _configuration["Upload"];
-                Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(1, Azure.Functions.ImageToContainer.ToString());
-                if (IsAcceptedFormat(file.Name))
-                {
-                    DataSummitModels.Enums.Document.Format format = GetFormat(file.Name);
-                    var doc = new DocumentUpload();
+                //var documentClassification = _configuration["Upload"];
+                //Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(1, Azure.Functions.ImageToContainer.ToString());
+                //if (IsAcceptedFormat(file.Name))
+                //{
+                //    DataSummitModels.Enums.Document.Format format = GetFormat(file.Name);
+                //    var doc = new DocumentUpload();
 
-                    //Upload image to Azure storage and create container if necessary
-                    var httpImageUpload = await _dataSummitHelper.ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(file));
-                    string docUploadString = await httpImageUpload.Content.ReadAsStringAsync();
-                    var docUploadObject = JsonConvert.DeserializeObject<DocumentUpload>(docUploadString);
-                    if (docUploadObject != null)
-                    { docs.Add(docUploadObject);  }
-                }
+                //    //Upload image to Azure storage and create container if necessary
+                //    var httpImageUpload = await _dataSummitHelper.ProcessCall(uriImageToContainer, JsonConvert.SerializeObject(file));
+                //    string docUploadString = await httpImageUpload.Content.ReadAsStringAsync();
+                //    var docUploadObject = JsonConvert.DeserializeObject<DocumentUpload>(docUploadString);
+                //    if (docUploadObject != null)
+                //    { docs.Add(docUploadObject);  }
+                //}
             }
             catch (Exception)
             { }

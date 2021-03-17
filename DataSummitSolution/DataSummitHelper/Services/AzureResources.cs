@@ -1,12 +1,18 @@
-﻿using DataSummitHelper.Interfaces;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Azure.Storage.Blobs.Specialized;
+using DataSummitHelper.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Authentication;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Core;
 using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
 using Microsoft.Azure.Management.Storage;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -16,11 +22,15 @@ namespace DataSummitHelper.Services
 {
     public class AzureResources : IAzureResources
     {
-        private readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
+        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IAzureResources _azureResources;
+        private readonly IConfiguration _configuration;
 
-        public AzureResources(Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public AzureResources(IDataSummitHelperService dataSummitHelper, IConfiguration configuration, IAzureResources azureResources)
         {
             _configuration = configuration;
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _azureResources = azureResources;
         }
 
         #region Management Client Access
@@ -354,6 +364,83 @@ namespace DataSummitHelper.Services
             catch (Exception)
             { return false; }
             return WasDeleted;
+        }
+        #endregion
+
+        #region Block Blobs
+        public async Task<string> UploadDataToBlob(IFormFile file)
+        {
+            // Get storage account connection string data from Azure Secrets store
+            string connectionString = _dataSummitHelper.GetSecret("datasummitstorage");
+            var blobServiceClient = new BlobServiceClient(connectionString);    //v12
+            var containerName = Guid.NewGuid().ToString();
+            var blobContainerClient = (await blobServiceClient.CreateBlobContainerAsync(containerName)).Value;    //v12
+
+            //Create container if it doesn't exist
+            await blobContainerClient.CreateIfNotExistsAsync();
+
+            var signedIdentifiers = new List<BlobSignedIdentifier>();
+            var identifier = "mysignedidentifier";
+            var readWritePermission = "rw";
+            var blobSignedIdentifier = new BlobSignedIdentifier()
+            {
+                Id = identifier,
+                AccessPolicy = new BlobAccessPolicy
+                {
+                    StartsOn = DateTimeOffset.UtcNow.AddHours(-1),
+                    ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
+                    Permissions = readWritePermission
+                }
+            };
+            signedIdentifiers.Add(blobSignedIdentifier);
+
+            var containerInfo = await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
+
+            var blockBlobClient = blobContainerClient.GetBlockBlobClient(file.FileName);
+
+            // Export image to blockBlob
+            var blobUploadOptions = new BlobUploadOptions
+            {
+                Metadata = new Dictionary<string, string>
+                            {
+                                { "FileName", file.FileName },
+                                { "DocumentFormat", GetDocumentFormatEnum(file.ContentType).ToString() }
+                            }
+            };
+
+            using (var ms = new MemoryStream())
+            {
+                var stream = file.OpenReadStream();
+                stream.CopyTo(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                stream.Close();
+                await blockBlobClient.UploadAsync(ms, blobUploadOptions);
+            }
+
+            return blockBlobClient.Uri.ToString();
+        }
+
+        private DataSummitModels.Enums.Document.Format GetDocumentFormatEnum(string mimeType)
+        {
+            var format = DataSummitModels.Enums.Document.Format.Unknown;
+
+            switch (mimeType)
+            {
+                case "application/pdf":
+                    format = DataSummitModels.Enums.Document.Format.PDF;
+                    break;
+                case "image/jpeg":
+                    format = DataSummitModels.Enums.Document.Format.JPG;
+                    break;
+                case "image/x-png":
+                    format = DataSummitModels.Enums.Document.Format.PNG;
+                    break;
+                case "image/gif":
+                    format = DataSummitModels.Enums.Document.Format.GIF;
+                    break;
+            }
+
+            return format;
         }
         #endregion
     }

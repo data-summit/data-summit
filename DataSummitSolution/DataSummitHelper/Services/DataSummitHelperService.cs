@@ -9,18 +9,21 @@ using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
 using DataSummitModels.DB;
+using Microsoft.Extensions.Configuration;
 
 namespace DataSummitHelper.Services
 {
     public class DataSummitHelperService : IDataSummitHelperService
     {
         private readonly IDataSummitDao _dao;
-        private readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
+        private readonly IAzureResources _azureResources;
+        private readonly IConfiguration _configuration;
 
-        public DataSummitHelperService(IDataSummitDao dao, Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public DataSummitHelperService(IDataSummitDao dao, IConfiguration configuration, IAzureResources azureResources)
         {
             _dao = dao;
             _configuration = configuration;
+            _azureResources = azureResources;
         }
 
         #region Companies
@@ -41,26 +44,23 @@ namespace DataSummitHelper.Services
 
         public async System.Threading.Tasks.Task CreateCompany(CompanyDto companyDto)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var company = companyDto.ToCompany();
             await _dao.CreateCompany(company);
-            company.ResourceGroup = await azr.CreateResourceGroup(company.Name);
+            company.ResourceGroup = await _azureResources.CreateResourceGroup(company.Name);
         }
 
         public async System.Threading.Tasks.Task UpdateCompany(CompanyDto company)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var companyDto = company.ToCompany();
             await _dao.UpdateCompany(companyDto);
-            companyDto.ResourceGroup = await azr.UpdateResourceGroup(companyDto.ResourceGroup, companyDto.Name);
+            companyDto.ResourceGroup = await _azureResources.UpdateResourceGroup(companyDto.ResourceGroup, companyDto.Name);
         }
 
         public async System.Threading.Tasks.Task DeleteCompany(int id)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var company = await _dao.GetCompanyById(id);
             await _dao.DeleteCompany(id);
-            await azr.DeleteResourceGroup(company.ResourceGroup);
+            await _azureResources.DeleteResourceGroup(company.ResourceGroup);
         }
         #endregion
 
@@ -76,29 +76,26 @@ namespace DataSummitHelper.Services
 
         public async System.Threading.Tasks.Task CreateProject(ProjectDto projectDto)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
-            await azr.CreateStorageAccount(project.Company.ResourceGroup, project.Name);
+            await _azureResources.CreateStorageAccount(project.Company.ResourceGroup, project.Name);
             project.UserId = -1;
             await _dao.CreateProject(project);
         }
 
         public async System.Threading.Tasks.Task UpdateProject(ProjectDto projectDto)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var project = projectDto.ToProject();
             var oldProject = _dao.GetProjectById(projectDto.ProjectId).Result;
-            project.Name = await azr.UpdateStorageAccount(project.Company.ResourceGroup, oldProject.Name, project.Name);
+            project.Name = await _azureResources.UpdateStorageAccount(project.Company.ResourceGroup, oldProject.Name, project.Name);
             await _dao.UpdateProjectName(project);
         }
 
         public async System.Threading.Tasks.Task DeleteProject(int id)
         {
-            AzureResources azr = new AzureResources(_configuration);
             var project = await _dao.GetProjectById(id);
             var company = await _dao.GetCompanyById(project.CompanyId);
             await _dao.DeleteProject(id);
-            await azr.DeleteStorageAccount(company.ResourceGroup, project.Name);
+            await _azureResources.DeleteStorageAccount(company.ResourceGroup, project.Name);
         }
         #endregion
 

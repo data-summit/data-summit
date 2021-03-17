@@ -26,11 +26,13 @@ namespace DataSummitWeb.Controllers
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IAzureResources _azureResources;
         private const int maxTrialDocumentUploads = 100;
 
-        public DocumentsController(IDataSummitHelperService dataSummitHelper)
+        public DocumentsController(IDataSummitHelperService dataSummitHelper, IAzureResources azureResources)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _azureResources = azureResources;
         }
 
         [HttpGet("{id}")]
@@ -48,91 +50,26 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost]
-        //public async Task<string> Post([FromBody] ICollection<IFormFile> files)
-        //public async Task<string> Post(IFormFile files)
-        public async Task<string> Post(ICollection<IFormFile> files)
+        public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
         {
-            var returnIds = new List<long>();
+            var uploadedFileURLs = new HashSet<string>();
             try
             {
-                List<DocumentUpload> lDocs = new List<DocumentUpload>();
-                List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
                 foreach (var file in files)
                 {
-                    //lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
-                    //{
                     if (file != null)
                     {
-                        var doc = new DocumentUpload();
-                        MemoryStream ms = new MemoryStream();
-                        file.OpenReadStream().CopyTo(ms);
-                        ms.Seek(0, SeekOrigin.Begin);
-
-                        doc.DocumentFormat = GetDocumentFormat(file.ContentType);
-
-                        // Get storage account connection string data from Azure Secrets store
-                        string connectionString = _dataSummitHelper.GetSecret("datasummitstorage");
-
-                        //Initiate Azure container object
-                        doc.ContainerName = Guid.NewGuid().ToString();
-                        //CloudBlobContainer cbc = blobClient.GetContainerReference(doc.ContainerName); v11
-
-                        BlobServiceClient bsc = new BlobServiceClient(connectionString);    //v12
-                        BlobContainerClient bcc = await bsc.CreateBlobContainerAsync(doc.ContainerName);    //v12
-
-                        //Create container if it doesn't exist
-                        await bcc.CreateIfNotExistsAsync();
-                        //BlobContainerPermissions permissions = await cbc.GetPermissionsAsync();
-                        //permissions.PublicAccess = BlobContainerPublicAccessType.Container;
-                        //await cbc.SetPermissionsAsync(permissions);
-
-                        List<BlobSignedIdentifier> signedIdentifiers = new List<BlobSignedIdentifier>();
-                        var bi = new BlobSignedIdentifier()
-                        {
-                            Id = "mysignedidentifier",
-                            AccessPolicy = new BlobAccessPolicy
-                            {
-                                StartsOn = DateTimeOffset.UtcNow.AddHours(-1),
-                                ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
-                                Permissions = "rw"
-                            }
-                        };
-                        signedIdentifiers.Add(bi);
-
-                        var ci = await bcc.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
-
-                        BlockBlobClient bbc = bcc.GetBlockBlobClient(file.FileName);
-                        BlobUploadOptions buo = new BlobUploadOptions();
-
-                        // Export image to blockBlob
-                        //buo.AccessTier = AccessTier.;
-                        buo.Metadata = new Dictionary<string, string>();
-                        buo.Metadata.Add("CompanyId", doc.CompanyId.ToString());
-                        buo.Metadata.Add("UserId", doc.UserId.ToString());
-                        buo.Metadata.Add("FileName", file.FileName.ToString());
-                        buo.Metadata.Add("DocumentFormat", doc.DocumentFormat.ToString());
-                        buo.Metadata.Add("PaymentPlan", doc.PaymentPlan.ToString());
-
-                        await bbc.UploadAsync(ms, buo);
-
-                        //Clear heavy payload content
-                        doc.File = null;
-                        doc.IsUploaded = true;
-                        doc.BlobUrl = bcc.Uri.ToString();
-
-                        //buo.Metadata.Add("DocumentType", doc.DocumentType.ToString());
-                        
-                        lDocs.Add(doc);
+                        var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
+                        uploadedFileURLs.Add(uploadedFileUrl);
                     }
-                    //}));
                 }
-                System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
             }
             catch (Exception ae)
             {
-                return JsonConvert.SerializeObject(new BadRequestObjectResult(ae));
+                //TODO log exception
+                return null;
             }
-            return JsonConvert.SerializeObject(returnIds);
+            return uploadedFileURLs;
         }
 
         [HttpPut("{id}")]
@@ -194,29 +131,6 @@ namespace DataSummitWeb.Controllers
             { }
 
             return documents;
-        }
-
-        private DataSummitModels.Enums.Document.Format GetDocumentFormat(string mimeType)
-        {
-            var format = DataSummitModels.Enums.Document.Format.Unknown;
-
-            switch (mimeType)
-            {
-                case "application/pdf":
-                    format = DataSummitModels.Enums.Document.Format.PDF;
-                    break;
-                case "image/jpeg":
-                    format = DataSummitModels.Enums.Document.Format.JPG;
-                    break;
-                case "image/x-png":
-                    format = DataSummitModels.Enums.Document.Format.PNG;
-                    break;
-                case "image/gif":
-                    format = DataSummitModels.Enums.Document.Format.GIF;
-                    break;
-            }
-
-            return format;
         }
 
         private bool AuditUploadIds(DocumentUpload imgU)
