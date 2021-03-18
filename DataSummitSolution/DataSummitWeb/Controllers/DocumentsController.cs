@@ -2,6 +2,7 @@
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using DataSummitHelper.Interfaces;
+using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitModels.DTO;
 using DataSummitModels.Enums;
@@ -26,13 +27,15 @@ namespace DataSummitWeb.Controllers
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
-        private readonly IAzureResources _azureResources;
-        private const int maxTrialDocumentUploads = 100;
+        private readonly IAzureResourcesService _azureResources;
+        private readonly IClassificationService _classificationService;
 
-        public DocumentsController(IDataSummitHelperService dataSummitHelper, IAzureResources azureResources)
+        public DocumentsController(IDataSummitHelperService dataSummitHelper, IAzureResourcesService azureResources,
+            IClassificationService classificationService)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
             _azureResources = azureResources;
+            _classificationService = classificationService;
         }
 
         [HttpGet("{id}")]
@@ -60,6 +63,7 @@ namespace DataSummitWeb.Controllers
                     if (file != null)
                     {
                         var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
+                        var typeResults = await _classificationService.DocumentType(uploadedFileUrl, "DocumentType", "Classification");
                         uploadedFileURLs.Add(uploadedFileUrl);
                     }
                 }
@@ -141,23 +145,6 @@ namespace DataSummitWeb.Controllers
             // idsAreValid &= imgU.CompanyId > 0;
 
             return idsAreValid;
-        }
-
-        private int TrialRemaining()
-        {
-            int trialRemainingDocumentCount = 0;
-
-            try
-            {
-                //Remaining trial documents
-                trialRemainingDocumentCount = trialRemainingDocumentCount > 0 && trialRemainingDocumentCount < maxTrialDocumentUploads
-                    ? 100 - trialRemainingDocumentCount
-                    : trialRemainingDocumentCount;
-            }
-            catch (Exception ae)
-            { }
-
-            return trialRemainingDocumentCount;
         }
 
         private List<DataSummitModels.DB.Document> ProcessPDF(ImageUpload drawData, Project cProject)

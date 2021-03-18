@@ -14,11 +14,11 @@ namespace DataSummitModels.Enums
 
         public enum Format
         {
-            Unknown = 4,
-            JPG = 1,
-            PNG = 2,
-            PDF = 3,
-            GIF = 4
+            Unknown = 1,
+            JPG = 2,
+            PNG = 3,
+            PDF = 4,
+            GIF = 5
         }
     }
 }

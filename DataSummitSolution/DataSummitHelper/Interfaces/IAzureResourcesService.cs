@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Interfaces
 {
-    public interface IAzureResources
+    public interface IAzureResourcesService
     {
         //Resource
         Task<string> CreateResourceGroup(string name);

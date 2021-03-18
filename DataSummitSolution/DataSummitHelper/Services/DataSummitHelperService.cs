@@ -16,10 +16,10 @@ namespace DataSummitHelper.Services
     public class DataSummitHelperService : IDataSummitHelperService
     {
         private readonly IDataSummitDao _dao;
-        private readonly IAzureResources _azureResources;
+        private readonly IAzureResourcesService _azureResources;
         private readonly IConfiguration _configuration;
 
-        public DataSummitHelperService(IDataSummitDao dao, IConfiguration configuration, IAzureResources azureResources)
+        public DataSummitHelperService(IDataSummitDao dao, IConfiguration configuration, IAzureResourcesService azureResources)
         {
             _dao = dao;
             _configuration = configuration;

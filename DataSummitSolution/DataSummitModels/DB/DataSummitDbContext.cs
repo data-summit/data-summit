@@ -26,6 +26,7 @@ namespace DataSummitModels.DB
         public virtual DbSet<AspNetUserRole> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<AzureCompanyResourceUrl> AzureCompanyResourceUrls { get; set; }
+        public virtual DbSet<AzureMLResource> AzureMLResources { get; set; }
         public virtual DbSet<BlockPosition> BlockPositions { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
@@ -57,15 +58,6 @@ namespace DataSummitModels.DB
         public virtual DbSet<UserInfo> UserInfos { get; set; }
         public virtual DbSet<UserInfoType> UserInfoTypes { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\ProjectsV13;Initial Catalog=DataSummitDB;Integrated Security=True");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -140,7 +132,8 @@ namespace DataSummitModels.DB
             {
                 //entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
-                //entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex").IsUnique();
+                //entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+                //    .IsUnique();
 
                 entity.Property(e => e.Id).HasMaxLength(50);
 
@@ -287,6 +280,33 @@ namespace DataSummitModels.DB
                     .WithMany(p => p.AzureCompanyResourceUrls)
                     .HasForeignKey(d => d.CompanyId)
                     .HasConstraintName("FK_AzureCompanyResourceUrls_Companies");
+            });
+
+            modelBuilder.Entity<AzureMLResource>(entity =>
+            {
+                entity.HasKey(e => e.AzureMLResourcesId)
+                    .HasName("PK_AzureMLResourcesIdId");
+
+                entity.ToTable("AzureMLResources");
+
+                entity.Property(e => e.AzureMLResourcesId).HasColumnName("AzureMLResourcesId");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.PredicitionKey)
+                    .IsRequired()
+                    .HasMaxLength(511);
+
+                entity.Property(e => e.TrainingKey)
+                    .IsRequired()
+                    .HasMaxLength(511);
+
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasMaxLength(511)
+                    .HasColumnName("URL");
             });
 
             modelBuilder.Entity<BlockPosition>(entity =>

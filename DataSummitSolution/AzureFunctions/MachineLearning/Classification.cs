@@ -70,22 +70,6 @@ namespace AzureFunctions.MachineLearning
                                     TagName = c.TagName,
                                     TagType = c.TagType
                                 };
-                                if (c.BoundingBox != null)
-                                {
-                                    pred.BoundingBox = new DataSummitModels.BHoM.Geometry.BoundingBox()
-                                    {
-                                        Max = new DataSummitModels.BHoM.Geometry.Point()
-                                        {
-                                            X = c.BoundingBox.Left + c.BoundingBox.Width,
-                                            Y = c.BoundingBox.Top
-                                        },
-                                        Min = new DataSummitModels.BHoM.Geometry.Point()
-                                        {
-                                            X = c.BoundingBox.Left,
-                                            Y = c.BoundingBox.Top - c.BoundingBox.Height
-                                        }
-                                    };
-                                }
                                 preds.Add(pred);
                             }
                         }

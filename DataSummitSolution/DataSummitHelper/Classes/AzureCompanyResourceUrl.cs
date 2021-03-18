@@ -49,7 +49,7 @@ namespace DataSummitHelper
 
         public enum AzureResource
         {
-            SplitDocument = 1,
+            Split = 1,
             ImageToContainer = 2,
             DivideImage = 3,
             RecogniseTextAzure = 4,

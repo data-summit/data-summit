@@ -14,23 +14,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DataSummitHelper.Services
 {
-    public class AzureResources : IAzureResources
+    public class AzureResourcesService : IAzureResourcesService
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
-        private readonly IAzureResources _azureResources;
         private readonly IConfiguration _configuration;
 
-        public AzureResources(IDataSummitHelperService dataSummitHelper, IConfiguration configuration, IAzureResources azureResources)
+        public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IConfiguration configuration)
         {
             _configuration = configuration;
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
-            _azureResources = azureResources;
         }
 
         #region Management Client Access
