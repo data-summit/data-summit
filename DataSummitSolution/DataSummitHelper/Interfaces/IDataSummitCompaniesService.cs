@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Interfaces
 {
-    public interface IDataSummitHelperService
+    public interface IDataSummitCompaniesService
     {
         #region Companies
         Task<List<CompanyDto>> GetAllCompanies();
@@ -15,38 +15,5 @@ namespace DataSummitHelper.Interfaces
         Task UpdateCompany(CompanyDto companyDto);
         Task DeleteCompany(int id);
         #endregion
-
-        #region Projects
-        Task<List<ProjectDto>> GetAllCompanyProjects(int id);
-        Task CreateProject(ProjectDto project);
-        Task UpdateProject(ProjectDto projectDto);
-        Task DeleteProject(int id);
-        #endregion
-
-        #region Documents
-        Task<List<DocumentDto>> GetProjectDocuments(int projectId);
-        Task DeleteDocumentProperty(long documentPropertyId);
-        Task<List<DocumentPropertyDto>> GetDocumentProperties(int documentId);
-        Task UpdateDocumentPropertyValue(DocumentPropertyDto documentProperty);
-        #endregion
-
-        Uri GetIndividualUrl(int companyId, string azureResource);
-
-        #region Templates
-        Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId);
-        Task<List<TemplateDto>> GetAllProjectTemplates(int companyId);
-        Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId);
-        #endregion
-
-
-        #region Properties
-
-        #endregion
-
-        #region Secrets
-        string GetSecret(string secretName);
-        #endregion
-
-        Task<HttpResponseMessage> ProcessCall(Uri uri, string payload);
     }
 }

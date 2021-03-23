@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Interfaces
 {
-    public interface IDataSummitHelperService
+    public interface IDataSummitProjectService
     {
         #region Companies
         Task<List<CompanyDto>> GetAllCompanies();
