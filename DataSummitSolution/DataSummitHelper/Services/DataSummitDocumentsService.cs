@@ -16,26 +16,52 @@ namespace DataSummitHelper.Services
     public class DataSummitDocumentsService : IDataSummitDocumentsService
     {
         private readonly IDataSummitDao _dao;
-        private readonly IConfiguration _configuration;
 
-        public DataSummitDocumentsService(IDataSummitDao dao, IConfiguration configuration)
+        public DataSummitDocumentsService(IDataSummitDao dao)
         {
             _dao = dao;
-            _configuration = configuration;
         }
 
-        public async Task<bool> IsDocument(int documentId)
+        public DataSummitModels.Enums.Document.Type DocumentType(string mimeType)
         {
-            var documentClassification = _configuration["DocumentClassification"];
-
-            //TODO make http call to //"https://documentlayout.cognitiveservices.azure.com/" and pass data to ML project
-
-            return false;
+            var enumType = DataSummitModels.Enums.Document.Type.Unknown;
+            switch (mimeType)
+            {
+                case "DrawingPlanView":
+                    enumType = DataSummitModels.Enums.Document.Type.DrawingPlanView;
+                    break;
+                case "Gantt":
+                    enumType = DataSummitModels.Enums.Document.Type.Gantt;
+                    break;
+                case "Report":
+                    enumType = DataSummitModels.Enums.Document.Type.Report;
+                    break;
+                case "Schematic":
+                    enumType = DataSummitModels.Enums.Document.Type.Schematic;
+                    break;
+            }
+            return enumType;
         }
 
-        public async System.Threading.Tasks.Task DeleteDocumentProperty(long documentPropertyId)
+        public DataSummitModels.Enums.Document.Format DocumentFormat(string mimeFormat)
         {
-            await _dao.DeleteTemplateAttribute(documentPropertyId);
+            var enumFormat = DataSummitModels.Enums.Document.Format.Unknown;
+            switch (mimeFormat)
+            {
+                case "application/pdf":
+                    enumFormat = DataSummitModels.Enums.Document.Format.PDF;
+                    break;
+                case "image/jpeg":
+                    enumFormat = DataSummitModels.Enums.Document.Format.JPG;
+                    break;
+                case "image/x-png":
+                    enumFormat = DataSummitModels.Enums.Document.Format.PNG;
+                    break;
+                case "image/gif":
+                    enumFormat = DataSummitModels.Enums.Document.Format.GIF;
+                    break;
+            }
+            return enumFormat;
         }
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
@@ -55,6 +81,11 @@ namespace DataSummitHelper.Services
                 .ToList();
 
             return documentDtos;
+        }
+
+        public async System.Threading.Tasks.Task DeleteDocumentProperty(long documentPropertyId)
+        {
+            await _dao.DeleteTemplateAttribute(documentPropertyId);
         }
     }
 }

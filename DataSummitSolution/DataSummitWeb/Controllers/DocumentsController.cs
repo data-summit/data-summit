@@ -6,6 +6,7 @@ using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitModels.DTO;
 using DataSummitModels.Enums;
+using DataSummitModels.Models;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,18 +54,41 @@ namespace DataSummitWeb.Controllers
         //}
 
         [HttpPost]
-        public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
+        //public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
+        public async Task<List<DSDocument>> UploadFiles(ICollection<IFormFile> files)
         {
-            var uploadedFileURLs = new HashSet<string>();
+            //var uploadedFileURLs = new HashSet<string>();
+            var uploadedFileURLs = new List<DSDocument>();
             try
             {
                 foreach (var file in files)
                 {
                     if (file != null)
                     {
-                        var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
-                        var typeResults = await _classificationService.DocumentType(uploadedFileUrl, "DocumentType", "Classification");
-                        uploadedFileURLs.Add(uploadedFileUrl);
+                        var doc = new DSDocument();
+                        doc.Name = file.FileName;
+                        doc.blobUrl =  await _azureResources.UploadDataToBlob(file);
+                        doc.Format = _dataSummitDocuments.DocumentFormat(file.ContentType);
+
+                        //Separate PDF pages
+                        if (doc.Format == DataSummitModels.Enums.Document.Format.PDF)
+                        {
+
+                        }
+                        else     //All other documents are single page only (FOR NOW!!)
+                        {
+                            var page = new DSPage();
+                            page.BlobUrl = doc.blobUrl;
+
+                            var typeResult = await _classificationService.DocumentType(doc.blobUrl, "DocumentType", "Classification");
+                            page.Type = _dataSummitDocuments.DocumentType(typeResult.TagName);
+                            page.TypeConfidence = Math.Round(typeResult.Probability, 3);
+
+                            doc.Pages.Add(page);
+                        }
+
+                        //uploadedFileURLs.Add(uploadedFileUrl);
+                        uploadedFileURLs.Add(doc);
                     }
                 }
             }

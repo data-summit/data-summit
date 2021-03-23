@@ -22,10 +22,10 @@ namespace DataSummitHelper.Services.MachineLearning
             _dao = dao ?? throw new ArgumentNullException(nameof(dao)); ;
         }
 
-        public async Task<List<MLPrediction>> DocumentType(string url, string azureMLResourceName, 
+        public async Task<MLPrediction> DocumentType(string url, string azureMLResourceName, 
             string azureResourceName)
         {
-            var results = new List<MLPrediction>();
+            var result = new MLPrediction();
             var azureFunction = await _dao.GetAzureUrlByName(azureResourceName);
             var azureAI = await _dao.GetMLUrlByName(azureMLResourceName);
 
@@ -42,11 +42,14 @@ namespace DataSummitHelper.Services.MachineLearning
                 };
 
                 //TODO catch error responses
-                var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Url), JsonConvert.SerializeObject(customVisionRequest));
+                var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Url + "?code=" + azureFunction.Key),
+                    JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
-                results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                result = results.OrderBy(f => f.Probability).First();
+
             }
-            return results;
+            return result;
         }
     }
 }

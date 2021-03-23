@@ -17,6 +17,8 @@ namespace DataSummitModels.DB
             var optionsBuilder = new DbContextOptionsBuilder<DataSummitDbContext>();
         }
 
+        
+
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }

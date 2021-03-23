@@ -346,6 +346,8 @@ namespace DataSummitHelper.Dao
         #region Azure URLs
         public async Task<DataSummitModels.DB.AzureCompanyResourceUrl> GetAzureUrlByName(string name)
         {
+            var urls = _context.AzureCompanyResourceUrls;
+            
             return await _context.AzureCompanyResourceUrls.FirstOrDefaultAsync(p => p.Name == name);
         }
         #endregion
