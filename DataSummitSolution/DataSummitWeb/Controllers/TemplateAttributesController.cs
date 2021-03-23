@@ -12,11 +12,11 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class TemplateAttributesController : Controller
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitTemplateAttributesService _dataSummitTemplateAttribtes;
 
-        public TemplateAttributesController(IDataSummitHelperService dataSummitHelper)
+        public TemplateAttributesController(IDataSummitTemplateAttributesService dataSummitTemplateAttribtes)
         {
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _dataSummitTemplateAttribtes = dataSummitTemplateAttribtes ?? throw new ArgumentNullException(nameof(dataSummitTemplateAttribtes));
         }
 
         private DataSummitDbContext db = new DataSummitDbContext();
@@ -25,7 +25,7 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var templateAttributes = await _dataSummitHelper.GetTemplateAttribtes(id);
+            var templateAttributes = await _dataSummitTemplateAttribtes.GetTemplateAttribtes(id);
             return Ok(templateAttributes);
         }
 

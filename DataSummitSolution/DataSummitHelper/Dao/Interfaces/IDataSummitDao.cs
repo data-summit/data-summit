@@ -31,12 +31,18 @@ namespace DataSummitHelper.Dao.Interfaces
         #endregion
 
 
-        Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttribtesForTemplateId(int templateId);
+        Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId);
 
         System.Threading.Tasks.Task DeleteTemplateAttribute(long templateAttributeId);
         Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId);
         Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId);
         System.Threading.Tasks.Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue);
-        Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttributesForDocumentId(int documentId);
+
+        #region Properts
+        Task<DataSummitModels.DB.Property> GetPropertyById(int id);
+        Task<bool> DeleteProperty(long propertyId);
+        #endregion
+
+        Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttributesForDocumentId(int documentId);
     }
 }

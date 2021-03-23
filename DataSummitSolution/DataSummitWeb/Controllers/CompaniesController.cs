@@ -4,7 +4,6 @@ using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,18 +13,18 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class CompaniesController : Controller
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitCompaniesService _dataSummitCompanies;
 
-        public CompaniesController(IDataSummitHelperService dataSummitHelper)
+        public CompaniesController(IDataSummitCompaniesService dataSummitCompanies)
         {
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _dataSummitCompanies = dataSummitCompanies;
         }
 
         // GET api/companies
         [HttpGet]
         public async Task<string> GetAllCompanies()
         {
-            var companyDtos = await _dataSummitHelper.GetAllCompanies();
+            var companyDtos = await _dataSummitCompanies.GetAllCompanies();
             var companies = companyDtos.Select(c => Company.FromDto(c))
                 .ToList();
             return JsonConvert.SerializeObject(companies.ToArray());
@@ -35,7 +34,7 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string GetCompanyById(int id)
         {
-            var company = _dataSummitHelper.GetCompanyById(id);
+            var company = _dataSummitCompanies.GetCompanyById(id);
             return JsonConvert.SerializeObject(company);
         }
 
@@ -43,21 +42,21 @@ namespace DataSummitWeb.Controllers
         [HttpPost("create")]
         public async Task CreateNewCompany([FromBody]Company company)
         {
-            await _dataSummitHelper.CreateCompany(company.ToDto());
+            await _dataSummitCompanies.CreateCompany(company.ToDto());
         }
 
         // PUT api/Company/update
         [HttpPut("update")]
         public async Task UpdateCompany([FromBody]CompanyDto company)
         {
-            await _dataSummitHelper.UpdateCompany(company);
+            await _dataSummitCompanies.UpdateCompany(company);
         }
 
         // DELETE api/Company/delete
         [HttpDelete("delete")]
         public async Task DeleteCompany([FromBody]int companyId)
         {
-            await _dataSummitHelper.DeleteCompany(companyId);
+            await _dataSummitCompanies.DeleteCompany(companyId);
         }
     }
 }

@@ -12,29 +12,29 @@ namespace DataSummitWeb.Controllers
 {
     //[Authorize]
     [Route("api/[controller]")]
-    public class TemplateVersionsController : Controller
+    public class TemplatesController : Controller
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitTemplatesService _dataSummitTemplates;
 
-        public TemplateVersionsController(IDataSummitHelperService dataSummitHelper)
+        public TemplatesController(IDataSummitTemplatesService dataSummitTemplates)
         {
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _dataSummitTemplates = dataSummitTemplates ?? throw new ArgumentNullException(nameof(dataSummitTemplates));
         }
 
         // GET api/templateVersion/company/5
         [HttpGet("company/{id}")]
         public async Task<IActionResult> GetCompanyTemplates(int id)
         {
-            var templateVersions = await _dataSummitHelper.GetAllCompanyTemplates(id);
+            var Templates = await _dataSummitTemplates.GetAllCompanyTemplates(id);
 
-            return Ok(templateVersions);
+            return Ok(Templates);
         }
 
         // GET api/templateVersion/project/5
         [HttpGet("project/{id}")]
         public async Task<IActionResult> GetProjectTemplates(int id)
         {
-            var templates = await _dataSummitHelper.GetAllProjectTemplates(id);
+            var templates = await _dataSummitTemplates.GetAllProjectTemplates(id);
 
             return Ok(templates);
         }
@@ -89,7 +89,7 @@ namespace DataSummitWeb.Controllers
                 }
                 pv.TemplateAttributes = lPa;
                 t.Wait();
-                //id = templateVersionsService.CreateTemplateVersion(pv);
+                //id = TemplatesService.CreateTemplateVersion(pv);
             }
             catch (Exception ae)
             { string strError = ae.Message.ToString(); }
@@ -103,7 +103,7 @@ namespace DataSummitWeb.Controllers
         public void Put(int id, [FromBody]TemplateVersion templateVersion)
         {
             //Update
-            //templateVersionsService.UpdateTemplateVersion(id, templateVersion);
+            //TemplatesService.UpdateTemplateVersion(id, templateVersion);
             return;
         }
 
@@ -111,7 +111,7 @@ namespace DataSummitWeb.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            //templateVersionsService.DeleteTemplateVersion(id);
+            //TemplatesService.DeleteTemplateVersion(id);
             return JsonConvert.SerializeObject("Ok");
         }
 

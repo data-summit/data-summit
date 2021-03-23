@@ -12,11 +12,11 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class PropertiesController : Controller
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitPropertiesService _dataSummitProperties;
         
-        public PropertiesController(IDataSummitHelperService dataSummitHelper)
+        public PropertiesController(IDataSummitPropertiesService dataSummitProperties)
         {
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _dataSummitProperties = dataSummitProperties ?? throw new ArgumentNullException(nameof(dataSummitProperties));
         }
 
         // GET api/properties/document/{id}
@@ -24,7 +24,7 @@ namespace DataSummitWeb.Controllers
         public async Task<IActionResult> GetDocumentProperties([FromRoute] string id)
         {
             var documentId = int.Parse(id);
-            var documentPropertyRows = await _dataSummitHelper.GetDocumentProperties(documentId);
+            var documentPropertyRows = await _dataSummitProperties.GetDocumentProperties(documentId);
 
             var documentProperties = documentPropertyRows
                 .Select(row => DocumentProperty.FromDto(row))
@@ -36,7 +36,7 @@ namespace DataSummitWeb.Controllers
         [HttpPut("update")]
         public async Task<IActionResult> UpdateDocumentPropertyValue([FromBody] DocumentPropertyValue documentPropertyValue)
         {
-            await _dataSummitHelper.UpdateDocumentPropertyValue(documentPropertyValue.ToDto());
+            await _dataSummitProperties.UpdateDocumentPropertyValue(documentPropertyValue.ToDto());
             return Ok();
         }
 
@@ -44,7 +44,7 @@ namespace DataSummitWeb.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            await _dataSummitHelper.DeleteDocumentProperty(id);
+            await _dataSummitProperties.DeleteProperty(id);
             return Ok();
         }
     }

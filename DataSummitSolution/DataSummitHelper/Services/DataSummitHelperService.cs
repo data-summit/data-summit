@@ -13,12 +13,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataSummitHelper.Services
 {
-    public class DataSummitHelperService
+    public class DataSummitHelperService : IDataSummitHelperService
     {
         private readonly IConfiguration _configuration;
 
         public DataSummitHelperService(IConfiguration configuration)
-        {s
+        {
             _configuration = configuration;
         }
 
@@ -27,7 +27,6 @@ namespace DataSummitHelper.Services
             throw new NotImplementedException();
         }
 
-        #region Secrets
         public string GetSecret(string secretName)
         {
             string key = "";
@@ -41,7 +40,6 @@ namespace DataSummitHelper.Services
             }
             return key;
         }
-        #endregion
 
         public async Task<HttpResponseMessage> ProcessCall(Uri uri, string payload)
         {

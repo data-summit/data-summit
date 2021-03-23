@@ -18,8 +18,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-
-
 namespace DataSummitWeb.Controllers
 {
     //[Authorize]
@@ -27,30 +25,32 @@ namespace DataSummitWeb.Controllers
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitDocumentsService _dataSummitDocuments;
         private readonly IAzureResourcesService _azureResources;
         private readonly IClassificationService _classificationService;
 
-        public DocumentsController(IDataSummitHelperService dataSummitHelper, IAzureResourcesService azureResources,
-            IClassificationService classificationService)
+        public DocumentsController(IDataSummitDocumentsService dataSummitProjects, IAzureResourcesService azureResources,
+            IClassificationService classificationService, IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
-            _azureResources = azureResources;
-            _classificationService = classificationService;
+            _dataSummitDocuments = dataSummitProjects ?? throw new ArgumentNullException(nameof(dataSummitProjects));
+            _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
+            _classificationService = classificationService ?? throw new ArgumentNullException(nameof(classificationService));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var documents = await _dataSummitHelper.GetProjectDocuments(id);
+            var documents = await _dataSummitDocuments.GetProjectDocuments(id);
             return Ok(documents);
         }
 
-        [HttpGet("templates/{id}")]
-        public async Task<IActionResult> GetTemplates(int companyId)
-        {
-            var templates = await _dataSummitHelper.GetAllCompanyTemplates(companyId);
-            return Ok(templates);
-        }
+        //[HttpGet("templates/{id}")]
+        //public async Task<IActionResult> GetTemplates(int companyId)
+        //{
+        //    var templates = await _dataSummitDocuments.GetAllCompanyTemplates(companyId);
+        //    return Ok(templates);
+        //}
 
         [HttpPost]
         public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
@@ -80,14 +80,14 @@ namespace DataSummitWeb.Controllers
         public void Put(int id, [FromBody] DataSummitModels.DB.Document project)
         {
             //Update
-            //_dataSummitHelper.UpdateDocument(id, project);
+            //_dataSummitProject.UpdateDocument(id, project);
             return;
         }
 
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
-            //_dataSummitHelper.DeleteDocument(id);
+            //_dataSummitProject.DeleteDocument(id);
             return JsonConvert.SerializeObject("Ok");
         }
 
@@ -189,18 +189,18 @@ namespace DataSummitWeb.Controllers
                 //    imageUpload.CompanyId = projects.CompanyId;
 
                 //    //Document manipulation
-                //    Uri uriSplitDocument = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
-                //    Uri uriImageToContainer = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
-                //    Uri uriDivideImage = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
+                //    Uri uriSplitDocument = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.SplitDocument.ToString());
+                //    Uri uriImageToContainer = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ImageToContainer.ToString());
+                //    Uri uriDivideImage = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.DivideImage.ToString());
 
                 //    //OCR
-                //    Uri uriAzureOCR = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
+                //    Uri uriAzureOCR = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.RecogniseTextAzure.ToString());
 
                 //    //Post processing
-                //    Uri uriPostProcessing = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
+                //    Uri uriPostProcessing = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.PostProcessing.ToString());
 
                 //    //Extract title block properties
-                //    Uri uriExtractTitleBlock = _dataSummitHelper.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
+                //    Uri uriExtractTitleBlock = _dataSummitProject.GetIndividualUrl(imageUpload.CompanyId, Azure.Functions.ExtractTitleBlock.ToString());
 
                 //    if (imageUpload.Format == DataSummitModels.Enums.Document.Format.PDF)
                 //    {

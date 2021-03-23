@@ -42,102 +42,6 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)
-        {
-            var documents = new List<DataSummitModels.DB.Document>();
-
-            try
-            {
-                documents = await _context.Documents
-                    .Where(d => d.ProjectId == projectId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
-
-            return documents;
-        }
-
-        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttributesForDocumentId(int documentId)
-        {
-            var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
-
-            try
-            {
-                var document = await _context.Documents.FirstOrDefaultAsync(d => d.DocumentId == documentId);
-                var templateVersion = await _context.TemplateVersions.FirstOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
-                templateAttributes = templateVersion.TemplateAttributes.ToList();
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-
-            return templateAttributes;
-        }
-
-        public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
-        {
-            var documentProperties = new List<DocumentProperty>();
-            
-            try
-            {
-                var document = await _context.Documents
-                    .FirstOrDefaultAsync(d => d.DocumentId == documentId);
-
-                documentProperties = await _context.Properties
-                    .Select(p => new { p.TemplateAttribute, p.Sentence })
-                    .Where(profAtrrWords =>
-                        profAtrrWords.TemplateAttribute.TemplateVersionId == document.TemplateVersionId
-                        && profAtrrWords.Sentence.DocumentId == document.DocumentId
-                    )
-                    .Select(a => new DocumentProperty()
-                    {
-                        Sentences = new DataSummitModels.Cloud.Consolidated.Sentences()
-                        {
-                            Confidence = a.Sentence.Confidence,
-                            DocumentId = a.Sentence.DocumentId,
-                            Height = a.Sentence.Height,
-                            IsUsed = a.Sentence.IsUsed,
-                            Left = a.Sentence.Left,
-                            //Properties = a.Sentence.Properties,
-                            SentenceId = a.Sentence.SentenceId,
-                            SlendernessRatio = (decimal)a.Sentence.SlendernessRatio,
-                            Top = a.Sentence.Top,
-                            Vendor = a.Sentence.Vendor,
-                            Width = a.Sentence.Width,
-                            Words = a.Sentence.Words
-
-                        },
-                        TemplateAttributes = a.TemplateAttribute
-                    })
-                    .ToListAsync();
-
-            }
-            catch (Exception ae)
-            {
-                throw;
-            }
-
-            return documentProperties;
-        }
-
-        public async System.Threading.Tasks.Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
-        {
-            try
-            {
-                var sentence = new DataSummitModels.DB.Sentence() { SentenceId = documentPropertyId };
-                sentence.Words = documentPropertyValue;
-                _context.Sentences.Attach(sentence);
-                _context.Entry(sentence).Property("Words").IsModified = true;
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         #region Companies
         public async Task<List<DataSummitModels.DB.Company>> GetAllCompanies()
@@ -299,7 +203,8 @@ namespace DataSummitHelper.Dao
         }
         #endregion
 
-        public async Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int projectId)
+        #region Documents
+        public async Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)
         {
             var documents = new List<DataSummitModels.DB.Document>();
 
@@ -316,7 +221,129 @@ namespace DataSummitHelper.Dao
             return documents;
         }
 
-        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetTemplateAttribtesForTemplateId(int templateId)
+        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttributesForDocumentId(int documentId)
+        {
+            var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
+
+            try
+            {
+                var document = await _context.Documents.FirstOrDefaultAsync(d => d.DocumentId == documentId);
+                var templateVersion = await _context.TemplateVersions.FirstOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
+                templateAttributes = templateVersion.TemplateAttributes.ToList();
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+            }
+
+            return templateAttributes;
+        }
+
+        public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
+        {
+            var documentProperties = new List<DocumentProperty>();
+            
+            try
+            {
+                var document = await _context.Documents
+                    .FirstOrDefaultAsync(d => d.DocumentId == documentId);
+
+                documentProperties = await _context.Properties
+                    .Select(p => new { p.TemplateAttribute, p.Sentence })
+                    .Where(profAtrrWords =>
+                        profAtrrWords.TemplateAttribute.TemplateVersionId == document.TemplateVersionId
+                        && profAtrrWords.Sentence.DocumentId == document.DocumentId
+                    )
+                    .Select(a => new DocumentProperty()
+                    {
+                        Sentences = new DataSummitModels.Cloud.Consolidated.Sentences()
+                        {
+                            Confidence = a.Sentence.Confidence,
+                            DocumentId = a.Sentence.DocumentId,
+                            Height = a.Sentence.Height,
+                            IsUsed = a.Sentence.IsUsed,
+                            Left = a.Sentence.Left,
+                            //Properties = a.Sentence.Properties,
+                            SentenceId = a.Sentence.SentenceId,
+                            SlendernessRatio = (decimal)a.Sentence.SlendernessRatio,
+                            Top = a.Sentence.Top,
+                            Vendor = a.Sentence.Vendor,
+                            Width = a.Sentence.Width,
+                            Words = a.Sentence.Words
+
+                        },
+                        TemplateAttributes = a.TemplateAttribute
+                    })
+                    .ToListAsync();
+
+            }
+            catch (Exception ae)
+            {
+                throw;
+            }
+
+            return documentProperties;
+        }
+
+        public async System.Threading.Tasks.Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
+        {
+            try
+            {
+                var sentence = new DataSummitModels.DB.Sentence() { SentenceId = documentPropertyId };
+                sentence.Words = documentPropertyValue;
+                _context.Sentences.Attach(sentence);
+                _context.Entry(sentence).Property("Words").IsModified = true;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int projectId)
+        {
+            var documents = new List<DataSummitModels.DB.Document>();
+
+            try
+            {
+                documents = await _context.Documents
+                    .Where(d => d.ProjectId == projectId)
+                    .ToListAsync();
+            }
+            catch (Exception ae)
+            {
+            }
+
+            return documents;
+        }
+        #endregion
+
+        #region Properties
+        public async Task<DataSummitModels.DB.Property> GetPropertyById(int id)
+        {
+            return await _context.Properties.FirstOrDefaultAsync(p => p.PropertyId == id);
+        }
+        public async Task<bool> DeleteProperty(long propertyId)
+        {
+            bool result;
+            try
+            {
+                var property = new DataSummitModels.DB.Property() { PropertyId = propertyId };
+                _context.Properties.Attach(property);
+                _context.Properties.Remove(property);
+                await _context.SaveChangesAsync();
+                result = true;
+            }
+            catch
+            {
+                throw;
+            }
+            return result;
+        }
+        #endregion
+
+        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
         {
             var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
             try
