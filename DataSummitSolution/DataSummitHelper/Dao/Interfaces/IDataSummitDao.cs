@@ -1,4 +1,5 @@
 using DataSummitHelper.Classes;
+using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -41,6 +42,14 @@ namespace DataSummitHelper.Dao.Interfaces
         #region Properts
         Task<DataSummitModels.DB.Property> GetPropertyById(int id);
         Task<bool> DeleteProperty(long propertyId);
+        #endregion
+
+        #region Azure URLs
+        Task<DataSummitModels.DB.AzureCompanyResourceUrl> GetAzureUrlByName(string name);
+        #endregion
+
+        #region ML URLs
+        Task<AzureMLResource> GetMLUrlByName(string name);
         #endregion
 
         Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttributesForDocumentId(int documentId);

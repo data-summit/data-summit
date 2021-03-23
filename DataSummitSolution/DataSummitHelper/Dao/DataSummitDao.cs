@@ -343,6 +343,20 @@ namespace DataSummitHelper.Dao
         }
         #endregion
 
+        #region Azure URLs
+        public async Task<DataSummitModels.DB.AzureCompanyResourceUrl> GetAzureUrlByName(string name)
+        {
+            return await _context.AzureCompanyResourceUrls.FirstOrDefaultAsync(p => p.Name == name);
+        }
+        #endregion
+
+        #region ML URLs
+        public async Task<AzureMLResource> GetMLUrlByName(string name)
+        {
+            return await _context.AzureMLResources.FirstOrDefaultAsync(p => p.Name == name);
+        }
+        #endregion
+
         public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
         {
             var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();

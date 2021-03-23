@@ -4,6 +4,7 @@ using DataSummitWeb.Models;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace DataSummitWeb.Controllers
 
         public CompaniesController(IDataSummitCompaniesService dataSummitCompanies)
         {
-            _dataSummitCompanies = dataSummitCompanies;
+            _dataSummitCompanies = dataSummitCompanies ?? throw new ArgumentNullException(nameof(dataSummitCompanies));
         }
 
         // GET api/companies

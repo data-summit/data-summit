@@ -3,7 +3,9 @@ using System.IdentityModel.Tokens.Jwt;
 using DataSummitHelper.Dao;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Interfaces;
+using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitHelper.Services;
+using DataSummitHelper.Services.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitWeb.Classes;
 using Microsoft.AspNetCore.Builder;
@@ -89,7 +91,8 @@ namespace DataSummitWeb
 
             // Add service dependencies.
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
-                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
+                //.AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
+                .AddDbContext<DataSummitDbContext>(options => options.UseSqlServer(connectionString))
                 .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
             services.Configure<IdentityOptions>(options =>
@@ -108,8 +111,17 @@ namespace DataSummitWeb
                 options.User.RequireUniqueEmail = true;
             });
 
+            //Data Summit specific dependency injection services
+            services.AddScoped<IAzureResourcesService, AzureResourcesService>();
+            services.AddScoped<IDataSummitCompaniesService, DataSummitCompaniesService>();
+            services.AddScoped<IDataSummitDocumentsService, DataSummitDocumentsService>();
             services.AddScoped<IDataSummitHelperService, DataSummitHelperService>();
+            services.AddScoped<IDataSummitProjectsService, DataSummitProjectsService>();
+            services.AddScoped<IDataSummitPropertiesService, DataSummitPropertiesService>();
+            services.AddScoped<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
+            services.AddScoped<IDataSummitTemplatesService, DataSummitTemplatesService>();
             services.AddScoped<IDataSummitDao, DataSummitDao>();
+            services.AddScoped<IClassificationService, ClassificationService>();
 
             // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
             // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing

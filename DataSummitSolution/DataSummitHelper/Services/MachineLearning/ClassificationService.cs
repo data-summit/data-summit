@@ -1,8 +1,8 @@
-﻿using DataSummitHelper.Interfaces;
+﻿using DataSummitHelper.Dao.Interfaces;
+using DataSummitHelper.Interfaces;
 using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.Cloud;
 using DataSummitModels.DB;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,21 +13,21 @@ namespace DataSummitHelper.Services.MachineLearning
 {
     public class ClassificationService : IClassificationService
     {
+        private readonly IDataSummitDao _dao;
         private readonly IDataSummitHelperService _dataSummitHelper;
-        private DataSummitDbContext _dbContext;
 
-        public ClassificationService(IDataSummitHelperService dataSummitHelper, DataSummitDbContext dataSummitDbContext)
+        public ClassificationService(IDataSummitDao dao, IDataSummitHelperService dataSummitHelper, DataSummitDbContext dataSummitDbContext)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
-            _dbContext = dataSummitDbContext;
+            _dao = dao ?? throw new ArgumentNullException(nameof(dao)); ;
         }
 
         public async Task<List<MLPrediction>> DocumentType(string url, string azureMLResourceName, 
             string azureResourceName)
         {
             var results = new List<MLPrediction>();
-            var azureFunction = _dbContext.AzureCompanyResourceUrls.First(f => f.Name == azureResourceName);
-            var azureAI = _dbContext.AzureMLResources.First(a => a.Name == azureMLResourceName);
+            var azureFunction = await _dao.GetAzureUrlByName(azureResourceName);
+            var azureAI = await _dao.GetMLUrlByName(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {

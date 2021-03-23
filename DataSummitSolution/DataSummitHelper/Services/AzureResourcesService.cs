@@ -26,7 +26,7 @@ namespace DataSummitHelper.Services
 
         public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
