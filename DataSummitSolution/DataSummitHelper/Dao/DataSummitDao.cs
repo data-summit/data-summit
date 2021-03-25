@@ -25,7 +25,7 @@ namespace DataSummitHelper.Dao
             // TODO: Guard class against empty objects
             else if (_context.AzureCompanyResourceUrls.Count() > 0)
             {
-                throw new Exception("DataSummit DbContext could not be created");
+                throw new Exception("DataSummit DbContext contains no results");
             }
         }
 
