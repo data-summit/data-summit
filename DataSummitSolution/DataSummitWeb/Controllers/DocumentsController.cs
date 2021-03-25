@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
+using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Interfaces;
 using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.DB;
@@ -25,14 +26,16 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public partial class DocumentsController : Controller
     {
+        private readonly IDataSummitDao _dao;
         private readonly IDataSummitHelperService _dataSummitHelper;
         private readonly IDataSummitDocumentsService _dataSummitDocuments;
         private readonly IAzureResourcesService _azureResources;
         private readonly IClassificationService _classificationService;
 
         public DocumentsController(IDataSummitDocumentsService dataSummitProjects, IAzureResourcesService azureResources,
-            IClassificationService classificationService, IDataSummitHelperService dataSummitHelper)
+            IClassificationService classificationService, IDataSummitHelperService dataSummitHelper, IDataSummitDao dao)
         {
+            _dao = dao ?? throw new ArgumentNullException(nameof(dao));
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
             _dataSummitDocuments = dataSummitProjects ?? throw new ArgumentNullException(nameof(dataSummitProjects));
             _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
@@ -46,49 +49,32 @@ namespace DataSummitWeb.Controllers
             return Ok(documents);
         }
 
-        //[HttpGet("templates/{id}")]
-        //public async Task<IActionResult> GetTemplates(int companyId)
-        //{
-        //    var templates = await _dataSummitDocuments.GetAllCompanyTemplates(companyId);
-        //    return Ok(templates);
-        //}
 
-        [HttpPost]
-        //public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
-        public async Task<List<DSDocument>> UploadFiles(ICollection<IFormFile> files)
+        [HttpPost("{uploadFiles}")]
+        public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
         {
-            //var uploadedFileURLs = new HashSet<string>();
-            var uploadedFileURLs = new List<DSDocument>();
+            var uploadedFileURLs = new HashSet<string>();
             try
             {
                 foreach (var file in files)
                 {
                     if (file != null)
                     {
-                        var doc = new DSDocument();
-                        doc.Name = file.FileName;
-                        doc.blobUrl =  await _azureResources.UploadDataToBlob(file);
-                        doc.Format = _dataSummitDocuments.DocumentFormat(file.ContentType);
+                        var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
+                        uploadedFileURLs.Add(uploadedFileUrl);
 
-                        //Separate PDF pages
-                        if (doc.Format == DataSummitModels.Enums.Document.Format.PDF)
+                        //Add to database via data adaptor
+                        var doc = new DataSummitModels.DB.Document()
                         {
-
-                        }
-                        else     //All other documents are single page only (FOR NOW!!)
-                        {
-                            var page = new DSPage();
-                            page.BlobUrl = doc.blobUrl;
-
-                            var typeResult = await _classificationService.DocumentType(doc.blobUrl, "DocumentType", "Classification");
-                            page.Type = _dataSummitDocuments.DocumentType(typeResult.TagName);
-                            page.TypeConfidence = Math.Round(typeResult.Probability, 3);
-
-                            doc.Pages.Add(page);
-                        }
-
-                        //uploadedFileURLs.Add(uploadedFileUrl);
-                        uploadedFileURLs.Add(doc);
+                            BlobUrl = uploadedFileUrl,
+                            //Not null values, required for successful insert
+                            DocumentTypeId = 1,         //Unknown type
+                            ProjectId = 1,              //Empty project
+                            TemplateVersionId = 1,      //Empty template
+                            PaperOrientationId = 1,     //Portrait
+                            PaperSizeId = 9             //A4
+                        };
+                        await _dao.CreateDocument(doc);
                     }
                 }
             }
@@ -99,6 +85,51 @@ namespace DataSummitWeb.Controllers
             }
             return uploadedFileURLs;
         }
+
+        [HttpPost("{determineDocumentType}")]
+        public async void DetermineDocumentType(HashSet<string> blobUrls)
+        {
+            try
+            {
+                foreach (var blobUrl in blobUrls)
+                {
+                    var documentTypeClassification = await _classificationService.DocumentType(blobUrl, "DocumentType", "Classification");
+                    var documentTypeEnum = _dataSummitDocuments.DocumentType(documentTypeClassification.TagName);
+                    var typeConfidence = Math.Round(documentTypeClassification.Probability, 3);
+
+                    //TODO persist in database and blob metadata
+
+                }
+            }
+            catch (Exception ae)
+            {
+                //TODO log exception
+                return;
+            }
+        }
+
+        [HttpPost("{determineDrawingComponents}")]
+        public async void DetermineDrawingComponents(HashSet<string> blobUrls)
+        {
+            try
+            {
+                foreach (var blobUrl in blobUrls)
+                {
+                    var documentTypeClassification = await _classificationService.DocumentType(blobUrl, "DocumentType", "Classification");
+                    var documentTypeEnum = _dataSummitDocuments.DocumentType(documentTypeClassification.TagName);
+                    var typeConfidence = Math.Round(documentTypeClassification.Probability, 3);
+
+                    //TODO persist in database and blob metadata
+                }
+            }
+            catch (Exception ae)
+            {
+                //TODO log exception
+                return;
+            }
+        }
+
+        //TODO final end point to return all document result information to the UI (via DB only)
 
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] DataSummitModels.DB.Document project)
@@ -122,21 +153,21 @@ namespace DataSummitWeb.Controllers
             {
                 if (AuditUploadIds(documentUpload))
                 {
-                    var mimeType = DataSummitModels.Enums.Document.Format.Unknown;
+                    var mimeType = DataSummitModels.Enums.Document.Extension.Unknown;
                     //switch (documentUpload.DocumentFormat)
                     switch ("")
                     {
                         case "application/pdf":
-                            mimeType = DataSummitModels.Enums.Document.Format.PDF;
+                            mimeType = DataSummitModels.Enums.Document.Extension.PDF;
                             break;
                         case "image/jpeg":
-                            mimeType = DataSummitModels.Enums.Document.Format.JPG;
+                            mimeType = DataSummitModels.Enums.Document.Extension.JPG;
                             break;
                         case "image/x-png":
-                            mimeType = DataSummitModels.Enums.Document.Format.PNG;
+                            mimeType = DataSummitModels.Enums.Document.Extension.PNG;
                             break;
                         case "image/gif":
-                            mimeType = DataSummitModels.Enums.Document.Format.GIF;
+                            mimeType = DataSummitModels.Enums.Document.Extension.GIF;
                             break;
                     }
 

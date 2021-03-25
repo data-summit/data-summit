@@ -272,7 +272,7 @@ namespace AzureFunctions.Document
                         File = null,
                         FileName = imgUp.FileName,
                         Tasks = Tasks.Select(t => t.ToModel(t)).ToList(),
-                        Format = DataSummitModels.Enums.Document.Format.PDF,
+                        Format = DataSummitModels.Enums.Document.Extension.PDF,
                         Layers = new List<DocumentLayer>()
                         { 
                             new DocumentLayer()

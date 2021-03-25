@@ -24,7 +24,10 @@ namespace DataSummitHelper.Dao.Interfaces
         System.Threading.Tasks.Task DeleteProject(int id);
         #endregion
 
+        #region Projects
+        System.Threading.Tasks.Task CreateDocument(DataSummitModels.DB.Document document);
         Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int companyId);
+        #endregion
 
         #region Templates
         Task<List<DataSummitModels.DB.TemplateVersion>> GetCompanyTemplateVersions(int companyId);

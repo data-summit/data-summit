@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
+using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.KeyVault.Models;
@@ -21,12 +22,14 @@ namespace DataSummitHelper.Services
 {
     public class AzureResourcesService : IAzureResourcesService
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
         private readonly IConfiguration _configuration;
+        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IConfiguration configuration)
+        public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IDataSummitDao dao, IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _dao = dao ?? throw new ArgumentNullException(nameof(dao));
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
@@ -392,17 +395,17 @@ namespace DataSummitHelper.Services
             signedIdentifiers.Add(blobSignedIdentifier);
 
             var containerInfo = await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
-
             var blockBlobClient = blobContainerClient.GetBlockBlobClient(file.FileName);
+            var documentFileExtensionEnum = GetDocumentExtensionEnum(file.ContentType);
 
             // Export image to blockBlob
             var blobUploadOptions = new BlobUploadOptions
             {
                 Metadata = new Dictionary<string, string>
-                            {
-                                { "FileName", file.FileName },
-                                { "DocumentFormat", GetDocumentFormatEnum(file.ContentType).ToString() }
-                            }
+                {
+                    { "FileName", file.FileName },
+                    { "DocumentFormat", documentFileExtensionEnum.ToString() }
+                }
             };
 
             using (var ms = new MemoryStream())
@@ -414,26 +417,43 @@ namespace DataSummitHelper.Services
                 await blockBlobClient.UploadAsync(ms, blobUploadOptions);
             }
 
+            //Add upload data to database
+            var doc = new DataSummitModels.DB.Document()
+            {
+                //Default seetings to avoid 'NOT NULL' fields from throwing errors
+                ProjectId = 1,              // Trial docs for Free Account
+                PaperOrientationId = 2,     // Landscape
+                PaperSizeId = 92,           // A1
+
+
+                //Actual document specific data from upload file
+                FileName = file.FileName,
+                BlobUrl = blockBlobClient.Uri.ToString(),
+                CreatedDate = DateTime.Now,
+                ContainerName = containerName
+            };
+            await _dao.CreateDocument(doc);
+
             return blockBlobClient.Uri.ToString();
         }
 
-        private DataSummitModels.Enums.Document.Format GetDocumentFormatEnum(string mimeType)
+        private DataSummitModels.Enums.Document.Extension GetDocumentExtensionEnum(string mimeType)
         {
-            var format = DataSummitModels.Enums.Document.Format.Unknown;
+            var format = DataSummitModels.Enums.Document.Extension.Unknown;
 
             switch (mimeType)
             {
                 case "application/pdf":
-                    format = DataSummitModels.Enums.Document.Format.PDF;
+                    format = DataSummitModels.Enums.Document.Extension.PDF;
                     break;
                 case "image/jpeg":
-                    format = DataSummitModels.Enums.Document.Format.JPG;
+                    format = DataSummitModels.Enums.Document.Extension.JPG;
                     break;
                 case "image/x-png":
-                    format = DataSummitModels.Enums.Document.Format.PNG;
+                    format = DataSummitModels.Enums.Document.Extension.PNG;
                     break;
                 case "image/gif":
-                    format = DataSummitModels.Enums.Document.Format.GIF;
+                    format = DataSummitModels.Enums.Document.Extension.GIF;
                     break;
             }
 

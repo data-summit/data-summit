@@ -51,15 +51,8 @@ namespace DataSummitHelper.Dao
 
         public async System.Threading.Tasks.Task CreateCompany(DataSummitModels.DB.Company company)
         {
-            try
-            {
-                await _context.Companies.AddAsync(company);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
+            await _context.Companies.AddAsync(company);
+            await _context.SaveChangesAsync();
         }
 
         public async System.Threading.Tasks.Task UpdateCompany(DataSummitModels.DB.Company company)
@@ -204,6 +197,12 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region Documents
+        public async System.Threading.Tasks.Task CreateDocument(DataSummitModels.DB.Document document)
+        {
+            await _context.Documents.AddAsync(document);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)
         {
             var documents = new List<DataSummitModels.DB.Document>();

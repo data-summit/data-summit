@@ -32,7 +32,7 @@ namespace DataSummitModels.DTO
         public DateTime? CreatedDate { get; set; }
         public string UserId { get; set; }
         public Enums.Document.Type Type { get; set; }
-        public Enums.Document.Format Format { get; set; }
+        public Enums.Document.Extension Format { get; set; }
 
 
         public virtual List<DocumentLayer> Layers { get; set; }

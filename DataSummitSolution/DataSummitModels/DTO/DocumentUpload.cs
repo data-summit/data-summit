@@ -8,7 +8,7 @@ namespace DataSummitModels.DTO
     public class DocumentUpload
     {
         public Enums.Document.Type DocumentType { get; set; } = Enums.Document.Type.Unknown;
-        public Enums.Document.Format DocumentFormat { get; set; } = Enums.Document.Format.Unknown;
+        public Enums.Document.Extension DocumentFormat { get; set; } = Enums.Document.Extension.Unknown;
         public Enums.Payment.Plan PaymentPlan { get; set; } = Enums.Payment.Plan.Free;
         public int CompanyId { get; set; } = 0;
         public string UserId { get; set; } = "0";

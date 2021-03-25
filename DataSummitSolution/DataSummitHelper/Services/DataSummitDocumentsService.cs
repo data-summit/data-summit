@@ -16,10 +16,12 @@ namespace DataSummitHelper.Services
     public class DataSummitDocumentsService : IDataSummitDocumentsService
     {
         private readonly IDataSummitDao _dao;
+        private readonly IAzureResourcesService _azureResources;
 
-        public DataSummitDocumentsService(IDataSummitDao dao)
+        public DataSummitDocumentsService(IDataSummitDao dao, IAzureResourcesService azureResources)
         {
             _dao = dao;
+            _azureResources = azureResources;
         }
 
         public DataSummitModels.Enums.Document.Type DocumentType(string mimeType)
@@ -43,22 +45,22 @@ namespace DataSummitHelper.Services
             return enumType;
         }
 
-        public DataSummitModels.Enums.Document.Format DocumentFormat(string mimeFormat)
+        public DataSummitModels.Enums.Document.Extension DocumentFormat(string mimeFormat)
         {
-            var enumFormat = DataSummitModels.Enums.Document.Format.Unknown;
+            var enumFormat = DataSummitModels.Enums.Document.Extension.Unknown;
             switch (mimeFormat)
             {
                 case "application/pdf":
-                    enumFormat = DataSummitModels.Enums.Document.Format.PDF;
+                    enumFormat = DataSummitModels.Enums.Document.Extension.PDF;
                     break;
                 case "image/jpeg":
-                    enumFormat = DataSummitModels.Enums.Document.Format.JPG;
+                    enumFormat = DataSummitModels.Enums.Document.Extension.JPG;
                     break;
                 case "image/x-png":
-                    enumFormat = DataSummitModels.Enums.Document.Format.PNG;
+                    enumFormat = DataSummitModels.Enums.Document.Extension.PNG;
                     break;
                 case "image/gif":
-                    enumFormat = DataSummitModels.Enums.Document.Format.GIF;
+                    enumFormat = DataSummitModels.Enums.Document.Extension.GIF;
                     break;
             }
             return enumFormat;

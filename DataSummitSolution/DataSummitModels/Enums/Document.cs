@@ -12,7 +12,7 @@ namespace DataSummitModels.Enums
             Schematic = 5
         }
 
-        public enum Format
+        public enum Extension
         {
             Unknown = 1,
             JPG = 2,
