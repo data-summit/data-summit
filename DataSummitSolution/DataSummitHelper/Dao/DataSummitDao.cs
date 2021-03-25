@@ -12,15 +12,18 @@ namespace DataSummitHelper.Dao
     public partial class DataSummitDao : IDataSummitDao
     {
         private readonly DataSummitDbContext _context;
-        private readonly Classes.Company _company;
 
         public DataSummitDao(DataSummitDbContext context)
         {
             _context = context;
-            _company = new Classes.Company(_context);
-            
+
             // TODO: Guard class against null objects
             if (_context == null)
+            {
+                throw new Exception("DataSummit DbContext could not be created");
+            }
+            // TODO: Guard class against empty objects
+            else if (_context.AzureCompanyResourceUrls.Count() > 0)
             {
                 throw new Exception("DataSummit DbContext could not be created");
             }
@@ -46,7 +49,7 @@ namespace DataSummitHelper.Dao
         #region Companies
         public async Task<List<DataSummitModels.DB.Company>> GetAllCompanies()
         {
-            return await _company.GetAllCompanies();
+            return await _context.Companies.ToListAsync();
         }
 
         public async System.Threading.Tasks.Task CreateCompany(DataSummitModels.DB.Company company)
@@ -347,7 +350,7 @@ namespace DataSummitHelper.Dao
         {
             var urls = _context.AzureCompanyResourceUrls;
             
-            return await _context.AzureCompanyResourceUrls.FirstOrDefaultAsync(p => p.Name == name);
+            return await _context.AzureCompanyResourceUrls.FirstAsync(p => p.Name == name);
         }
         #endregion
 

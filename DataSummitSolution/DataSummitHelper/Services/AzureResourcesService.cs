@@ -421,10 +421,11 @@ namespace DataSummitHelper.Services
             var doc = new DataSummitModels.DB.Document()
             {
                 //Default seetings to avoid 'NOT NULL' fields from throwing errors
-                ProjectId = 1,              // Trial docs for Free Account
-                PaperOrientationId = 2,     // Landscape
-                PaperSizeId = 92,           // A1
-
+                DocumentTypeId = 1,         //Unknown type
+                ProjectId = 1,              //Empty project
+                TemplateVersionId = 1,      //Empty template
+                PaperOrientationId = 1,     //Portrait
+                PaperSizeId = 9,            //A4
 
                 //Actual document specific data from upload file
                 FileName = file.FileName,

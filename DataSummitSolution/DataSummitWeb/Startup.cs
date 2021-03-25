@@ -44,7 +44,6 @@ namespace DataSummitWeb
                 //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
-            //connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=admin;Password=admin";
 
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
@@ -93,8 +92,7 @@ namespace DataSummitWeb
 
             // Add service dependencies.
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
-                //.AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
-                .AddDbContext<DataSummitDbContext>(options => options.UseSqlServer(connectionString))
+                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
                 .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
             services.Configure<IdentityOptions>(options =>

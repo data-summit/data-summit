@@ -50,7 +50,7 @@ namespace DataSummitWeb.Controllers
         }
 
 
-        [HttpPost("{uploadFiles}")]
+        [HttpPost("uploadFiles")]
         public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
         {
             var uploadedFileURLs = new HashSet<string>();
@@ -62,19 +62,6 @@ namespace DataSummitWeb.Controllers
                     {
                         var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
                         uploadedFileURLs.Add(uploadedFileUrl);
-
-                        //Add to database via data adaptor
-                        var doc = new DataSummitModels.DB.Document()
-                        {
-                            BlobUrl = uploadedFileUrl,
-                            //Not null values, required for successful insert
-                            DocumentTypeId = 1,         //Unknown type
-                            ProjectId = 1,              //Empty project
-                            TemplateVersionId = 1,      //Empty template
-                            PaperOrientationId = 1,     //Portrait
-                            PaperSizeId = 9             //A4
-                        };
-                        await _dao.CreateDocument(doc);
                     }
                 }
             }
@@ -86,8 +73,8 @@ namespace DataSummitWeb.Controllers
             return uploadedFileURLs;
         }
 
-        [HttpPost("{determineDocumentType}")]
-        public async void DetermineDocumentType(HashSet<string> blobUrls)
+        [HttpPost("determineDocumentType")]
+        public async void DetermineDocumentType([FromBody] HashSet<string> blobUrls)
         {
             try
             {
@@ -108,7 +95,7 @@ namespace DataSummitWeb.Controllers
             }
         }
 
-        [HttpPost("{determineDrawingComponents}")]
+        [HttpPost("determineDrawingComponents")]
         public async void DetermineDrawingComponents(HashSet<string> blobUrls)
         {
             try
