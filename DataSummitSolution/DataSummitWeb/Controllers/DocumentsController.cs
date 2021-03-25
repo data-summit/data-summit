@@ -50,7 +50,7 @@ namespace DataSummitWeb.Controllers
         }
 
 
-        [HttpPost("{uploadFiles}")]
+        [HttpPost("uploadFiles")]
         public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
         {
             var uploadedFileURLs = new HashSet<string>();
@@ -86,7 +86,7 @@ namespace DataSummitWeb.Controllers
             return uploadedFileURLs;
         }
 
-        [HttpPost("{determineDocumentType}")]
+        [HttpPost("determineDocumentType")]
         public async void DetermineDocumentType(HashSet<string> blobUrls)
         {
             try
@@ -108,7 +108,7 @@ namespace DataSummitWeb.Controllers
             }
         }
 
-        [HttpPost("{determineDrawingComponents}")]
+        [HttpPost("determineDrawingComponents")]
         public async void DetermineDrawingComponents(HashSet<string> blobUrls)
         {
             try
@@ -130,21 +130,6 @@ namespace DataSummitWeb.Controllers
         }
 
         //TODO final end point to return all document result information to the UI (via DB only)
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] DataSummitModels.DB.Document project)
-        {
-            //Update
-            //_dataSummitProject.UpdateDocument(id, project);
-            return;
-        }
-
-        [HttpDelete("{id}")]
-        public string Delete(int id)
-        {
-            //_dataSummitProject.DeleteDocument(id);
-            return JsonConvert.SerializeObject("Ok");
-        }
 
         private List<DataSummitModels.DB.Document> ProcessDocumentUpload(DocumentUpload documentUpload)
         {
