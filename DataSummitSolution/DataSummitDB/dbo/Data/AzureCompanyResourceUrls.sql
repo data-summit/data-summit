@@ -19,5 +19,7 @@ INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [U
 GO
 INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (8, N'Classification', N'https://datasummit-functionapps.azurewebsites.net/api/Classification', N'cdyMm6NMcySrXgT3t1mw/PqNndKmqBH0tXKnXcPT0HIGVG/iXXcSLQ==', N'Function', 1)
 GO
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (9, N'ObjectDetection', N'https://datasummit-functionapps.azurewebsites.net/api/ObjectDetection', N'LHaEs9drwYz6rSvyDRR31bT7ucraq1N/rqgute6si0oGJEXoH49XSw==', N'Function', 1)
+GO
 SET IDENTITY_INSERT [dbo].[AzureCompanyResourceUrls] OFF
 GO

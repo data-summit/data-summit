@@ -44,7 +44,7 @@ namespace DataSummitWeb
                 //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
-
+            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=admin;Password=admin";
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")
@@ -122,6 +122,7 @@ namespace DataSummitWeb
             services.AddScoped<IDataSummitTemplatesService, DataSummitTemplatesService>();
             services.AddScoped<IDataSummitDao, DataSummitDao>();
             services.AddScoped<IClassificationService, ClassificationService>();
+            services.AddScoped<IObjectDetectionService, ObjectDetectionService>();
 
             // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
             // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing

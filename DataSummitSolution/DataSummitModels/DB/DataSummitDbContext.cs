@@ -17,8 +17,6 @@ namespace DataSummitModels.DB
             var optionsBuilder = new DbContextOptionsBuilder<DataSummitDbContext>();
         }
 
-        
-
         public virtual DbSet<Address> Addresses { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
@@ -423,6 +421,8 @@ namespace DataSummitModels.DB
 
             modelBuilder.Entity<Document>(entity =>
             {
+                entity.HasKey(e => new { e.DocumentId });
+
                 entity.Property(e => e.AmazonConfidence).HasColumnType("decimal(3, 2)");
 
                 entity.Property(e => e.AzureConfidence).HasColumnType("decimal(3, 2)");
@@ -479,6 +479,12 @@ namespace DataSummitModels.DB
 
             modelBuilder.Entity<DocumentFeature>(entity =>
             {
+                entity.Property(e => e.Confidence).HasColumnType("decimal(6, 5)");
+
+                entity.Property(e => e.Feature)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
                 entity.Property(e => e.Value)
                     .IsRequired()
                     .HasMaxLength(1023);

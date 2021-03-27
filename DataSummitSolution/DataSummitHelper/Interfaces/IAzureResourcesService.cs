@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Storage.Blobs.Specialized;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataSummitHelper.Interfaces
@@ -17,5 +19,7 @@ namespace DataSummitHelper.Interfaces
 
         //Block blob
         Task<string> UploadDataToBlob(IFormFile file);
+        BlockBlobClient GetBlobByUrl(string blobUrl);
+        Task AddMetadataToBlob(string blobUrl, List<KeyValuePair<string, string>> metadata);
     }
 }

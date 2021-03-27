@@ -55,33 +55,5 @@ namespace DataSummitHelper
             }
             return returnid;
         }
-
-        public void UpdateDocument(long id, DataSummitModels.DB.Document document)
-        {
-            try
-            {
-                if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                dataSummitDbContext.Documents.Update(document);
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-            return;
-        }
-        public void DeleteDocument(long documentId)
-        {
-            try
-            {
-                if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                DataSummitModels.DB.Document document = dataSummitDbContext.Documents.First(p => p.DocumentId == documentId);
-                dataSummitDbContext.Documents.Remove(document);
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-            return;
-        }
     }
 }

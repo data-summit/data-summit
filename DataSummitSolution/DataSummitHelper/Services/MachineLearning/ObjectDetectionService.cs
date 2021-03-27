@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Services.MachineLearning
 {
-    public class ClassificationService : IClassificationService
+    public class ObjectDetectionService : IObjectDetectionService
     {
         private readonly IDataSummitDao _dao;
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public ClassificationService(IDataSummitDao dao, IDataSummitHelperService dataSummitHelper)
+        public ObjectDetectionService(IDataSummitDao dao, IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
             _dao = dao ?? throw new ArgumentNullException(nameof(dao)); ;
         }
 
-        public async Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, 
+        public async Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName, 
             string azureResourceName, double minThreshold = 0.65)
         {
-            var result = new MLPrediction();
+            var results = new List<MLPrediction>();
             var azureFunction = _dao.GetAzureUrlByName(azureResourceName);
             var azureAI = _dao.GetMLUrlByName(azureMLResourceName);
 
@@ -45,11 +45,9 @@ namespace DataSummitHelper.Services.MachineLearning
                 var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Item1 + "?code=" + azureFunction.Item2),
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
-                var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
-                result = results.OrderBy(f => f.Probability).First();
-
+                results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
             }
-            return result;
+            return results;
         }
     }
 }

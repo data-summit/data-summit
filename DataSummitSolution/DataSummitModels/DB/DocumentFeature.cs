@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
-
+﻿
 namespace DataSummitModels.DB
 {
     public partial class DocumentFeature
@@ -15,7 +11,8 @@ namespace DataSummitModels.DB
         public long? Top { get; set; }
         public long? Width { get; set; }
         public long? Height { get; set; }
-        public byte? Feature { get; set; }
+        public string Feature { get; set; }
+        public double Confidence { get; set; } = 0;
         public long? Center { get; set; }
 
         public virtual Document Document { get; set; }

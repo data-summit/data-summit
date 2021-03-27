@@ -421,6 +421,7 @@ namespace DataSummitHelper.Services
             var doc = new DataSummitModels.DB.Document()
             {
                 //Default seetings to avoid 'NOT NULL' fields from throwing errors
+                //TODO enums to replace SQL ids
                 DocumentTypeId = 1,         //Unknown type
                 ProjectId = 1,              //Empty project
                 TemplateVersionId = 1,      //Empty template
@@ -437,7 +438,45 @@ namespace DataSummitHelper.Services
 
             return blockBlobClient.Uri.ToString();
         }
+        public BlockBlobClient GetBlobByUrl(string blobUrl)
+        {
+            // Get storage account connection string data from Azure Secrets store
+            string connectionString = _dataSummitHelper.GetSecret("datasummitstorage");
+            var blobServiceClient = new BlobServiceClient(connectionString);    //v12
 
+            // Get container from connection Url
+            var containerUrl = blobUrl.Substring(0, blobUrl.LastIndexOf("/"));
+            var containerName = containerUrl.Substring(containerUrl.LastIndexOf("/") + 1, containerUrl.Length - containerUrl.LastIndexOf("/") - 1);
+            var blobContainerClient = blobServiceClient.GetBlobContainerClient(containerName);    //v12
+
+            var blobName = blobUrl.Substring(blobUrl.LastIndexOf("/") + 1, blobUrl.Length - blobUrl.LastIndexOf("/") - 1);
+            var blob = blobContainerClient.GetBlockBlobClient(blobName);
+
+            return blob;
+        }
+        public async Task AddMetadataToBlob(string blobUrl, List<KeyValuePair<string, string>> metadata)
+        {
+            var blob = GetBlobByUrl(blobUrl);
+
+            // Get the blob properties
+            BlobProperties properties = await blob.GetPropertiesAsync();
+            try
+            {
+                foreach (var pair in metadata)
+                {
+                    if (properties.Metadata.Count(k => k.Key == pair.Key) > 0)
+                    {
+                        properties.Metadata.Remove(pair.Key);
+                    }
+                    properties.Metadata.Add(pair.Key, pair.Value);
+                }
+                blob.SetMetadata(properties.Metadata);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Document type & confidence could not be added to blob metadata");
+            }
+        }
         private DataSummitModels.Enums.Document.Extension GetDocumentExtensionEnum(string mimeType)
         {
             var format = DataSummitModels.Enums.Document.Extension.Unknown;

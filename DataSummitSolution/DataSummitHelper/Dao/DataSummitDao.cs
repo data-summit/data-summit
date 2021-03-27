@@ -22,11 +22,11 @@ namespace DataSummitHelper.Dao
             {
                 throw new Exception("DataSummit DbContext could not be created");
             }
-            // TODO: Guard class against empty objects
-            else if (_context.AzureCompanyResourceUrls.Count() > 0)
-            {
-                throw new Exception("DataSummit DbContext contains no results");
-            }
+            //// TODO: Guard class against empty objects
+            //else if (_context.AzureCompanyResourceUrls.Count() > 0)
+            //{
+            //    throw new Exception("DataSummit DbContext contains no results");
+            //}
         }
 
         public async System.Threading.Tasks.Task DeleteTemplateAttribute(long templateAttributeId)
@@ -88,7 +88,7 @@ namespace DataSummitHelper.Dao
         
         public async Task<DataSummitModels.DB.Company> GetCompanyById(int id)
         {
-            return await _context.Companies.FirstOrDefaultAsync(c => c.CompanyId == id);
+            return await _context.Companies.SingleOrDefaultAsync(c => c.CompanyId == id);
         }
         #endregion
 
@@ -195,7 +195,7 @@ namespace DataSummitHelper.Dao
 
         public async Task<DataSummitModels.DB.Project> GetProjectById(int id)
         {
-            return await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
+            return await _context.Projects.SingleOrDefaultAsync(p => p.ProjectId == id);
         }
         #endregion
 
@@ -204,6 +204,60 @@ namespace DataSummitHelper.Dao
         {
             await _context.Documents.AddAsync(document);
             await _context.SaveChangesAsync();
+        }
+
+        public void UpdateDocument(DataSummitModels.DB.Document document)
+        {
+            _context.Documents.Update(document);
+            _context.SaveChanges();
+        }
+
+        public void DeleteDocument(long documentId)
+        {
+            DataSummitModels.DB.Document document = _context.Documents.SingleOrDefault(doc => doc.DocumentId == documentId);
+            DeleteDocument(document);
+        }
+        public void DeleteDocument(string documentUrl)
+        {
+            DataSummitModels.DB.Document document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
+            DeleteDocument(document);
+        }
+        public void DeleteDocument(DataSummitModels.DB.Document document)
+        {
+            _context.Documents.Remove(document);
+        }
+
+        public async System.Threading.Tasks.Task DeleteDocumentAsync(long documentId)
+        {
+            DataSummitModels.DB.Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.DocumentId == documentId);
+            DeleteDocument(document);
+        }
+        public async System.Threading.Tasks.Task DeleteDocumentAsync(string documentUrl)
+        {
+            DataSummitModels.DB.Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
+            DeleteDocument(document);
+        }
+
+        public void AddDocumentFeatures(List<DocumentFeature> documentFeatures)
+        {
+            documentFeatures.ForEach(doc => AddDocumentFeature(doc));
+        }
+
+        public void AddDocumentFeature(DocumentFeature documentFeature)
+        {
+            _context.DocumentFeatures.Add(documentFeature);
+        }
+
+        public async Task<DataSummitModels.DB.Document> GetDocumentsByUrlAsync(string documentUrl)
+        {
+            var document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
+            return document;
+        }
+
+        public DataSummitModels.DB.Document GetDocumentsByUrl(string documentUrl)
+        {
+            var document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
+            return document;
         }
 
         public async Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)
@@ -229,8 +283,8 @@ namespace DataSummitHelper.Dao
 
             try
             {
-                var document = await _context.Documents.FirstOrDefaultAsync(d => d.DocumentId == documentId);
-                var templateVersion = await _context.TemplateVersions.FirstOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
+                var document = await _context.Documents.SingleOrDefaultAsync(d => d.DocumentId == documentId);
+                var templateVersion = await _context.TemplateVersions.SingleOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
                 templateAttributes = templateVersion.TemplateAttributes.ToList();
             }
             catch (Exception ae)
@@ -248,7 +302,7 @@ namespace DataSummitHelper.Dao
             try
             {
                 var document = await _context.Documents
-                    .FirstOrDefaultAsync(d => d.DocumentId == documentId);
+                    .SingleOrDefaultAsync(d => d.DocumentId == documentId);
 
                 documentProperties = await _context.Properties
                     .Select(p => new { p.TemplateAttribute, p.Sentence })
@@ -303,6 +357,7 @@ namespace DataSummitHelper.Dao
             }
         }
 
+        //TODO remove this or the 'Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)' method. They are duplicates.
         public async Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int projectId)
         {
             var documents = new List<DataSummitModels.DB.Document>();
@@ -324,7 +379,7 @@ namespace DataSummitHelper.Dao
         #region Properties
         public async Task<DataSummitModels.DB.Property> GetPropertyById(int id)
         {
-            return await _context.Properties.FirstOrDefaultAsync(p => p.PropertyId == id);
+            return await _context.Properties.SingleOrDefaultAsync(p => p.PropertyId == id);
         }
         public async Task<bool> DeleteProperty(long propertyId)
         {
@@ -346,18 +401,28 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region Azure URLs
-        public async Task<DataSummitModels.DB.AzureCompanyResourceUrl> GetAzureUrlByName(string name)
+        public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
         {
-            var urls = _context.AzureCompanyResourceUrls;
-            
-            return await _context.AzureCompanyResourceUrls.FirstAsync(p => p.Name == name);
+            var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
+            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+        }
+        public Tuple<string, string> GetAzureUrlByName(string name)
+        {
+            var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
+            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
         }
         #endregion
 
         #region ML URLs
-        public async Task<AzureMLResource> GetMLUrlByName(string name)
+        public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
         {
-            return await _context.AzureMLResources.FirstOrDefaultAsync(p => p.Name == name);
+            var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
+            return azML;
+        }
+        public AzureMLResource GetMLUrlByName(string name)
+        {
+            var azML = _context.AzureMLResources.SingleOrDefault(ar => ar.Name == name);
+            return azML;
         }
         #endregion
 

@@ -8,6 +8,6 @@ namespace DataSummitHelper.Interfaces.MachineLearning
 {
     public interface IClassificationService
     {
-        Task<MLPrediction> DocumentType(string url, string azureMLResourceName, string azureResourceName);
+        Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, string azureResourceName, double minThreshold = 0.65);
     }
 }
