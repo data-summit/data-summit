@@ -19,7 +19,7 @@
     [DocumentTypeId]      TINYINT         NOT NULL, 
     CONSTRAINT [PK_Document] PRIMARY KEY CLUSTERED ([DocumentId] ASC),
     CONSTRAINT [FK_Documents_Projects] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([ProjectId]),
-	CONSTRAINT [FK_Documents_PaperSizes] FOREIGN KEY ([PaperSizeId]) REFERENCES [dbo].[PaperSizes] ([PaperSizeId]) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT [FK_Documents_PaperSizes] FOREIGN KEY ([PaperSizeId]) REFERENCES [dbo].[PaperSizes] ([PaperSizeId]) ON UPDATE CASCADE,
 	CONSTRAINT [FK_Documents_PaperOrientations] FOREIGN KEY ([PaperOrientationId]) REFERENCES [dbo].[PaperOrientations] ([PaperOrientationId]), 
     CONSTRAINT [FK_Documents_TemplateVersions] FOREIGN KEY ([TemplateVersionId]) REFERENCES [TemplateVersions]([TemplateVersionId]),
     CONSTRAINT [FK_Documents_DocumentTypes] FOREIGN KEY ([DocumentTypeId]) REFERENCES [DocumentTypes]([DocumentTypeId]) ON DELETE CASCADE ON UPDATE CASCADE

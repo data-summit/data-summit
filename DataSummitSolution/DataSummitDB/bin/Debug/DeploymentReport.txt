@@ -27,6 +27,7 @@
        [dbo].[AspNetUsers].[UserNameIndex] (Index)
        [dbo].[AspNetUserTokens] (Table)
        [dbo].[AzureCompanyResourceUrls] (Table)
+       [dbo].[AzureMLResources] (Table)
        [dbo].[BlockPositions] (Table)
        [dbo].[Categories] (Table)
        [dbo].[Companies] (Table)

@@ -19,5 +19,10 @@ INSERT [dbo].[Documents] ([DocumentId], [FileName], [BlobUrl], [ContainerName], 
 GO
 INSERT [dbo].[Documents] ([DocumentId], [FileName], [BlobUrl], [ContainerName], [Success], [ProjectId], [TemplateVersionId], [AzureConfidence], [GoogleConfidence], [AmazonConfidence], [PaperSizeId], [PaperOrientationId], [Processed], [CreatedDate], [UserId], [Type], [File], [DocumentTypeId]) VALUES (10017, N'M 109_AHU 01 Schematic, Supply.jpg', N'https://trialdocs.blob.core.windows.net/c64fdca6-67b8-465c-be18-9cc1605f372a/Original.jpg', N'c64fdca6-67b8-465c-be18-9cc1605f372a', 0, 1, 3007, NULL, NULL, NULL, NULL, 2, 1, CURRENT_TIMESTAMP, NULL, N'JPG', NULL, 5)
 GO
+INSERT [dbo].[Documents] ([DocumentId], [FileName], [BlobUrl], [ContainerName], [Success], [ProjectId], [TemplateVersionId], [AzureConfidence], [GoogleConfidence], [AmazonConfidence], [PaperSizeId], [PaperOrientationId], [Processed], [CreatedDate], [UserId], [Type], [File], [DocumentTypeId]) VALUES (1, N'Original.jpg', N'https://datasummitstorage.blob.core.windows.net/1be68311-4303-4638-9d8b-3e4baeea3436/Original.jpg', N'1be68311-4303-4638-9d8b-3e4baeea3436', 0, 1, 3007, 0.81, NULL, NULL, NULL, 2, 1, CURRENT_TIMESTAMP, NULL, N'JPG', NULL, 5)
+GO
+INSERT [dbo].[Documents] ([DocumentId], [FileName], [BlobUrl], [ContainerName], [Success], [ProjectId], [TemplateVersionId], [AzureConfidence], [GoogleConfidence], [AmazonConfidence], [PaperSizeId], [PaperOrientationId], [Processed], [CreatedDate], [UserId], [Type], [File], [DocumentTypeId]) VALUES (40011, N'Original.jpg', N'https://datasummitstorage.blob.core.windows.net/57038dcc-e550-4482-abb3-ef802484f596/Original.jpg', N'57038dcc-e550-4482-abb3-ef802484f596', 0, 1, 1, 0.93, NULL, NULL, 9, 1, 0, CURRENT_TIMESTAMP, NULL, N'JPG', NULL, 2)
+GO
+
 SET IDENTITY_INSERT [dbo].[Documents] OFF
 GO

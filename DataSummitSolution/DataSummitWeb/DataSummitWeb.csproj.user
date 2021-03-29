@@ -13,7 +13,7 @@
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
-    <NameOfLastUsedPublishProfile>DataSummit-Web - Web Deploy2</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\GitHub\data-summit\DataSummitSolution\DataSummitWeb\Properties\PublishProfiles\DataSummit-API - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
     <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
 </Project>
