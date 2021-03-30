@@ -123,7 +123,7 @@ namespace DataSummitWeb.Controllers
             {
                 foreach (var blobUrl in blobUrls)
                 {
-                    var doc = _dao.GetDocumentsByUrl(blobUrl);      // If document is run later in the method a _dao disposed error occurs
+                    var doc = _dataSummitDocuments.GetDocumentByUrl(blobUrl);      // If document is run later in the method a _dao disposed error occurs
                     var features = new List<DocumentFeature>();
                     features.AddRange(doc.DocumentFeatures.ToList());
 
@@ -146,10 +146,9 @@ namespace DataSummitWeb.Controllers
                         }
                     }
 
-                    //TODO persist in database and blob metadata
-                    //_dao.AddDocumentFeatures(features);
-                    doc.DocumentFeatures  = features;       // Still throws a _dao.disposed() error
-                    _dao.UpdateDocument(doc);
+                    //Persists in database
+                    doc.DocumentFeatures  = features;
+                    _dataSummitDocuments.UpdateDocument(doc);
                 }
             }
             catch (Exception ae)
@@ -158,22 +157,6 @@ namespace DataSummitWeb.Controllers
                 return;
             }
         }
-
-        [HttpPost("determineDrawingComponents")]
-        public async void DetermineReportComponents([FromBody] HashSet<string> blobUrls)
-        {
-            try
-            {
-                
-            }
-            catch (Exception ae)
-            {
-                //TODO log exception
-                return;
-            }
-        }
-
-        //TODO final end point to return all document result information to the UI (via DB only)
 
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] DataSummitModels.DB.Document project)

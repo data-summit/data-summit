@@ -65,6 +65,9 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Data" />
     <Folder Include="Deploy" />
+    <Folder Include="dbo\Deploy\Local" />
+    <Folder Include="dbo\Deploy\Cloud" />
+    <Folder Include="dbo\Deploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Addresses.sql" />

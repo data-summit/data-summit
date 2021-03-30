@@ -44,7 +44,7 @@ namespace DataSummitWeb
                 //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
-            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=admin;Password=admin";
+            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=lightosDB;Password=!Aa12345";
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")
@@ -52,7 +52,6 @@ namespace DataSummitWeb
             {
                 options.Authority = "http://localhost:55836";
                 options.RequireHttpsMetadata = false;
-
                 options.Audience = "values";
             });
 
@@ -92,7 +91,8 @@ namespace DataSummitWeb
 
             // Add service dependencies.
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
-                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
+                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString),
+                ServiceLifetime.Transient)
                 .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
             services.Configure<IdentityOptions>(options =>
@@ -112,17 +112,17 @@ namespace DataSummitWeb
             });
 
             //Data Summit specific dependency injection services
-            services.AddScoped<IAzureResourcesService, AzureResourcesService>();
-            services.AddScoped<IDataSummitCompaniesService, DataSummitCompaniesService>();
-            services.AddScoped<IDataSummitDocumentsService, DataSummitDocumentsService>();
-            services.AddScoped<IDataSummitHelperService, DataSummitHelperService>();
-            services.AddScoped<IDataSummitProjectsService, DataSummitProjectsService>();
-            services.AddScoped<IDataSummitPropertiesService, DataSummitPropertiesService>();
-            services.AddScoped<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
-            services.AddScoped<IDataSummitTemplatesService, DataSummitTemplatesService>();
+            services.AddTransient<IAzureResourcesService, AzureResourcesService>();
+            services.AddTransient<IDataSummitCompaniesService, DataSummitCompaniesService>();
+            services.AddTransient<IDataSummitDocumentsService, DataSummitDocumentsService>();
+            services.AddTransient<IDataSummitHelperService, DataSummitHelperService>();
+            services.AddTransient<IDataSummitProjectsService, DataSummitProjectsService>();
+            services.AddTransient<IDataSummitPropertiesService, DataSummitPropertiesService>();
+            services.AddTransient<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
+            services.AddTransient<IDataSummitTemplatesService, DataSummitTemplatesService>();
+            services.AddTransient<IClassificationService, ClassificationService>();
+            services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
             services.AddTransient<IDataSummitDao, DataSummitDao>();
-            services.AddScoped<IClassificationService, ClassificationService>();
-            services.AddScoped<IObjectDetectionService, ObjectDetectionService>();
 
             // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
             // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing

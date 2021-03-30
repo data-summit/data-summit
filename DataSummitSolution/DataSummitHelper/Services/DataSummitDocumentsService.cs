@@ -66,11 +66,17 @@ namespace DataSummitHelper.Services
             return enumFormat;
         }
 
-        public DocumentDto GetDocumentsByUrl(string documentUrl)
+        public DocumentDto GetDocumentDtoByUrl(string documentUrl)
         {
             var document = _dao.GetDocumentsByUrl(documentUrl);
             var documentDto = new DocumentDto(document);
             return documentDto;
+        }
+
+        public DataSummitModels.DB.Document GetDocumentByUrl(string documentUrl)
+        {
+            var document = _dao.GetDocumentsByUrl(documentUrl);
+            return document;
         }
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
@@ -97,5 +103,9 @@ namespace DataSummitHelper.Services
             await _dao.DeleteTemplateAttribute(documentPropertyId);
         }
 
+        public void UpdateDocument(DataSummitModels.DB.Document document)
+        {
+            _dao.UpdateDocument(document);
+        }
     }
 }

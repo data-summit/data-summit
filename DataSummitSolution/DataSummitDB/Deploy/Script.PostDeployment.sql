@@ -19,6 +19,7 @@ Note: This is a seeding only data set. Only to run on empty databases
 :r ..\dbo\Data\PaperSizes.sql
 :r ..\dbo\Data\StandardAttributes.sql
 :r ..\dbo\Data\AzureCompanyResourceUrls.sql
+:r ..\dbo\Data\AzureMLResources.sql
 :r ..\dbo\Data\Projects.sql
 :r ..\dbo\Data\Countries.sql
 :r ..\dbo\Data\Currencies.sql
