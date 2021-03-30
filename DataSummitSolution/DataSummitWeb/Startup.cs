@@ -120,7 +120,7 @@ namespace DataSummitWeb
             services.AddScoped<IDataSummitPropertiesService, DataSummitPropertiesService>();
             services.AddScoped<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
             services.AddScoped<IDataSummitTemplatesService, DataSummitTemplatesService>();
-            services.AddScoped<IDataSummitDao, DataSummitDao>();
+            services.AddTransient<IDataSummitDao, DataSummitDao>();
             services.AddScoped<IClassificationService, ClassificationService>();
             services.AddScoped<IObjectDetectionService, ObjectDetectionService>();
 
