@@ -2,7 +2,6 @@
 using DataSummitHelper.Interfaces;
 using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.Cloud;
-using DataSummitModels.DB;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,21 +12,25 @@ namespace DataSummitHelper.Services.MachineLearning
 {
     public class ClassificationService : IClassificationService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitAzureUrlsDao _azureDao;
+        private readonly IDataSummitMachineLearningDao _machineLearningDao;
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public ClassificationService(IDataSummitDao dao, IDataSummitHelperService dataSummitHelper)
+        public ClassificationService(IDataSummitAzureUrlsDao azureDao,
+                                     IDataSummitMachineLearningDao machineLearningDao,
+                                     IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
-            _dao = dao ?? throw new ArgumentNullException(nameof(dao)); ;
+            _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao)); ;
+            _machineLearningDao = machineLearningDao ?? throw new ArgumentNullException(nameof(machineLearningDao)); ;
         }
 
         public async Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, 
             string azureResourceName, double minThreshold = 0.65)
         {
             var result = new MLPrediction();
-            var azureFunction = _dao.GetAzureUrlByName(azureResourceName);
-            var azureAI = _dao.GetMLUrlByName(azureMLResourceName);
+            var azureFunction = _azureDao.GetAzureUrlByName(azureResourceName);
+            var azureAI = _machineLearningDao.GetMLUrlByName(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {
@@ -45,10 +48,11 @@ namespace DataSummitHelper.Services.MachineLearning
                 var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Item1 + "?code=" + azureFunction.Item2),
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
+                
                 var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
                 result = results.OrderBy(f => f.Probability).First();
-
             }
+
             return result;
         }
     }

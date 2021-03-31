@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Dao
 {
-    public partial class DataSummitDao : IDataSummitDao
+    public partial class DataSummitDao : IDataSummitAzureUrlsDao, IDataSummitCompaniesDao, IDataSummitDocumentsDao, IDataSummitMachineLearningDao,
+        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
     {
         private readonly DataSummitDbContext _context;
 
@@ -29,11 +30,11 @@ namespace DataSummitHelper.Dao
             //}
         }
 
-        public async System.Threading.Tasks.Task DeleteTemplateAttribute(long templateAttributeId)
+        public async Task DeleteTemplateAttribute(long templateAttributeId)
         {
             try
             {
-                var templateAttribute = new DataSummitModels.DB.TemplateAttribute() 
+                var templateAttribute = new DataSummitModels.DB.TemplateAttribute()
                 { TemplateAttributeId = templateAttributeId };
                 _context.TemplateAttributes.Attach(templateAttribute);
                 _context.TemplateAttributes.Remove(templateAttribute);
@@ -52,13 +53,13 @@ namespace DataSummitHelper.Dao
             return await _context.Companies.ToListAsync();
         }
 
-        public async System.Threading.Tasks.Task CreateCompany(DataSummitModels.DB.Company company)
+        public async Task CreateCompany(DataSummitModels.DB.Company company)
         {
             await _context.Companies.AddAsync(company);
             await _context.SaveChangesAsync();
         }
 
-        public async System.Threading.Tasks.Task UpdateCompany(DataSummitModels.DB.Company company)
+        public async Task UpdateCompany(DataSummitModels.DB.Company company)
         {
             try
             {
@@ -71,7 +72,7 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async System.Threading.Tasks.Task DeleteCompany(int companyId)
+        public async Task DeleteCompany(int companyId)
         {
             try
             {
@@ -85,7 +86,7 @@ namespace DataSummitHelper.Dao
                 throw;
             }
         }
-        
+
         public async Task<DataSummitModels.DB.Company> GetCompanyById(int id)
         {
             return await _context.Companies.SingleOrDefaultAsync(c => c.CompanyId == id);
@@ -149,20 +150,20 @@ namespace DataSummitHelper.Dao
             return projects;
         }
 
-        public async System.Threading.Tasks.Task CreateProject(DataSummitModels.DB.Project project)
+        public async Task CreateProject(DataSummitModels.DB.Project project)
         {
             try
             {
                 await _context.Projects.AddAsync(project);
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-        public async System.Threading.Tasks.Task UpdateProjectName(DataSummitModels.DB.Project project)
+        public async Task UpdateProjectName(DataSummitModels.DB.Project project)
         {
             try
             {
@@ -178,7 +179,7 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async System.Threading.Tasks.Task DeleteProject(int projectId)
+        public async Task DeleteProject(int projectId)
         {
             try
             {
@@ -200,13 +201,13 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region Documents
-        public async System.Threading.Tasks.Task CreateDocument(DataSummitModels.DB.Document document)
+        public async Task CreateDocument(Document document)
         {
             await _context.Documents.AddAsync(document);
             await _context.SaveChangesAsync();
         }
 
-        public void UpdateDocument(DataSummitModels.DB.Document document)
+        public void UpdateDocument(Document document)
         {
             _context.Documents.Update(document);
             _context.SaveChanges();
@@ -214,27 +215,27 @@ namespace DataSummitHelper.Dao
 
         public void DeleteDocument(long documentId)
         {
-            DataSummitModels.DB.Document document = _context.Documents.SingleOrDefault(doc => doc.DocumentId == documentId);
+            Document document = _context.Documents.SingleOrDefault(doc => doc.DocumentId == documentId);
             DeleteDocument(document);
         }
         public void DeleteDocument(string documentUrl)
         {
-            DataSummitModels.DB.Document document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
+            Document document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
             DeleteDocument(document);
         }
-        public void DeleteDocument(DataSummitModels.DB.Document document)
+        public void DeleteDocument(Document document)
         {
             _context.Documents.Remove(document);
         }
 
-        public async System.Threading.Tasks.Task DeleteDocumentAsync(long documentId)
+        public async Task DeleteDocumentAsync(long documentId)
         {
-            DataSummitModels.DB.Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.DocumentId == documentId);
+            Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.DocumentId == documentId);
             DeleteDocument(document);
         }
-        public async System.Threading.Tasks.Task DeleteDocumentAsync(string documentUrl)
+        public async Task DeleteDocumentAsync(string documentUrl)
         {
-            DataSummitModels.DB.Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
+            Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
             DeleteDocument(document);
         }
 
@@ -248,21 +249,29 @@ namespace DataSummitHelper.Dao
             _context.DocumentFeatures.Add(documentFeature);
         }
 
-        public async Task<DataSummitModels.DB.Document> GetDocumentsByUrlAsync(string documentUrl)
+        public async Task UpdateDocumentFeature(string documentUrl, DocumentFeature documentFeature)
+        {
+            var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
+
+            doc.DocumentFeatures.Add(documentFeature);
+            _context.SaveChanges();
+        }
+
+        public async Task<Document> GetDocumentsByUrlAsync(string documentUrl)
         {
             var document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
             return document;
         }
 
-        public DataSummitModels.DB.Document GetDocumentsByUrl(string documentUrl)
+        public Document GetDocumentsByUrl(string documentUrl)
         {
             var document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
             return document;
         }
 
-        public async Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)
+        public async Task<List<Document>> GetAllProjectDocuments(int projectId)
         {
-            var documents = new List<DataSummitModels.DB.Document>();
+            var documents = new List<Document>();
 
             try
             {
@@ -341,7 +350,7 @@ namespace DataSummitHelper.Dao
             return documentProperties;
         }
 
-        public async System.Threading.Tasks.Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
+        public async Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
         {
             try
             {
@@ -357,10 +366,10 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        //TODO remove this or the 'Task<List<DataSummitModels.DB.Document>> GetAllProjectDocuments(int projectId)' method. They are duplicates.
-        public async Task<List<DataSummitModels.DB.Document>> GetProjectDocuments(int projectId)
+        //TODO remove this or the 'Task<List<Document>> GetAllProjectDocuments(int projectId)' method. They are duplicates.
+        public async Task<List<Document>> GetProjectDocuments(int projectId)
         {
-            var documents = new List<DataSummitModels.DB.Document>();
+            var documents = new List<Document>();
 
             try
             {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DataSummitModels.DB
 {
-    public partial class Task
+    public partial class FunctionTask
     {
         public long TaskId { get; set; }
         public string Name { get; set; }
@@ -15,7 +15,7 @@ namespace DataSummitModels.DB
 
         public virtual Document Document { get; set; }
 
-        public Task()
+        public FunctionTask()
         { ; }
     }
 }

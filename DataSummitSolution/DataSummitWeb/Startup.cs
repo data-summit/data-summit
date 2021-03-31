@@ -41,10 +41,10 @@ namespace DataSummitWeb
                     o.SerializerSettings.Converters.Add(new StringEnumConverter());
                     o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
-                //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
-            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;User ID=lightosDB;Password=!Aa12345";
+            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;Integrated Security=SSPI;"; 
+            // User ID=lightosDB;Password=!Aa12345";
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")
@@ -122,7 +122,14 @@ namespace DataSummitWeb
             services.AddTransient<IDataSummitTemplatesService, DataSummitTemplatesService>();
             services.AddTransient<IClassificationService, ClassificationService>();
             services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
-            services.AddTransient<IDataSummitDao, DataSummitDao>();
+            services.AddTransient<IDataSummitAzureUrlsDao, DataSummitDao>();
+            services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitDocumentsDao, DataSummitDao>();
+            services.AddTransient<IDataSummitMachineLearningDao, DataSummitDao>();
+            services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
+            services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplateAttributesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplatesDao, DataSummitDao>();
 
             // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
             // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing

@@ -43,11 +43,11 @@ namespace AzureFunctions.RecogniseText
                 ImageUpload imgUp = (ImageUpload)data;
                 name = name ?? data?.name;
 
-                List<FunctionTask> Tasks = new List<FunctionTask>();
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
 
                 //Validate entry data
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
@@ -71,7 +71,7 @@ namespace AzureFunctions.RecogniseText
                 if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
-                Tasks.Add(new FunctionTask("Google OCR\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Google OCR\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
                 //Get Container name from input object, exit if not found
@@ -88,11 +88,11 @@ namespace AzureFunctions.RecogniseText
                     //Google's literal version:  Uri uri = new Uri("POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDMe0LtaxFvFvDCTaEV-05IT792tvxpmbA");
                     Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + "Keys.Google.API_Key");  //Replace with actual key from Azure Secrets
 
-                    List<System.Threading.Tasks.Task> lOCRTasks = new List<System.Threading.Tasks.Task>();
+                    List<Task> lOCRTasks = new List<Task>();
 
                     foreach (ImageGrids ig in imgUp.SplitImages)
                     {
-                        lOCRTasks.Add(System.Threading.Tasks.Task.Run(async () =>
+                        lOCRTasks.Add(Task.Run(async () =>
                         {
                             //Download blob image data
                             Uri uriBlob = new Uri(ig.BlobUrl);
@@ -143,7 +143,7 @@ namespace AzureFunctions.RecogniseText
                                 }
                             }
 
-                            string responseText = String.Empty;
+                            string responseText = string.Empty;
                             using (var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
                             {
                                 responseText = reader.ReadToEnd();
@@ -157,21 +157,21 @@ namespace AzureFunctions.RecogniseText
                                 Methods.OCRSources ocrMethods = new Methods.OCRSources();
                                 sentences.AddRange(ocrMethods.FromGoogle(res));
 
-                                if (ig.Sentences == null) ig.Sentences = new List<DataSummitModels.DB.Sentence>();
+                                if (ig.Sentences == null) ig.Sentences = new List<Sentence>();
                                 ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
 
-                                Tasks.Add(new FunctionTask("Google OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Google OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ": " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
                             }
                         }));
                     }
 
-                    Tasks.Add(new FunctionTask("Google OCR\tAll OCR tasks started", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Google OCR\tAll OCR tasks started", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
-                    System.Threading.Tasks.Task.WaitAll(lOCRTasks.ToArray());
+                    Task.WaitAll(lOCRTasks.ToArray());
 
-                    Tasks.Add(new FunctionTask("Google OCR\tAll OCR tasks finished", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Google OCR\tAll OCR tasks finished", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
                     //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
@@ -191,7 +191,7 @@ namespace AzureFunctions.RecogniseText
                     //imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
 
 
-                    Tasks.Add(new FunctionTask("Google OCR\t'All OCR Results' uploaded", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Google OCR\t'All OCR Results' uploaded", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                     string jsonToReturn = JsonConvert.SerializeObject(imgUp);
 

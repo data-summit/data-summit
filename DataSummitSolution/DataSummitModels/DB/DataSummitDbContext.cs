@@ -52,7 +52,7 @@ namespace DataSummitModels.DB
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Sentence> Sentences { get; set; }
         public virtual DbSet<StandardAttribute> StandardAttributes { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<FunctionTask> Tasks { get; set; }
         public virtual DbSet<TemplateAttribute> TemplateAttributes { get; set; }
         public virtual DbSet<TemplateVersion> TemplateVersions { get; set; }
         public virtual DbSet<UserInfo> UserInfos { get; set; }
@@ -777,7 +777,7 @@ namespace DataSummitModels.DB
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<Task>(entity =>
+            modelBuilder.Entity<FunctionTask>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()

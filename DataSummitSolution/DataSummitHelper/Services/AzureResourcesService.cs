@@ -3,6 +3,8 @@ using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Interfaces;
+using DataSummitModels.DB;
+using DataSummitModels.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.KeyVault.Models;
 using Microsoft.Azure.Management.ResourceManager.Fluent;
@@ -23,13 +25,13 @@ namespace DataSummitHelper.Services
     public class AzureResourcesService : IAzureResourcesService
     {
         private readonly IConfiguration _configuration;
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitDocumentsDao _documentsDao;
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IDataSummitDao dao, IConfiguration configuration)
+        public AzureResourcesService(IDataSummitHelperService dataSummitHelper, IDataSummitDocumentsDao documentsDao, IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _dao = dao ?? throw new ArgumentNullException(nameof(dao));
+            _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
         }
 
@@ -418,7 +420,7 @@ namespace DataSummitHelper.Services
             }
 
             //Add upload data to database
-            var doc = new DataSummitModels.DB.Document()
+            var doc = new Document()
             {
                 //Default seetings to avoid 'NOT NULL' fields from throwing errors
                 //TODO enums to replace SQL ids
@@ -434,7 +436,7 @@ namespace DataSummitHelper.Services
                 CreatedDate = DateTime.Now,
                 ContainerName = containerName
             };
-            await _dao.CreateDocument(doc);
+            await _documentsDao.CreateDocument(doc);
 
             return blockBlobClient.Uri.ToString();
         }
@@ -477,23 +479,23 @@ namespace DataSummitHelper.Services
                 throw new Exception("Document type & confidence could not be added to blob metadata");
             }
         }
-        private DataSummitModels.Enums.Document.Extension GetDocumentExtensionEnum(string mimeType)
+        private DocumentExtension GetDocumentExtensionEnum(string mimeType)
         {
-            var format = DataSummitModels.Enums.Document.Extension.Unknown;
+            var format = DocumentExtension.Unknown;
 
             switch (mimeType)
             {
                 case "application/pdf":
-                    format = DataSummitModels.Enums.Document.Extension.PDF;
+                    format = DocumentExtension.PDF;
                     break;
                 case "image/jpeg":
-                    format = DataSummitModels.Enums.Document.Extension.JPG;
+                    format = DocumentExtension.JPG;
                     break;
                 case "image/x-png":
-                    format = DataSummitModels.Enums.Document.Extension.PNG;
+                    format = DocumentExtension.PNG;
                     break;
                 case "image/gif":
-                    format = DataSummitModels.Enums.Document.Extension.GIF;
+                    format = DocumentExtension.GIF;
                     break;
             }
 

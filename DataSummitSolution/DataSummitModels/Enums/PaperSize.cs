@@ -1,16 +1,7 @@
 ﻿
 namespace DataSummitModels.Enums
 {
-    public class Paper
-    {
-        
-        public enum Orientations
-        {
-            Portrait = 1,
-            Landscape = 2
-        }
-
-        public enum Size
+    public enum PaperSize
         {
             A0 = 91,
             A1 = 92,
@@ -90,5 +81,4 @@ namespace DataSummitModels.Enums
             TabloidExtra = 52,
             USStandardFanfold = 39
         }
-    }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DataSummitModels.Enums;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace DataSummitModels.DB
@@ -7,8 +8,8 @@ namespace DataSummitModels.DB
     {
         public Image Image { get; set; }
         public List<Sentence> Sentences { get; set; } = new List<Sentence>();
-        public Enums.Document.Type DocumentType { get; set; } = Enums.Document.Type.Unknown;
-        public Enums.Image.Type ImageType { get; set; } = Enums.Image.Type.Unknown;
+        public DocumentContentType DocumentType { get; set; } = DocumentContentType.Unknown;
+        public ImageType ImageType { get; set; } = ImageType.Unknown;
 
         public ImageGrids()
         { ; }

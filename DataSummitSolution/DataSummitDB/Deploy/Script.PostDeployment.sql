@@ -29,7 +29,7 @@ Note: This is a seeding only data set. Only to run on empty databases
 :r ..\dbo\Data\Documents.sql
 :r ..\dbo\Data\ImageGrids.sql
 :r ..\dbo\Data\Sentences.sql
-:r ..\dbo\Data\Tasks.sql
+:r ..\dbo\Data\FunctionTasks.sql
 :r ..\dbo\Data\GoogleLanguages.sql
 :r ..\dbo\Data\TemplateAttributes.sql
 :r ..\dbo\Data\Properties.sql

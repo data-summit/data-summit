@@ -1,23 +1,18 @@
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
-using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DataSummitHelper.Services
 {
     public class DataSummitCompaniesService : IDataSummitCompaniesService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitCompaniesDao _dao;
         private readonly IAzureResourcesService _azureResources;
 
-        public DataSummitCompaniesService(IDataSummitDao dao, IAzureResourcesService azureResources)
+        public DataSummitCompaniesService(IDataSummitCompaniesDao dao, IAzureResourcesService azureResources)
         {
             _dao = dao;
             _azureResources = azureResources;

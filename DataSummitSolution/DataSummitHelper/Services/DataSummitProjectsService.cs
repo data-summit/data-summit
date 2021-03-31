@@ -8,44 +8,47 @@ namespace DataSummitHelper.Services
 {
     public class DataSummitProjectsService : IDataSummitProjectsService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitProjectsDao _projectsDao;
+        private readonly IDataSummitCompaniesDao _companiesDao;
         private readonly IAzureResourcesService _azureResources;
 
-        public DataSummitProjectsService(IDataSummitDao dao, IAzureResourcesService azureResources)
+        public DataSummitProjectsService(IDataSummitProjectsDao projectsDao,
+                                         IDataSummitCompaniesDao _companiesDao,
+                                         IAzureResourcesService azureResources)
         {
-            _dao = dao;
+            _projectsDao = projectsDao;
             _azureResources = azureResources;
         }
         public async Task<List<ProjectDto>> GetAllCompanyProjects(int id)
         {
-            var projects = await _dao.GetAllCompanyProjects(id);
+            var projects = await _projectsDao.GetAllCompanyProjects(id);
             var projectDtos = projects.Select(p => new ProjectDto(p))
                 .ToList();
 
             return projectDtos;
         }
 
-        public async System.Threading.Tasks.Task CreateProject(ProjectDto projectDto)
+        public async Task CreateProject(ProjectDto projectDto)
         {
             var project = projectDto.ToProject();
             await _azureResources.CreateStorageAccount(project.Company.ResourceGroup, project.Name);
             project.UserId = -1;
-            await _dao.CreateProject(project);
+            await _projectsDao.CreateProject(project);
         }
 
-        public async System.Threading.Tasks.Task UpdateProject(ProjectDto projectDto)
+        public async Task UpdateProject(ProjectDto projectDto)
         {
             var project = projectDto.ToProject();
-            var oldProject = _dao.GetProjectById(projectDto.ProjectId).Result;
+            var oldProject = _projectsDao.GetProjectById(projectDto.ProjectId).Result;
             project.Name = await _azureResources.UpdateStorageAccount(project.Company.ResourceGroup, oldProject.Name, project.Name);
-            await _dao.UpdateProjectName(project);
+            await _projectsDao.UpdateProjectName(project);
         }
 
-        public async System.Threading.Tasks.Task DeleteProject(int id)
+        public async Task DeleteProject(int id)
         {
-            var project = await _dao.GetProjectById(id);
-            var company = await _dao.GetCompanyById(project.CompanyId);
-            await _dao.DeleteProject(id);
+            var project = await _projectsDao.GetProjectById(id);
+            var company = await _companiesDao.GetCompanyById(project.CompanyId);
+            await _projectsDao.DeleteProject(id);
             await _azureResources.DeleteStorageAccount(company.ResourceGroup, project.Name);
         }
     }

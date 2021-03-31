@@ -1,28 +1,28 @@
-﻿using static DataSummitModels.Enums.Paper;
+﻿using DataSummitModels.Enums;
 
 namespace DataSummitModels.DTO.Paper
 {
-    public class Types
+    public class PaperType
     {
         public string Name { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public Size Size { get; set; }
+        public PaperSize Size { get; set; }
 
-        public Types()
+        public PaperType()
         { }
 
-        public Types(string name)
+        public PaperType(string name)
         { Name = name; }
 
-        public Types(string name, int width, int height)
+        public PaperType(string name, int width, int height)
         {
             Name = name;
             Width = width;
             Height = height;
         }
 
-        public Types(string name, int width, int height, Size size)
+        public PaperType(string name, int width, int height, PaperSize size)
         {
             Name = name;
             Width = width;

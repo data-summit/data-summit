@@ -14,7 +14,7 @@ namespace DataSummitModels.DB
             DocumentTemplates = new HashSet<DocumentTemplate>();
             ImageGrids = new HashSet<ImageGrid>();
             Sentences = new HashSet<Sentence>();
-            Tasks = new HashSet<Task>();
+            Tasks = new HashSet<FunctionTask>();
         }
 
         public long DocumentId { get; set; }
@@ -46,6 +46,6 @@ namespace DataSummitModels.DB
         public virtual ICollection<DocumentTemplate> DocumentTemplates { get; set; }
         public virtual ICollection<ImageGrid> ImageGrids { get; set; }
         public virtual ICollection<Sentence> Sentences { get; set; }
-        public virtual ICollection<Task> Tasks { get; set; }
+        public virtual ICollection<FunctionTask> Tasks { get; set; }
     }
 }

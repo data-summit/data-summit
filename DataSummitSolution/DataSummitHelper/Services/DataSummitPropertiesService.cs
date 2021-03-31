@@ -9,9 +9,9 @@ namespace DataSummitHelper.Services
 {
     public class DataSummitPropertiesService : IDataSummitPropertiesService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitPropertiesDao _dao;
 
-        public DataSummitPropertiesService(IDataSummitDao dao)
+        public DataSummitPropertiesService(IDataSummitPropertiesDao dao)
         {
             _dao = dao;
         }
