@@ -12,9 +12,9 @@ namespace DataSummitModels.DB
             DocumentFeatures = new HashSet<DocumentFeature>();
             DocumentLayers = new HashSet<DocumentLayer>();
             DocumentTemplates = new HashSet<DocumentTemplate>();
+            FunctionTasks = new HashSet<FunctionTask>();
             ImageGrids = new HashSet<ImageGrid>();
             Sentences = new HashSet<Sentence>();
-            Tasks = new HashSet<FunctionTask>();
         }
 
         public long DocumentId { get; set; }
@@ -44,8 +44,8 @@ namespace DataSummitModels.DB
         public virtual ICollection<DocumentFeature> DocumentFeatures { get; set; }
         public virtual ICollection<DocumentLayer> DocumentLayers { get; set; }
         public virtual ICollection<DocumentTemplate> DocumentTemplates { get; set; }
+        public virtual ICollection<FunctionTask> FunctionTasks { get; set; }
         public virtual ICollection<ImageGrid> ImageGrids { get; set; }
         public virtual ICollection<Sentence> Sentences { get; set; }
-        public virtual ICollection<FunctionTask> Tasks { get; set; }
     }
 }

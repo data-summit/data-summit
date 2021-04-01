@@ -126,7 +126,7 @@ namespace DataSummitWeb.Controllers
                         documentPredictions.ForEach(docPred => documentFeatures.Add(new DocumentFeature()
                         {
                             Value = docPred.TagName,
-                            Confidence = Math.Round(docPred.Probability, 5),
+                            Confidence = (decimal)Math.Round(docPred.Probability, 5),
                             Vendor = "Microsoft Custom Vision",
                             Left = (long)Math.Round(docPred.BoundingBox.Min.X, 0),
                             Top = (long)Math.Round(docPred.BoundingBox.Max.Y, 0),

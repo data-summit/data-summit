@@ -14,8 +14,5 @@ namespace DataSummitModels.DB
         public TimeSpan Duration { get; set; }
 
         public virtual Document Document { get; set; }
-
-        public FunctionTask()
-        { ; }
     }
 }

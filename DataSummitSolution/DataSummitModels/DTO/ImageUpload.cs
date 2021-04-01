@@ -44,7 +44,7 @@ namespace DataSummitModels.DTO
                 ImageGrids = SplitImages,
                 Success = Success,
                 Type = Type.ToString(),
-                Tasks = (ICollection<DB.FunctionTask>)base.Tasks,
+                FunctionTasks = (ICollection<DB.FunctionTask>)base.Tasks,
                 UserId = UserId
             };
             return draw;
