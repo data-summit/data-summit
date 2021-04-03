@@ -11,114 +11,107 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AzureFunctions.Methods
 {
     public class Google
     {
-        public DataSummitModels.DB.Document Run(List<System.Drawing.Image> images)
+        public Document Run(List<System.Drawing.Image> images)
         {
-            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
+            var cOCR = new Document();
             try
             {
-                Cloud gCloud = new Cloud();
-                OCRSources ocrMethods = new OCRSources();
+                var gCloud = new Cloud();
+                var ocrMethods = new OCRSources();
                 foreach (System.Drawing.Image i in images)
                 {
-                    using (MemoryStream m = new MemoryStream())
-                    {
-                        i.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        byte[] imageBytes = m.ToArray();
-                        m.Seek(0, SeekOrigin.Begin);
-                        List<Responses> lrs = RecogniseText(Convert.ToBase64String(imageBytes));
-                        ocrMethods.FromGoogle(lrs, "");
-                    }
+                    using MemoryStream m = new MemoryStream();
+                    i.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    byte[] imageBytes = m.ToArray();
+                    m.Seek(0, SeekOrigin.Begin);
+                    var lrs = RecogniseText(Convert.ToBase64String(imageBytes));
+                    ocrMethods.FromGoogle(lrs, "");
                 }
             }
             catch (Exception ae)
             {
-                string strError = ae.Message.ToString();
+                string strError = ae.Message;
             }
             return cOCR;
         }
 
-        public DataSummitModels.DB.Document Run(List<ImageGrids> lDocuments)
+        public Document Run(List<ImageGrids> lDocuments)
         {
-            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
+            var cOCR = new Document();
             try
             {
-                Cloud gCloud = new Cloud();
-                OCRSources ocrMethods = new OCRSources();
+                var gCloud = new Cloud();
+                var ocrMethods = new OCRSources();
                 foreach (ImageGrids ig in lDocuments)
                 {
-                    using (MemoryStream m = new MemoryStream())
-                    {
-                        ig.Image.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        byte[] imageBytes = m.ToArray();
-                        m.Seek(0, SeekOrigin.Begin);
-                        List<Responses> lrs = RecogniseText(Convert.ToBase64String(imageBytes));
-                        ocrMethods.FromGoogle(lrs, ig.Name);
-                    }
+                    using MemoryStream m = new MemoryStream();
+                    ig.Image.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    byte[] imageBytes = m.ToArray();
+                    m.Seek(0, SeekOrigin.Begin);
+                    var lrs = RecogniseText(Convert.ToBase64String(imageBytes));
+                    ocrMethods.FromGoogle(lrs, ig.Name);
                 }
             }
             catch (Exception ae)
             {
-                string strError = ae.Message.ToString();
+                string strError = ae.Message;
             }
             return cOCR;
         }
 
-        public DataSummitModels.DB.Document Run(List<string> lfilepaths)
+        public Document Run(List<string> lfilepaths)
         {
-            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
+            var cOCR = new Document();
             try
             {
-                Cloud gCloud = new Cloud();
-                OCRSources ocrMethods = new OCRSources();
+                var gCloud = new Cloud();
+                var ocrMethods = new OCRSources();
                 foreach (string s in lfilepaths)
                 {
                     System.Drawing.Image i = System.Drawing.Image.FromFile(s);
-                    using (MemoryStream m = new MemoryStream())
-                    {
-                        i.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        byte[] imageBytes = m.ToArray();
-                        m.Seek(0, SeekOrigin.Begin);
-                        List<Responses> lrs = RecogniseText(Convert.ToBase64String(imageBytes));
-                        ocrMethods.FromGoogle(lrs, s.Substring(s.LastIndexOf("/"), s.LastIndexOf(".")));
-                    }
+                    using MemoryStream m = new MemoryStream();
+                    i.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    byte[] imageBytes = m.ToArray();
+                    m.Seek(0, SeekOrigin.Begin);
+                    var lrs = RecogniseText(Convert.ToBase64String(imageBytes));
+                    ocrMethods.FromGoogle(lrs, s.Substring(s.LastIndexOf("/"), s.LastIndexOf(".")));
                 }
                 ocrMethods.FromGoogle(gCloud);
             }
             catch (Exception ae)
             {
-                string strError = ae.Message.ToString();
+                string strError = ae.Message;
             }
             return cOCR;
         }
 
-        public async System.Threading.Tasks.Task<DataSummitModels.DB.Document> RunAsync(List<Uri> lblobs)
+        public async Task<Document> RunAsync(List<Uri> lblobs)
         {
-            DataSummitModels.DB.Document cOCR = new DataSummitModels.DB.Document();
+            var cOCR = new Document();
             try
             {
-                Cloud gCloud = new Cloud();
-                OCRSources ocrMethods = new OCRSources();
+                var gCloud = new Cloud();
+                var ocrMethods = new OCRSources();
 
                 //Azure cloud image data 
                 string connectionString = "";
 
-                //String.Format("DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1}",
-                //                                            Keys.Azure.StorageAccountName, Keys.Azure.StorageAccountKey);
-                CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
-                CloudBlobClient blobClient = account.CreateCloudBlobClient();
+                var account = CloudStorageAccount.Parse(connectionString);
+                var blobClient = account.CreateCloudBlobClient();
 
                 foreach (Uri u in lblobs)
                 {
-                    ICloudBlob b = await blobClient.GetBlobReferenceFromServerAsync(u);
+                    var b = await blobClient.GetBlobReferenceFromServerAsync(u);
 
-                    byte[] imageBytes = new byte[b.Properties.Length];
+                    var imageBytes = new byte[b.Properties.Length];
                     await b.DownloadRangeToByteArrayAsync(imageBytes, 0, 0, b.Properties.Length);
-                    List<Responses> rs = RecogniseText(Convert.ToBase64String(imageBytes));
+                    var rs = RecogniseText(Convert.ToBase64String(imageBytes));
                     if (rs != null)
                     { gCloud.responses.AddRange(rs); }
                 }
@@ -126,7 +119,7 @@ namespace AzureFunctions.Methods
             }
             catch (Exception ae)
             {
-                string strError = ae.Message.ToString();
+                string strError = ae.Message;
             }
             return cOCR;
         }
@@ -136,40 +129,30 @@ namespace AzureFunctions.Methods
             try
             {
                 //Creates and populates bosepoke Google TextRecognition JSON object
-                Requests r = new Requests();
-                ImageAndFeat iaf = new ImageAndFeat();
+                var r = new Requests();
+                var iaf = new ImageAndFeat();
                 iaf.features.Add(new Features("TEXT_DETECTION"));
                 iaf.image.content = ImageContent;
                 r.requests.Add(iaf);
-                String json = JsonConvert.SerializeObject(r);
+                var json = JsonConvert.SerializeObject(r);
 
                 //Google's literal version:  Uri uri = new Uri("POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDMe0LtaxFvFvDCTaEV-05IT792tvxpmbA");
-                Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + "Keys.Google.API_Key"); //Replace 'Keys.Google.API_Key' with Azure Secret of actual key
+                var uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + "Keys.Google.API_Key"); //Replace 'Keys.Google.API_Key' with Azure Secret of actual key
 
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
-                //req1.Timeout = 3600;
+                var req = (HttpWebRequest)WebRequest.Create(uri);
                 req.Method = "POST";
                 req.ContentType = "application/json";
                 req.ContentLength = json.Length;
-                //req.Headers.Add("x-functions-key", "i7W5DKPh3VldO/Taqc3vam/VN9xSN6bnwaJ6Dl0nolNcAPPMrYleeg==");
-                //req.Headers.Add("x-functions-clientid", "default");
-                //List<String> lHead = new List<string>();
-                //for (int i = 0; i < req1.Headers.Count; i++)
-                //{ lHead.Add(string.Join(":", req.Headers.GetValues(i).ToList())); }
 
-                Stream stream = req.GetRequestStream();
-                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                var stream = req.GetRequestStream();
+                var buffer = Encoding.UTF8.GetBytes(json);
                 stream.Write(buffer, 0, buffer.Length);
                 stream.Close();
-                //await stream.WriteAsync(buffer, 0, buffer.Length);
 
-                //HttpWebResponse resp = default(HttpWebResponse);
-                WebResponse resp = default(WebResponse);
-
+                var resp = default(WebResponse);
                 try
                 {
                     resp = (HttpWebResponse)req.GetResponse();
-                    //resp = req.GetResponse();
                 }
                 catch (WebException wex)
                 {
@@ -186,15 +169,13 @@ namespace AzureFunctions.Methods
                         }
                     }
                 }
-                //HttpStatusCode ht = resp.StatusCode;
                 string responseText = String.Empty;
                 using (var reader = new StreamReader(resp.GetResponseStream(), Encoding.UTF8))
                 {
                     responseText = reader.ReadToEnd();
-                    //responseText = await reader.ReadToEndAsync();
                 }
 
-                Cloud res = JsonConvert.DeserializeObject<Cloud>(responseText);
+                var res = JsonConvert.DeserializeObject<Cloud>(responseText);
 
                 return res.responses.ToList();
             }
@@ -202,8 +183,8 @@ namespace AzureFunctions.Methods
             {
                 string strError = ae.Message.ToString();
             }
+
             return null;
         }
-
     }
 }

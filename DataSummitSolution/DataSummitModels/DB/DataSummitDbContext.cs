@@ -1,20 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+
+#nullable disable
 
 namespace DataSummitModels.DB
 {
     public partial class DataSummitDbContext : DbContext
     {
-        // Required when using DI
-        // This allows us to inject the context and pass the connection string in via the calling service's Startup.cs
-        public DataSummitDbContext(DbContextOptions<DataSummitDbContext> options)
-            : base(options)
-        { }
-
         public DataSummitDbContext()
         {
-            //A parameterless DBContext constructor is required for MockDbContext
-            var optionsBuilder = new DbContextOptionsBuilder<DataSummitDbContext>();
+        }
+
+        public DataSummitDbContext(DbContextOptions<DataSummitDbContext> options)
+            : base(options)
+        {
         }
 
         public virtual DbSet<Address> Addresses { get; set; }
@@ -39,6 +39,7 @@ namespace DataSummitModels.DB
         public virtual DbSet<DocumentType> DocumentTypes { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<EmployeeTerritory> EmployeeTerritories { get; set; }
+        public virtual DbSet<FunctionTask> FunctionTasks { get; set; }
         public virtual DbSet<Gender> Genders { get; set; }
         public virtual DbSet<GoogleLanguage> GoogleLanguages { get; set; }
         public virtual DbSet<ImageGrid> ImageGrids { get; set; }
@@ -52,7 +53,6 @@ namespace DataSummitModels.DB
         public virtual DbSet<Property> Properties { get; set; }
         public virtual DbSet<Sentence> Sentences { get; set; }
         public virtual DbSet<StandardAttribute> StandardAttributes { get; set; }
-        public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<TemplateAttribute> TemplateAttributes { get; set; }
         public virtual DbSet<TemplateVersion> TemplateVersions { get; set; }
         public virtual DbSet<UserInfo> UserInfos { get; set; }
@@ -105,6 +105,8 @@ namespace DataSummitModels.DB
 
             modelBuilder.Entity<AspNetRole>(entity =>
             {
+                // This is automatically generated code from EF Core but throws an error
+                // This relates to all the AspNet tables for Identity logins
                 //entity.HasIndex(e => e.NormalizedName, "RoleNameIndex");
 
                 entity.Property(e => e.Id).HasMaxLength(128);
@@ -284,12 +286,12 @@ namespace DataSummitModels.DB
 
             modelBuilder.Entity<AzureMLResource>(entity =>
             {
-                entity.HasKey(e => e.AzureMLResourcesId)
+                entity.HasKey(e => e.AzureMlresourcesId)
                     .HasName("PK_AzureMLResourcesIdId");
 
                 entity.ToTable("AzureMLResources");
 
-                entity.Property(e => e.AzureMLResourcesId).HasColumnName("AzureMLResourcesId");
+                entity.Property(e => e.AzureMlresourcesId).HasColumnName("AzureMLResourcesId");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -421,8 +423,6 @@ namespace DataSummitModels.DB
 
             modelBuilder.Entity<Document>(entity =>
             {
-                entity.HasKey(e => new { e.DocumentId });
-
                 entity.Property(e => e.AmazonConfidence).HasColumnType("decimal(3, 2)");
 
                 entity.Property(e => e.AzureConfidence).HasColumnType("decimal(3, 2)");
@@ -450,7 +450,6 @@ namespace DataSummitModels.DB
                 entity.HasOne(d => d.DocumentType)
                     .WithMany(p => p.Documents)
                     .HasForeignKey(d => d.DocumentTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Documents_DocumentTypes");
 
                 entity.HasOne(d => d.PaperOrientation)
@@ -532,7 +531,7 @@ namespace DataSummitModels.DB
 
                 entity.Property(e => e.Name)
                     .IsRequired()
-                    .HasMaxLength(15);
+                    .HasMaxLength(32);
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -580,6 +579,23 @@ namespace DataSummitModels.DB
                 entity.Property(e => e.TerritoryId).HasMaxLength(20);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<FunctionTask>(entity =>
+            {
+                entity.HasKey(e => e.TaskId)
+                    .HasName("PK_TaskId");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(255);
+
+                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Document)
+                    .WithMany(p => p.FunctionTasks)
+                    .HasForeignKey(d => d.DocumentId)
+                    .HasConstraintName("FK_FunctionTasks_Document");
             });
 
             modelBuilder.Entity<Gender>(entity =>
@@ -777,20 +793,6 @@ namespace DataSummitModels.DB
                     .HasMaxLength(255);
             });
 
-            modelBuilder.Entity<Task>(entity =>
-            {
-                entity.Property(e => e.Name)
-                    .IsRequired()
-                    .HasMaxLength(255);
-
-                entity.Property(e => e.TimeStamp).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Document)
-                    .WithMany(p => p.Tasks)
-                    .HasForeignKey(d => d.DocumentId)
-                    .HasConstraintName("FK_Tasks_Document");
-            });
-
             modelBuilder.Entity<TemplateAttribute>(entity =>
             {
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
@@ -807,6 +809,7 @@ namespace DataSummitModels.DB
                 entity.HasOne(d => d.PaperSize)
                     .WithMany(p => p.TemplateAttributes)
                     .HasForeignKey(d => d.PaperSizeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TemplateAttributes_PaperSizes");
 
                 entity.HasOne(d => d.StandardAttribute)

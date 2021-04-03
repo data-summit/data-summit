@@ -38,8 +38,8 @@ namespace AzureFunctions
                 ImageUpload imgUp = (ImageUpload)data;
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
 
-                List<FunctionTask> Tasks = new List<FunctionTask>();
-                if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.Task>();
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
+                if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.FunctionTask>();
                 if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
 
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
@@ -48,7 +48,7 @@ namespace AzureFunctions
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
@@ -69,9 +69,9 @@ namespace AzureFunctions
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
                 if (Tasks.Count == 0)
-                { Tasks.Add(new FunctionTask("Divide Images\tGet container", DateTime.Now)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", DateTime.Now)); }
                 else
-                { Tasks.Add(new FunctionTask("Divide Images\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
 
                 //Get Container name from input object, exit if not found
                 CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
@@ -107,7 +107,7 @@ namespace AzureFunctions
                     }
                 } while (blobContinuationToken != null);    // Loop while the continuation token is not null.
 
-                Tasks.Add(new FunctionTask("Fetch 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Fetch 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 if (cbbOrig == null)
                 {
@@ -145,7 +145,7 @@ namespace AzureFunctions
                                 Name = "F_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
                                 WidthStart = x,
                                 HeightStart = y,
-                                ImageType = DataSummitModels.Enums.Image.Type.Normal
+                                ImageType = ImageType.Normal
                             };
                             if (x == widthMod - 1 && y != heightMod - 1)
                             {
@@ -184,7 +184,7 @@ namespace AzureFunctions
                         }
                     }
 
-                    Tasks.Add(new FunctionTask("Divide Image\tOriginal divide into " + imgUp.SplitImages.Count().ToString() + " adjoining images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " + imgUp.SplitImages.Count().ToString() + " adjoining images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                     //Create overlap grid system
                     for (int x = 0; x < widthMod; x++)
@@ -196,7 +196,7 @@ namespace AzureFunctions
                                 Name = "O_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
                                 WidthStart = x,
                                 HeightStart = y,
-                                ImageType = DataSummitModels.Enums.Image.Type.Overlap
+                                ImageType = ImageType.Overlap
                             };
                             ig.WidthStart = (x * widthSpan) + (widthSpan / 2);
                             ig.HeightStart = (y * heightSpan) + (heightSpan / 2);
@@ -210,7 +210,7 @@ namespace AzureFunctions
                         }
                     }
 
-                    Tasks.Add(new FunctionTask("Divide Image\tOriginal divide into " +
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " +
                                                      imgUp.SplitImages.Count(d => d.Type == 2).ToString() +
                                                      " overlapping images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
@@ -233,20 +233,20 @@ namespace AzureFunctions
 
                         imgG.Image = null;
 
-                        Tasks.Add(new FunctionTask("Divide Image\tImage " +
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tImage " +
                                                          (imgUp.SplitImages.IndexOf(imgG) + 1).ToString() + " uploaded",
                                                          imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     }
                     bmp.Dispose();
                 }
 
-                Tasks.Add(new FunctionTask("Divide Image\tCreating JSON Image Structure Text", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tCreating JSON Image Structure Text", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 //Write json data file to blob, containing the above information
                 CloudBlockBlob jsonBlob = cbc.GetBlockBlobReference("Split Images Data & Structure.json");
                 await jsonBlob.UploadTextAsync(JsonConvert.SerializeObject(imgUp));
 
-                Tasks.Add(new FunctionTask("Divide Image\tFunction complete", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tFunction complete", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);
 

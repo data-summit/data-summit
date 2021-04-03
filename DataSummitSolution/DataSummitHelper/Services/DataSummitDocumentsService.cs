@@ -8,59 +8,75 @@ using System.Threading.Tasks;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Dto;
 using DataSummitHelper.Interfaces;
+using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitModels.DB;
+using DataSummitModels.Enums;
 using Microsoft.Extensions.Configuration;
 
 namespace DataSummitHelper.Services
 {
     public class DataSummitDocumentsService : IDataSummitDocumentsService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitDocumentsDao _documentsDao;
+        private readonly IDataSummitTemplateAttributesDao _templateAttributesDao;
         private readonly IAzureResourcesService _azureResources;
+        private readonly IObjectDetectionService _objectDetectionService;
+        private readonly IDataSummitAzureUrlsDao _azureDao;
+        private readonly IDataSummitMachineLearningDao _machineLearningDao;
 
-        public DataSummitDocumentsService(IDataSummitDao dao, IAzureResourcesService azureResources)
+        public DataSummitDocumentsService(IDataSummitDocumentsDao documentsDao,
+                                          IDataSummitTemplateAttributesDao templateAttributesDao,
+                                          IObjectDetectionService objectDetectionService,
+                                          IDataSummitAzureUrlsDao azureDao,
+                                          IDataSummitMachineLearningDao machineLearningDao,
+                                          IAzureResourcesService azureResources)
         {
-            _dao = dao;
+            _documentsDao = documentsDao;
+            _templateAttributesDao = templateAttributesDao;
             _azureResources = azureResources;
+            _objectDetectionService = objectDetectionService ?? throw new ArgumentNullException(nameof(objectDetectionService));
+            _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
+            _machineLearningDao = machineLearningDao ?? throw new ArgumentNullException(nameof(machineLearningDao));
+
         }
 
-        public DataSummitModels.Enums.Document.Type DocumentType(string mimeType)
+        public DocumentContentType DocumentType(string mimeType)
         {
-            var enumType = DataSummitModels.Enums.Document.Type.Unknown;
+            var enumType = DocumentContentType.Unknown;
             switch (mimeType)
             {
                 case "DrawingPlanView":
-                    enumType = DataSummitModels.Enums.Document.Type.DrawingPlanView;
+                    enumType = DocumentContentType.DrawingPlanView;
                     break;
                 case "Gantt":
-                    enumType = DataSummitModels.Enums.Document.Type.Gantt;
+                    enumType = DocumentContentType.Gantt;
                     break;
                 case "Report":
-                    enumType = DataSummitModels.Enums.Document.Type.Report;
+                    enumType = DocumentContentType.Report;
                     break;
                 case "Schematic":
-                    enumType = DataSummitModels.Enums.Document.Type.Schematic;
+                    enumType = DocumentContentType.Schematic;
                     break;
             }
             return enumType;
         }
 
-        public DataSummitModels.Enums.Document.Extension DocumentFormat(string mimeFormat)
+        public DocumentExtension DocumentFormat(string mimeFormat)
         {
-            var enumFormat = DataSummitModels.Enums.Document.Extension.Unknown;
+            var enumFormat = DocumentExtension.Unknown;
             switch (mimeFormat)
             {
                 case "application/pdf":
-                    enumFormat = DataSummitModels.Enums.Document.Extension.PDF;
+                    enumFormat = DocumentExtension.PDF;
                     break;
                 case "image/jpeg":
-                    enumFormat = DataSummitModels.Enums.Document.Extension.JPG;
+                    enumFormat = DocumentExtension.JPG;
                     break;
                 case "image/x-png":
-                    enumFormat = DataSummitModels.Enums.Document.Extension.PNG;
+                    enumFormat = DocumentExtension.PNG;
                     break;
                 case "image/gif":
-                    enumFormat = DataSummitModels.Enums.Document.Extension.GIF;
+                    enumFormat = DocumentExtension.GIF;
                     break;
             }
             return enumFormat;
@@ -68,20 +84,43 @@ namespace DataSummitHelper.Services
 
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)
         {
-            var document = _dao.GetDocumentsByUrl(documentUrl);
+            var document = _documentsDao.GetDocumentsByUrl(documentUrl);
             var documentDto = new DocumentDto(document);
             return documentDto;
         }
 
-        public DataSummitModels.DB.Document GetDocumentByUrl(string documentUrl)
+        public Document GetDocumentByUrl(string documentUrl) => _documentsDao.GetDocumentsByUrl(documentUrl);
+
+        public async Task UpdateDocumentFeature(string documentUrl)
         {
-            var document = _dao.GetDocumentsByUrl(documentUrl);
-            return document;
+
+            var azureFunction = await _azureDao.GetAzureUrlByName("ObjectDetection");
+            var azureAI = await _machineLearningDao.GetMLUrlByName("DrawingLayout");
+            var documentPredictions = await _objectDetectionService.GetPrediction(documentUrl, azureFunction, azureAI, 0.05);
+            if (documentPredictions?.Any() ?? false)
+            {
+                documentPredictions.ForEach(async docPred =>
+                {
+                    var documentFeature = new DocumentFeature
+                    {
+                        Value = docPred.TagName,
+                        Confidence = (decimal)Math.Round(docPred.Probability, 5),
+                        Vendor = "Microsoft Custom Vision",
+                        Left = (long)Math.Round(docPred.BoundingBox.Min.X, 0),
+                        Top = (long)Math.Round(docPred.BoundingBox.Max.Y, 0),
+                        Width = (long)Math.Round(docPred.BoundingBox.Max.X - docPred.BoundingBox.Min.X, 0),
+                        Height = (long)Math.Round(docPred.BoundingBox.Max.Y - docPred.BoundingBox.Min.Y, 0)
+                    };
+
+                    //Persist in database
+                    await _documentsDao.UpdateDocumentFeature(documentUrl, documentFeature);
+                });
+            }
         }
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
         {
-            var documents = await _dao.GetAllProjectDocuments(projectId);
+            var documents = await _documentsDao.GetAllProjectDocuments(projectId);
 
             var documentDtos = documents.Select(d => new DocumentDto(d))
                 .ToList();
@@ -91,21 +130,21 @@ namespace DataSummitHelper.Services
 
         public async Task<List<DocumentDto>> GetProjectDocuments(int projectId)
         {
-            var documents = await _dao.GetProjectDocuments(projectId);
+            var documents = await _documentsDao.GetProjectDocuments(projectId);
             var documentDtos = documents.Select(d => new DocumentDto(d))
                 .ToList();
 
             return documentDtos;
         }
 
-        public async System.Threading.Tasks.Task DeleteDocumentProperty(long documentPropertyId)
+        public async Task DeleteDocumentProperty(long documentPropertyId)
         {
-            await _dao.DeleteTemplateAttribute(documentPropertyId);
+            await _templateAttributesDao.DeleteTemplateAttribute(documentPropertyId);
         }
 
-        public void UpdateDocument(DataSummitModels.DB.Document document)
+        public void UpdateDocument(Document document)
         {
-            _dao.UpdateDocument(document);
+            _documentsDao.UpdateDocument(document);
         }
     }
 }

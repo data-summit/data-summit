@@ -13,21 +13,19 @@ namespace DataSummitHelper.Services.MachineLearning
 {
     public class ObjectDetectionService : IObjectDetectionService
     {
-        private readonly IDataSummitDao _dao;
         private readonly IDataSummitHelperService _dataSummitHelper;
 
-        public ObjectDetectionService(IDataSummitDao dao, IDataSummitHelperService dataSummitHelper)
+        public ObjectDetectionService(IDataSummitHelperService dataSummitHelper)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
-            _dao = dao ?? throw new ArgumentNullException(nameof(dao)); ;
         }
 
-        public async Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName, 
-            string azureResourceName, double minThreshold = 0.65)
+        public async Task<List<MLPrediction>> GetPrediction(string url, 
+                                                            Tuple<string, string> azureFunction, 
+                                                            AzureMLResource azureAI, 
+                                                            double minThreshold = 0.65)
         {
             var results = new List<MLPrediction>();
-            var azureFunction = _dao.GetAzureUrlByName(azureResourceName);
-            var azureAI = _dao.GetMLUrlByName(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {

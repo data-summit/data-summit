@@ -9,17 +9,19 @@ namespace DataSummitHelper.Services
 {
     public class DataSummitTemplatesService : IDataSummitTemplatesService
     {
-        private readonly IDataSummitDao _dao;
+        private readonly IDataSummitTemplatesDao _templatesDao;
+        private readonly IDataSummitTemplateAttributesDao _attributesDao;
 
-        public DataSummitTemplatesService(IDataSummitDao dao)
+        public DataSummitTemplatesService(IDataSummitTemplatesDao templatesDao, IDataSummitTemplateAttributesDao attributesDao)
         {
-            _dao = dao;
+            _templatesDao = templatesDao;
+            _attributesDao = attributesDao;
         }
 
         #region Templates
         public async Task<List<TemplateDto>> GetAllCompanyTemplates(int companyId)
         {
-            var templates = await _dao.GetCompanyTemplateVersions(companyId);
+            var templates = await _templatesDao.GetCompanyTemplateVersions(companyId);
             var templateDtos = templates.Select(t => new TemplateDto(t))
                 .ToList();
 
@@ -28,7 +30,7 @@ namespace DataSummitHelper.Services
 
         public async Task<List<TemplateDto>> GetAllProjectTemplates(int projectId)
         {
-            var templates = await _dao.GetProjectTemplateVersions(projectId);
+            var templates = await _templatesDao.GetProjectTemplateVersions(projectId);
             var templateDtos = templates.Select(t => new TemplateDto(t))
                 .ToList();
 
@@ -37,7 +39,7 @@ namespace DataSummitHelper.Services
 
         public async Task<List<TemplateAttributeDto>> GetTemplateAttribtes(int templateId)
         {
-            var templateAttributes = await _dao.GetAttribtesForTemplateId(templateId);
+            var templateAttributes = await _attributesDao.GetAttribtesForTemplateId(templateId);
             var templateAttributeDtos = templateAttributes.Select(d => new TemplateAttributeDto(d))
                 .ToList();
 

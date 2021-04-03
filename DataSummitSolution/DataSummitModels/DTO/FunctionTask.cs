@@ -3,7 +3,7 @@ using System;
 
 namespace DataSummitModels.DTO
 {
-    public class FunctionTask : Task
+    public class FunctionTask : DB.FunctionTask
     {
         public FunctionTask()
         { ; }
@@ -15,9 +15,9 @@ namespace DataSummitModels.DTO
             Duration = TimeStamp - previous;
         }
 
-        public Task ToModel(FunctionTask functionTask)
+        public DB.FunctionTask ToModel(FunctionTask functionTask)
         {
-            Task t = new Task()
+            DB.FunctionTask t = new DB.FunctionTask()
             {
                 Document = functionTask.Document,
                 DocumentId = functionTask.DocumentId,

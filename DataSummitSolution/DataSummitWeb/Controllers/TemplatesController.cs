@@ -60,7 +60,7 @@ namespace DataSummitWeb.Controllers
                     //TODO this needs to updated with actual logged in user id
                     UserId = 1
                 };
-                System.Threading.Tasks.Task t = System.Threading.Tasks.Task.Run(() =>
+                Task t = Task.Run(() =>
                 {
                     string i = templateVersion.ImageString.Replace("data:image/jpeg;base64,", "");
                     pv.Image = Convert.FromBase64String(i);
@@ -120,7 +120,7 @@ namespace DataSummitWeb.Controllers
             byte[] array = null;
             try
             {
-                System.Threading.Tasks.Task t = System.Threading.Tasks.Task.Run(() =>
+                Task t = Task.Run(() =>
                 {
                     array = Convert.FromBase64String(image);
                 });

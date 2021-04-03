@@ -1,5 +1,5 @@
 ﻿using DataSummitModels.DB;
-
+using DataSummitModels.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace DataSummitModels.DTO
         {
             Layers = new HashSet<DocumentLayer>().ToList();
             Sentences = new HashSet<Sentence>().ToList();
-            Tasks = new HashSet<Task>().ToList();
+            Tasks = new HashSet<DB.FunctionTask>().ToList();
         }
 
         public long DocumentId { get; set; }
@@ -31,12 +31,12 @@ namespace DataSummitModels.DTO
         public bool Processed { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string UserId { get; set; }
-        public Enums.Document.Type Type { get; set; }
-        public Enums.Document.Extension Format { get; set; }
+        public DocumentContentType Type { get; set; }
+        public DocumentExtension Format { get; set; }
 
 
         public virtual List<DocumentLayer> Layers { get; set; }
         public virtual List<Sentence> Sentences { get; set; }
-        public virtual List<Task> Tasks { get; set; }
+        public virtual List<DB.FunctionTask> Tasks { get; set; }
     }
 }

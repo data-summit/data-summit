@@ -1,4 +1,5 @@
 ﻿using DataSummitModels.DB;
+using DataSummitModels.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -21,10 +22,10 @@ namespace DataSummitModels.DTO
         bool Processed { get; set; }
         DateTime? CreatedDate { get; set; }
         string UserId { get; set; }
-        Enums.Document.Type Type { get; set; }
+        DocumentContentType Type { get; set; }
         List<DocumentLayer> Layers { get; set; }
         List<Sentence> Sentences { get; set; }
-        List<Task> Tasks { get; set; }
+        List<DB.FunctionTask> Tasks { get; set; }
 
     }
 }

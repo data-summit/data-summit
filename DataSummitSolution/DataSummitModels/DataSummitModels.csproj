@@ -37,52 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Address.cs" />
-    <Compile Remove="Models\AspNetRole.cs" />
-    <Compile Remove="Models\AspNetRoleClaim.cs" />
-    <Compile Remove="Models\AspNetUser.cs" />
-    <Compile Remove="Models\AspNetUserClaim.cs" />
-    <Compile Remove="Models\AspNetUserLogin.cs" />
-    <Compile Remove="Models\AspNetUserRole.cs" />
-    <Compile Remove="Models\AspNetUserToken.cs" />
-    <Compile Remove="Models\AzureCompanyResourceUrl.cs" />
-    <Compile Remove="Models\BlockPosition.cs" />
-    <Compile Remove="Models\Category.cs" />
-    <Compile Remove="Models\Company.cs" />
-    <Compile Remove="Models\Country.cs" />
-    <Compile Remove="Models\Currency.cs" />
-    <Compile Remove="Models\Document.cs" />
-    <Compile Remove="Models\DocumentFeature.cs" />
-    <Compile Remove="Models\DocumentLayer.cs" />
-    <Compile Remove="Models\DocumentTemplate.cs" />
-    <Compile Remove="Models\Employee.cs" />
-    <Compile Remove="Models\EmployeeTerritory.cs" />
-    <Compile Remove="Models\Gender.cs" />
-    <Compile Remove="Models\GoogleLanguage.cs" />
-    <Compile Remove="Models\ImageGrid.cs" />
-    <Compile Remove="Models\Order.cs" />
-    <Compile Remove="Models\OrderDetail.cs" />
-    <Compile Remove="Models\PaperOrientation.cs" />
-    <Compile Remove="Models\PaperSize.cs" />
-    <Compile Remove="Models\Point.cs" />
-    <Compile Remove="Models\Product.cs" />
-    <Compile Remove="Models\Project.cs" />
-    <Compile Remove="Models\Property.cs" />
-    <Compile Remove="Models\Sentence.cs" />
-    <Compile Remove="Models\StandardAttribute.cs" />
-    <Compile Remove="Models\Task.cs" />
-    <Compile Remove="Models\TemplateAttribute.cs" />
-    <Compile Remove="Models\TemplateVersion.cs" />
-    <Compile Remove="Models\UserInfo.cs" />
-    <Compile Remove="Models\UserInfoType.cs" />
-    <Compile Remove="Models\UserType.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Models\efpt.config.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.12">
       <PrivateAssets>all</PrivateAssets>

@@ -17,7 +17,7 @@ namespace DataSummitModels.DTO
         public string StorageAccountKey { get; set; }
         public List<TemplateAttribute> TemplateAttributes { get; set; }
         public List<ImageGrid> SplitImages { get; set; }
-        public Paper.Types PaperSize { get; set; }
+        public Paper.PaperType PaperSize { get; set; }
 
         public ImageUpload()
         { }
@@ -40,11 +40,11 @@ namespace DataSummitModels.DTO
                 Processed = Processed,
                 TemplateVersionId = TemplateVersionId,
                 ProjectId = ProjectId,
-                Sentences = (ICollection<Sentence>)Sentences,
+                Sentences = (ICollection<Sentence>)base.Sentences,
                 ImageGrids = SplitImages,
                 Success = Success,
                 Type = Type.ToString(),
-                Tasks = (ICollection<Task>)Tasks,
+                FunctionTasks = (ICollection<DB.FunctionTask>)base.Tasks,
                 UserId = UserId
             };
             return draw;

@@ -36,8 +36,8 @@ namespace AzureFunctions
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
 
-                List<FunctionTask> Tasks = new List<FunctionTask>();
-                List<System.Threading.Tasks.Task> lTasks = new List<System.Threading.Tasks.Task>();
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
+                List<Task> lTasks = new List<Task>();
 
                 //if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
                 if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
@@ -49,7 +49,7 @@ namespace AzureFunctions
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == null) return new BadRequestObjectResult("Illegal input: File name is empty.");
-                //if (imgUp.Type == DataSummitModels.Enums.Document.Type.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.File.Length == 0) return new BadRequestObjectResult("Illegal input: PDF/Image is empty.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
@@ -79,13 +79,13 @@ namespace AzureFunctions
 
                 //Add event checking that whether it is the first event to exist in list
                 if (Tasks.Count == 0)
-                { Tasks.Add(new FunctionTask("Container created", DateTime.Now)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", DateTime.Now)); }
                 else
-                { Tasks.Add(new FunctionTask("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                 CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
-                lTasks.Add(System.Threading.Tasks.Task.Run(async () =>
+                lTasks.Add(Task.Run(async () =>
                 {
                     await cbbImage.UploadFromByteArrayAsync(imgUp.File, 0, imgUp.File.Length);
                     //Export image to blockBlob
@@ -97,7 +97,7 @@ namespace AzureFunctions
                     cbbImage.Metadata.Add("Height", imgUp.HeightOriginal.ToString());
                     await cbbImage .SetMetadataAsync();
 
-                    Tasks.Add(new FunctionTask("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                     //Clear heavy payload content
@@ -106,7 +106,7 @@ namespace AzureFunctions
                     imgUp.BlobUrl = cbbImage.Uri.ToString();
                 }));
 
-                lTasks.Add(System.Threading.Tasks.Task.Run(() =>
+                lTasks.Add(Task.Run(() =>
                 {
                     //Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
                     using (var ms = new MemoryStream(imgUp.File))
@@ -115,12 +115,12 @@ namespace AzureFunctions
                         imgUp.WidthOriginal = bmp.Width;
                         imgUp.HeightOriginal = bmp.Height;
 
-                        Tasks.Add(new FunctionTask("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                         log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
                     }
                 }));
 
-                System.Threading.Tasks.Task.WaitAll(lTasks.ToArray());
+                Task.WaitAll(lTasks.ToArray());
 
                 //Return single image object
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);

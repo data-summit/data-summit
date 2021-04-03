@@ -1,4 +1,6 @@
 using DataSummitHelper.Dto;
+using DataSummitModels.DB;
+using DataSummitModels.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,13 +8,14 @@ namespace DataSummitHelper.Interfaces
 {
     public interface IDataSummitDocumentsService
     {
-        DataSummitModels.Enums.Document.Type DocumentType(string mimeType);
-        DataSummitModels.Enums.Document.Extension DocumentFormat(string mimeFormat);
+        DocumentContentType DocumentType(string mimeType);
+        DocumentExtension DocumentFormat(string mimeFormat);
         DocumentDto GetDocumentDtoByUrl(string documentUrl);
-        DataSummitModels.DB.Document GetDocumentByUrl(string documentUrl);
+        Document GetDocumentByUrl(string documentUrl);
         Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId);
         Task<List<DocumentDto>> GetProjectDocuments(int projectId);
-        void UpdateDocument(DataSummitModels.DB.Document document);
+        void UpdateDocument(Document document);
+        Task UpdateDocumentFeature(string documentUrl);
         Task DeleteDocumentProperty(long documentPropertyId);
     }
 }
