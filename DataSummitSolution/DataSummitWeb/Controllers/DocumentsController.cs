@@ -18,25 +18,19 @@ namespace DataSummitWeb.Controllers
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitDocumentsDao _documentsDao;
-        private readonly IDataSummitHelperService _dataSummitHelper;
         private readonly IDataSummitDocumentsService _dataSummitDocuments;
         private readonly IAzureResourcesService _azureResources;
         private readonly IClassificationService _classificationService;
-        private readonly IObjectDetectionService _objectDetectionService;
 
         public DocumentsController(IDataSummitDocumentsService dataSummitProjects, 
                                    IAzureResourcesService azureResources,
                                    IClassificationService classificationService, 
-                                   IObjectDetectionService objectDetectionService, 
-                                   IDataSummitHelperService dataSummitHelper,
                                    IDataSummitDocumentsDao documentsDao)
         {
             _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
             _dataSummitDocuments = dataSummitProjects ?? throw new ArgumentNullException(nameof(dataSummitProjects));
             _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
             _classificationService = classificationService ?? throw new ArgumentNullException(nameof(classificationService));
-            _objectDetectionService = objectDetectionService ?? throw new ArgumentNullException(nameof(objectDetectionService));
         }
 
         [HttpGet("{id}")]
@@ -48,26 +42,26 @@ namespace DataSummitWeb.Controllers
 
 
         [HttpPost("uploadFiles")]
-        public async Task<HashSet<string>> UploadFiles(ICollection<IFormFile> files)
+        public async Task<IActionResult> UploadFiles(List<IFormFile> files)
         {
             var uploadedFileURLs = new HashSet<string>();
             try
             {
-                foreach (var file in files)
+                files.ForEach(async file =>
                 {
                     if (file != null)
                     {
                         var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
                         uploadedFileURLs.Add(uploadedFileUrl);
                     }
-                }
+                });
             }
             catch (Exception ae)
             {
                 //TODO log exception
-                return null;
+                return Problem(detail: ae.Message, statusCode: 500);
             }
-            return uploadedFileURLs;
+            return Ok(uploadedFileURLs);
         }
 
         [HttpPost("determineDocumentType")]
@@ -113,33 +107,13 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost("determineDrawingComponents")]
-        public async void DetermineDrawingComponents([FromBody] HashSet<string> blobUrls)
+        public async Task DetermineDrawingComponents([FromBody] HashSet<string> blobUrls)
         {
             try
             {
                 foreach (var blobUrl in blobUrls)
                 {
-                    var documentFeatures = new List<DocumentFeature>();
-                    var documentPredictions = await _objectDetectionService.GetPrediction(blobUrl, "DrawingLayout", "ObjectDetection", 0.05);
-                    if (documentPredictions?.Any() ?? false)
-                    {
-                        documentPredictions.ForEach(docPred => documentFeatures.Add(new DocumentFeature()
-                        {
-                            Value = docPred.TagName,
-                            Confidence = (decimal)Math.Round(docPred.Probability, 5),
-                            Vendor = "Microsoft Custom Vision",
-                            Left = (long)Math.Round(docPred.BoundingBox.Min.X, 0),
-                            Top = (long)Math.Round(docPred.BoundingBox.Max.Y, 0),
-                            Width = (long)Math.Round(docPred.BoundingBox.Max.X - docPred.BoundingBox.Min.X, 0),
-                            Height = (long)Math.Round(docPred.BoundingBox.Max.Y - docPred.BoundingBox.Min.Y, 0)
-                        }));
-                    }
-
-                    var doc = _dataSummitDocuments.GetDocumentByUrl(blobUrl);
-                    var features = doc?.DocumentFeatures.ToList() ?? new List<DocumentFeature>();
-
-                    //Persists in database
-                    _dataSummitDocuments.UpdateDocument(doc);
+                    await _dataSummitDocuments.UpdateDocumentFeature(blobUrl);
                 }
             }
             catch (Exception ae)

@@ -1,7 +1,6 @@
 using DataSummitHelper.Classes;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitModels.DB;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Dao
 {
-    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitDocumentsDao,
-        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
+    public partial class DataSummitMachineLearningDao : IDataSummitMachineLearningDao
     {
         private readonly DataSummitDbContext _context;
 
-        public DataSummitDao(DataSummitDbContext context)
+        public DataSummitMachineLearningDao(DataSummitDbContext context)
         {
             _context = context;
 
@@ -254,7 +252,7 @@ namespace DataSummitHelper.Dao
         {
             var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
 
-            doc?.DocumentFeatures.Add(documentFeature);
+            doc.DocumentFeatures.Add(documentFeature);
             _context.SaveChanges();
         }
 
@@ -424,14 +422,9 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region ML URLs
-        public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
+        public async Task<AzureMLResource> GetMLUrlByName(string name)
         {
             var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
-            return azML;
-        }
-        public AzureMLResource GetMLUrlByName(string name)
-        {
-            var azML = _context.AzureMLResources.SingleOrDefault(ar => ar.Name == name);
             return azML;
         }
         #endregion

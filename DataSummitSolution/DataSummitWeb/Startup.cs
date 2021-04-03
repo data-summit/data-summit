@@ -90,9 +90,31 @@ namespace DataSummitWeb
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add service dependencies.
+
+            //Data Summit specific dependency injection services
+            services.AddTransient<IAzureResourcesService, AzureResourcesService>();
+            services.AddTransient<IDataSummitCompaniesService, DataSummitCompaniesService>();
+            services.AddTransient<IDataSummitDocumentsService, DataSummitDocumentsService>();
+            services.AddTransient<IDataSummitHelperService, DataSummitHelperService>();
+            services.AddTransient<IDataSummitProjectsService, DataSummitProjectsService>();
+            services.AddTransient<IDataSummitPropertiesService, DataSummitPropertiesService>();
+            services.AddTransient<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
+            services.AddTransient<IDataSummitTemplatesService, DataSummitTemplatesService>();
+            services.AddTransient<IClassificationService, ClassificationService>();
+            services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
+
+            services.AddTransient<IDataSummitAzureUrlsDao, DataSummitAzureDao>();
+            services.AddTransient<IDataSummitMachineLearningDao, DataSummitMachineLearningDao>();
+            services.AddTransient<IDataSummitDocumentsDao, DataSummitDao>();
+
+            services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
+            services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplateAttributesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplatesDao, DataSummitDao>();
+
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
-                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString),
-                ServiceLifetime.Transient)
+                .AddDbContext<DataSummitDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Transient)
                 .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
             services.Configure<IdentityOptions>(options =>
@@ -110,26 +132,6 @@ namespace DataSummitWeb
 
                 options.User.RequireUniqueEmail = true;
             });
-
-            //Data Summit specific dependency injection services
-            services.AddTransient<IAzureResourcesService, AzureResourcesService>();
-            services.AddTransient<IDataSummitCompaniesService, DataSummitCompaniesService>();
-            services.AddTransient<IDataSummitDocumentsService, DataSummitDocumentsService>();
-            services.AddTransient<IDataSummitHelperService, DataSummitHelperService>();
-            services.AddTransient<IDataSummitProjectsService, DataSummitProjectsService>();
-            services.AddTransient<IDataSummitPropertiesService, DataSummitPropertiesService>();
-            services.AddTransient<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
-            services.AddTransient<IDataSummitTemplatesService, DataSummitTemplatesService>();
-            services.AddTransient<IClassificationService, ClassificationService>();
-            services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
-            services.AddTransient<IDataSummitAzureUrlsDao, DataSummitDao>();
-            services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
-            services.AddTransient<IDataSummitDocumentsDao, DataSummitDao>();
-            services.AddTransient<IDataSummitMachineLearningDao, DataSummitDao>();
-            services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
-            services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();
-            services.AddTransient<IDataSummitTemplateAttributesDao, DataSummitDao>();
-            services.AddTransient<IDataSummitTemplatesDao, DataSummitDao>();
 
             // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
             // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing

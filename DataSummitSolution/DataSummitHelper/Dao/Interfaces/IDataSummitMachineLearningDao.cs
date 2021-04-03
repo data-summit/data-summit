@@ -9,8 +9,7 @@ namespace DataSummitHelper.Dao.Interfaces
     public interface IDataSummitMachineLearningDao
     {
         #region ML URLs
-        Task<AzureMLResource> GetMLUrlByNameAsync(string name);
-        AzureMLResource GetMLUrlByName(string name);
+        Task<AzureMLResource> GetMLUrlByName(string name);
         #endregion
     }
 }

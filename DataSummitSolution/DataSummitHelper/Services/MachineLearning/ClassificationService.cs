@@ -29,8 +29,8 @@ namespace DataSummitHelper.Services.MachineLearning
             string azureResourceName, double minThreshold = 0.65)
         {
             var result = new MLPrediction();
-            var azureFunction = _azureDao.GetAzureUrlByName(azureResourceName);
-            var azureAI = _machineLearningDao.GetMLUrlByName(azureMLResourceName);
+            var azureFunction = await _azureDao.GetAzureUrlByName(azureResourceName);
+            var azureAI = await _machineLearningDao.GetMLUrlByName(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {

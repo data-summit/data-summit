@@ -1,7 +1,6 @@
 using DataSummitHelper.Classes;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitModels.DB;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Dao
 {
-    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitDocumentsDao,
-        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
+    public partial class DataSummitAzureDao : IDataSummitAzureUrlsDao
     {
         private readonly DataSummitDbContext _context;
 
-        public DataSummitDao(DataSummitDbContext context)
+        public DataSummitAzureDao(DataSummitDbContext context)
         {
             _context = context;
 
@@ -254,7 +252,7 @@ namespace DataSummitHelper.Dao
         {
             var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
 
-            doc?.DocumentFeatures.Add(documentFeature);
+            doc.DocumentFeatures.Add(documentFeature);
             _context.SaveChanges();
         }
 
@@ -411,14 +409,9 @@ namespace DataSummitHelper.Dao
         #endregion
 
         #region Azure URLs
-        public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
+        public async Task<Tuple<string, string>> GetAzureUrlByName(string name)
         {
             var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
-        }
-        public Tuple<string, string> GetAzureUrlByName(string name)
-        {
-            var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
             return new Tuple<string, string>(urlKey.Url, urlKey.Key);
         }
         #endregion

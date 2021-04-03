@@ -15,6 +15,7 @@ namespace DataSummitHelper.Interfaces
         Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId);
         Task<List<DocumentDto>> GetProjectDocuments(int projectId);
         void UpdateDocument(Document document);
+        Task UpdateDocumentFeature(string documentUrl);
         Task DeleteDocumentProperty(long documentPropertyId);
     }
 }
