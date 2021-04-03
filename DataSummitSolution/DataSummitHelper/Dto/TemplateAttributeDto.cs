@@ -1,5 +1,4 @@
-﻿using DataSummitModels.DB;
-using System;
+﻿using System;
 
 namespace DataSummitHelper.Dto
 {
@@ -14,16 +13,16 @@ namespace DataSummitHelper.Dto
         public short? Height { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public TemplateAttributeDto(ProfileAttributes profileAttribute)
+        public TemplateAttributeDto(DataSummitModels.DB.TemplateAttribute templateAttribute)
         {
-            TemplateAttributeId = profileAttribute.ProfileAttributeId;
-            StandardAttributeName = profileAttribute.StandardAttribute.Name;
-            Name = profileAttribute.Name;
-            X = profileAttribute.ValueX;
-            Y = profileAttribute.ValueY;
-            Width = profileAttribute.ValueWidth;
-            Height = profileAttribute.ValueHeight;
-            CreatedDate = profileAttribute.CreatedDate;
+            TemplateAttributeId = templateAttribute.TemplateAttributeId;
+            StandardAttributeName = templateAttribute.StandardAttribute.Name;
+            Name = templateAttribute.Name;
+            X = templateAttribute.ValueX;
+            Y = templateAttribute.ValueY;
+            Width = templateAttribute.ValueWidth;
+            Height = templateAttribute.ValueHeight;
+            CreatedDate = templateAttribute.CreatedDate;
         }
     }
 }

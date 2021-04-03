@@ -39,13 +39,13 @@ export class StandardAttributeComponent implements OnInit {
     }
     
     getStandardAttributeNames() {
-        this.standardAttributes.push(new StandardAttribute(1, "Drawing Title"));
+        this.standardAttributes.push(new StandardAttribute(1, "Document Title"));
         this.standardAttributes.push(new StandardAttribute(2, "StandardAttribute Number"));
         this.standardAttributes.push(new StandardAttribute(3, "StandardAttribute Name"));
         this.standardAttributes.push(new StandardAttribute(4, "StandardAttribute Address"));
-        this.standardAttributes.push(new StandardAttribute(5, "Drawing Number"));
-        this.standardAttributes.push(new StandardAttribute(6, "Drawing Revision"));
-        this.standardAttributes.push(new StandardAttribute(7, "Drawing Date"));
+        this.standardAttributes.push(new StandardAttribute(5, "Document Number"));
+        this.standardAttributes.push(new StandardAttribute(6, "Document Revision"));
+        this.standardAttributes.push(new StandardAttribute(7, "Document Date"));
         this.standardAttributes.push(new StandardAttribute(8, "Design Stage"));
         this.standardAttributes.push(new StandardAttribute(9, "Discipline"));
         this.standardAttributes.push(new StandardAttribute(10, "Size"));

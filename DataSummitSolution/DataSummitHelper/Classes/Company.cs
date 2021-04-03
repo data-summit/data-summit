@@ -16,9 +16,9 @@ namespace DataSummitHelper.Classes
             dataSummitDbContext = dbContext;
         }
 
-        public async Task<List<Companies>> GetAllCompanies()
+        public async Task<List<DataSummitModels.DB.Company>> GetAllCompanies()
         {
-            List<Companies> companies = new List<Companies>();
+            List<DataSummitModels.DB.Company> companies = new List<DataSummitModels.DB.Company>();
             try
             {
                 companies = await dataSummitDbContext.Companies.ToListAsync();
@@ -30,9 +30,9 @@ namespace DataSummitHelper.Classes
             return companies;
         }
 
-        public Companies GetCompanyById(int companyId)
+        public DataSummitModels.DB.Company GetCompanyById(int companyId)
         {
-            Companies company = new Companies();
+            DataSummitModels.DB.Company company = new DataSummitModels.DB.Company();
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
@@ -45,7 +45,7 @@ namespace DataSummitHelper.Classes
             return company;
         }
 
-        public int CreateCompany(Companies company)
+        public int CreateCompany(DataSummitModels.DB.Company company)
         {
             int returnid = 0;
             try
@@ -63,7 +63,7 @@ namespace DataSummitHelper.Classes
             return returnid;
         }
 
-        public void UpdateCompany(Companies company)
+        public void UpdateCompany(DataSummitModels.DB.Company company)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace DataSummitHelper.Classes
             try
             {
                 if (dataSummitDbContext == null) dataSummitDbContext = new DataSummitDbContext();
-                Companies company = dataSummitDbContext.Companies.First(p => p.CompanyId == companyId);
+                DataSummitModels.DB.Company company = dataSummitDbContext.Companies.First(p => p.CompanyId == companyId);
                 dataSummitDbContext.Companies.Remove(company);
                 dataSummitDbContext.SaveChanges();
             }

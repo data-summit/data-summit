@@ -3,7 +3,9 @@ using System.IdentityModel.Tokens.Jwt;
 using DataSummitHelper.Dao;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitHelper.Interfaces;
+using DataSummitHelper.Interfaces.MachineLearning;
 using DataSummitHelper.Services;
+using DataSummitHelper.Services.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitWeb.Classes;
 using Microsoft.AspNetCore.Builder;
@@ -14,6 +16,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -38,9 +41,10 @@ namespace DataSummitWeb
                     o.SerializerSettings.Converters.Add(new StringEnumConverter());
                     o.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 });
-                //.AddJsonFormatters(); //Required operator for .NET Core 2.2
 
             var connectionString = Configuration["DatabaseConnection"];
+            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;Integrated Security=SSPI;"; 
+            // User ID=lightosDB;Password=!Aa12345";
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")
@@ -48,7 +52,6 @@ namespace DataSummitWeb
             {
                 options.Authority = "http://localhost:55836";
                 options.RequireHttpsMetadata = false;
-
                 options.Audience = "values";
             });
 
@@ -87,8 +90,31 @@ namespace DataSummitWeb
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add service dependencies.
+
+            //Data Summit specific dependency injection services
+            services.AddTransient<IAzureResourcesService, AzureResourcesService>();
+            services.AddTransient<IDataSummitCompaniesService, DataSummitCompaniesService>();
+            services.AddTransient<IDataSummitDocumentsService, DataSummitDocumentsService>();
+            services.AddTransient<IDataSummitHelperService, DataSummitHelperService>();
+            services.AddTransient<IDataSummitProjectsService, DataSummitProjectsService>();
+            services.AddTransient<IDataSummitPropertiesService, DataSummitPropertiesService>();
+            services.AddTransient<IDataSummitTemplateAttributesService, DataSummitTemplateAttributesService>();
+            services.AddTransient<IDataSummitTemplatesService, DataSummitTemplatesService>();
+            services.AddTransient<IClassificationService, ClassificationService>();
+            services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
+
+            services.AddTransient<IDataSummitAzureUrlsDao, DataSummitAzureDao>();
+            services.AddTransient<IDataSummitMachineLearningDao, DataSummitMachineLearningDao>();
+            services.AddTransient<IDataSummitDocumentsDao, DataSummitDao>();
+
+            services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
+            services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplateAttributesDao, DataSummitDao>();
+            services.AddTransient<IDataSummitTemplatesDao, DataSummitDao>();
+
             services.AddDbContext<AuthenticationContext>(options => options.UseSqlServer(connectionString))
-                .AddDbContext<DataSummitDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString))
+                .AddDbContext<DataSummitDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Transient)
                 .AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
 
             services.Configure<IdentityOptions>(options =>
@@ -106,12 +132,15 @@ namespace DataSummitWeb
 
                 options.User.RequireUniqueEmail = true;
             });
-            services.AddScoped<IDataSummitHelperService, DataSummitHelperService>();
-            services.AddScoped<IDataSummitDao, DataSummitDao>();
+
+            // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
+            // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing
+            services.AddControllers(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        //public void Configure(IApplicationBuilder app, IHostingEnvironment env)   //IHostingEnvironment to be deprecated
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -124,7 +153,14 @@ namespace DataSummitWeb
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            // For .Net Core 2.2 to 3.1 update this was added as per the issues detailed here:
+            // https://stackoverflow.com/questions/57684093/using-usemvc-to-configure-mvc-is-not-supported-while-using-endpoint-routing
+            //app.UseMvc(); //Removed
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

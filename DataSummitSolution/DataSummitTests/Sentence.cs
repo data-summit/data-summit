@@ -15,76 +15,76 @@ namespace DataSummitTests
         [TestMethod]
         public void Create_new_Sentence()
         {
-            Sentences Sentence = new Sentences
+            DataSummitModels.DB.Sentence Sentence = new DataSummitModels.DB.Sentence
             {
                 SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Confidence = (decimal)0.1,
-                DrawingId = 1,
+                DocumentId = 1,
                 //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                 IsUsed = true,
                 Vendor = "Test",
                 Words = "0001"
             };
 
-            var mockSentenceDbSet = new Mock<DbSet<Sentences>>();
+            var mockSentenceDbSet = new Mock<DbSet<DataSummitModels.DB.Sentence>>();
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
             //false = Is Production environment | true = Is development environment
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(m => m.Sentences).Returns(mockSentenceDbSet.Object);
-            var mockSentence = new Sentence(mockContext.Object);
+            var mockSentence = new DataSummitHelper.Sentence(mockContext.Object);
 
             mockSentence.CreateSentence(Sentence);
 
-            mockSentenceDbSet.Verify(m => m.Add(It.IsAny<Sentences>()), Times.Once());
+            mockSentenceDbSet.Verify(m => m.Add(It.IsAny<DataSummitModels.DB.Sentence>()), Times.Once());
             mockContext.Verify(m => m.SaveChanges(), Times.Once());
         }
 
         [TestMethod]
         public void Get_Sentence_by_id()
         {
-            //DrawingVTemplate drawingVTemplate1 = new DrawingVTemplate
+            //DocumentVTemplate documentVTemplate1 = new DocumentVTemplate
             //{
-            //    DrawingId = 1,
+            //    DocumentId = 1,
             //    DrawVtempId = 1,
-            //    ProfileAttributeId = 1,
+            //    TemplateAttributeId = 1,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001")
             //};
-            //DrawingVTemplate drawingVTemplate2 = new DrawingVTemplate
+            //DocumentVTemplate documentVTemplate2 = new DocumentVTemplate
             //{
-            //    DrawingId = 2,
+            //    DocumentId = 2,
             //    DrawVtempId = 2,
-            //    ProfileAttributeId = 2,
+            //    TemplateAttributeId = 2,
             //    SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002")
             //};
 
-            var testSentence = new List<Sentences>
+            var testSentence = new List<DataSummitModels.DB.Sentence>
             {
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                     Confidence = (decimal)0.1,
-                    DrawingId = 1,
+                    DocumentId = 1,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-100000000000"),
                     IsUsed = true,
                     Vendor = "Test",
                     Words = "0001"
                 },
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                     Confidence = (decimal)0.2,
-                    DrawingId = 2,
+                    DocumentId = 2,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-200000000000"),
                     IsUsed = true,
                     Vendor = "Test",
                     Words = "0002"
                 },
-                new Sentences
+                new DataSummitModels.DB.Sentence
                 {
                     SentenceId = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                     Confidence = (decimal)0.3,
-                    DrawingId = 3,
+                    DocumentId = 3,
                     //RectangleId = Guid.Parse("00000000-0000-0000-0000-300000000000"),
                     IsUsed = true,
                     Vendor = "Test",
@@ -92,11 +92,11 @@ namespace DataSummitTests
                 }
             }.AsQueryable();
 
-            var mockSentenceDbSet = new Mock<DbSet<Sentences>>();
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.Provider).Returns(testSentence.Provider);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.Expression).Returns(testSentence.Expression);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.ElementType).Returns(testSentence.ElementType);
-            mockSentenceDbSet.As<IQueryable<Sentences>>().Setup(m => m.GetEnumerator()).Returns(testSentence.GetEnumerator());
+            var mockSentenceDbSet = new Mock<DbSet<DataSummitModels.DB.Sentence>>();
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.Provider).Returns(testSentence.Provider);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.Expression).Returns(testSentence.Expression);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.ElementType).Returns(testSentence.ElementType);
+            mockSentenceDbSet.As<IQueryable<DataSummitModels.DB.Sentence>>().Setup(m => m.GetEnumerator()).Returns(testSentence.GetEnumerator());
 
             //Mock<DataSummitDbContext>(false) is required should a parameterless DbContext not exist
             //otherwise Mock<DataSummitDbContext>() is permissible
@@ -104,8 +104,8 @@ namespace DataSummitTests
             var mockContext = new Mock<DataSummitDbContext>(false);
             mockContext.Setup(c => c.Sentences).Returns(mockSentenceDbSet.Object);
 
-            var mockSentenceService = new Sentence(mockContext.Object);
-            var mockSentence = mockSentenceService.GetAllDrawingSentences(1);
+            var mockSentenceService = new DataSummitHelper.Sentence(mockContext.Object);
+            var mockSentence = mockSentenceService.GetAllDocumentSentences(1);
             Assert.AreEqual(mockSentence.FirstOrDefault().SentenceId, testSentence.ToList()[0].SentenceId);
         }
     }

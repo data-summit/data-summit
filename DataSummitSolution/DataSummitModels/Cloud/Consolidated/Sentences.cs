@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataSummitModels.DB;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,9 +23,9 @@ namespace DataSummitModels.Cloud.Consolidated
         public bool IsUsed { get; set; }
         public decimal? Confidence { get; set; }
         public decimal SlendernessRatio { get; set; }
-        public long DrawingId { get; set; }
+        public long DocumentId { get; set; }
 
-        //public virtual Drawings Drawing { get; set; }
+        public virtual Document Document { get; set; }
         public virtual List<Properties> Properties { get; set; } = new List<Properties>();
 
         public Sentences(string words)
@@ -85,9 +86,9 @@ namespace DataSummitModels.Cloud.Consolidated
             };
             return s;
         }
-        public DB.Sentences ToModel()
+        public DB.Sentence ToModel()
         {
-            DB.Sentences m = new DB.Sentences();
+            DB.Sentence m = new DB.Sentence();
             m.Confidence = Confidence;
             m.Height = Height;
             m.IsUsed = IsUsed;

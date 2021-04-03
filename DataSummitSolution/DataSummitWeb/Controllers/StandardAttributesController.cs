@@ -19,14 +19,14 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string GetStandardAttributes(short id)
         {
-            List<StandardAttributes> lStandardAttributes = standardAttributesService
+            List<StandardAttribute> lStandardAttributes = standardAttributesService
                                                         .GetAllCompanyStandardAttributes(id);
             return JsonConvert.SerializeObject(lStandardAttributes.ToArray());
         }
 
         // PUT: api/StandardAttributes/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStandardAttributes(short id, StandardAttributes standardAttributes)
+        public async Task<IActionResult> PutStandardAttributes(short id, StandardAttribute standardAttributes)
         {
             if (id != standardAttributes.StandardAttributeId)
             {
@@ -65,14 +65,14 @@ namespace DataSummitWeb.Controllers
         //}
 
         [HttpPost]
-        public string PostStandardAttributes(ProfileVersions profileVersion)
+        public string PostStandardAttributes(TemplateVersion templateVersion)
         {
-            return JsonConvert.SerializeObject(profileVersion);
+            return JsonConvert.SerializeObject(templateVersion);
         }
 
         // DELETE: api/StandardAttributes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<StandardAttributes>> DeleteStandardAttributes(short id)
+        public async Task<ActionResult<StandardAttribute>> DeleteStandardAttributes(short id)
         {
             var standardAttributes = await db.StandardAttributes.FindAsync(id);
             if (standardAttributes == null)

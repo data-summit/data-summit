@@ -1,4 +1,4 @@
-export class DrawingProperty {
+export class DocumentProperty {
 
     Id: string;
     StandardName: string;

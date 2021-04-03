@@ -4,7 +4,7 @@ import { CompaniesComponent } from "./components/companies.component";
 import { ProjectsComponent } from "../projects/components/projects.component";
 import { ProfileVersionsComponent } from "../profileVersion/components/profileVersions.component";
 import { ProfileAttributesComponent } from "../profileAttributes/components/profileAttributes.component";
-import { DrawingsComponent } from "../drawings/components/drawings.component";
+import { DocumentsComponent } from "../documents/components/documents.component";
 import { PropertiesComponent } from "../properties/components/properties.component";
 import { StandardAttributeComponent } from "../../obsolete/standardAttribute/components/standardAttribute.component";
 import { CreateProfileVersionComponent } from "../profileVersion/create/components/createProfileVersion.component";
@@ -18,8 +18,8 @@ const archiveRoutes: Routes = [
   { path: ":companyId/profileversions/:profileVersionId/standardAttributes", component: StandardAttributeComponent },
   { path: ":companyId/profileversions/create", component: CreateProfileVersionComponent},
   { path: ":companyId/projects", component: ProjectsComponent },
-  { path: ":companyId/projects/:projectId/drawings", component: DrawingsComponent },
-  { path: ":companyId/projects/:projectId/drawings/:drawingId/properties", component: PropertiesComponent }
+  { path: ":companyId/projects/:projectId/documents", component: DocumentsComponent },
+  { path: ":companyId/projects/:projectId/documents/:documentId/properties", component: PropertiesComponent }
 ];
 
 @NgModule({

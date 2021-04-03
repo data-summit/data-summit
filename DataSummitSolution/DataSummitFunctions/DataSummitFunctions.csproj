@@ -49,7 +49,6 @@
   <ItemGroup>
     <Folder Include="Models\Amazon\" />
     <Folder Include="Models\Google\" />
-    <Folder Include="Keys\" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)Select.Html.dep&quot; &quot;$(TargetDir)bin\&quot; /y&#xD;&#xA;xcopy &quot;$(ProjectDir)Select.Tools.dep&quot; &quot;$(TargetDir)bin\&quot; /y" />

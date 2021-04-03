@@ -10,8 +10,7 @@
     <ProjectGuid>{75400e0a-9af2-43a9-9fda-99052688b582}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureDatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>DataSummitDB</RootNamespace>
     <AssemblyName>DataSummitDB</AssemblyName>
     <ModelCollation>1033,CI</ModelCollation>
@@ -55,7 +54,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -67,6 +65,10 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Data" />
     <Folder Include="Deploy" />
+    <Folder Include="dbo\Deploy\Local" />
+    <Folder Include="dbo\Deploy\Cloud" />
+    <Folder Include="dbo\Deploy" />
+    <Folder Include="Snapshots" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Addresses.sql" />
@@ -85,7 +87,6 @@
     <Build Include="dbo\Tables\UserTypes.sql" />
     <Build Include="dbo\Tables\Countries.sql" />
     <Build Include="dbo\Tables\Currencies.sql" />
-    <Build Include="dbo\Tables\Drawings.sql" />
     <Build Include="dbo\Tables\Employees.sql" />
     <Build Include="dbo\Tables\EmployeeTerritories.sql" />
     <Build Include="dbo\Tables\Genders.sql" />
@@ -94,14 +95,12 @@
     <Build Include="dbo\Tables\Orders.sql" />
     <Build Include="dbo\Tables\PaperSizes.sql" />
     <Build Include="dbo\Tables\Products.sql" />
-    <Build Include="dbo\Tables\ProfileAttributes.sql" />
-    <Build Include="dbo\Tables\ProfileVersions.sql" />
+    <Build Include="dbo\Tables\TemplateAttributes.sql" />
+    <Build Include="dbo\Tables\TemplateVersions.sql" />
     <Build Include="dbo\Tables\Projects.sql" />
     <Build Include="dbo\Tables\AzureCompanyResourceUrls.sql" />
-    <Build Include="dbo\Tables\Tasks.sql" />
+    <Build Include="dbo\Tables\FunctionTasks.sql" />
     <Build Include="dbo\Tables\ImageGrids.sql" />
-    <Build Include="dbo\Tables\DrawingLayers.sql" />
-    <Build Include="dbo\Tables\DrawingFeatures.sql" />
     <Build Include="dbo\Tables\Points.sql" />
     <Build Include="dbo\Tables\Sentences.sql" />
     <Build Include="dbo\Tables\Properties.sql" />
@@ -115,28 +114,38 @@
     <None Include="dbo\Data\Companies.sql" />
     <None Include="dbo\Data\Countries.sql" />
     <None Include="dbo\Data\Currencies.sql" />
-    <None Include="dbo\Data\Drawings.sql" />
     <None Include="dbo\Data\Genders.sql" />
     <None Include="dbo\Data\GoogleLanguages.sql" />
     <None Include="dbo\Data\ImageGrids.sql" />
     <None Include="dbo\Data\PaperOrientations.sql" />
     <None Include="dbo\Data\PaperSizes.sql" />
-    <None Include="dbo\Data\ProfileAttributes.sql" />
-    <None Include="dbo\Data\ProfileVersions.sql" />
+    <None Include="dbo\Data\TemplateAttributes.sql" />
+    <None Include="dbo\Data\TemplateVersions.sql" />
     <None Include="dbo\Data\Projects.sql" />
     <None Include="dbo\Data\Properties.sql" />
     <None Include="dbo\Data\Sentences.sql" />
     <None Include="dbo\Data\StandardAttributes.sql" />
-    <None Include="dbo\Data\Tasks.sql" />
+    <None Include="dbo\Data\FunctionTasks.sql" />
     <None Include="dbo\Data\UserInfo.sql" />
     <None Include="dbo\Data\UserInfoTypes.sql" />
     <None Include="dbo\Data\UserTypes.sql" />
-    <Build Include="dbo\Tables\DrawingTemplates.sql" />
+    <Build Include="dbo\Tables\Document.sql" />
+    <Build Include="dbo\Tables\DocumentFeatures.sql" />
+    <Build Include="dbo\Tables\DocumentLayers.sql" />
+    <Build Include="dbo\Tables\DocumentTemplates.sql" />
+    <None Include="dbo\Data\Documents.sql" />
+    <Build Include="dbo\Tables\DocumentTypes.sql" />
+    <None Include="dbo\Data\DocumentTypes.sql" />
+    <Build Include="dbo\Tables\AzureMLResources.sql" />
+    <None Include="dbo\Data\AzureMLResources.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DataSummitDB.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Deploy\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Snapshots\DataSummitDB_20210331_13-15-22.dacpac" />
   </ItemGroup>
 </Project>

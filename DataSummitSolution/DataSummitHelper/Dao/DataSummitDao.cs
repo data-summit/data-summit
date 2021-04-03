@@ -1,6 +1,7 @@
 using DataSummitHelper.Classes;
 using DataSummitHelper.Dao.Interfaces;
 using DataSummitModels.DB;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,30 +10,35 @@ using System.Threading.Tasks;
 
 namespace DataSummitHelper.Dao
 {
-    public partial class DataSummitDao : IDataSummitDao
+    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitDocumentsDao,
+        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
     {
         private readonly DataSummitDbContext _context;
-        private readonly Company _company;
 
         public DataSummitDao(DataSummitDbContext context)
         {
             _context = context;
-            _company = new Company(_context);
-            
+
             // TODO: Guard class against null objects
             if (_context == null)
             {
                 throw new Exception("DataSummit DbContext could not be created");
             }
+            //// TODO: Guard class against empty objects
+            //else if (_context.AzureCompanyResourceUrls.Count() > 0)
+            //{
+            //    throw new Exception("DataSummit DbContext contains no results");
+            //}
         }
 
-        public async Task DeleteProfileAttribute(long profileAttributeId)
+        public async Task DeleteTemplateAttribute(long templateAttributeId)
         {
             try
             {
-                var profileAttribute = new ProfileAttributes() { ProfileAttributeId = profileAttributeId };
-                _context.ProfileAttributes.Attach(profileAttribute);
-                _context.ProfileAttributes.Remove(profileAttribute);
+                var templateAttribute = new DataSummitModels.DB.TemplateAttribute()
+                { TemplateAttributeId = templateAttributeId };
+                _context.TemplateAttributes.Attach(templateAttribute);
+                _context.TemplateAttributes.Remove(templateAttribute);
                 await _context.SaveChangesAsync();
             }
             catch (Exception)
@@ -41,107 +47,20 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async Task<List<Drawings>> GetAllProjectDrawings(int projectId)
-        {
-            var drawings = new List<Drawings>();
-
-            try
-            {
-                drawings = await _context.Drawings
-                    .Where(d => d.ProjectId == projectId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
-
-            return drawings;
-        }
-
-        public async Task<List<ProfileAttributes>> GetProfileAttributesForDrawingId(int drawingId)
-        {
-            var profileAttributes = new List<ProfileAttributes>();
-
-            try
-            {
-                var drawing = await _context.Drawings.FirstOrDefaultAsync(d => d.DrawingId == drawingId);
-                var profileVersion = await _context.ProfileVersions.FirstOrDefaultAsync(p => p.ProfileVersionId == drawing.ProfileVersionId);
-                profileAttributes = profileVersion.ProfileAttributes.ToList();
-            }
-            catch (Exception ae)
-            {
-                string strError = ae.Message.ToString();
-            }
-
-            return profileAttributes;
-        }
-
-        public async Task<List<DrawingProperty>> GetDrawingPropertiesByDrawingId(int drawingId)
-        {
-            var drawingProperties = new List<DrawingProperty>();
-            
-            try
-            {
-                var drawing = await _context.Drawings
-                    .FirstOrDefaultAsync(d => d.DrawingId == drawingId);
-
-                drawingProperties = await _context.Properties
-                    .Select(p => new { p.ProfileAttribute, p.Sentence })
-                    .Where(profAtrrWords => 
-                        profAtrrWords.ProfileAttribute.ProfileVersionId == drawing.ProfileVersionId 
-                        && profAtrrWords.Sentence.DrawingId == drawing.DrawingId
-                    )
-                    .Select(a => new DrawingProperty()
-                    {
-                        Sentences =  a.Sentence,
-                        ProfileAttributes = a.ProfileAttribute
-                    })
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-                throw;
-            }
-
-            return drawingProperties;
-        }
-
-        public async Task UpdateDrawingPropertyValue(Guid drawingPropertyId, string drawingPropertyValue)
-        {
-            try
-            {
-                var sentence = new Sentences() { SentenceId = drawingPropertyId };
-                sentence.Words = drawingPropertyValue;
-                _context.Sentences.Attach(sentence);
-                _context.Entry(sentence).Property("Words").IsModified = true;
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         #region Companies
-        public async Task<List<Companies>> GetAllCompanies()
+        public async Task<List<DataSummitModels.DB.Company>> GetAllCompanies()
         {
-            return await _company.GetAllCompanies();
+            return await _context.Companies.ToListAsync();
         }
 
-        public async Task CreateCompany(Companies company)
+        public async Task CreateCompany(DataSummitModels.DB.Company company)
         {
-            try
-            {
-                await _context.Companies.AddAsync(company);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
+            await _context.Companies.AddAsync(company);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCompany(Companies company)
+        public async Task UpdateCompany(DataSummitModels.DB.Company company)
         {
             try
             {
@@ -158,7 +77,7 @@ namespace DataSummitHelper.Dao
         {
             try
             {
-                var company = new Companies() { CompanyId = companyId };
+                var company = new DataSummitModels.DB.Company() { CompanyId = companyId };
                 _context.Companies.Attach(company);
                 _context.Companies.Remove(company);
                 await _context.SaveChangesAsync();
@@ -168,21 +87,21 @@ namespace DataSummitHelper.Dao
                 throw;
             }
         }
-        
-        public async Task<Companies> GetCompanyById(int id)
+
+        public async Task<DataSummitModels.DB.Company> GetCompanyById(int id)
         {
-            return await _context.Companies.FirstOrDefaultAsync(c => c.CompanyId == id);
+            return await _context.Companies.SingleOrDefaultAsync(c => c.CompanyId == id);
         }
         #endregion
 
         #region Templates
-        public async Task<List<ProfileVersions>> GetCompanyProfileVersions(int companyId)
+        public async Task<List<DataSummitModels.DB.TemplateVersion>> GetCompanyTemplateVersions(int companyId)
         {
-            var profileVersions = new List<ProfileVersions>();
+            var templateVersions = new List<DataSummitModels.DB.TemplateVersion>();
 
             try
             {
-                profileVersions = await _context.ProfileVersions
+                templateVersions = await _context.TemplateVersions
                     .Where(p => p.CompanyId == companyId)
                     .ToListAsync();
             }
@@ -191,16 +110,16 @@ namespace DataSummitHelper.Dao
                 throw;
             }
 
-            return profileVersions;
+            return templateVersions;
         }
 
-        public async Task<List<ProfileVersions>> GetProjectProfileVersions(int projectId)
+        public async Task<List<DataSummitModels.DB.TemplateVersion>> GetProjectTemplateVersions(int projectId)
         {
-            var profileVersions = new List<ProfileVersions>();
+            var templateVersions = new List<DataSummitModels.DB.TemplateVersion>();
 
             try
             {
-                profileVersions = await _context.ProfileVersions
+                templateVersions = await _context.TemplateVersions
                     .Where(pv => pv.Company.Projects
                         .Select(p => p.ProjectId)
                         .Single() == projectId)
@@ -211,14 +130,14 @@ namespace DataSummitHelper.Dao
                 throw;
             }
 
-            return profileVersions;
+            return templateVersions;
         }
         #endregion
 
         #region Projects
-        public async Task<List<Projects>> GetAllCompanyProjects(int companyId)
+        public async Task<List<DataSummitModels.DB.Project>> GetAllCompanyProjects(int companyId)
         {
-            var projects = new List<Projects>();
+            var projects = new List<DataSummitModels.DB.Project>();
             try
             {
                 projects = await _context.Projects
@@ -232,20 +151,20 @@ namespace DataSummitHelper.Dao
             return projects;
         }
 
-        public async Task CreateProject(Projects project)
+        public async Task CreateProject(DataSummitModels.DB.Project project)
         {
             try
             {
                 await _context.Projects.AddAsync(project);
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
 
-        public async Task UpdateProjectName(Projects project)
+        public async Task UpdateProjectName(DataSummitModels.DB.Project project)
         {
             try
             {
@@ -265,7 +184,7 @@ namespace DataSummitHelper.Dao
         {
             try
             {
-                var project = new Projects() { ProjectId = projectId };
+                var project = new DataSummitModels.DB.Project() { ProjectId = projectId };
                 _context.Projects.Attach(project);
                 _context.Projects.Remove(project);
                 await _context.SaveChangesAsync();
@@ -276,19 +195,88 @@ namespace DataSummitHelper.Dao
             }
         }
 
-        public async Task<Projects> GetProjectById(int id)
+        public async Task<DataSummitModels.DB.Project> GetProjectById(int id)
         {
-            return await _context.Projects.FirstOrDefaultAsync(p => p.ProjectId == id);
+            return await _context.Projects.SingleOrDefaultAsync(p => p.ProjectId == id);
         }
         #endregion
 
-        public async Task<List<Drawings>> GetProjectDrawings(int projectId)
+        #region Documents
+        public async Task CreateDocument(Document document)
         {
-            var drawings = new List<Drawings>();
+            await _context.Documents.AddAsync(document);
+            await _context.SaveChangesAsync();
+        }
+
+        public void UpdateDocument(Document document)
+        {
+            _context.Documents.Update(document);
+            _context.SaveChanges();
+        }
+
+        public void DeleteDocument(long documentId)
+        {
+            Document document = _context.Documents.SingleOrDefault(doc => doc.DocumentId == documentId);
+            DeleteDocument(document);
+        }
+        public void DeleteDocument(string documentUrl)
+        {
+            Document document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
+            DeleteDocument(document);
+        }
+        public void DeleteDocument(Document document)
+        {
+            _context.Documents.Remove(document);
+        }
+
+        public async Task DeleteDocumentAsync(long documentId)
+        {
+            Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.DocumentId == documentId);
+            DeleteDocument(document);
+        }
+        public async Task DeleteDocumentAsync(string documentUrl)
+        {
+            Document document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
+            DeleteDocument(document);
+        }
+
+        public void AddDocumentFeatures(List<DocumentFeature> documentFeatures)
+        {
+            documentFeatures.ForEach(doc => AddDocumentFeature(doc));
+        }
+
+        public void AddDocumentFeature(DocumentFeature documentFeature)
+        {
+            _context.DocumentFeatures.Add(documentFeature);
+        }
+
+        public async Task UpdateDocumentFeature(string documentUrl, DocumentFeature documentFeature)
+        {
+            var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
+
+            doc?.DocumentFeatures.Add(documentFeature);
+            _context.SaveChanges();
+        }
+
+        public async Task<Document> GetDocumentsByUrlAsync(string documentUrl)
+        {
+            var document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
+            return document;
+        }
+
+        public Document GetDocumentsByUrl(string documentUrl)
+        {
+            var document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
+            return document;
+        }
+
+        public async Task<List<Document>> GetAllProjectDocuments(int projectId)
+        {
+            var documents = new List<Document>();
 
             try
             {
-                drawings = await _context.Drawings
+                documents = await _context.Documents
                     .Where(d => d.ProjectId == projectId)
                     .ToListAsync();
             }
@@ -296,23 +284,172 @@ namespace DataSummitHelper.Dao
             {
             }
 
-            return drawings;
+            return documents;
         }
 
-        public async Task<List<ProfileAttributes>> GetTemplateAttribtesForTemplateId(int templateId)
+        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttributesForDocumentId(int documentId)
         {
-            var profileAttributes = new List<ProfileAttributes>();
+            var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
+
             try
             {
-                profileAttributes = await _context.ProfileAttributes
-                    .Where(p => p.ProfileVersionId == templateId)
+                var document = await _context.Documents.SingleOrDefaultAsync(d => d.DocumentId == documentId);
+                var templateVersion = await _context.TemplateVersions.SingleOrDefaultAsync(p => p.TemplateVersionId == document.TemplateVersionId);
+                templateAttributes = templateVersion.TemplateAttributes.ToList();
+            }
+            catch (Exception ae)
+            {
+                string strError = ae.Message.ToString();
+            }
+
+            return templateAttributes;
+        }
+
+        public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
+        {
+            var documentProperties = new List<DocumentProperty>();
+            
+            try
+            {
+                var document = await _context.Documents
+                    .SingleOrDefaultAsync(d => d.DocumentId == documentId);
+
+                documentProperties = await _context.Properties
+                    .Select(p => new { p.TemplateAttribute, p.Sentence })
+                    .Where(profAtrrWords =>
+                        profAtrrWords.TemplateAttribute.TemplateVersionId == document.TemplateVersionId
+                        && profAtrrWords.Sentence.DocumentId == document.DocumentId
+                    )
+                    .Select(a => new DocumentProperty()
+                    {
+                        Sentences = new DataSummitModels.Cloud.Consolidated.Sentences()
+                        {
+                            Confidence = a.Sentence.Confidence,
+                            DocumentId = a.Sentence.DocumentId,
+                            Height = a.Sentence.Height,
+                            IsUsed = a.Sentence.IsUsed,
+                            Left = a.Sentence.Left,
+                            //Properties = a.Sentence.Properties,
+                            SentenceId = a.Sentence.SentenceId,
+                            SlendernessRatio = (decimal)a.Sentence.SlendernessRatio,
+                            Top = a.Sentence.Top,
+                            Vendor = a.Sentence.Vendor,
+                            Width = a.Sentence.Width,
+                            Words = a.Sentence.Words
+
+                        },
+                        TemplateAttributes = a.TemplateAttribute
+                    })
+                    .ToListAsync();
+
+            }
+            catch (Exception ae)
+            {
+                throw;
+            }
+
+            return documentProperties;
+        }
+
+        public async Task UpdateDocumentPropertyValue(Guid documentPropertyId, string documentPropertyValue)
+        {
+            try
+            {
+                var sentence = new DataSummitModels.DB.Sentence() { SentenceId = documentPropertyId };
+                sentence.Words = documentPropertyValue;
+                _context.Sentences.Attach(sentence);
+                _context.Entry(sentence).Property("Words").IsModified = true;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //TODO remove this or the 'Task<List<Document>> GetAllProjectDocuments(int projectId)' method. They are duplicates.
+        public async Task<List<Document>> GetProjectDocuments(int projectId)
+        {
+            var documents = new List<Document>();
+
+            try
+            {
+                documents = await _context.Documents
+                    .Where(d => d.ProjectId == projectId)
                     .ToListAsync();
             }
             catch (Exception ae)
             {
             }
 
-            return profileAttributes;
+            return documents;
+        }
+        #endregion
+
+        #region Properties
+        public async Task<DataSummitModels.DB.Property> GetPropertyById(int id)
+        {
+            return await _context.Properties.SingleOrDefaultAsync(p => p.PropertyId == id);
+        }
+        public async Task<bool> DeleteProperty(long propertyId)
+        {
+            bool result;
+            try
+            {
+                var property = new DataSummitModels.DB.Property() { PropertyId = propertyId };
+                _context.Properties.Attach(property);
+                _context.Properties.Remove(property);
+                await _context.SaveChangesAsync();
+                result = true;
+            }
+            catch
+            {
+                throw;
+            }
+            return result;
+        }
+        #endregion
+
+        #region Azure URLs
+        public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
+        {
+            var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
+            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+        }
+        public Tuple<string, string> GetAzureUrlByName(string name)
+        {
+            var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
+            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+        }
+        #endregion
+
+        #region ML URLs
+        public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
+        {
+            var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
+            return azML;
+        }
+        public AzureMLResource GetMLUrlByName(string name)
+        {
+            var azML = _context.AzureMLResources.SingleOrDefault(ar => ar.Name == name);
+            return azML;
+        }
+        #endregion
+
+        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
+        {
+            var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
+            try
+            {
+                templateAttributes = await _context.TemplateAttributes
+                    .Where(p => p.TemplateVersionId == templateId)
+                    .ToListAsync();
+            }
+            catch (Exception ae)
+            {
+            }
+
+            return templateAttributes;
         }
     }
 }

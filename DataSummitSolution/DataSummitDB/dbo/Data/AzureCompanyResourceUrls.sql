@@ -13,9 +13,13 @@ INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [U
 GO
 INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (5, N'PostProcessing', N'https://datasummit-functionapps.azurewebsites.net/api/PostProcessing', N'ytQe2gUa9UsH070XPOp5GIj3MQ12O8kFXT8TEv3plrW4lsgmEIP7HA==', N'Function', 1)
 GO
-INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (10003, N'RecogniseTextGoogle', N'https://datasummit-functionapps.azurewebsites.net/api/RecogniseTextGoogle', N'SaSc8KmZWiYQvGs1ui6x48yDnNtOJbFZcjg16w8QxcGQzbsYuZJNuw==', N'Function', 1)
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (6, N'RecogniseTextGoogle', N'https://datasummit-functionapps.azurewebsites.net/api/RecogniseTextGoogle', N'SaSc8KmZWiYQvGs1ui6x48yDnNtOJbFZcjg16w8QxcGQzbsYuZJNuw==', N'Function', 1)
 GO
-INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (10004, N'RecogniseTextAmazon', N'https://datasummit-functionapps.azurewebsites.net/api/RecogniseTextAmazon', N'6PPe6zPtCV/48oqVOFQiEADoHvSlfEC4t7B4MDaluJEzRq8a1T/PBQ==', N'Function', 1)
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (7, N'RecogniseTextAmazon', N'https://datasummit-functionapps.azurewebsites.net/api/RecogniseTextAmazon', N'6PPe6zPtCV/48oqVOFQiEADoHvSlfEC4t7B4MDaluJEzRq8a1T/PBQ==', N'Function', 1)
+GO
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (8, N'Classification', N'https://datasummit-functionapps.azurewebsites.net/api/Classification', N'cdyMm6NMcySrXgT3t1mw/PqNndKmqBH0tXKnXcPT0HIGVG/iXXcSLQ==', N'Function', 1)
+GO
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (9, N'ObjectDetection', N'https://datasummit-functionapps.azurewebsites.net/api/ObjectDetection', N'LHaEs9drwYz6rSvyDRR31bT7ucraq1N/rqgute6si0oGJEXoH49XSw==', N'Function', 1)
 GO
 SET IDENTITY_INSERT [dbo].[AzureCompanyResourceUrls] OFF
 GO

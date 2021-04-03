@@ -1,7 +1,6 @@
 ﻿using DataSummitHelper.Interfaces;
 using DataSummitWeb.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,18 +11,18 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
-        private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitProjectsService _dataSummitProject;
 
-        public ProjectsController(IDataSummitHelperService dataSummitHelper)
+        public ProjectsController(IDataSummitProjectsService dataSummitProject)
         {
-            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _dataSummitProject = dataSummitProject ?? throw new ArgumentNullException(nameof(dataSummitProject));
         }
 
         // GET api/projects/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProjectById(int id)
         {
-            var projectDtos = await _dataSummitHelper.GetAllCompanyProjects(id);
+            var projectDtos = await _dataSummitProject.GetAllCompanyProjects(id);
             var projects = projectDtos.Select(p => Project.FromDto(p))
                 .ToList();
             return Ok(projects);
@@ -33,7 +32,7 @@ namespace DataSummitWeb.Controllers
         [HttpPost("create")]
         public async Task CreateProject([FromBody]Project project)
         {
-            await _dataSummitHelper.CreateProject(project.ToDto());
+            await _dataSummitProject.CreateProject(project.ToDto());
         }
 
         // PUT api/projects/update
@@ -41,14 +40,14 @@ namespace DataSummitWeb.Controllers
         public async Task UpdateProject([FromBody]Project project)
         {
             //Update
-            await _dataSummitHelper.UpdateProject(project.ToDto());
+            await _dataSummitProject.UpdateProject(project.ToDto());
         }
 
         // DELETE api/projects/delete/{id}
         [HttpDelete("delete")]
         public async Task DeleteProjectById([FromBody]int id)
         {
-            await _dataSummitHelper.DeleteProject(id);
+            await _dataSummitProject.DeleteProject(id);
         }
     }
 }

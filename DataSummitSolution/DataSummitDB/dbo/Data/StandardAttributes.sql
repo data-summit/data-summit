@@ -3,7 +3,7 @@ GO
 
 SET IDENTITY_INSERT [dbo].[StandardAttributes] ON 
 GO
-INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (1, N'Drawing Title')
+INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (1, N'Document Title')
 GO
 INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (2, N'Project Number')
 GO
@@ -11,11 +11,11 @@ INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (3, N'P
 GO
 INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (4, N'Project Address')
 GO
-INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (5, N'Drawing Number')
+INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (5, N'Document Number')
 GO
-INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (6, N'Drawing Revision')
+INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (6, N'Document Revision')
 GO
-INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (7, N'Drawing Date')
+INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (7, N'Document Date')
 GO
 INSERT [dbo].[StandardAttributes] ([StandardAttributeId], [Name]) VALUES (8, N'Design Stage')
 GO

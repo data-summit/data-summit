@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { DrawingProperty } from '../models/drawingProperty';
+import { DocumentProperty } from '../models/documentProperty';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -12,19 +12,19 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class PropertiesComponent implements OnInit {
 
-    @ViewChild('drawingPropertyModal', { static: false }) drawingPropertyModal;
+    @ViewChild('documentPropertyModal', { static: false }) documentPropertyModal;
 
     @Input() companyId: number;
     projectId: number;
-    drawingId: number;
+    documentId: number;
     headers: string[];
-    selectedDrawingProperty: DrawingProperty;
-    drawingPropertiesForm: FormGroup;
+    selectedDocumentProperty: DocumentProperty;
+    documentPropertiesForm: FormGroup;
     loading: boolean;
     saveProfileAttribute: any;
     enableEdit = false;
     enableEditIndex = null;
-    drawingProperties: Array<DrawingProperty>
+    documentProperties: Array<DocumentProperty>
 
     constructor(private router: Router,
         private api: ApiService,
@@ -36,22 +36,22 @@ export class PropertiesComponent implements OnInit {
         this.companyId = this.route.snapshot.params['companyId']
         if (typeof this.companyId == 'string')         //Ensure id is number if received as a string
         { this.companyId = Number(this.companyId); }
-        //Get drawingId from URL
-        this.drawingId = this.route.snapshot.params['drawingId']
-        if (typeof this.drawingId == 'string')         //Ensure id is number if received as a string
-        { this.drawingId = Number(this.drawingId); }
+        //Get documentId from URL
+        this.documentId = this.route.snapshot.params['documentId']
+        if (typeof this.documentId == 'string')         //Ensure id is number if received as a string
+        { this.documentId = Number(this.documentId); }
 
         this.initPropertiesTable();
         this.initPropertiesForm();
-        this.getDrawingProperties(this.drawingId);
+        this.getDocumentProperties(this.documentId);
     }
 
     initPropertiesForm() {
-        this.drawingPropertiesForm = this.fb.group({
+        this.documentPropertiesForm = this.fb.group({
             Name: this.fb.control('', Validators.required),
             CreateDate: this.fb.control('')
         });
-        this.selectedDrawingProperty = new DrawingProperty();
+        this.selectedDocumentProperty = new DocumentProperty();
     }
 
     initPropertiesTable() {
@@ -63,21 +63,21 @@ export class PropertiesComponent implements OnInit {
             'Actions'
         ]; }
 
-    getDrawingProperties(id: number) {
+    getDocumentProperties(id: number) {
         this.loading = true;        
-        this.api.get(`api/properties/drawing/${id}`)
+        this.api.get(`api/properties/document/${id}`)
             .pipe(take(1))
                 .subscribe((result: any[]) => {
-                    this.drawingProperties = [];
+                    this.documentProperties = [];
 
                     for (let i = 0; i < result.length; i++) {
-                        let p = new DrawingProperty(result[i].sentenceId, 
+                        let p = new DocumentProperty(result[i].sentenceId, 
                             result[i].standardName, 
                             result[i].name, 
                             result[i].wordValue, 
                             result[i].confidence);
 
-                        this.drawingProperties.push(p);
+                        this.documentProperties.push(p);
                 };
                 console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
@@ -89,33 +89,33 @@ export class PropertiesComponent implements OnInit {
 
     hideDialog()
     {
-        this.drawingPropertyModal.hide();
-        this.selectedDrawingProperty = new DrawingProperty();
+        this.documentPropertyModal.hide();
+        this.selectedDocumentProperty = new DocumentProperty();
     }
 
-    goToAttributes(drawingId: number) {
-        this.router.navigate(['companies/profileattributes', drawingId]);
+    goToAttributes(documentId: number) {
+        this.router.navigate(['companies/profileattributes', documentId]);
     }
 
     createProperties() {
-        this.router.navigate(['drawings', 'create', 'createprofileversion', this.companyId]);
+        this.router.navigate(['documents', 'create', 'createprofileversion', this.companyId]);
     }
 
-    addDrawingProperty(drawingProperty?: DrawingProperty) {
-        if (!drawingProperty)
-        { this.selectedDrawingProperty = new DrawingProperty() }
+    addDocumentProperty(documentProperty?: DocumentProperty) {
+        if (!documentProperty)
+        { this.selectedDocumentProperty = new DocumentProperty() }
         else
-        { this.selectedDrawingProperty = drawingProperty; }
-        this.drawingPropertyModal.show();
+        { this.selectedDocumentProperty = documentProperty; }
+        this.documentPropertyModal.show();
     }
 
-    editDrawingProperty(drawingProperty?: DrawingProperty) {
-        this.addDrawingProperty(drawingProperty);
+    editDocumentProperty(documentProperty?: DocumentProperty) {
+        this.addDocumentProperty(documentProperty);
     }
 
     // deleteProperties(property?: Property) {
     //     if (property.PropertyId > 0) {
-    //         this.api.delete('api/drawings/' + property.PropertyId.toString(), property.PropertyId)
+    //         this.api.delete('api/documents/' + property.PropertyId.toString(), property.PropertyId)
     //             .pipe(take(1))
     //             .subscribe(result => {
     //                 this.getProperties(this.companyId);
@@ -126,12 +126,12 @@ export class PropertiesComponent implements OnInit {
     //     }
     // }
 
-    updateDrawingProperty(propertyId: string, propertyValue: string) {
-        let drawingProperty ={propertyId, propertyValue};
-        console.log(drawingProperty);
+    updateDocumentProperty(propertyId: string, propertyValue: string) {
+        let documentProperty ={propertyId, propertyValue};
+        console.log(documentProperty);
         
-        if (drawingProperty) {
-            this.api.post('api/properties/update', drawingProperty)
+        if (documentProperty) {
+            this.api.post('api/properties/update', documentProperty)
                 .pipe(take(1))
                 .subscribe(result => {
                     console.log(result);
@@ -141,16 +141,16 @@ export class PropertiesComponent implements OnInit {
         }
     }
 
-    saveDrawingProperty() 
+    saveDocumentProperty() 
     {
-        //this.selectedDrawingProperty.CompanyId = this.companyId;
-        if (!this.selectedDrawingProperty.Id) //New entry
+        //this.selectedDocumentProperty.CompanyId = this.companyId;
+        if (!this.selectedDocumentProperty.Id) //New entry
         { 
-            this.api.post("api/properties/create", this.selectedDrawingProperty)
+            this.api.post("api/properties/create", this.selectedDocumentProperty)
                 .pipe(take(1))
                 .subscribe(result => {
-                    this.drawingPropertyModal.hide();
-                    this.getDrawingProperties(this.drawingId);
+                    this.documentPropertyModal.hide();
+                    this.getDocumentProperties(this.documentId);
                     console.log(result);
                 }, error => {
                     console.log(error);
@@ -158,11 +158,11 @@ export class PropertiesComponent implements OnInit {
         }
         else //updated entry
         { 
-            this.api.put("api/properties/update", this.selectedDrawingProperty)
+            this.api.put("api/properties/update", this.selectedDocumentProperty)
             .pipe(take(1))
                 .subscribe(result => {
-                    this.drawingPropertyModal.hide();
-                    this.getDrawingProperties(this.drawingId);
+                    this.documentPropertyModal.hide();
+                    this.getDocumentProperties(this.documentId);
                     console.log(result)
                 }, error => {
                     console.log(error)

@@ -1,25 +1,24 @@
-﻿using DataSummitModels.DB;
-using System;
+﻿using System;
 
 namespace DataSummitHelper.Interfaces
 {
     public class TemplateDto
     {
-        public int ProfileVersionId { get; set; }
+        public int TemplateVersionId { get; set; }
         public string TemplateName { get; set; }
         public int CompanyId { get; set; }
         public int? Height { get; set; }
         public int? Width { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public TemplateDto(ProfileVersions profileVersions)
+        public TemplateDto(DataSummitModels.DB.TemplateVersion templateVersions)
         {
-            ProfileVersionId = profileVersions.ProfileVersionId;
-            TemplateName = profileVersions.Name;
-            CompanyId = profileVersions.CompanyId;
-            Height = profileVersions.Height;
-            Width = profileVersions.Width;
-            CreatedDate = profileVersions.CreatedDate;
+            TemplateVersionId = templateVersions.TemplateVersionId;
+            TemplateName = templateVersions.Name;
+            CompanyId = templateVersions.CompanyId;
+            Height = templateVersions.Height;
+            Width = templateVersions.Width;
+            CreatedDate = templateVersions.CreatedDate;
         }
     }
 }

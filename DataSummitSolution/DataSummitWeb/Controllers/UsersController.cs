@@ -22,7 +22,7 @@ namespace DataSummitWeb.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            List<AspNetUsers> users = usersService.GetAllCompanyUsers(id);
+            List<AspNetUser> users = usersService.GetAllCompanyUsers(id);
             return JsonConvert.SerializeObject(users.ToArray());
         }
 
@@ -44,9 +44,9 @@ namespace DataSummitWeb.Controllers
                         : countryCode + regUser.Phone;
 
                     //Extract address from body
-                    var address = new HashSet<Addresses>()
+                    var address = new HashSet<DataSummitModels.DB.Address>()
                     {
-                        new Addresses
+                        new DataSummitModels.DB.Address
                         {
                             Street = regUser.Street,
                             Street2 = regUser.Street2,
@@ -75,7 +75,7 @@ namespace DataSummitWeb.Controllers
                     };
 
                     //Extract user from body
-                    AspNetUsers user = new AspNetUsers
+                    AspNetUser user = new AspNetUser
                     {
                         FirstName = regUser.FirstName,
                         Surname = regUser.LastName,
@@ -99,7 +99,7 @@ namespace DataSummitWeb.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody]AspNetUsers user)
+        public void Put(string id, [FromBody]AspNetUser user)
         {
             //Update
             usersService.UpdateUsers(id, user);

@@ -21,7 +21,7 @@
         <tbody>
           <tr class="text-center" mdbTableCol *ngFor="let proj of projects">
             <td>{{proj.Name}}</td>
-            <td (click)="goToDrawings(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' drawings'"></i></td>
+            <td (click)="goToDocuments(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' documents'"></i></td>
             <td (click)="goToProjectTemplates(proj.ProjectId)"><i class="fa fa-search pointer" [mdbTooltip]="'View ' + proj.Name + ' templates'"></i></td>
             <td (click)="goToCompanyTemplates()"><i class="fa fa-search pointer" [mdbTooltip]="'View company templates'"></i></td>
             <td>{{proj.CreatedDate | date: 'dd/MM/yyyy'}}</td>

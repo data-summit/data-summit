@@ -10,9 +10,9 @@
     [IsUsed]			BIT					NOT NULL DEFAULT 0, 
     [Confidence]		DECIMAL(3, 2)		NULL,
 	[SlendernessRatio]	DECIMAL				NULL DEFAULT 0, 
-	[DrawingId]			BIGINT				NOT NULL, 
+	[DocumentId]			BIGINT				NOT NULL, 
 
     [ModifiedWords] NVARCHAR(MAX) NULL DEFAULT NULL, 
     CONSTRAINT [PK_SentenceId] PRIMARY KEY CLUSTERED ([SentenceId] ASC),
-    CONSTRAINT [FK_Sentences_Drawings] FOREIGN KEY ([DrawingId]) REFERENCES [dbo].[Drawings] ([DrawingId]) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT [FK_Sentences_Documents] FOREIGN KEY ([DocumentId]) REFERENCES [dbo].[Documents] ([DocumentId]) ON DELETE CASCADE ON UPDATE CASCADE
 )

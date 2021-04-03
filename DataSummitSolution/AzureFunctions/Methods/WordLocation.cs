@@ -6,13 +6,13 @@ namespace AzureFunctions.Methods
 {
     public static class WordLocation
     {
-        public static List<Sentences> Corrected(
-                                    List<Sentences> sents, ImageGrids ig)
+        public static List<Sentence> Corrected(
+                                    List<Sentence> sents, ImageGrid ig)
         {
-            List<Sentences> lOut = new List<Sentences>();
+            List<Sentence> lOut = new List<Sentence>();
             try
             {
-                foreach (Sentences s in sents)
+                foreach (Sentence s in sents)
                 {
                     //s.Rectangle = new Models.Consolidated.Rectangle(
                     //                    ig.WidthStart + s.Rectangle.Left,
@@ -36,7 +36,7 @@ namespace AzureFunctions.Methods
             return lOut;
         }
 
-        internal static IEnumerable<Sentences> Corrected(List<DataSummitModels.Cloud.Consolidated.Sentences> sentences, ImageGrids ig)
+        internal static IEnumerable<Sentence> Corrected(List<DataSummitModels.Cloud.Consolidated.Sentences> sentences, ImageGrid ig)
         {
             throw new NotImplementedException();
         }

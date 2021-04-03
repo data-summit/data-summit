@@ -5,6 +5,7 @@ using AWS = Amazon;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AzureFunctions.Models.Amazon
 {
@@ -20,14 +21,14 @@ namespace AzureFunctions.Models.Amazon
         public AmazonOCR()
         { }
 
-        public async System.Threading.Tasks.Task<string> RunAsync(System.Drawing.Image ImageData)
+        public async Task<string> RunAsync(System.Drawing.Image ImageData)
         {
             String res = String.Empty;
             try
             {
                 AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(
-                    AzureFunctions.Keys.Amazon.AccessKeyID, 
-                    AzureFunctions.Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                    "AzureFunctions.Keys.Amazon.AccessKeyID", 
+                    "AzureFunctions.Keys.Amazon.SecretAccessKey", AWS.RegionEndpoint.EUWest1);  //Replace with actual key from Azure Secrets 
                 DetectTextRequest detectTextRequest = new DetectTextRequest();
 
                 String json = String.Empty;

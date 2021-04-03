@@ -1,16 +1,16 @@
-﻿export class DrawingData {
+﻿export class DocumentData {
 
-    DrawingId: number
+    DocumentId: number
     Name: string
     ContainerUrl: string 
     CreatedDate: Date
 
-    constructor(drawingId?: number, 
+    constructor(documentId?: number, 
                 name?: string, 
                 containerUrl?: string, 
                 createdDate?: Date)
     {
-        this.DrawingId = drawingId  || null;
+        this.DocumentId = documentId  || null;
         this.Name = name || null;
         this.ContainerUrl = containerUrl || null;
         this.CreatedDate = createdDate || null;

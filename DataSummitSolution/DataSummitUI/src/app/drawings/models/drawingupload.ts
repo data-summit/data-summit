@@ -1,4 +1,4 @@
-export class DrawingUpload {
+export class DocumentUpload {
 
     ProjectId: number
     TemplateId: number

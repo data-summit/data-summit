@@ -2,26 +2,26 @@
 import { ApiService } from 'src/app/shared/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take, catchError } from 'rxjs/operators';
-import { DrawingData } from '../models/drawingdata';
-import { DrawingUpload } from '../models/drawingupload'
+import { DocumentData } from '../models/documentdata';
+import { DocumentUpload } from '../models/documentupload'
 import { FileUpload } from 'primeng/fileupload';
 import { FormBuilder } from '@angular/forms';
 
 @Component({
-    selector: 'ds-drawings',
-    templateUrl: 'drawings.component.html'
+    selector: 'ds-documents',
+    templateUrl: 'documents.component.html'
 })
 
-export class DrawingsComponent implements OnInit {
+export class DocumentsComponent implements OnInit {
 
-    @ViewChild('drawingModal', { static: false }) drawingModal;
+    @ViewChild('documentModal', { static: false }) documentModal;
     @ViewChild('uploadControl', { static: false }) uploadControl: FileUpload
 
     companyId: number;
     projectId: number;
-    drawingTableRows: Array<DrawingData>;
-    selectedDrawing: DrawingData;
-    drawingsForUpload: DrawingUpload[];
+    documentTableRows: Array<DocumentData>;
+    selectedDocument: DocumentData;
+    documentsForUpload: DocumentUpload[];
     templateId: number;
     headers: string[];
     loading: boolean;
@@ -38,11 +38,11 @@ export class DrawingsComponent implements OnInit {
         this.projectId = this.route.snapshot.params['projectId'];
         if (typeof this.projectId == 'string')         //Ensure id is number if received as a string
         { this.projectId = Number(this.projectId); }
-        this.getDrawings(this.projectId);
-        this.initDrawingsTable();
+        this.getDocuments(this.projectId);
+        this.initDocumentsTable();
     }
 
-    initDrawingsTable() {
+    initDocumentsTable() {
         this.headers = [
             "Name",
             "Container Url",
@@ -52,19 +52,19 @@ export class DrawingsComponent implements OnInit {
         ];
     }
 
-    getDrawings(id: number) {
+    getDocuments(id: number) {
         this.loading = true;        
-        this.api.get("api/drawings/" + id.toString(), id)
+        this.api.get("api/documents/" + id.toString(), id)
             .pipe(take(1))
                 .subscribe((result: any[]) => {
-                    this.drawingTableRows = [];
+                    this.documentTableRows = [];
 
                     for (let i = 0; i < result.length; i++) {
-                        let d = new DrawingData(result[i].drawingId, 
+                        let d = new DocumentData(result[i].documentId, 
                             result[i].name, 
                             result[i].containerUrl, 
                             result[i].createdDate);
-                        this.drawingTableRows.push(d);
+                        this.documentTableRows.push(d);
                 };
                 console.log(location.origin.toString() + this.router.url.toString());
                 this.loading = false;
@@ -74,7 +74,7 @@ export class DrawingsComponent implements OnInit {
             })
     }
 
-    // addDrawing() {
+    // addDocument() {
     //     this.api.get(`api/profileversions/${this.companyId}`, this.companyId)
     //         .pipe(take(1))
     //             .subscribe((result: ProfileVersion[]) => {
@@ -85,7 +85,7 @@ export class DrawingsComponent implements OnInit {
     //             };
     //             console.log(location.origin.toString() + this.router.url.toString());
     //             this.loading = false;
-    //             this.drawingModal.show();
+    //             this.documentModal.show();
     //         }, error => {
     //             console.log(error)
     //             this.loading = false;
@@ -99,8 +99,8 @@ export class DrawingsComponent implements OnInit {
         { this.templateId = event; }
     }
 
-    readDrawings(event) {
-        this.drawingsForUpload = []
+    readDocuments(event) {
+        this.documentsForUpload = []
         let fileList: FileList = event.files;
         if (fileList.length > 0) {
             for (let i = 0; i < fileList.length; i++) {
@@ -110,7 +110,7 @@ export class DrawingsComponent implements OnInit {
                 
                 reader.onload = (e) => {
 
-                    let draw = new DrawingUpload();
+                    let draw = new DocumentUpload();
                     draw.ProjectId= this.projectId;
                     draw.TemplateId = this.templateId;
                     draw.FileName = file.name;
@@ -118,8 +118,8 @@ export class DrawingsComponent implements OnInit {
                     
                     draw.UserId = 1; //TODO This is Tom James' ID from the data generic data
                     //This needs to be replaced by the logged in users id once OAuth protection is working
-                    //Drawings are controlled by user if they're "under trial" 
-                    //Drawings are by company if the user is not "under trial"
+                    //Documents are controlled by user if they're "under trial" 
+                    //Documents are by company if the user is not "under trial"
 
                     var binary = '';
                     var bytes = new Uint8Array(reader.result as ArrayBuffer);
@@ -129,20 +129,20 @@ export class DrawingsComponent implements OnInit {
                     
                     draw.File = btoa(binary);
                     
-                    this.drawingsForUpload.push(draw);
+                    this.documentsForUpload.push(draw);
 
-                    this.api.postImage(`api/drawings/`, this.drawingsForUpload)
+                    this.api.postImage(`api/documents/`, this.documentsForUpload)
                         .pipe(take(1))
                             .subscribe(result => {
                                 console.log(result);
                                 this.uploadControl.clear();
-                                this.getDrawings(this.projectId);
-                                this.drawingModal.hide();
+                                this.getDocuments(this.projectId);
+                                this.documentModal.hide();
                             }, error => {
                                 console.log(error);
                                 this.uploadControl.clear();
-                                this.getDrawings(this.projectId);
-                                this.drawingModal.hide();
+                                this.getDocuments(this.projectId);
+                                this.documentModal.hide();
                             });
                 }
             }
@@ -153,15 +153,15 @@ export class DrawingsComponent implements OnInit {
         this.uploadControl.upload()            
     }
 
-    deleteDrawing(drawing) {
+    deleteDocument(document) {
         //todo: api call:
-        let index = this.drawingTableRows.findIndex(d => d == drawing)
+        let index = this.documentTableRows.findIndex(d => d == document)
         if(index > -1) {
-            this.drawingTableRows.splice(index, 1)
+            this.documentTableRows.splice(index, 1)
         }
     }
 
-    goToProperties(drawingId: number) {
-        this.router.navigate([`companies/${this.companyId}/projects/${this.projectId}/drawings/${drawingId}/properties`])
+    goToProperties(documentId: number) {
+        this.router.navigate([`companies/${this.companyId}/projects/${this.projectId}/documents/${documentId}/properties`])
     }
 }

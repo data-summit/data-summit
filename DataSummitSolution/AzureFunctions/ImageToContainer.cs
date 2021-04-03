@@ -1,4 +1,4 @@
-
+using DataSummitModels.DB;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
-using DataSummitModels.DB;
+using DataSummitModels.DTO;
 
 namespace AzureFunctions
 {
@@ -36,19 +36,20 @@ namespace AzureFunctions
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
 
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
                 List<Task> lTasks = new List<Task>();
 
-                if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DrawingLayers>();
+                //if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
+                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
 
                 if (jsonContent.Length == 0) return new BadRequestObjectResult("Illegal input: No content");
                 //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
                 //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
-                if (imgUp.DrawingId < 0) return new BadRequestObjectResult("Illegal input: DrawingId is less than zero.");
+                if (imgUp.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
                 //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
                 //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
                 if (imgUp.FileName == null) return new BadRequestObjectResult("Illegal input: File name is empty.");
-                if (imgUp.Type == "") return new BadRequestObjectResult("Illegal input: Type is blank.");
+                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
                 if (imgUp.File.Length == 0) return new BadRequestObjectResult("Illegal input: PDF/Image is empty.");
                 if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
                 if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
@@ -77,11 +78,11 @@ namespace AzureFunctions
                 await cbc.SetPermissionsAsync(permissions);
 
                 //Add event checking that whether it is the first event to exist in list
-                if (imgUp.Tasks.Count == 0)
-                { imgUp.Tasks.Add(new Tasks("Container created", DateTime.Now)); }
+                if (Tasks.Count == 0)
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", DateTime.Now)); }
                 else
-                { imgUp.Tasks.Add(new Tasks("Container created", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp)); }
-                log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                 CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
                 lTasks.Add(Task.Run(async () =>
@@ -96,23 +97,27 @@ namespace AzureFunctions
                     cbbImage.Metadata.Add("Height", imgUp.HeightOriginal.ToString());
                     await cbbImage .SetMetadataAsync();
 
-                    imgUp.Tasks.Add(new Tasks("Image uploaded to blob", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
-                //Clear heavy payload content
-                imgUp.File = null;
+                    //Clear heavy payload content
+                    imgUp.File = null;
                     imgUp.Processed = true;
                     imgUp.BlobUrl = cbbImage.Uri.ToString();
                 }));
 
                 lTasks.Add(Task.Run(() =>
                 {
-                    Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
-                    imgUp.WidthOriginal = bmp.Width;
-                    imgUp.HeightOriginal = bmp.Height;
+                    //Image bmp = (Bitmap)((new ImageConverter()).ConvertFrom(imgUp.File));
+                    using (var ms = new MemoryStream(imgUp.File))
+                    {
+                        Image bmp = new Bitmap(ms);
+                        imgUp.WidthOriginal = bmp.Width;
+                        imgUp.HeightOriginal = bmp.Height;
 
-                    imgUp.Tasks.Add(new Tasks("Image dimensions assessed", imgUp.Tasks[imgUp.Tasks.Count - 1].TimeStamp));
-                    log.LogInformation(imgUp.Tasks[imgUp.Tasks.Count - 1].Name);
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
+                    }
                 }));
 
                 Task.WaitAll(lTasks.ToArray());

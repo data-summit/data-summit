@@ -23,7 +23,7 @@ export class CollectionOrderFormComponent implements OnInit {
 
     ngOnInit() {
         this.headers = [
-            "No. Drawings",
+            "No. Documents",
             "Page Size",
             "Container Type",
             "Urgency"

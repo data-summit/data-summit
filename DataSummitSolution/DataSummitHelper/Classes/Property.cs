@@ -14,7 +14,7 @@ namespace DataSummitHelper
             dataSummitDbContext = dbContext;
         }
 
-        public long CreateProperty(Properties property)
+        public long CreateProperty(DataSummitModels.DB.Property property)
         {
             long returnlong = long.MinValue;
             try

@@ -9,7 +9,7 @@ namespace AzureFunctions.Methods
 {
     public class OCRSources
     {
-        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitModels.DB.ImageGrids im)
+        public List<Sentences> FromAmazon(List<Amazon.Rekognition.Model.TextDetection> lDetections, DataSummitModels.DB.ImageGrid im)
         {
             List<Sentences> Sentences = new List<Sentences>();
             try
@@ -20,8 +20,8 @@ namespace AzureFunctions.Methods
                     {
                         //FileName = amRes.FileName
                     };
-                    //ImageGrid im = Drawings.First(i => i.Name == s.FileName);
-                    //ImageGrid im = Drawings.First(i => i.Path.Substring(i.Path.LastIndexOf("\\") + 1,
+                    //ImageGrid im = Documents.First(i => i.Name == s.FileName);
+                    //ImageGrid im = Documents.First(i => i.Path.Substring(i.Path.LastIndexOf("\\") + 1,
                     //                                        i.Path.Length - i.Path.LastIndexOf("\\") - 1) == s.FileName);
                     Models.Amazon.BoundingBox bb = new Models.Amazon.BoundingBox(
                         t.Geometry.BoundingBox.Height, t.Geometry.BoundingBox.Left,
