@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataSummitHelper
+namespace DataSummitService
 {
     public class DataSummitUser : IdentityUser
     {

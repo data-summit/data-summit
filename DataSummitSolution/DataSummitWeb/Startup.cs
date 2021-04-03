@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
-using DataSummitHelper.Dao;
-using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Interfaces;
-using DataSummitHelper.Interfaces.MachineLearning;
-using DataSummitHelper.Services;
-using DataSummitHelper.Services.MachineLearning;
+using DataSummitService.Dao;
+using DataSummitService.Dao.Interfaces;
+using DataSummitService.Interfaces;
+using DataSummitService.Interfaces.MachineLearning;
+using DataSummitService.Services;
+using DataSummitService.Services.MachineLearning;
 using DataSummitModels.DB;
-using DataSummitWeb.Classes;
+using DataSummitWeb.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -103,10 +103,10 @@ namespace DataSummitWeb
             services.AddTransient<IClassificationService, ClassificationService>();
             services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
 
+            services.AddTransient<IDataSummitDocumentsDao, DataSummitDocumentsDao>();
+
             services.AddTransient<IDataSummitAzureUrlsDao, DataSummitAzureDao>();
             services.AddTransient<IDataSummitMachineLearningDao, DataSummitMachineLearningDao>();
-            services.AddTransient<IDataSummitDocumentsDao, DataSummitDao>();
-
             services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
             services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
             services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();

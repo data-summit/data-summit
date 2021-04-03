@@ -1,6 +1,6 @@
-﻿using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Interfaces;
-using DataSummitHelper.Interfaces.MachineLearning;
+﻿using DataSummitService.Dao.Interfaces;
+using DataSummitService.Interfaces;
+using DataSummitService.Interfaces.MachineLearning;
 using DataSummitModels.Cloud;
 using Newtonsoft.Json;
 using System;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Services.MachineLearning
+namespace DataSummitService.Services.MachineLearning
 {
     public class ClassificationService : IClassificationService
     {

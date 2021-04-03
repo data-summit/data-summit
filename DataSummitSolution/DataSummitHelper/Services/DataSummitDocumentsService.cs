@@ -5,15 +5,15 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Dto;
-using DataSummitHelper.Interfaces;
-using DataSummitHelper.Interfaces.MachineLearning;
+using DataSummitService.Dao.Interfaces;
+using DataSummitService.Dto;
+using DataSummitService.Interfaces;
+using DataSummitService.Interfaces.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitModels.Enums;
 using Microsoft.Extensions.Configuration;
 
-namespace DataSummitHelper.Services
+namespace DataSummitService.Services
 {
     public class DataSummitDocumentsService : IDataSummitDocumentsService
     {

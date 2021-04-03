@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Interfaces.MachineLearning
+namespace DataSummitService.Interfaces.MachineLearning
 {
     public interface IObjectDetectionService
     {

@@ -1,6 +1,7 @@
-﻿using System;
+﻿using DataSummitModels.DB;
+using System;
 
-namespace DataSummitHelper.Interfaces
+namespace DataSummitService.Dto
 {
     public class TemplateDto
     {
@@ -11,7 +12,7 @@ namespace DataSummitHelper.Interfaces
         public int? Width { get; set; }
         public DateTime? CreatedDate { get; set; }
 
-        public TemplateDto(DataSummitModels.DB.TemplateVersion templateVersions)
+        public TemplateDto(TemplateVersion templateVersions)
         {
             TemplateVersionId = templateVersions.TemplateVersionId;
             TemplateName = templateVersions.Name;

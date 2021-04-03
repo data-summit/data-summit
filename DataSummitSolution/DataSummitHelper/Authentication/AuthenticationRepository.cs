@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper
+namespace DataSummitService
 {
     public class AuthenticationRepository : IDisposable
     {

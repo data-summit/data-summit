@@ -1,8 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs.Specialized;
-using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Interfaces;
+using DataSummitService.Dao.Interfaces;
+using DataSummitService.Interfaces;
 using DataSummitModels.DB;
 using DataSummitModels.Enums;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +20,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Services
+namespace DataSummitService.Services
 {
     public class AzureResourcesService : IAzureResourcesService
     {
@@ -381,7 +381,6 @@ namespace DataSummitHelper.Services
             //Create container if it doesn't exist
             await blobContainerClient.CreateIfNotExistsAsync();
 
-            var signedIdentifiers = new List<BlobSignedIdentifier>();
             var identifier = "mysignedidentifier";
             var readWritePermission = "rw";
             var blobSignedIdentifier = new BlobSignedIdentifier()
@@ -394,9 +393,12 @@ namespace DataSummitHelper.Services
                     Permissions = readWritePermission
                 }
             };
-            signedIdentifiers.Add(blobSignedIdentifier);
 
-            var containerInfo = await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
+            var signedIdentifiers = new List<BlobSignedIdentifier>
+            {
+                blobSignedIdentifier
+            };
+            _ = await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
             var blockBlobClient = blobContainerClient.GetBlockBlobClient(file.FileName);
             var documentFileExtensionEnum = GetDocumentExtensionEnum(file.ContentType);
 
@@ -440,6 +442,7 @@ namespace DataSummitHelper.Services
 
             return blockBlobClient.Uri.ToString();
         }
+
         public BlockBlobClient GetBlobByUrl(string blobUrl)
         {
             // Get storage account connection string data from Azure Secrets store

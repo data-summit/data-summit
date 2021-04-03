@@ -1,7 +1,7 @@
-using DataSummitHelper.Classes;
+using DataSummitService.Classes;
 using System;
 
-namespace DataSummitHelper.Dto
+namespace DataSummitService.Dto
 {
     /// <summary>
     /// </summary>
@@ -17,7 +17,7 @@ namespace DataSummitHelper.Dto
         public DocumentPropertyDto()
         { ; }
 
-        public DocumentPropertyDto(DocumentProperty documentProperty)
+        public DocumentPropertyDto(Classes.DocumentPropertyDto documentProperty)
         {
             TemplateAttributeId = documentProperty.TemplateAttributes.TemplateAttributeId;
             StandardName = documentProperty.TemplateAttributes.StandardAttribute.Name;

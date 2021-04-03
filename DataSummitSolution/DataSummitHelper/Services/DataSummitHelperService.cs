@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Dto;
-using DataSummitHelper.Interfaces;
+using DataSummitService.Dao.Interfaces;
+using DataSummitService.Dto;
+using DataSummitService.Interfaces;
 using DataSummitModels.DB;
 using Microsoft.Extensions.Configuration;
 
-namespace DataSummitHelper.Services
+namespace DataSummitService.Services
 {
     public class DataSummitHelperService : IDataSummitHelperService
     {

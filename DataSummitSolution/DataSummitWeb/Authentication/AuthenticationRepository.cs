@@ -1,10 +1,9 @@
-﻿using DataSummitWeb.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace DataSummitWeb.Classes
+namespace DataSummitWeb.Authentication
 {
     public class AuthenticationRepository : IDisposable
     {
