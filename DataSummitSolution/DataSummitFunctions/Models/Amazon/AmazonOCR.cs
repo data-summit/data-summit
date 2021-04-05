@@ -20,27 +20,29 @@ namespace DataSummitFunctions.Models.Amazon
         public AmazonOCR()
         { }
 
-        public String Run(System.Drawing.Image ImageData)
+        public string Run(System.Drawing.Image ImageData)
         {
-            String res = String.Empty;
+            var res = string.Empty;
             try
             {
                 AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(
-                    DataSummitFunctions.Keys.Amazon.AccessKeyID, 
-                    DataSummitFunctions.Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                    "",//DataSummitFunctions.Keys.Amazon.AccessKeyID, 
+                    "");//DataSummitFunctions.Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
                 DetectTextRequest detectTextRequest = new DetectTextRequest();
 
-                String json = String.Empty;
-                MemoryStream m = new MemoryStream();
+                var json = string.Empty;
+                var m = new MemoryStream();
                 ImageData.Save(m, System.Drawing.Imaging.ImageFormat.Jpeg);
                 m.Position = 0;
 
-                detectTextRequest.Image = new AWS.Rekognition.Model.Image();
-                detectTextRequest.Image.Bytes = m;
-                DetectTextResponse detectTextResponse = rekognitionClient.DetectText(detectTextRequest);
+                detectTextRequest.Image = new Image
+                {
+                    Bytes = m
+                };
+                var detectTextResponse = rekognitionClient.DetectText(detectTextRequest);
 
                 var r = detectTextResponse.TextDetections.Select(f => f.DetectedText).Distinct().ToList().First();
-                res = String.Join("", detectTextResponse.TextDetections.SelectMany(f => f.DetectedText).Distinct().ToList());
+                res = string.Join("", detectTextResponse.TextDetections.SelectMany(f => f.DetectedText).Distinct().ToList());
 
                 //using (StreamReader file = new StreamReader(strAmazonTestOCRResData))
                 //{

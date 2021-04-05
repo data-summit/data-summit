@@ -88,7 +88,7 @@ namespace DataSummitFunctions
 
                 // Request headers.
                 client.DefaultRequestHeaders.Add(
-                    "Ocp-Apim-Subscription-Key", Keys.Azure.VisionKey);
+                    "Ocp-Apim-Subscription-Key", ""); //Keys.Azure.VisionKey);
 
                 // Request parameters. 
                 // The language parameter doesn't specify a language, so the 
@@ -98,7 +98,7 @@ namespace DataSummitFunctions
                 string requestParameters = "language=unk&detectOrientation=true";
 
                 // Assemble the URI for the REST API method.
-                string uri = Keys.Azure.VisionUri + "?" + requestParameters;
+                string uri = null; //Keys.Azure.VisionUri + "?" + requestParameters;
 
                 List<Task> lOCRTasks = new List<Task>();
 

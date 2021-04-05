@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Amazon;
 #endregion
 
 namespace DataSummitFunctions
@@ -75,7 +76,8 @@ namespace DataSummitFunctions
                 //string sOCRRes = "All OCR Results.json";
                 //CloudBlockBlob jsonSentencesBlob = cbc.GetBlockBlobReference(sOCRRes);
 
-                AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(Keys.Amazon.AccessKeyID, Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                //AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(Keys.Amazon.AccessKeyID, Keys.Amazon.SecretAccessKey, AWS.RegionEndpoint.EUWest1);
+                AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient("", "", RegionEndpoint.EUWest1);
                 DetectTextRequest detectTextRequest = new DetectTextRequest();
 
                 List<Task> lOCRTasks = new List<Task>();
