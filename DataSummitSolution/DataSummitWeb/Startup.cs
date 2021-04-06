@@ -43,8 +43,6 @@ namespace DataSummitWeb
                 });
 
             var connectionString = Configuration["DatabaseConnection"];
-            connectionString = @"Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Persist Security Info=False;Integrated Security=SSPI;"; 
-            // User ID=lightosDB;Password=!Aa12345";
 
             // USE THIS FOR SIMPLE USER NAME AND PASSWORD or SERVER to SERVER comms
             services.AddAuthentication("Bearer")

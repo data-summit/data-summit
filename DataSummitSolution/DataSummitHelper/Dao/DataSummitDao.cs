@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataSummitService.Dao
 {
-    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitDocumentsDao,
-        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
+    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
     {
         private readonly DataSummitDbContext _context;
 
