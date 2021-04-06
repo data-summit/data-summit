@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataSummitWeb.Controllers
@@ -28,23 +29,18 @@ namespace DataSummitWeb.Controllers
         [HttpPost("uploadFiles")]
         public async Task<IActionResult> UploadFiles(List<IFormFile> files)
         {
-            var uploadedFileURLs = new HashSet<string>();
             try
             {
-                files.ForEach(async file =>
-                {
-                    if (file != null)
-                    {
-                        var uploadedFileUrl = await _azureService.UploadDataToBlob(file);
-                        uploadedFileURLs.Add(uploadedFileUrl);
-                    }
-                });
+                var tasks = files.Select(file => _azureService.UploadDataToBlob(file));
+                var results = await Task.WhenAll(tasks);
+
+                var uploadedFileURLs = new HashSet<string>(results);
+                return Ok(uploadedFileURLs);
             }
             catch (Exception ae)
             {
                 return Problem(detail: ae.Message, statusCode: 500);
             }
-            return Ok(uploadedFileURLs);
         }
     }
 }
