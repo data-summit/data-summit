@@ -409,31 +409,31 @@ namespace DataSummitService.Dao
         }
         #endregion
 
-        #region Azure URLs
-        public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
-        {
-            var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
-        }
-        public Tuple<string, string> GetAzureUrlByName(string name)
-        {
-            var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
-        }
-        #endregion
+        //#region Azure URLs
+        //public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
+        //{
+        //    var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
+        //    return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+        //}
+        //public Tuple<string, string> GetAzureUrlByName(string name)
+        //{
+        //    var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
+        //    return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+        //}
+        //#endregion
 
-        #region ML URLs
-        public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
-        {
-            var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
-            return azML;
-        }
-        public AzureMLResource GetMLUrlByName(string name)
-        {
-            var azML = _context.AzureMLResources.SingleOrDefault(ar => ar.Name == name);
-            return azML;
-        }
-        #endregion
+        //#region ML URLs
+        //public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
+        //{
+        //    var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
+        //    return azML;
+        //}
+        //public AzureMLResource GetMLUrlByName(string name)
+        //{
+        //    var azML = _context.AzureMLResources.SingleOrDefault(ar => ar.Name == name);
+        //    return azML;
+        //}
+        //#endregion
 
         public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
         {
