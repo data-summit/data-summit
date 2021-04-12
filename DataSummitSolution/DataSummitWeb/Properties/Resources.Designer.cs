@@ -70,15 +70,6 @@ namespace DataSummitWeb.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to /9j/4AAQSkZJRgABAQEAyADIAAD/4gxYSUNDX1BST0ZJTEUAAQEAAAxITGlubwIQAABtbnRyUkdCIFhZWiAHzgACAAkABgAxAABhY3NwTVNGVAAAAABJRUMgc1JHQgAAAAAAAAAAAAAAAAAA9tYAAQAAAADTLUhQICAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABFjcHJ0AAABUAAAADNkZXNjAAABhAAAAGx3dHB0AAAB8AAAABRia3B0AAACBAAAABRyWFlaAAACGAAAABRnWFlaAAACLAAAABRiWFlaAAACQAAAABRkbW5kAAACVAAAAHBkbWRkAAACxAAAAIh2dWVkAAADTAAAAIZ2aWV3AAAD1AAAACRsdW1pAAAD+AAAABRtZWFzAAAEDAAAACR0ZWNoAAAEMAAAAAxyVFJDAAAEPAAACAxnVFJDAAAEPAAACAxiVFJDAAAEPAAACAx0ZXh0AAAAAENv [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string TempImage {
-            get {
-                return ResourceManager.GetString("TempImage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Data Source=(localdb)\ProjectsV13;Initial Catalog=DataSummitDB;Integrated Security=True;Pooling=False;Connect Timeout=30.
         /// </summary>
         internal static string TestDbConnectionString {

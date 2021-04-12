@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataSummitWeb.Classes
+namespace DataSummitWeb.Authentication
 {
     public class AuthenticationContext : IdentityDbContext<IdentityUser>
     {

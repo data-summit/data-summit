@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataSummitHelper.Dao.Interfaces;
-using DataSummitHelper.Dto;
-using DataSummitHelper.Interfaces;
+using DataSummitService.Dao.Interfaces;
+using DataSummitService.Dto;
+using DataSummitService.Interfaces;
 
-namespace DataSummitHelper.Services
+namespace DataSummitService.Services
 {
     public class DataSummitTemplateAttributesService : IDataSummitTemplateAttributesService
     {

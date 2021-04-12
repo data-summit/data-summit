@@ -1,10 +1,10 @@
-using DataSummitHelper.Classes;
+using DataSummitService.Classes;
 using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Dao.Interfaces
+namespace DataSummitService.Dao.Interfaces
 {
     public interface IDataSummitDocumentsDao
     {

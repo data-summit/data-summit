@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace DataSummitWeb.Models
+namespace DataSummitWeb.Authentication
 {
     public class DataSummitUser : IdentityUser
     {

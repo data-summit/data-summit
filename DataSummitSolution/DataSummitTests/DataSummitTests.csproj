@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataSummitHelper\DataSummitHelper.csproj" />
+    <ProjectReference Include="..\DataSummitHelper\DataSummitService.csproj" />
   </ItemGroup>
 
 </Project>

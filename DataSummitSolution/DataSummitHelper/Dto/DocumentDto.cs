@@ -1,7 +1,7 @@
 using System;
 using DataSummitModels.DB;
 
-namespace DataSummitHelper.Dto
+namespace DataSummitService.Dto
 {
     /// <summary>
     /// </summary>

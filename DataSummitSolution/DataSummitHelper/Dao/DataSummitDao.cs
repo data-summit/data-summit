@@ -1,5 +1,5 @@
-using DataSummitHelper.Classes;
-using DataSummitHelper.Dao.Interfaces;
+using DataSummitService.Classes;
+using DataSummitService.Dao.Interfaces;
 using DataSummitModels.DB;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Dao
+namespace DataSummitService.Dao
 {
-    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitDocumentsDao,
-        IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
+    public partial class DataSummitDao : IDataSummitCompaniesDao, IDataSummitProjectsDao, IDataSummitPropertiesDao, IDataSummitTemplateAttributesDao, IDataSummitTemplatesDao
     {
         private readonly DataSummitDbContext _context;
 
@@ -305,9 +304,9 @@ namespace DataSummitHelper.Dao
             return templateAttributes;
         }
 
-        public async Task<List<DocumentProperty>> GetDocumentPropertiesByDocumentId(int documentId)
+        public async Task<List<DocumentPropertyDto>> GetDocumentPropertiesByDocumentId(int documentId)
         {
-            var documentProperties = new List<DocumentProperty>();
+            var documentProperties = new List<DocumentPropertyDto>();
             
             try
             {
@@ -320,7 +319,7 @@ namespace DataSummitHelper.Dao
                         profAtrrWords.TemplateAttribute.TemplateVersionId == document.TemplateVersionId
                         && profAtrrWords.Sentence.DocumentId == document.DocumentId
                     )
-                    .Select(a => new DocumentProperty()
+                    .Select(a => new DocumentPropertyDto()
                     {
                         Sentences = new DataSummitModels.Cloud.Consolidated.Sentences()
                         {

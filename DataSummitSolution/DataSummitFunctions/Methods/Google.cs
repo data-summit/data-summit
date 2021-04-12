@@ -140,10 +140,10 @@ namespace DataSummitFunctions.Methods
                 iaf.features.Add(new Features("TEXT_DETECTION"));
                 iaf.image.content = ImageContent;
                 r.requests.Add(iaf);
-                String json = JsonConvert.SerializeObject(r);
+                string json = JsonConvert.SerializeObject(r);
 
                 //Google's literal version:  Uri uri = new Uri("POST https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDMe0LtaxFvFvDCTaEV-05IT792tvxpmbA");
-                Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + Keys.Google.API_Key);
+                Uri uri = new Uri("https://vision.googleapis.com/v1/images:annotate?key=" + ""); //Keys.Google.API_Key);
 
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(uri);
                 //req1.Timeout = 3600;

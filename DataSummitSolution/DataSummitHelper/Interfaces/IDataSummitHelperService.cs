@@ -1,10 +1,10 @@
-using DataSummitHelper.Dto;
+using DataSummitService.Dto;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Interfaces
+namespace DataSummitService.Interfaces
 {
     public interface IDataSummitHelperService
     {

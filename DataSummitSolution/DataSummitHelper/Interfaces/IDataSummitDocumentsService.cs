@@ -1,10 +1,10 @@
-using DataSummitHelper.Dto;
+using DataSummitService.Dto;
 using DataSummitModels.DB;
 using DataSummitModels.Enums;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Interfaces
+namespace DataSummitService.Interfaces
 {
     public interface IDataSummitDocumentsService
     {

@@ -1,6 +1,7 @@
 using DataSummitService.Classes;
 using DataSummitService.Dao.Interfaces;
 using DataSummitModels.DB;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DataSummitService.Dao
 {
-    public partial class DataSummitMachineLearningDao : IDataSummitMachineLearningDao
+    public partial class DataSummitDocumentsDao : IDataSummitDocumentsDao
     {
         private readonly DataSummitDbContext _context;
 
-        public DataSummitMachineLearningDao(DataSummitDbContext context)
+        public DataSummitDocumentsDao(DataSummitDbContext context)
         {
             _context = context;
 
@@ -28,176 +29,6 @@ namespace DataSummitService.Dao
             //    throw new Exception("DataSummit DbContext contains no results");
             //}
         }
-
-        public async Task DeleteTemplateAttribute(long templateAttributeId)
-        {
-            try
-            {
-                var templateAttribute = new DataSummitModels.DB.TemplateAttribute()
-                { TemplateAttributeId = templateAttributeId };
-                _context.TemplateAttributes.Attach(templateAttribute);
-                _context.TemplateAttributes.Remove(templateAttribute);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
-        #region Companies
-        public async Task<List<DataSummitModels.DB.Company>> GetAllCompanies()
-        {
-            return await _context.Companies.ToListAsync();
-        }
-
-        public async Task CreateCompany(DataSummitModels.DB.Company company)
-        {
-            await _context.Companies.AddAsync(company);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCompany(DataSummitModels.DB.Company company)
-        {
-            try
-            {
-                _context.Companies.Update(company);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task DeleteCompany(int companyId)
-        {
-            try
-            {
-                var company = new DataSummitModels.DB.Company() { CompanyId = companyId };
-                _context.Companies.Attach(company);
-                _context.Companies.Remove(company);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<DataSummitModels.DB.Company> GetCompanyById(int id)
-        {
-            return await _context.Companies.SingleOrDefaultAsync(c => c.CompanyId == id);
-        }
-        #endregion
-
-        #region Templates
-        public async Task<List<DataSummitModels.DB.TemplateVersion>> GetCompanyTemplateVersions(int companyId)
-        {
-            var templateVersions = new List<DataSummitModels.DB.TemplateVersion>();
-
-            try
-            {
-                templateVersions = await _context.TemplateVersions
-                    .Where(p => p.CompanyId == companyId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-                throw;
-            }
-
-            return templateVersions;
-        }
-
-        public async Task<List<DataSummitModels.DB.TemplateVersion>> GetProjectTemplateVersions(int projectId)
-        {
-            var templateVersions = new List<DataSummitModels.DB.TemplateVersion>();
-
-            try
-            {
-                templateVersions = await _context.TemplateVersions
-                    .Where(pv => pv.Company.Projects
-                        .Select(p => p.ProjectId)
-                        .Single() == projectId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-                throw;
-            }
-
-            return templateVersions;
-        }
-        #endregion
-
-        #region Projects
-        public async Task<List<DataSummitModels.DB.Project>> GetAllCompanyProjects(int companyId)
-        {
-            var projects = new List<DataSummitModels.DB.Project>();
-            try
-            {
-                projects = await _context.Projects
-                    .Where(p => p.CompanyId == companyId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
-
-            return projects;
-        }
-
-        public async Task CreateProject(DataSummitModels.DB.Project project)
-        {
-            try
-            {
-                await _context.Projects.AddAsync(project);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task UpdateProjectName(DataSummitModels.DB.Project project)
-        {
-            try
-            {
-                _context.Projects.Attach(project);
-                _context.Entry(project).Property("Name").IsModified = true;
-                _context.Entry(project).Property("StorageAccountName").IsModified = false;
-                _context.Entry(project).Property("StorageAccountKey").IsModified = false;
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async Task DeleteProject(int projectId)
-        {
-            try
-            {
-                var project = new DataSummitModels.DB.Project() { ProjectId = projectId };
-                _context.Projects.Attach(project);
-                _context.Projects.Remove(project);
-                await _context.SaveChangesAsync();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
-        public async Task<DataSummitModels.DB.Project> GetProjectById(int id)
-        {
-            return await _context.Projects.SingleOrDefaultAsync(p => p.ProjectId == id);
-        }
-        #endregion
 
         #region Documents
         public async Task CreateDocument(Document document)
@@ -252,7 +83,7 @@ namespace DataSummitService.Dao
         {
             var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
 
-            doc.DocumentFeatures.Add(documentFeature);
+            doc?.DocumentFeatures.Add(documentFeature);
             _context.SaveChanges();
         }
 
@@ -383,66 +214,5 @@ namespace DataSummitService.Dao
             return documents;
         }
         #endregion
-
-        #region Properties
-        public async Task<DataSummitModels.DB.Property> GetPropertyById(int id)
-        {
-            return await _context.Properties.SingleOrDefaultAsync(p => p.PropertyId == id);
-        }
-        public async Task<bool> DeleteProperty(long propertyId)
-        {
-            bool result;
-            try
-            {
-                var property = new DataSummitModels.DB.Property() { PropertyId = propertyId };
-                _context.Properties.Attach(property);
-                _context.Properties.Remove(property);
-                await _context.SaveChangesAsync();
-                result = true;
-            }
-            catch
-            {
-                throw;
-            }
-            return result;
-        }
-        #endregion
-
-        #region Azure URLs
-        public async Task<Tuple<string, string>> GetAzureUrlByNameAsync(string name)
-        {
-            var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
-        }
-        public Tuple<string, string> GetAzureUrlByName(string name)
-        {
-            var urlKey =  _context.AzureCompanyResourceUrls.SingleOrDefault(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
-        }
-        #endregion
-
-        #region ML URLs
-        public async Task<AzureMLResource> GetMLUrlByName(string name)
-        {
-            var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
-            return azML;
-        }
-        #endregion
-
-        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
-        {
-            var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
-            try
-            {
-                templateAttributes = await _context.TemplateAttributes
-                    .Where(p => p.TemplateVersionId == templateId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
-
-            return templateAttributes;
-        }
     }
 }

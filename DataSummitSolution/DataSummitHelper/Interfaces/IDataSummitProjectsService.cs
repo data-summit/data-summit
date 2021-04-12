@@ -1,7 +1,8 @@
+using DataSummitService.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Interfaces
+namespace DataSummitService.Interfaces
 {
     public interface IDataSummitProjectsService
     {

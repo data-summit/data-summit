@@ -1,4 +1,4 @@
-﻿using DataSummitWeb.Models;
+﻿using DataSummitWeb.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 

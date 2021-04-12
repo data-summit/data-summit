@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataSummitHelper.Interfaces.MachineLearning
+namespace DataSummitService.Interfaces.MachineLearning
 {
     public interface IClassificationService
     {
