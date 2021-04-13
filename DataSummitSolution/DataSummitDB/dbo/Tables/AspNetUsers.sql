@@ -27,10 +27,7 @@
     [PositionTitle]		   NVARCHAR (50)	  NULL,
 	[UserTypeId]		   TINYINT			  NULL,
     [CompanyId]			   INT				  NULL,
-    CONSTRAINT [PK_AspNetUser] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_AspNetUsers_Companies] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([CompanyId]) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT [FK_AspNetUsers_UserTypes] FOREIGN KEY ([UserTypeId]) REFERENCES [dbo].[UserTypes] ([UserTypeId]) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT [FK_AspNetUsers_Genders] FOREIGN KEY ([GenderId]) REFERENCES [dbo].[Genders] ([GenderId]) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT [PK_AspNetUser] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 
 

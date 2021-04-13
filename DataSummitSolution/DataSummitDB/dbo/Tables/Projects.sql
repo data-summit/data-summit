@@ -7,7 +7,5 @@
     [CreatedDate]		    DATETIME        NOT NULL,
     [UserId]			    BIGINT          NOT NULL,
     [Region]                NVARCHAR(31)    NULL, 
-    CONSTRAINT [PK_ProjectId] PRIMARY KEY CLUSTERED ([ProjectId] ASC),
-    CONSTRAINT [FK_Projects_Companies] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([CompanyId]) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT [PK_ProjectId] PRIMARY KEY CLUSTERED ([ProjectId] ASC)
 );
-

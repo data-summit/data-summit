@@ -1,4 +1,6 @@
-﻿using DataSummitService.Interfaces;
+﻿using DataSummitService.Dao.Interfaces;
+using DataSummitService.Interfaces;
+using DataSummitService.Interfaces.MachineLearning;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +15,14 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public partial class DocumentsController : Controller
     {
-        private readonly IAzureResourcesService _azureService;
+        private readonly IDataSummitDocumentsService _dataSummitDocuments;
+        private readonly IAzureResourcesService _azureResources;
+        private readonly IClassificationService _classificationService;
+        private readonly IDataSummitDocumentsDao _documentsDao;
 
-        public DocumentsController(IDataSummitDocumentsService dataSummitDocuments, 
+        public DocumentsController(IDataSummitDocumentsService dataSummitDocuments,
                                    IAzureResourcesService azureResources,
-                                   IClassificationService classificationService, 
+                                   IClassificationService classificationService,
                                    IDataSummitDocumentsDao documentsDao)
         {
             _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
@@ -56,13 +61,13 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost("determineDocumentType")]
-        public async Task<IDictionary<string, string>> DetermineDocumentType([FromBody] HashSet<string> blobUrls)
+        public async Task<IActionResult> DetermineDocumentType([FromBody] HashSet<string> blobUrls)
         {
             IDictionary<string, string> documentsAndTypes = new Dictionary<string, string>();
             try
             {
                 List<Task> tasks = new List<Task>();
-                
+
                 foreach (var url in blobUrls)
                 {
                     var kv = await _classificationService.GetDocumentType(url);
@@ -105,16 +110,15 @@ namespace DataSummitWeb.Controllers
 
                 //    documentsAndTypes.Add(blobUrl, documentTypeEnum.ToString());
                 //}
-            }
-            catch (Exception ae)
-            {
-                //TODO log exception
-            }
-            return documentsAndTypes;
-        }
+                //    }
+                //    catch (Exception ae)
+                //    {
+                //        //TODO log exception
+                //    }
+                //    return documentsAndTypes;
+                //}
 
-                var uploadedFileURLs = new HashSet<string>(results);
-                return Ok(uploadedFileURLs);
+                return Ok(documentsAndTypes);
             }
             catch (Exception ae)
             {

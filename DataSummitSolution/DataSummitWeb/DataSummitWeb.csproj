@@ -13,11 +13,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="Resources\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="DTO\**" />
+    <Content Remove="Enums\**" />
+    <Content Remove="Resources\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="DTO\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Resources\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="DTO\**" />
+    <None Remove="Enums\**" />
+    <None Remove="Resources\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Enums\" />
-    <Folder Include="Resources\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

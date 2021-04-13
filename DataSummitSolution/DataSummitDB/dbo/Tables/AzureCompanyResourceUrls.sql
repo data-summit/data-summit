@@ -6,7 +6,6 @@
 	[Key]						NVARCHAR(511)			NOT NULL,
 	[ResourceType]				NVARCHAR(63)			NOT NULL,
     [CompanyId]					INT						NOT NULL,
-	CONSTRAINT [PK_AzureCompanyResourceUrlId] PRIMARY KEY CLUSTERED ([AzureCompanyResourceUrlId] ASC),
-	CONSTRAINT [FK_AzureCompanyResourceUrls_Companies] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([CompanyId]) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT [PK_AzureCompanyResourceUrlId] PRIMARY KEY CLUSTERED ([AzureCompanyResourceUrlId] ASC)
 )
  

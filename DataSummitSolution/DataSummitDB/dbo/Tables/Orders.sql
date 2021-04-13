@@ -15,7 +15,6 @@
     [ShipCountry]    NVARCHAR (15) NULL,
     [CreatedDate]    DATETIME      NULL,
     [UserId]         BIGINT        NULL,
-    CONSTRAINT [PK_Orders] PRIMARY KEY CLUSTERED ([OrderId] ASC),
-    CONSTRAINT [FK_Orders_Companies] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([CompanyId])
+    CONSTRAINT [PK_Orders] PRIMARY KEY CLUSTERED ([OrderId] ASC)
 );
 
