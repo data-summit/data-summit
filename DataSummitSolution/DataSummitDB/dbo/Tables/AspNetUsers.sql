@@ -25,7 +25,6 @@
     [GenderId]			   TINYINT			  NULL	DEFAULT 1, 
     [CreatedDate]		   DATETIME		      NULL, 
     [PositionTitle]		   NVARCHAR (50)	  NULL,
-	[UserTypeId]		   TINYINT			  NULL,
     [CompanyId]			   INT				  NULL,
     CONSTRAINT [PK_AspNetUser] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AspNetUsers_Companies] FOREIGN KEY ([CompanyId]) REFERENCES [dbo].[Companies] ([CompanyId]) ON DELETE CASCADE ON UPDATE CASCADE,
