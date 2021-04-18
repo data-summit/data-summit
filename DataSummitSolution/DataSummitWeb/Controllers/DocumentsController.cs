@@ -74,50 +74,6 @@ namespace DataSummitWeb.Controllers
                     documentsAndTypes.Add(kv);
                 }
 
-                //blobUrls.ToList().ForEach(url =>
-                //    tasks.Add(Task.Run(async () =>
-                //    {
-                //        documentsAndTypes.Add(await _classificationService.GetDocumentType(url));
-                //    }))
-                //);
-                //await Task.WhenAll(tasks.ToArray());
-
-                //foreach (var blobUrl in blobUrls)
-                //{
-                //    var documentTypeClassification = await _classificationService.GetPrediction(blobUrl, "DocumentType", "Classification");
-                //    var documentTypeEnum = _dataSummitDocuments.DocumentType(documentTypeClassification.TagName);
-                //    var typeConfidence = Math.Round(documentTypeClassification.Probability, 3);
-
-                //    // Update blob metadata
-                //    List<KeyValuePair<string, string>> additionalMetaData = new List<KeyValuePair<string, string>>
-                //    {
-                //        new KeyValuePair<string, string>("DocumentType", documentTypeEnum.ToString()),
-                //        new KeyValuePair<string, string>("DocumentTypeConfidence", typeConfidence.ToString())
-                //    };
-
-                //    await _azureResources.AddMetadataToBlob(blobUrl, additionalMetaData);
-
-                //    //Persist in database
-                //    var doc = _documentsDao.GetDocumentsByUrl(blobUrl);
-                //    doc.DocumentType = new DocumentType()
-                //    {
-                //        Name = documentTypeEnum.ToString(),
-                //        DocumentTypeId = (byte)documentTypeEnum
-                //    };
-
-                //    doc.AzureConfidence = (decimal)typeConfidence;
-                //    _documentsDao.UpdateDocument(doc);
-
-                //    documentsAndTypes.Add(blobUrl, documentTypeEnum.ToString());
-                //}
-                //    }
-                //    catch (Exception ae)
-                //    {
-                //        //TODO log exception
-                //    }
-                //    return documentsAndTypes;
-                //}
-
                 return Ok(documentsAndTypes);
             }
             catch (Exception ae)
