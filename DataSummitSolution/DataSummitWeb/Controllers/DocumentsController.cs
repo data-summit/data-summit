@@ -16,18 +16,18 @@ namespace DataSummitWeb.Controllers
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitDocumentsService _dataSummitDocuments;
-        private readonly IAzureResourcesService _azureResources;
+        private readonly IAzureResourcesService _azureResourcesService;
         private readonly IClassificationService _classificationService;
         private readonly IDataSummitDocumentsDao _documentsDao;
 
         public DocumentsController(IDataSummitDocumentsService dataSummitDocuments,
-                                   IAzureResourcesService azureResources,
+                                   IAzureResourcesService azureResourcesService,
                                    IClassificationService classificationService,
                                    IDataSummitDocumentsDao documentsDao)
         {
             _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
             _dataSummitDocuments = dataSummitDocuments ?? throw new ArgumentNullException(nameof(dataSummitDocuments));
-            _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
+            _azureResourcesService = azureResourcesService ?? throw new ArgumentNullException(nameof(azureResourcesService));
             _classificationService = classificationService ?? throw new ArgumentNullException(nameof(classificationService));
         }
 
@@ -43,14 +43,8 @@ namespace DataSummitWeb.Controllers
             var uploadedFileURLs = new HashSet<string>();
             try
             {
-                files.ForEach(async file =>
-                {
-                    if (file != null)
-                    {
-                        var uploadedFileUrl = await _azureResources.UploadDataToBlob(file);
-                        uploadedFileURLs.Add(uploadedFileUrl);
-                    }
-                });
+                var tasks = files.Select(file => _azureResourcesService.UploadDataToBlob(file));
+                var results = await Task.WhenAll(tasks);
             }
             catch (Exception ae)
             {
