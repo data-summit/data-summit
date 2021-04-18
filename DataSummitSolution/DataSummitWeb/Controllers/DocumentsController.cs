@@ -57,18 +57,12 @@ namespace DataSummitWeb.Controllers
         [HttpPost("determineDocumentType")]
         public async Task<IActionResult> DetermineDocumentType([FromBody] HashSet<string> blobUrls)
         {
-            IDictionary<string, string> documentsAndTypes = new Dictionary<string, string>();
             try
             {
-                List<Task> tasks = new List<Task>();
+                var tasks = blobUrls.Select(blobUrl => _classificationService.GetDocumentType(blobUrl));
+                var results = await Task.WhenAll(tasks);
 
-                foreach (var url in blobUrls)
-                {
-                    var kv = await _classificationService.GetDocumentType(url);
-                    documentsAndTypes.Add(kv);
-                }
-
-                return Ok(documentsAndTypes);
+                return Ok(results);
             }
             catch (Exception ae)
             {
