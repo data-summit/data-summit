@@ -9,7 +9,11 @@ namespace DataSummitService.Dao.Interfaces
     public interface IDataSummitAzureUrlsDao
     {
         #region Azure URLs
-        Task<Tuple<string, string>> GetAzureUrlByName(string name);
+        Task<Tuple<string, string>> GetAzureFunctionUrlByName(string name);
+        #endregion
+
+        #region Machine Learning URLs
+        Task<AzureMLResource> GetMLUrlByNameAsync(string name);
         #endregion
     }
 }

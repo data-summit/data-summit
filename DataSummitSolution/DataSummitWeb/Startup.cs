@@ -102,9 +102,8 @@ namespace DataSummitWeb
             services.AddTransient<IObjectDetectionService, ObjectDetectionService>();
 
             services.AddTransient<IDataSummitDocumentsDao, DataSummitDocumentsDao>();
-
             services.AddTransient<IDataSummitAzureUrlsDao, DataSummitAzureDao>();
-            services.AddTransient<IDataSummitMachineLearningDao, DataSummitMachineLearningDao>();
+
             services.AddTransient<IDataSummitCompaniesDao, DataSummitDao>();
             services.AddTransient<IDataSummitProjectsDao, DataSummitDao>();
             services.AddTransient<IDataSummitPropertiesDao, DataSummitDao>();

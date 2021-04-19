@@ -1,4 +1,6 @@
-﻿using DataSummitService.Interfaces;
+﻿using DataSummitService.Dao.Interfaces;
+using DataSummitService.Interfaces;
+using DataSummitService.Interfaces.MachineLearning;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,11 +15,20 @@ namespace DataSummitWeb.Controllers
     [Route("api/[controller]")]
     public partial class DocumentsController : Controller
     {
-        private readonly IAzureResourcesService _azureService;
+        private readonly IDataSummitDocumentsService _dataSummitDocuments;
+        private readonly IAzureResourcesService _azureResourcesService;
+        private readonly IClassificationService _classificationService;
+        private readonly IDataSummitDocumentsDao _documentsDao;
 
-        public DocumentsController(IAzureResourcesService azureResources)
+        public DocumentsController(IDataSummitDocumentsService dataSummitDocuments,
+                                   IAzureResourcesService azureResourcesService,
+                                   IClassificationService classificationService,
+                                   IDataSummitDocumentsDao documentsDao)
         {
-            _azureService = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
+            _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
+            _dataSummitDocuments = dataSummitDocuments ?? throw new ArgumentNullException(nameof(dataSummitDocuments));
+            _azureResourcesService = azureResourcesService ?? throw new ArgumentNullException(nameof(azureResourcesService));
+            _classificationService = classificationService ?? throw new ArgumentNullException(nameof(classificationService));
         }
 
         [HttpGet]
@@ -29,13 +40,29 @@ namespace DataSummitWeb.Controllers
         [HttpPost("uploadFiles")]
         public async Task<IActionResult> UploadFiles(List<IFormFile> files)
         {
+            var uploadedFileURLs = new HashSet<string>();
             try
             {
-                var tasks = files.Select(file => _azureService.UploadDataToBlob(file));
+                var tasks = files.Select(file => _azureResourcesService.UploadDataToBlob(file));
+                var results = await Task.WhenAll(tasks);
+            }
+            catch (Exception ae)
+            {
+                //TODO log exception
+                return Problem(detail: ae.Message, statusCode: 500);
+            }
+            return Ok(uploadedFileURLs);
+        }
+
+        [HttpPost("determineDocumentType")]
+        public async Task<IActionResult> DetermineDocumentType([FromBody] HashSet<string> blobUrls)
+        {
+            try
+            {
+                var tasks = blobUrls.Select(blobUrl => _classificationService.GetDocumentType(blobUrl));
                 var results = await Task.WhenAll(tasks);
 
-                var uploadedFileURLs = new HashSet<string>(results);
-                return Ok(uploadedFileURLs);
+                return Ok(results);
             }
             catch (Exception ae)
             {

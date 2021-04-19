@@ -22,13 +22,11 @@ namespace DataSummitService.Services
         private readonly IAzureResourcesService _azureResources;
         private readonly IObjectDetectionService _objectDetectionService;
         private readonly IDataSummitAzureUrlsDao _azureDao;
-        private readonly IDataSummitMachineLearningDao _machineLearningDao;
 
         public DataSummitDocumentsService(IDataSummitDocumentsDao documentsDao,
                                           IDataSummitTemplateAttributesDao templateAttributesDao,
                                           IObjectDetectionService objectDetectionService,
                                           IDataSummitAzureUrlsDao azureDao,
-                                          IDataSummitMachineLearningDao machineLearningDao,
                                           IAzureResourcesService azureResources)
         {
             _documentsDao = documentsDao;
@@ -36,7 +34,6 @@ namespace DataSummitService.Services
             _azureResources = azureResources;
             _objectDetectionService = objectDetectionService ?? throw new ArgumentNullException(nameof(objectDetectionService));
             _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
-            _machineLearningDao = machineLearningDao ?? throw new ArgumentNullException(nameof(machineLearningDao));
 
         }
 
@@ -94,8 +91,8 @@ namespace DataSummitService.Services
         public async Task UpdateDocumentFeature(string documentUrl)
         {
 
-            var azureFunction = await _azureDao.GetAzureUrlByName("ObjectDetection");
-            var azureAI = await _machineLearningDao.GetMLUrlByName("DrawingLayout");
+            var azureFunction = await _azureDao.GetAzureFunctionUrlByName("ObjectDetection");
+            var azureAI = await _azureDao.GetMLUrlByNameAsync("DrawingLayout");
             var documentPredictions = await _objectDetectionService.GetPrediction(documentUrl, azureFunction, azureAI, 0.05);
             if (documentPredictions?.Any() ?? false)
             {
