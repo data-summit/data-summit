@@ -57,7 +57,10 @@ namespace AzureFunctions.MachineLearning
                         new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(cvML.PredictionKey));
                         predictionApi.Endpoint = "https://documentlayout.cognitiveservices.azure.com/"; // cvML.MLUrl;
 
-                        var result = predictionApi.ClassifyImageUrl(project.Id, "Iteration4", new ImageUrl(cvML.BlobUrl) { Url = cvML.BlobUrl });
+                        var iteration = cvML.MLUrl.Substring(
+                            cvML.MLUrl.LastIndexOf("/Iteration") + 1,
+                            cvML.MLUrl.LastIndexOf("/") - cvML.MLUrl.LastIndexOf("/Iteration") - 1);
+                        var result = predictionApi.ClassifyImageUrl(project.Id, iteration, new ImageUrl(cvML.BlobUrl) { Url = cvML.BlobUrl });
 
                         foreach (var c in result.Predictions)
                         {

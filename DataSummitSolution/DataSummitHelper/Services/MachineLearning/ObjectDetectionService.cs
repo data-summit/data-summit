@@ -13,26 +13,84 @@ namespace DataSummitService.Services.MachineLearning
 {
     public class ObjectDetectionService : IObjectDetectionService
     {
+        private readonly IDataSummitAzureUrlsDao _azureDao;
+        private readonly IAzureResourcesService _azureResources;
         private readonly IDataSummitHelperService _dataSummitHelper;
+        private readonly IDataSummitDocumentsDao _dataSummitDocumentsDao;
+        private readonly IDataSummitDocumentsService _dataSummitDocumentsService;
 
-        public ObjectDetectionService(IDataSummitHelperService dataSummitHelper)
+        public ObjectDetectionService(IDataSummitAzureUrlsDao azureDao,
+                                     IAzureResourcesService azureResources,
+                                     IDataSummitHelperService dataSummitHelper,
+                                     IDataSummitDocumentsDao dataSummitDocumentsDao,
+                                     IDataSummitDocumentsService dataSummitDocumentsService)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
+            _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
+            _dataSummitDocumentsDao = dataSummitDocumentsDao ?? throw new ArgumentNullException(nameof(dataSummitDocumentsDao));
+            _dataSummitDocumentsService = dataSummitDocumentsService ?? throw new ArgumentNullException(nameof(dataSummitDocumentsService));
         }
 
-        public async Task<List<MLPrediction>> GetPrediction(string url, 
-                                                            Tuple<string, string> azureFunction, 
-                                                            AzureMLResource azureAI, 
-                                                            double minThreshold = 0.65)
+        public async Task<KeyValuePair<string, string>> GetDrawingLayout(string url)
         {
-            var results = new List<MLPrediction>();
+            List<DocumentFeature> Features = new List<DocumentFeature>();
+            
+            var drawingLayout = await GetPrediction(url, "DrawingLayout", "ObjectDetection");
+            if (drawingLayout != null && drawingLayout.Count > 0)
+            {
+                var doc = _dataSummitDocumentsDao.GetDocumentsByUrl(url);
+                foreach (var item in drawingLayout)
+                {
+                    var itemType = _dataSummitDocumentsService.DrawingLayoutComponent(item.TagName);
+                    var typeConfidence = Math.Round(item.Probability, 3);
+
+                    //Persist in database
+                    var docFeature = new DocumentFeature()
+                    {
+                        Confidence = (decimal)typeConfidence,
+                        Feature = "Object",
+                        Value = itemType.ToString(),
+                        Height = (long)Math.Abs(item.BoundingBox.Max.X - item.BoundingBox.Min.X),
+                        Width = (long)Math.Abs(item.BoundingBox.Max.Y - item.BoundingBox.Min.Y),
+                        Vendor = "Custom Vision"
+                    };
+
+                    // Top
+                    if (item.BoundingBox.Min.Y < item.BoundingBox.Max.Y)
+                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Max.Y, 5); }
+                    else
+                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Min.Y, 5); }
+                    // Left
+                    if (item.BoundingBox.Min.X > item.BoundingBox.Max.X)
+                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Max.X, 5); }
+                    else
+                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Min.X, 5); }
+                    Features.Add(docFeature);                   
+                }
+                // Remove existing features
+                doc.DocumentFeatures.Clear();
+                // Add new detected features
+                doc.DocumentFeatures = Features;
+
+                _dataSummitDocumentsDao.UpdateDocument(doc);
+            }
+            return new KeyValuePair<string, string>(url, Features.Count.ToString());
+        }
+
+        public async Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName,
+            string azureResourceName, double minThreshold = 0.15)
+        {
+            var result = new List<MLPrediction>();
+            var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
+            var azureAI = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {
                 var customVisionRequest = new CustomVision()
                 {
                     BlobUrl = url,
-                    MLUrl = azureAI.Url,
+                    MLUrl = azureAI.Url,    
                     TrainingKey = azureAI.TrainingKey,
                     PredictionKey = azureAI.PredicitionKey,
                     MLProjectName = azureAI.Name,
@@ -43,9 +101,11 @@ namespace DataSummitService.Services.MachineLearning
                 var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Item1 + "?code=" + azureFunction.Item2),
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
-                results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+
+                var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                result = results.OrderBy(f => f.Probability).ToList();
             }
-            return results;
+            return result;
         }
     }
 }

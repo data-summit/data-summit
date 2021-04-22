@@ -496,6 +496,11 @@ namespace DataSummitModels.DB
                     .WithMany(p => p.DocumentFeatures)
                     .HasForeignKey(d => d.DocumentId)
                     .HasConstraintName("FK_DocumentFeatures_Documents");
+
+                entity.Property(e => e.Height).HasColumnType("decimal(6, 5)");
+                entity.Property(e => e.Width).HasColumnType("decimal(6, 5)");
+                entity.Property(e => e.Top).HasColumnType("decimal(6, 5)");
+                entity.Property(e => e.Left).HasColumnType("decimal(6, 5)");
             });
 
             modelBuilder.Entity<DocumentLayer>(entity =>
