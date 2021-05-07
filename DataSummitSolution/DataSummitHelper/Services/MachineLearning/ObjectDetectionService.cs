@@ -47,7 +47,6 @@ namespace DataSummitService.Services.MachineLearning
                     var itemType = _dataSummitDocumentsService.DrawingLayoutComponent(item.TagName);
                     var typeConfidence = Math.Round(item.Probability, predictionAccuracy);
 
-                    //Persist in database
                     var docFeature = new DocumentFeature()
                     {
                         Confidence = (decimal)typeConfidence,
