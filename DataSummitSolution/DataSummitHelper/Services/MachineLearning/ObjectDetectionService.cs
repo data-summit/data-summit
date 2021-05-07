@@ -85,17 +85,17 @@ namespace DataSummitService.Services.MachineLearning
         {
             var result = new List<MLPrediction>();
             var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
-            var azureAI = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
+            var azureML = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
 
-            if (azureFunction != null && azureAI != null)
+            if (azureFunction != null && azureML != null)
             {
                 var customVisionRequest = new CustomVision()
                 {
                     BlobUrl = url,
-                    MLUrl = azureAI.Url,    
-                    TrainingKey = azureAI.TrainingKey,
-                    PredictionKey = azureAI.PredicitionKey,
-                    MLProjectName = azureAI.Name,
+                    MLUrl = azureML.Url,    
+                    TrainingKey = azureML.TrainingKey,
+                    PredictionKey = azureML.PredicitionKey,
+                    MLProjectName = azureML.Name,
                     MinThreshold = minThreshold
                 };
 
