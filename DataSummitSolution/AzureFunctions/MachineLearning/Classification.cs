@@ -62,7 +62,7 @@ namespace AzureFunctions.MachineLearning
                         var imageUrl = new ImageUrl(customVisionData.BlobUrl);
                         var imagePrediction = predictionApi.ClassifyImageUrl(project.Id, iteration, imageUrl, customVisionData.BlobUrl);
 
-                        foreach (var c in result.Predictions)
+                        foreach (var c in imagePrediction.Predictions)
                         {
                             if (c.Probability > customVisionData.MinThreshold)
                             {
