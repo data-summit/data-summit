@@ -104,8 +104,8 @@ namespace DataSummitService.Services.MachineLearning
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
 
-                var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
-                result = results.OrderBy(f => f.Probability).ToList();
+                var objectDetectionPredictions = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                result = objectDetectionPredictions.OrderBy(f => f.Probability).ToList();
             }
             return result;
         }
