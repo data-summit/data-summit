@@ -32,7 +32,7 @@ namespace DataSummitService.Services.MachineLearning
             _dataSummitDocumentsService = dataSummitDocumentsService ?? throw new ArgumentNullException(nameof(dataSummitDocumentsService));
         }
 
-        public async Task<KeyValuePair<string, string>> GetDrawingLayout(string url)
+        public async Task<KeyValuePair<string, int>> GetDrawingLayout(string url)
         {
             List<DocumentFeature> Features = new List<DocumentFeature>();
 
@@ -77,7 +77,7 @@ namespace DataSummitService.Services.MachineLearning
 
                 _dataSummitDocumentsDao.UpdateDocument(doc);
             }
-            return new KeyValuePair<string, string>(url, Features.Count.ToString());
+            return new KeyValuePair<string, int>(url, Features.Count);
         }
 
         public async Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName,
