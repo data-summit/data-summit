@@ -21,6 +21,7 @@ namespace AzureFunctions.MachineLearning
 {
     public static class Classification
     {
+        private static readonly string endPoint = @"https://documentlayout.cognitiveservices.azure.com";
         [FunctionName("Classification")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -42,7 +43,7 @@ namespace AzureFunctions.MachineLearning
                 // Create a training endpoint, passing in the obtained training key
                 CustomVisionTrainingClient trainingApi = new CustomVisionTrainingClient(
                     new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(cvML.TrainingKey))
-                { Endpoint = "https://documentlayout.cognitiveservices.azure.com/" };
+                { Endpoint = endPoint };
 
                 var projects = await trainingApi.GetProjectsAsync();
                 if (projects != null && projects.Count(p => p.Name == cvML.MLProjectName) > 0)
@@ -55,11 +56,9 @@ namespace AzureFunctions.MachineLearning
                         // Create a prediction endpoint, passing in the obtained prediction key
                         CustomVisionPredictionClient predictionApi = new CustomVisionPredictionClient(
                         new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(cvML.PredictionKey));
-                        predictionApi.Endpoint = "https://documentlayout.cognitiveservices.azure.com/"; // cvML.MLUrl;
+                        predictionApi.Endpoint = endPoint;
 
-                        var iteration = cvML.MLUrl.Substring(
-                            cvML.MLUrl.LastIndexOf("/Iteration") + 1,
-                            cvML.MLUrl.LastIndexOf("/") - cvML.MLUrl.LastIndexOf("/Iteration") - 1);
+                        var iteration = cvML.GetIteration();
                         var result = predictionApi.ClassifyImageUrl(project.Id, iteration, new ImageUrl(cvML.BlobUrl) { Url = cvML.BlobUrl });
 
                         foreach (var c in result.Predictions)
