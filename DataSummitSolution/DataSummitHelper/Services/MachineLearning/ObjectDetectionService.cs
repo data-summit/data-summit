@@ -35,7 +35,9 @@ namespace DataSummitService.Services.MachineLearning
         public async Task<KeyValuePair<string, string>> GetDrawingLayout(string url)
         {
             List<DocumentFeature> Features = new List<DocumentFeature>();
-            
+
+            int predictionAccuracy = 3;
+
             var drawingLayout = await GetPrediction(url, "DrawingLayout", "ObjectDetection");
             if (drawingLayout != null && drawingLayout.Count > 0)
             {
@@ -43,7 +45,7 @@ namespace DataSummitService.Services.MachineLearning
                 foreach (var item in drawingLayout)
                 {
                     var itemType = _dataSummitDocumentsService.DrawingLayoutComponent(item.TagName);
-                    var typeConfidence = Math.Round(item.Probability, 3);
+                    var typeConfidence = Math.Round(item.Probability, predictionAccuracy);
 
                     //Persist in database
                     var docFeature = new DocumentFeature()
