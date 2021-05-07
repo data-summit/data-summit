@@ -93,7 +93,7 @@ namespace DataSummitService.Dao
             return document;
         }
 
-        public Document GetDocumentsByUrl(string documentUrl)
+        public Document GetDocumentByUrl(string documentUrl)
         {
             var document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
             return document;

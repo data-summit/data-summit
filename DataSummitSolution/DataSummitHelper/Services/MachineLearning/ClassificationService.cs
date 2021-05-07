@@ -49,7 +49,7 @@ namespace DataSummitService.Services.MachineLearning
             await _azureResources.AddMetadataToBlob(url, additionalMetaData);
 
             //Persist in database
-            var doc = _dataSummitDocumentsDao.GetDocumentsByUrl(url);
+            var doc = _dataSummitDocumentsDao.GetDocumentByUrl(url);
             doc.DocumentType = new DocumentType()
             {
                 Name = documentTypeEnum.ToString(),

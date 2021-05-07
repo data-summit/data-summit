@@ -39,7 +39,7 @@ namespace DataSummitService.Services.MachineLearning
             var drawingLayout = await GetPrediction(url, "DrawingLayout", "ObjectDetection");
             if (drawingLayout != null && drawingLayout.Count > 0)
             {
-                var doc = _dataSummitDocumentsDao.GetDocumentsByUrl(url);
+                var doc = _dataSummitDocumentsDao.GetDocumentByUrl(url);
                 foreach (var item in drawingLayout)
                 {
                     var itemType = _dataSummitDocumentsService.DrawingLayoutComponent(item.TagName);

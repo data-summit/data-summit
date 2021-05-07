@@ -22,7 +22,7 @@ namespace DataSummitService.Dao.Interfaces
 
         Task<List<Document>> GetProjectDocuments(int companyId);
         Task<Document> GetDocumentsByUrlAsync(string documentUrl);
-        Document GetDocumentsByUrl(string documentUrl);
+        Document GetDocumentByUrl(string documentUrl);
         Task<List<Document>> GetAllProjectDocuments(int projectId);
         #endregion
     }

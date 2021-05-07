@@ -96,12 +96,12 @@ namespace DataSummitService.Services
 
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)
         {
-            var document = _documentsDao.GetDocumentsByUrl(documentUrl);
+            var document = _documentsDao.GetDocumentByUrl(documentUrl);
             var documentDto = new DocumentDto(document);
             return documentDto;
         }
 
-        public Document GetDocumentByUrl(string documentUrl) => _documentsDao.GetDocumentsByUrl(documentUrl);
+        public Document GetDocumentByUrl(string documentUrl) => _documentsDao.GetDocumentByUrl(documentUrl);
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
         {
