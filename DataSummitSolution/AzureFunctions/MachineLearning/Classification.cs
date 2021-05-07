@@ -31,39 +31,39 @@ namespace AzureFunctions.MachineLearning
             {
                 string jsonContent = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject<CustomVision>(jsonContent);
-                CustomVision cvML = (CustomVision)data;
+                CustomVision customVisionData = (CustomVision)data;
 
                 //Verify body content
-                if (cvML.BlobUrl == "") return new BadRequestObjectResult("Illegal input: blob url required.");
-                if (cvML.MLUrl == "") return new BadRequestObjectResult("Illegal input: Ml end-point url required.");
-                if (cvML.TrainingKey == "") return new BadRequestObjectResult("Illegal input: No training key");
-                if (cvML.PredictionKey == "") return new BadRequestObjectResult("Illegal input: No prediction key");
-                if (cvML.MLProjectName == "") return new BadRequestObjectResult("Illegal input: ML project name required");
+                if (customVisionData.BlobUrl == "") return new BadRequestObjectResult("Illegal input: blob url required.");
+                if (customVisionData.MLUrl == "") return new BadRequestObjectResult("Illegal input: Ml end-point url required.");
+                if (customVisionData.TrainingKey == "") return new BadRequestObjectResult("Illegal input: No training key");
+                if (customVisionData.PredictionKey == "") return new BadRequestObjectResult("Illegal input: No prediction key");
+                if (customVisionData.MLProjectName == "") return new BadRequestObjectResult("Illegal input: ML project name required");
 
                 // Create a training endpoint, passing in the obtained training key
                 CustomVisionTrainingClient trainingApi = new CustomVisionTrainingClient(
-                    new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(cvML.TrainingKey))
+                    new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(customVisionData.TrainingKey))
                 { Endpoint = endPoint };
 
                 var projects = await trainingApi.GetProjectsAsync();
-                if (projects != null && projects.Count(p => p.Name == cvML.MLProjectName) > 0)
+                if (projects != null && projects.Count(p => p.Name == customVisionData.MLProjectName) > 0)
                 {
-                    var project = projects.First(p => p.Name == cvML.MLProjectName);
+                    var project = projects.First(p => p.Name == customVisionData.MLProjectName);
 
                     List<MLPrediction> preds = new List<MLPrediction>();
                     if (project != null)
                     {
                         // Create a prediction endpoint, passing in the obtained prediction key
                         CustomVisionPredictionClient predictionApi = new CustomVisionPredictionClient(
-                        new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(cvML.PredictionKey));
+                        new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(customVisionData.PredictionKey));
                         predictionApi.Endpoint = endPoint;
 
-                        var iteration = cvML.GetIteration();
-                        var result = predictionApi.ClassifyImageUrl(project.Id, iteration, new ImageUrl(cvML.BlobUrl) { Url = cvML.BlobUrl });
+                        var iteration = customVisionData.GetIteration();
+                        var result = predictionApi.ClassifyImageUrl(project.Id, iteration, new ImageUrl(customVisionData.BlobUrl) { Url = customVisionData.BlobUrl });
 
                         foreach (var c in result.Predictions)
                         {
-                            if (c.Probability > cvML.MinThreshold)
+                            if (c.Probability > customVisionData.MinThreshold)
                             {
                                 var pred = new MLPrediction()
                                 {
