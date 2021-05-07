@@ -37,6 +37,7 @@ namespace DataSummitService.Services.MachineLearning
             List<DocumentFeature> Features = new List<DocumentFeature>();
 
             int predictionAccuracy = 3;
+            int boundingBoxAccuracy = 5;
 
             var drawingLayout = await GetPrediction(url, "DrawingLayout", "ObjectDetection");
             if (drawingLayout != null && drawingLayout.Count > 0)
@@ -59,14 +60,14 @@ namespace DataSummitService.Services.MachineLearning
 
                     // Top
                     if (item.BoundingBox.Min.Y < item.BoundingBox.Max.Y)
-                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Max.Y, 5); }
+                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Max.Y, boundingBoxAccuracy); }
                     else
-                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Min.Y, 5); }
+                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Min.Y, boundingBoxAccuracy); }
                     // Left
                     if (item.BoundingBox.Min.X > item.BoundingBox.Max.X)
-                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Max.X, 5); }
+                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Max.X, boundingBoxAccuracy); }
                     else
-                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Min.X, 5); }
+                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Min.X, boundingBoxAccuracy); }
                     Features.Add(docFeature);                   
                 }
                 // Remove existing features
