@@ -59,7 +59,8 @@ namespace AzureFunctions.MachineLearning
                         predictionApi.Endpoint = endPoint;
 
                         var iteration = customVisionData.GetIteration();
-                        var result = predictionApi.ClassifyImageUrl(project.Id, iteration, new ImageUrl(customVisionData.BlobUrl) { Url = customVisionData.BlobUrl });
+                        var imageUrl = new ImageUrl(customVisionData.BlobUrl);
+                        var result = predictionApi.ClassifyImageUrl(project.Id, iteration, imageUrl, customVisionData.BlobUrl);
 
                         foreach (var c in result.Predictions)
                         {
