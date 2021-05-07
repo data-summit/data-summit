@@ -21,6 +21,7 @@ namespace AzureFunctions.MachineLearning
 {
     public static class ObjectDetection
     {
+        private static readonly string endPoint = @"https://documentlayout.cognitiveservices.azure.com";
         [FunctionName("ObjectDetection")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -43,7 +44,7 @@ namespace AzureFunctions.MachineLearning
                 // Create a training endpoint, passing in the obtained training key
                 CustomVisionTrainingClient trainingApi = new CustomVisionTrainingClient(
                     new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(cvML.TrainingKey))
-                { Endpoint = "https://documentlayout.cognitiveservices.azure.com/" };
+                { Endpoint = endPoint };
 
                 var projects = await trainingApi.GetProjectsAsync();
                 if (projects != null && projects.Count(p => p.Name == cvML.MLProjectName) > 0)
@@ -56,7 +57,7 @@ namespace AzureFunctions.MachineLearning
                         // Create a prediction endpoint, passing in the obtained prediction key
                         CustomVisionPredictionClient predictionApi = new CustomVisionPredictionClient(
                             new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(cvML.PredictionKey));
-                        predictionApi.Endpoint = "https://documentlayout.cognitiveservices.azure.com/";
+                        predictionApi.Endpoint = endPoint;
 
                         var imgUrl = new ImageUrl(cvML.BlobUrl)
                         {
