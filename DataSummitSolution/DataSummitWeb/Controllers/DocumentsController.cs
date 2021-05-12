@@ -45,6 +45,8 @@ namespace DataSummitWeb.Controllers
             {
                 var tasks = files.Select(file => _azureResourcesService.UploadDataToBlob(file));
                 var results = await Task.WhenAll(tasks);
+
+                uploadedFileURLs = results.ToHashSet();
             }
             catch (Exception ae)
             {
