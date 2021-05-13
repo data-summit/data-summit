@@ -51,7 +51,7 @@ namespace AzureFunctions.MachineLearning
                 {
                     var project = projects.First(p => p.Name == cvML.MLProjectName);
 
-                    List<MLPrediction> preds = new List<MLPrediction>();
+                    List<ClassificationPrediction> preds = new List<ClassificationPrediction>();
                     if (project != null)
                     {
                         // Create a prediction endpoint, passing in the obtained prediction key
@@ -71,7 +71,7 @@ namespace AzureFunctions.MachineLearning
                         {
                             if (c.Probability > cvML.MinThreshold)
                             {
-                                var pred = new MLPrediction()
+                                var pred = new ObjectDetectionPrediction()
                                 {
                                     Probability = c.Probability,
                                     TagId = c.TagId,

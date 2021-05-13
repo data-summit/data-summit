@@ -34,7 +34,7 @@ namespace DataSummitService.Services.MachineLearning
 
         public async Task<KeyValuePair<string, string>> GetDocumentType(string url)
         {
-            var documentTypeClassification = await GetPrediction(url, "DocumentType", "Classification");
+            var documentTypeClassification = await GetClassificationPrediction(url, "DocumentType", "Classification");
             var documentTypeEnum = _dataSummitDocumentsService.DocumentType(documentTypeClassification.TagName);
             
             var typeConfidence = Math.Round(documentTypeClassification.Probability, 3);
@@ -62,10 +62,10 @@ namespace DataSummitService.Services.MachineLearning
             return new KeyValuePair<string, string>(url, documentTypeEnum.ToString());
         }
 
-        public async Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, 
+        public async Task<ClassificationPrediction> GetClassificationPrediction(string url, string azureMLResourceName, 
             string azureResourceName, double minThreshold = 0.65)
         {
-            var result = new MLPrediction();
+            var result = new ClassificationPrediction();
             var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
             var azureAI = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
 
@@ -86,7 +86,7 @@ namespace DataSummitService.Services.MachineLearning
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
                 
-                var results = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                var results = JsonConvert.DeserializeObject<List<ClassificationPrediction>>(response);
                 result = results.OrderBy(f => f.Probability).First();
             }
 

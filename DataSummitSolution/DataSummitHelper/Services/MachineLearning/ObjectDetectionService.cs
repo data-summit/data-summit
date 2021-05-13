@@ -14,76 +14,73 @@ namespace DataSummitService.Services.MachineLearning
     public class ObjectDetectionService : IObjectDetectionService
     {
         private readonly IDataSummitAzureUrlsDao _azureDao;
-        private readonly IAzureResourcesService _azureResources;
         private readonly IDataSummitHelperService _dataSummitHelper;
         private readonly IDataSummitDocumentsDao _dataSummitDocumentsDao;
         private readonly IDataSummitDocumentsService _dataSummitDocumentsService;
 
         public ObjectDetectionService(IDataSummitAzureUrlsDao azureDao,
-                                     IAzureResourcesService azureResources,
                                      IDataSummitHelperService dataSummitHelper,
                                      IDataSummitDocumentsDao dataSummitDocumentsDao,
                                      IDataSummitDocumentsService dataSummitDocumentsService)
         {
             _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
             _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
-            _azureResources = azureResources ?? throw new ArgumentNullException(nameof(azureResources));
             _dataSummitDocumentsDao = dataSummitDocumentsDao ?? throw new ArgumentNullException(nameof(dataSummitDocumentsDao));
             _dataSummitDocumentsService = dataSummitDocumentsService ?? throw new ArgumentNullException(nameof(dataSummitDocumentsService));
         }
 
         public async Task<KeyValuePair<string, int>> GetDrawingLayout(string url)
         {
-            List<DocumentFeature> Features = new List<DocumentFeature>();
+            var features = new List<DocumentFeature>();
 
             int predictionAccuracy = 3;
             int boundingBoxAccuracy = 5;
 
-            var drawingLayout = await GetPrediction(url, "DrawingLayout", "ObjectDetection");
-            if (drawingLayout != null && drawingLayout.Count > 0)
+            var drawingLayoutComponents = await GetObjectDetectionPredictions(url, "DrawingLayout", "ObjectDetection");
+            if (drawingLayoutComponents?.Any() ?? false)
             {
                 var doc = _dataSummitDocumentsDao.GetDocumentByUrl(url);
-                foreach (var item in drawingLayout)
+                foreach (var drawingLayoutComponent in drawingLayoutComponents)
                 {
-                    var itemType = _dataSummitDocumentsService.DrawingLayoutComponent(item.TagName);
-                    var typeConfidence = Math.Round(item.Probability, predictionAccuracy);
+                    var drawingLayounEnum = _dataSummitDocumentsService.DrawingLayoutComponent(drawingLayoutComponent.TagName);
+                    var typeConfidence = Math.Round(drawingLayoutComponent.Probability, predictionAccuracy);
 
                     var docFeature = new DocumentFeature()
                     {
                         Confidence = (decimal)typeConfidence,
                         Feature = "Object",
-                        Value = itemType.ToString(),
-                        Height = (long)Math.Abs(item.BoundingBox.Max.X - item.BoundingBox.Min.X),
-                        Width = (long)Math.Abs(item.BoundingBox.Max.Y - item.BoundingBox.Min.Y),
+                        Value = drawingLayounEnum.ToString(),
+                        Height = (long)Math.Abs(drawingLayoutComponent.BoundingBox.Max.X - drawingLayoutComponent.BoundingBox.Min.X),
+                        Width = (long)Math.Abs(drawingLayoutComponent.BoundingBox.Max.Y - drawingLayoutComponent.BoundingBox.Min.Y),
                         Vendor = "Custom Vision"
                     };
 
                     // Top
-                    if (item.BoundingBox.Min.Y < item.BoundingBox.Max.Y)
-                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Max.Y, boundingBoxAccuracy); }
+                    if (drawingLayoutComponent.BoundingBox.Min.Y < drawingLayoutComponent.BoundingBox.Max.Y)
+                    { docFeature.Top = (decimal)Math.Round(drawingLayoutComponent.BoundingBox.Max.Y, boundingBoxAccuracy); }
                     else
-                    { docFeature.Top = (decimal)Math.Round(item.BoundingBox.Min.Y, boundingBoxAccuracy); }
+                    { docFeature.Top = (decimal)Math.Round(drawingLayoutComponent.BoundingBox.Min.Y, boundingBoxAccuracy); }
                     // Left
-                    if (item.BoundingBox.Min.X > item.BoundingBox.Max.X)
-                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Max.X, boundingBoxAccuracy); }
+                    if (drawingLayoutComponent.BoundingBox.Min.X > drawingLayoutComponent.BoundingBox.Max.X)
+                    { docFeature.Left = (decimal)Math.Round(drawingLayoutComponent.BoundingBox.Max.X, boundingBoxAccuracy); }
                     else
-                    { docFeature.Left = (decimal)Math.Round(item.BoundingBox.Min.X, boundingBoxAccuracy); }
-                    Features.Add(docFeature);                   
+                    { docFeature.Left = (decimal)Math.Round(drawingLayoutComponent.BoundingBox.Min.X, boundingBoxAccuracy); }
+                    features.Add(docFeature);                   
                 }
                 // Remove existing features
                 doc.DocumentFeatures.Clear();
                 // Add new detected features
-                doc.DocumentFeatures = Features;
+                doc.DocumentFeatures = features;
 
                 _dataSummitDocumentsDao.UpdateDocument(doc);
             }
-            return new KeyValuePair<string, int>(url, Features.Count);
+            return new KeyValuePair<string, int>(url, features.Count);
         }
 
-        public async Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName,
+        public async Task<List<ObjectDetectionPrediction>> GetObjectDetectionPredictions(string url, string azureMLResourceName,
             string azureResourceName, double minThreshold = 0.15)
         {
-            var result = new List<MLPrediction>();
+            var result = new List<ObjectDetectionPrediction>();
             var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
             var azureML = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
 
@@ -104,7 +101,7 @@ namespace DataSummitService.Services.MachineLearning
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
 
-                var objectDetectionPredictions = JsonConvert.DeserializeObject<List<MLPrediction>>(response);
+                var objectDetectionPredictions = JsonConvert.DeserializeObject<List<ObjectDetectionPrediction>>(response);
                 result = objectDetectionPredictions.OrderBy(f => f.Probability).ToList();
             }
             return result;

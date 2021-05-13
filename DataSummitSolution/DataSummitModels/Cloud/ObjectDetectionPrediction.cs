@@ -3,7 +3,7 @@ using System;
 
 namespace DataSummitModels.Cloud
 {
-    public class MLPrediction
+    public class ObjectDetectionPrediction
     {
         public double Probability { get; set; }
         public Guid TagId { get; set; }
@@ -11,10 +11,10 @@ namespace DataSummitModels.Cloud
         public BoundingBox BoundingBox { get; set; }
         public string TagType { get; set; }
 
-        public MLPrediction()
+        public ObjectDetectionPrediction()
         { ; }
 
-        public MLPrediction(double probability = 0, Guid tagId = default, string tagName = null, BoundingBox boundingBox = null, string tagType = null)
+        public ObjectDetectionPrediction(double probability = 0, Guid tagId = default, string tagName = null, BoundingBox boundingBox = null, string tagType = null)
         {
             Probability = probability;
             TagId = tagId;

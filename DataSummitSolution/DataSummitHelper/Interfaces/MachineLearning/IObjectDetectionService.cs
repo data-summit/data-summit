@@ -9,6 +9,6 @@ namespace DataSummitService.Interfaces.MachineLearning
     public interface IObjectDetectionService
     {
         Task<KeyValuePair<string, int>> GetDrawingLayout(string url);
-        Task<List<MLPrediction>> GetPrediction(string url, string azureMLResourceName, string azureResourceName, double minThreshold = 0.15);
+        Task<List<ObjectDetectionPrediction>> GetObjectDetectionPredictions(string url, string azureMLResourceName, string azureResourceName, double minThreshold = 0.15);
     }
 }
