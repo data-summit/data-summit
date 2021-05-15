@@ -13,7 +13,7 @@ namespace DataSummitService.Dao.Interfaces
         #endregion
 
         #region Machine Learning URLs
-        Task<AzureMLResource> GetMLUrlByNameAsync(string name);
+        Task<AzureMLResource> GetAzureMLResourceByNameAsync(string name);
         #endregion
     }
 }

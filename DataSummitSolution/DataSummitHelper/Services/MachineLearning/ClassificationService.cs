@@ -67,7 +67,7 @@ namespace DataSummitService.Services.MachineLearning
         {
             var result = new ClassificationPrediction();
             var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
-            var azureAI = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
+            var azureAI = await _azureDao.GetAzureMLResourceByNameAsync(azureMLResourceName);
 
             if (azureFunction != null && azureAI != null)
             {

@@ -82,7 +82,7 @@ namespace DataSummitService.Services.MachineLearning
         {
             var result = new List<ObjectDetectionPrediction>();
             var azureFunction = await _azureDao.GetAzureFunctionUrlByName(azureResourceName);
-            var azureML = await _azureDao.GetMLUrlByNameAsync(azureMLResourceName);
+            var azureML = await _azureDao.GetAzureMLResourceByNameAsync(azureMLResourceName);
 
             if (azureFunction != null && azureML != null)
             {

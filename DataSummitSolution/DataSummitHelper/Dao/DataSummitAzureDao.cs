@@ -48,15 +48,15 @@ namespace DataSummitService.Dao
         #region Azure URLs
         public async Task<Tuple<string, string>> GetAzureFunctionUrlByName(string name)
         {
-            var urlKey = await _context.AzureCompanyResourceUrls.SingleOrDefaultAsync(ar => ar.Name == name);
+            var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name);
             return new Tuple<string, string>(urlKey.Url, urlKey.Key);
         }
         #endregion
 
         #region ML URLs
-        public async Task<AzureMLResource> GetMLUrlByNameAsync(string name)
+        public async Task<AzureMLResource> GetAzureMLResourceByNameAsync(string name)
         {
-            var azML = await _context.AzureMLResources.SingleOrDefaultAsync(ar => ar.Name == name);
+            var azML = await _context.AzureMLResources.SingleAsync(ar => ar.Name == name);
             return azML;
         }
 
