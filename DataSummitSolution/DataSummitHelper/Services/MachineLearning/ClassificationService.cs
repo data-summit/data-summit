@@ -63,7 +63,7 @@ namespace DataSummitService.Services.MachineLearning
             return new DocumentTypeSummaryDto
             {
                 BlobUrl = url, 
-                DocumentType = documentTypeEnum.ToString()
+                DocumentType = documentTypeEnum
             };
         }
 

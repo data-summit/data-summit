@@ -17,7 +17,7 @@
     [Type]                NVARCHAR (7)    NULL,
     [File]				  VARBINARY(MAX)  NULL, 
     [DocumentTypeId]      TINYINT         NOT NULL, 
-    [FileExtension] NVARCHAR(8) NOT NULL, 
+    [FileExtension] NVARCHAR(8) NULL, 
     CONSTRAINT [PK_Document] PRIMARY KEY CLUSTERED ([DocumentId] ASC),
     CONSTRAINT [FK_Documents_Projects] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Projects] ([ProjectId]),
 	CONSTRAINT [FK_Documents_PaperSizes] FOREIGN KEY ([PaperSizeId]) REFERENCES [dbo].[PaperSizes] ([PaperSizeId]) ON UPDATE CASCADE,

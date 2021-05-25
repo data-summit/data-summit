@@ -59,7 +59,7 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost("determineDocumentType")]
-        public async Task<IActionResult> DetermineDocumentType([FromBody] DetermineDocumentTypeParams determineDocumentTypeParams)
+        public async Task<IActionResult> DetermineDocumentType(DetermineDocumentTypeParams determineDocumentTypeParams)
         {
             var blobUrls = determineDocumentTypeParams.BlobUrls;
 
