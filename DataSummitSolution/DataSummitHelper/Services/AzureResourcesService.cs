@@ -19,6 +19,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using DataSummitService.Dto;
 
 namespace DataSummitService.Services
 {
@@ -370,7 +371,7 @@ namespace DataSummitService.Services
         #endregion
 
         #region Block Blobs
-        public async Task<string> UploadDataToBlob(IFormFile file)
+        public async Task<FileUploadSummaryDto> UploadDataToBlob(IFormFile file)
         {
             // Get storage account connection string data from Azure Secrets store
             string connectionString = _dataSummitHelper.GetSecret("datasummitstorage");
@@ -421,6 +422,9 @@ namespace DataSummitService.Services
                 await blockBlobClient.UploadAsync(ms, blobUploadOptions);
             }
 
+            var fileName = file.FileName;
+            var fileExtension = Path.GetExtension(file.FileName);
+
             //Add upload data to database
             var doc = new Document()
             {
@@ -433,14 +437,20 @@ namespace DataSummitService.Services
                 PaperSizeId = 9,            //A4
 
                 //Actual document specific data from upload file
-                FileName = file.FileName,
+                FileName = fileName,
                 BlobUrl = blockBlobClient.Uri.ToString(),
                 CreatedDate = DateTime.Now,
-                ContainerName = containerName
+                ContainerName = containerName,
+                FileExtension = fileExtension
             };
             await _documentsDao.CreateDocument(doc);
 
-            return blockBlobClient.Uri.ToString();
+            return new FileUploadSummaryDto 
+            {
+                BlobUrl = blockBlobClient.Uri.ToString(),
+                FileName = fileName,
+                FileExtension = fileExtension
+            };
         }
 
         public BlockBlobClient GetBlobByUrl(string blobUrl)

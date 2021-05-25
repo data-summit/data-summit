@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataSummitService.Dto;
 
 namespace DataSummitService.Services.MachineLearning
 {
@@ -32,7 +33,7 @@ namespace DataSummitService.Services.MachineLearning
             _dataSummitDocumentsService = dataSummitDocumentsService ?? throw new ArgumentNullException(nameof(dataSummitDocumentsService));
         }
 
-        public async Task<KeyValuePair<string, string>> GetDocumentType(string url)
+        public async Task<DocumentTypeSummaryDto> GetDocumentType(string url)
         {
             var documentTypeClassification = await GetPrediction(url, "DocumentType", "Classification");
             var documentTypeEnum = _dataSummitDocumentsService.DocumentType(documentTypeClassification.TagName);
@@ -59,7 +60,11 @@ namespace DataSummitService.Services.MachineLearning
             doc.AzureConfidence = (decimal)typeConfidence;
             _dataSummitDocumentsDao.UpdateDocument(doc);
 
-            return new KeyValuePair<string, string>(url, documentTypeEnum.ToString());
+            return new DocumentTypeSummaryDto
+            {
+                BlobUrl = url, 
+                DocumentType = documentTypeEnum
+            };
         }
 
         public async Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, 
