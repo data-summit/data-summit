@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataSummitService.Dto;
+using System.Web;
 
 namespace DataSummitService.Services
 {
@@ -408,7 +409,7 @@ namespace DataSummitService.Services
             {
                 Metadata = new Dictionary<string, string>
                 {
-                    { "FileName", file.FileName },
+                    { "FileName", HttpUtility.UrlEncode(file.FileName) },
                     { "DocumentFormat", documentFileExtensionEnum.ToString() }
                 }
             };
