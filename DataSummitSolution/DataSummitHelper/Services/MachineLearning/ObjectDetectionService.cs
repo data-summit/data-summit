@@ -42,14 +42,14 @@ namespace DataSummitService.Services.MachineLearning
                 var doc = _dataSummitDocumentsDao.GetDocumentByUrl(url);
                 foreach (var drawingLayoutComponent in drawingLayoutComponents)
                 {
-                    var drawingLayounEnum = _dataSummitDocumentsService.DrawingLayoutComponent(drawingLayoutComponent.TagName);
+                    var drawingLayoutEnum = _dataSummitDocumentsService.GetDrawingLayoutEnum(drawingLayoutComponent.TagName);
                     var typeConfidence = Math.Round(drawingLayoutComponent.Probability, predictionAccuracy);
 
                     var docFeature = new DocumentFeature()
                     {
                         Confidence = (decimal)typeConfidence,
                         Feature = "Object",
-                        Value = drawingLayounEnum.ToString(),
+                        Value = drawingLayoutEnum.ToString(),
                         Height = (long)Math.Abs(drawingLayoutComponent.BoundingBox.Max.X - drawingLayoutComponent.BoundingBox.Min.X),
                         Width = (long)Math.Abs(drawingLayoutComponent.BoundingBox.Max.Y - drawingLayoutComponent.BoundingBox.Min.Y),
                         Vendor = "Custom Vision"

@@ -76,7 +76,7 @@ namespace DataSummitService.Services
             return enumFormat;
         }
 
-        public DrawingLayout DrawingLayoutComponent(string itemName)
+        public DrawingLayout GetDrawingLayoutEnum(string itemName)
         {
             var enumComponent = DrawingLayout.Unknown;
             switch (itemName)
