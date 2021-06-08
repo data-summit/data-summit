@@ -76,6 +76,12 @@ namespace DataSummitService.Services
             return enumFormat;
         }
 
+        /// <summary>
+        ///  This is tech-debt and in a future ticket/iteration we should put the object(string) in a class and have 
+        ///  a ToEnum() method in that class.
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns>DrawingLayout enum</returns>
         public DrawingLayout GetDrawingLayoutEnum(string itemName)
         {
             var enumComponent = DrawingLayout.Unknown;
