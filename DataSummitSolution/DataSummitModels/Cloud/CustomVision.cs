@@ -17,8 +17,8 @@ namespace DataSummitModels.Cloud
 
         public string GetIteration()
         {
-            // Return the number from an example string http://test/Iteration/1323/
-            var rgx = new Regex(@"(?<=Iteration\/)(\d+)(?=\/)");
+            // Return the number 1323 from an example string http://test/Iteration1323/
+            var rgx = new Regex(@"(?!Iteration)(\d+)(?=\/)");
             var match = rgx.Match(MLUrl);
             return match.Value;
         }
