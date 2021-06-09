@@ -39,7 +39,6 @@ namespace DataSummitService.Services.MachineLearning
             var drawingLayoutComponents = await GetObjectDetectionPredictions(url, "DrawingLayout", "ObjectDetection");
             if (drawingLayoutComponents?.Any() ?? false)
             {
-                var doc = _dataSummitDocumentsDao.GetDocumentByUrl(url);
                 foreach (var drawingLayoutComponent in drawingLayoutComponents)
                 {
                     var drawingLayoutEnum = _dataSummitDocumentsService.GetDrawingLayoutEnum(drawingLayoutComponent.TagName);
@@ -67,13 +66,10 @@ namespace DataSummitService.Services.MachineLearning
                     { docFeature.Left = (decimal)Math.Round(drawingLayoutComponent.BoundingBox.Min.X, boundingBoxAccuracy); }
                     features.Add(docFeature);                   
                 }
-                // Remove existing features
-                doc.DocumentFeatures.Clear();
-                // Add new detected features
-                doc.DocumentFeatures = features;
 
-                _dataSummitDocumentsDao.UpdateDocument(doc);
+                _dataSummitDocumentsDao.ReplaceDocumentFeatures(url, features);
             }
+
             return new KeyValuePair<string, int>(url, features.Count);
         }
 
