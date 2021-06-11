@@ -1,6 +1,8 @@
 ﻿using DataSummitService.Dao.Interfaces;
+using DataSummitService.Dto;
 using DataSummitService.Interfaces;
 using DataSummitService.Interfaces.MachineLearning;
+using DataSummitWeb.Params;
 using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,29 +45,41 @@ namespace DataSummitWeb.Controllers
         [HttpPost("uploadFiles")]
         public async Task<IActionResult> UploadFiles(List<IFormFile> files)
         {
-            var uploadedFileURLs = new HashSet<string>();
+            var uploadedFilesSummary = new List<FileUploadSummaryDto>();
             try
             {
                 var tasks = files.Select(file => _azureResourcesService.UploadDataToBlob(file));
                 var results = await Task.WhenAll(tasks);
+
+                uploadedFilesSummary = results.ToList();
             }
             catch (Exception ae)
             {
                 //TODO log exception
                 return Problem(detail: ae.Message, statusCode: 500);
             }
-            return Ok(uploadedFileURLs);
+            return Ok(uploadedFilesSummary);
         }
 
         [HttpPost("determineDocumentType")]
-        public async Task<IActionResult> DetermineDocumentType([FromBody] HashSet<string> blobUrls)
+        public async Task<IActionResult> DetermineDocumentType(DetermineDocumentTypeParams determineDocumentTypeParams)
         {
+            var blobUrls = determineDocumentTypeParams.BlobUrls;
+
             try
             {
-                var tasks = blobUrls.Select(blobUrl => _classificationService.GetDocumentType(blobUrl));
-                var results = await Task.WhenAll(tasks);
+                // TODO fix this so that it works async without throwing an error
+                //var tasks = blobUrls.Select(blobUrl => _classificationService.GetDocumentType(blobUrl));
+                //var results = await Task.WhenAll(tasks);
 
-                return Ok(results);
+                var documentTypeSummaries = new List<DocumentTypeSummaryDto>();
+                foreach (var blobUrl in blobUrls)
+                {
+                    var documentType = await _classificationService.GetDocumentType(blobUrl);
+                    documentTypeSummaries.Add(documentType);
+                }
+
+                return Ok(documentTypeSummaries);
             }
             catch (Exception ae)
             {

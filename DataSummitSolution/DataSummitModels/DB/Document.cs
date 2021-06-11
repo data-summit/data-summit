@@ -35,6 +35,8 @@ namespace DataSummitModels.DB
         public string Type { get; set; }
         public byte[] File { get; set; }
         public byte DocumentTypeId { get; set; }
+        public string FileExtension { get; set; }
+
 
         public virtual DocumentType DocumentType { get; set; }
         public virtual PaperOrientation PaperOrientation { get; set; }

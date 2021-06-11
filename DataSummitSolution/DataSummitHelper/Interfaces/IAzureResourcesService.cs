@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs.Specialized;
+using DataSummitService.Dto;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace DataSummitService.Interfaces
         Task<bool> DeleteStorageAccount(string resourceGroup, string name);
 
         //Block blob
-        Task<string> UploadDataToBlob(IFormFile file);
+        Task<FileUploadSummaryDto> UploadDataToBlob(IFormFile file);
         BlockBlobClient GetBlobByUrl(string blobUrl);
         Task AddMetadataToBlob(string blobUrl, List<KeyValuePair<string, string>> metadata);
     }
