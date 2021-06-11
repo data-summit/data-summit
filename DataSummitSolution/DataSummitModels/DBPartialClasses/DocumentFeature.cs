@@ -17,7 +17,6 @@ namespace DataSummitModels.DB
                           (Feature == documentFeature.Feature) &&
                           (Confidence == documentFeature.Confidence);
 
-
             return isEqual;
         }
 
