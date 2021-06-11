@@ -19,7 +19,7 @@ namespace DataSummitService.Dao.Interfaces
         void AddDocumentFeatures(List<DocumentFeature> documentFeatures);
         void AddDocumentFeature(DocumentFeature documentFeature);
         Task UpdateDocumentFeature(string documentUrl, DocumentFeature documentFeature);
-        Task ReplaceDocumentFeatures(string documentUrl, List<DocumentFeature> features);
+        Task UpdateDocumentFeatures(string documentUrl, List<DocumentFeature> features);
 
         Task<List<Document>> GetProjectDocuments(int companyId);
         Task<Document> GetDocumentsByUrlAsync(string documentUrl);

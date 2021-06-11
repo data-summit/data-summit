@@ -89,7 +89,7 @@ namespace DataSummitService.Dao
             _context.SaveChanges();
         }
 
-        public async Task ReplaceDocumentFeatures(string documentUrl, List<DocumentFeature> features)
+        public async Task UpdateDocumentFeatures(string documentUrl, List<DocumentFeature> features)
         {
             var doc = await _context.Documents
                                     .Include(d => d.DocumentFeatures)
@@ -100,8 +100,9 @@ namespace DataSummitService.Dao
                 return;
             }
 
-            //doc.DocumentFeatures.Clear();
-            doc.DocumentFeatures = features;
+            doc.DocumentFeatures = doc.DocumentFeatures
+                                      .Union(features)
+                                      .ToList();
             _context.SaveChanges();
         }
 

@@ -67,7 +67,7 @@ namespace DataSummitService.Services.MachineLearning
                     features.Add(docFeature);                   
                 }
 
-                _dataSummitDocumentsDao.ReplaceDocumentFeatures(url, features);
+                await _dataSummitDocumentsDao.UpdateDocumentFeatures(url, features);
             }
 
             return new KeyValuePair<string, int>(url, features.Count);
