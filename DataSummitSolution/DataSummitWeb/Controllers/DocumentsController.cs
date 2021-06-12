@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 namespace DataSummitWeb.Controllers
 {
     //[Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     public partial class DocumentsController : Controller
     {
@@ -88,11 +89,11 @@ namespace DataSummitWeb.Controllers
         }
 
         [HttpPost("determineDrawingLayout")]
-        public async Task<IActionResult> DetermineDrawingLayout([FromBody] HashSet<string> blobUrls)
+        public async Task<IActionResult> DetermineDrawingLayout(DetermineDrawingLayout determineDrawingLayout)
         {
             try
             {
-                var tasks = blobUrls.Select(blobUrl => _objectDetectionService.GetDrawingLayout(blobUrl));
+                var tasks = determineDrawingLayout.BlobUrls.Select(blobUrl => _objectDetectionService.GetDrawingLayout(blobUrl));
                 var results = await Task.WhenAll(tasks);
 
                 return Ok(results);

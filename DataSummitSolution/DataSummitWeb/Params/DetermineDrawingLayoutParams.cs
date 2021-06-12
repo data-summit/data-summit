@@ -2,7 +2,7 @@
 
 namespace DataSummitWeb.Params
 {
-    public class DetermineDocumentTypeParams
+    public class DetermineDrawingLayout
     {
         public HashSet<string> BlobUrls { get; set; }
     }
