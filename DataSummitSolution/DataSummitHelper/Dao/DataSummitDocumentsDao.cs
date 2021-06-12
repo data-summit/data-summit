@@ -96,10 +96,9 @@ namespace DataSummitService.Dao
                                     .SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
 
             if (doc == null)
-            {
-                return;
-            }
+            { return; }
 
+            features.ForEach(f => f.DocumentId = doc.DocumentId);
             doc.DocumentFeatures = doc.DocumentFeatures
                                       .Union(features)
                                       .ToList();
