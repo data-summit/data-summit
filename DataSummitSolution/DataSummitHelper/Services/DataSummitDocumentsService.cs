@@ -20,19 +20,16 @@ namespace DataSummitService.Services
         private readonly IDataSummitDocumentsDao _documentsDao;
         private readonly IDataSummitTemplateAttributesDao _templateAttributesDao;
         private readonly IAzureResourcesService _azureResources;
-        private readonly IObjectDetectionService _objectDetectionService;
         private readonly IDataSummitAzureUrlsDao _azureDao;
 
         public DataSummitDocumentsService(IDataSummitDocumentsDao documentsDao,
                                           IDataSummitTemplateAttributesDao templateAttributesDao,
-                                          IObjectDetectionService objectDetectionService,
                                           IDataSummitAzureUrlsDao azureDao,
                                           IAzureResourcesService azureResources)
         {
             _documentsDao = documentsDao;
             _templateAttributesDao = templateAttributesDao;
             _azureResources = azureResources;
-            _objectDetectionService = objectDetectionService ?? throw new ArgumentNullException(nameof(objectDetectionService));
             _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
 
         }
@@ -79,41 +76,38 @@ namespace DataSummitService.Services
             return enumFormat;
         }
 
+        /// <summary>
+        ///  This is tech-debt and in a future ticket/iteration we should put the object(string) in a class and have 
+        ///  a ToEnum() method in that class.
+        /// </summary>
+        /// <param name="itemName"></param>
+        /// <returns>DrawingLayout enum</returns>
+        public DrawingLayout GetDrawingLayoutEnum(string itemName)
+        {
+            var enumComponent = DrawingLayout.Unknown;
+            switch (itemName)
+            {
+                case "DrawingContent":
+                    enumComponent = DrawingLayout.DrawingContent;
+                    break;
+                case "Notes":
+                    enumComponent = DrawingLayout.Notes;
+                    break;
+                case "TitleBox":
+                    enumComponent = DrawingLayout.TitleBox;
+                    break;
+            }
+            return enumComponent;
+        }
+
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)
         {
-            var document = _documentsDao.GetDocumentsByUrl(documentUrl);
+            var document = _documentsDao.GetDocumentByUrl(documentUrl);
             var documentDto = new DocumentDto(document);
             return documentDto;
         }
 
-        public Document GetDocumentByUrl(string documentUrl) => _documentsDao.GetDocumentsByUrl(documentUrl);
-
-        public async Task UpdateDocumentFeature(string documentUrl)
-        {
-
-            var azureFunction = await _azureDao.GetAzureFunctionUrlByName("ObjectDetection");
-            var azureAI = await _azureDao.GetMLUrlByNameAsync("DrawingLayout");
-            var documentPredictions = await _objectDetectionService.GetPrediction(documentUrl, azureFunction, azureAI, 0.05);
-            if (documentPredictions?.Any() ?? false)
-            {
-                documentPredictions.ForEach(async docPred =>
-                {
-                    var documentFeature = new DocumentFeature
-                    {
-                        Value = docPred.TagName,
-                        Confidence = (decimal)Math.Round(docPred.Probability, 5),
-                        Vendor = "Microsoft Custom Vision",
-                        Left = (long)Math.Round(docPred.BoundingBox.Min.X, 0),
-                        Top = (long)Math.Round(docPred.BoundingBox.Max.Y, 0),
-                        Width = (long)Math.Round(docPred.BoundingBox.Max.X - docPred.BoundingBox.Min.X, 0),
-                        Height = (long)Math.Round(docPred.BoundingBox.Max.Y - docPred.BoundingBox.Min.Y, 0)
-                    };
-
-                    //Persist in database
-                    await _documentsDao.UpdateDocumentFeature(documentUrl, documentFeature);
-                });
-            }
-        }
+        public Document GetDocumentByUrl(string documentUrl) => _documentsDao.GetDocumentByUrl(documentUrl);
 
         public async Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId)
         {

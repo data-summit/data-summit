@@ -10,12 +10,12 @@ namespace DataSummitService.Interfaces
     {
         DocumentContentType DocumentType(string mimeType);
         DocumentExtension DocumentFormat(string mimeFormat);
+        DrawingLayout GetDrawingLayoutEnum(string itemName);
         DocumentDto GetDocumentDtoByUrl(string documentUrl);
         Document GetDocumentByUrl(string documentUrl);
         Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId);
         Task<List<DocumentDto>> GetProjectDocuments(int projectId);
         void UpdateDocument(Document document);
-        Task UpdateDocumentFeature(string documentUrl);
         Task DeleteDocumentProperty(long documentPropertyId);
     }
 }

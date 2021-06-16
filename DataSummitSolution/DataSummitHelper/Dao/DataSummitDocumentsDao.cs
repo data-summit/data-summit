@@ -81,9 +81,27 @@ namespace DataSummitService.Dao
 
         public async Task UpdateDocumentFeature(string documentUrl, DocumentFeature documentFeature)
         {
-            var doc = await _context.Documents.SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
+            var doc = await _context.Documents
+                                    .Include(d => d.DocumentFeatures)
+                                    .SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
 
             doc?.DocumentFeatures.Add(documentFeature);
+            _context.SaveChanges();
+        }
+
+        public async Task UpdateDocumentFeatures(string documentUrl, List<DocumentFeature> features)
+        {
+            var doc = await _context.Documents
+                                    .Include(d => d.DocumentFeatures)
+                                    .SingleOrDefaultAsync(d => d.BlobUrl == documentUrl);
+
+            if (doc == null)
+            { return; }
+
+            features.ForEach(f => f.DocumentId = doc.DocumentId);
+            doc.DocumentFeatures = doc.DocumentFeatures
+                                      .Union(features)
+                                      .ToList();
             _context.SaveChanges();
         }
 
@@ -93,7 +111,7 @@ namespace DataSummitService.Dao
             return document;
         }
 
-        public Document GetDocumentsByUrl(string documentUrl)
+        public Document GetDocumentByUrl(string documentUrl)
         {
             var document = _context.Documents.SingleOrDefault(doc => doc.BlobUrl == documentUrl);
             return document;
@@ -116,7 +134,7 @@ namespace DataSummitService.Dao
             return documents;
         }
 
-        public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttributesForDocumentId(int documentId)
+        public async Task<List<TemplateAttribute>> GetAttributesForDocumentId(int documentId)
         {
             var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
 

@@ -10,6 +10,6 @@ namespace DataSummitService.Interfaces.MachineLearning
     public interface IClassificationService
     {
         Task<DocumentTypeSummaryDto> GetDocumentType(string url);
-        Task<MLPrediction> GetPrediction(string url, string azureMLResourceName, string azureResourceName, double minThreshold = 0.65);
+        Task<ClassificationPrediction> GetClassificationPrediction(string url, string azureMLResourceName, string azureResourceName, double minThreshold = 0.65);
     }
 }

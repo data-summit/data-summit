@@ -111,7 +111,7 @@
     <None Include="dbo\Data\Sentences.sql" />
     <None Include="dbo\Data\StandardAttributes.sql" />
     <None Include="dbo\Data\FunctionTasks.sql" />
-    <Build Include="dbo\Tables\Document.sql" />
+    <Build Include="dbo\Tables\Documents.sql" />
     <Build Include="dbo\Tables\DocumentFeatures.sql" />
     <Build Include="dbo\Tables\DocumentLayers.sql" />
     <Build Include="dbo\Tables\DocumentTemplates.sql" />

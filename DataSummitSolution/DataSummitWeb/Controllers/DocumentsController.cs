@@ -14,23 +14,27 @@ using System.Threading.Tasks;
 namespace DataSummitWeb.Controllers
 {
     //[Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     public partial class DocumentsController : Controller
     {
         private readonly IDataSummitDocumentsService _dataSummitDocuments;
         private readonly IAzureResourcesService _azureResourcesService;
         private readonly IClassificationService _classificationService;
+        private readonly IObjectDetectionService _objectDetectionService;
         private readonly IDataSummitDocumentsDao _documentsDao;
 
         public DocumentsController(IDataSummitDocumentsService dataSummitDocuments,
                                    IAzureResourcesService azureResourcesService,
                                    IClassificationService classificationService,
+                                   IObjectDetectionService objectDetectionService,
                                    IDataSummitDocumentsDao documentsDao)
         {
             _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao));
             _dataSummitDocuments = dataSummitDocuments ?? throw new ArgumentNullException(nameof(dataSummitDocuments));
             _azureResourcesService = azureResourcesService ?? throw new ArgumentNullException(nameof(azureResourcesService));
             _classificationService = classificationService ?? throw new ArgumentNullException(nameof(classificationService));
+            _objectDetectionService = objectDetectionService ?? throw new ArgumentNullException(nameof(objectDetectionService));
         }
 
         [HttpGet]
@@ -77,6 +81,22 @@ namespace DataSummitWeb.Controllers
                 }
 
                 return Ok(documentTypeSummaries);
+            }
+            catch (Exception ae)
+            {
+                return Problem(detail: ae.Message, statusCode: 500);
+            }
+        }
+
+        [HttpPost("determineDrawingLayout")]
+        public async Task<IActionResult> DetermineDrawingLayout(DetermineDrawingLayout determineDrawingLayout)
+        {
+            try
+            {
+                var tasks = determineDrawingLayout.BlobUrls.Select(blobUrl => _objectDetectionService.GetDrawingLayout(blobUrl));
+                var results = await Task.WhenAll(tasks);
+
+                return Ok(results);
             }
             catch (Exception ae)
             {

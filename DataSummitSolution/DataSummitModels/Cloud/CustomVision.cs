@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace DataSummitModels.Cloud
 {
     public class CustomVision
@@ -12,5 +14,13 @@ namespace DataSummitModels.Cloud
 
         public CustomVision()
         { ; }
+
+        public string GetIteration()
+        {
+            // Return the number 1323 from an example string http://test/Iteration1323/
+            var rgx = new Regex(@"(?!Iteration)(\d+)(?=\/)");
+            var match = rgx.Match(MLUrl);
+            return match.Value;
+        }
     }
 }

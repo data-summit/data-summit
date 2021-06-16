@@ -21,6 +21,8 @@ namespace AzureFunctions.MachineLearning
 {
     public static class Classification
     {
+        private static readonly string ENDPOINT = @"https://documentlayout.cognitiveservices.azure.com";
+
         [FunctionName("Classification")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -30,51 +32,52 @@ namespace AzureFunctions.MachineLearning
             {
                 string jsonContent = await new StreamReader(req.Body).ReadToEndAsync();
                 dynamic data = JsonConvert.DeserializeObject<CustomVision>(jsonContent);
-                CustomVision cvML = (CustomVision)data;
-
+                CustomVision customVisionData = (CustomVision)data;
+                
                 //Verify body content
-                if (cvML.BlobUrl == "") return new BadRequestObjectResult("Illegal input: blob url required.");
-                if (cvML.MLUrl == "") return new BadRequestObjectResult("Illegal input: Ml end-point url required.");
-                if (cvML.TrainingKey == "") return new BadRequestObjectResult("Illegal input: No training key");
-                if (cvML.PredictionKey == "") return new BadRequestObjectResult("Illegal input: No prediction key");
-                if (cvML.MLProjectName == "") return new BadRequestObjectResult("Illegal input: ML project name required");
+                if (string.IsNullOrEmpty(customVisionData.BlobUrl)) return new BadRequestObjectResult("Illegal input: blob url required.");
+                if (string.IsNullOrEmpty(customVisionData.MLUrl)) return new BadRequestObjectResult("Illegal input: Ml end-point url required.");
+                if (string.IsNullOrEmpty(customVisionData.TrainingKey)) return new BadRequestObjectResult("Illegal input: No training key");
+                if (string.IsNullOrEmpty(customVisionData.PredictionKey)) return new BadRequestObjectResult("Illegal input: No prediction key");
+                if (string.IsNullOrEmpty(customVisionData.MLProjectName)) return new BadRequestObjectResult("Illegal input: ML project name required");
 
                 // Create a training endpoint, passing in the obtained training key
-                CustomVisionTrainingClient trainingApi = new CustomVisionTrainingClient(
-                    new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(cvML.TrainingKey))
-                { Endpoint = "https://documentlayout.cognitiveservices.azure.com/" };
+                var trainingApi = new CustomVisionTrainingClient(
+                    new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.ApiKeyServiceClientCredentials(customVisionData.TrainingKey))
+                { Endpoint = ENDPOINT };
 
                 var projects = await trainingApi.GetProjectsAsync();
-                if (projects != null && projects.Count(p => p.Name == cvML.MLProjectName) > 0)
+                if (projects?.Any() ?? false)
                 {
-                    var project = projects.First(p => p.Name == cvML.MLProjectName);
+                    var project = projects.Single(p => p.Name == customVisionData.MLProjectName);
 
-                    List<MLPrediction> preds = new List<MLPrediction>();
-                    if (project != null)
+                    var preds = new List<ClassificationPrediction>();
+
+                    // Create a prediction endpoint, passing in the obtained prediction key
+                    var predictionApi = new CustomVisionPredictionClient(
+                        new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(customVisionData.PredictionKey));
+                    predictionApi.Endpoint = ENDPOINT;
+
+                    var iteration = customVisionData.GetIteration();
+                    var imageUrl = new ImageUrl(customVisionData.BlobUrl);
+                    var imageClassification = predictionApi.ClassifyImageUrl(project.Id, iteration, imageUrl, customVisionData.BlobUrl);
+                    var predictions = imageClassification.Predictions.Where(p => p.Probability > customVisionData.MinThreshold).ToList();
+
+                    foreach (var prediction in imageClassification.Predictions)
                     {
-                        // Create a prediction endpoint, passing in the obtained prediction key
-                        CustomVisionPredictionClient predictionApi = new CustomVisionPredictionClient(
-                        new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(cvML.PredictionKey));
-                        predictionApi.Endpoint = "https://documentlayout.cognitiveservices.azure.com/"; // cvML.MLUrl;
-
-                        var result = predictionApi.ClassifyImageUrl(project.Id, "Iteration4", new ImageUrl(cvML.BlobUrl) { Url = cvML.BlobUrl });
-
-                        foreach (var c in result.Predictions)
+                        if (prediction.Probability > customVisionData.MinThreshold)
                         {
-                            if (c.Probability > cvML.MinThreshold)
+                            var pred = new ClassificationPrediction()
                             {
-                                var pred = new MLPrediction()
-                                {
-                                    Probability = c.Probability,
-                                    TagId = c.TagId,
-                                    TagName = c.TagName,
-                                    TagType = c.TagType
-                                };
-                                preds.Add(pred);
-                            }
+                                Probability = prediction.Probability,
+                                TagId = prediction.TagId,
+                                TagName = prediction.TagName,
+                                TagType = prediction.TagType
+                            };
+                            preds.Add(pred);
                         }
                     }
-                    string jsonToReturn = JsonConvert.SerializeObject(preds);
+                    var jsonToReturn = JsonConvert.SerializeObject(preds);
                     return new OkObjectResult(jsonToReturn);
                 }
                 else

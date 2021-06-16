@@ -11,13 +11,12 @@ namespace DataSummitModels.DB
         public string Vendor { get; set; }
         public string Value { get; set; }
         public long DocumentId { get; set; }
-        public long? Left { get; set; }
-        public long? Top { get; set; }
-        public long? Width { get; set; }
-        public long? Height { get; set; }
+        public decimal? Left { get; set; }
+        public decimal? Top { get; set; }
+        public decimal? Width { get; set; }
+        public decimal? Height { get; set; }
         public string Feature { get; set; }
         public decimal Confidence { get; set; }
-        public long? Center { get; set; }
 
         public virtual Document Document { get; set; }
     }
