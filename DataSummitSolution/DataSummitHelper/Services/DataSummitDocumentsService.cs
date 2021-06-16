@@ -100,6 +100,16 @@ namespace DataSummitService.Services
             return enumComponent;
         }
 
+        public async Task<List<DocumentFeature>> GetDocumentText(string url)
+        {
+            var features = new List<DocumentFeature>();
+            var azureFunction = await _azureDao.GetAzureFunctionUrlByName("RecogniseTextAzure");
+            
+
+
+            return features;
+        }
+
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)
         {
             var document = _documentsDao.GetDocumentByUrl(documentUrl);

@@ -41,25 +41,22 @@ namespace AzureFunctions.RecogniseText
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent,
                         new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime });
                 ImageUpload imgUp = (ImageUpload)data;
-                name = name ?? data?.name;
 
-                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
+                var functionTasks = new List<DataSummitModels.DTO.FunctionTask>();
 
                 //Validate entry data
-                if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
-                if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
-                if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
+                if (string.IsNullOrEmpty(imgUp.FileName)) return new BadRequestObjectResult("Illegal input: File name is, less than zero.");
+                //if (string.IsNullOrEmpty(imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
+                if (string.IsNullOrEmpty(imgUp.StorageAccountName)) return new BadRequestObjectResult("Illegal input: Storage name required.");
+                if (string.IsNullOrEmpty(imgUp.StorageAccountKey)) return new BadRequestObjectResult("Illegal input: Storage key required.");
                 if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
                 if (imgUp.HeightOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have height greater than zero");
-                if (imgUp.ContainerName == "") return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
-                if (imgUp.SplitImages == null) return new BadRequestObjectResult("Illegal input: 'SplitImages' list is null");
-                if (imgUp.SplitImages.Count == 0) return new BadRequestObjectResult("Illegal input: 'SplitImages' list is empty");
-                if (imgUp.Tasks == null) return new BadRequestObjectResult("Illegal input: 'Tasks' list is null");
-                //if (Tasks.Count == 0) return new BadRequestObjectResult("Illegal input: 'Tasks' list is empty");
+                if (string.IsNullOrEmpty(imgUp.ContainerName)) return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
+                if (imgUp.SplitImages?.Any() ?? true) return new BadRequestObjectResult("Illegal input: 'SplitImages' list is null or empty");
+                if (imgUp.Tasks?.Any() ?? true) return new BadRequestObjectResult("Illegal input: 'Tasks' list is null or empty");
 
-                List<BlobOCR> lRes = new List<BlobOCR>();
-                Document ocrRes = new Document();
+                var lRes = new List<BlobOCR>();
+                var ocrRes = new Document();
 
                 string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
                                            ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
@@ -74,8 +71,8 @@ namespace AzureFunctions.RecogniseText
                 if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tGet container", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
 
                 //Get Container name from input object, exit if not found
                 CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
@@ -158,8 +155,8 @@ namespace AzureFunctions.RecogniseText
                             string contentString = response.Content.ReadAsStringAsync().Result;
                             res = JsonConvert.DeserializeObject<OcrResult>(contentString);
 
-                            Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tProcessed image " + imgUp.SplitImages.IndexOf(ig).ToString("000"), imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                            log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ": " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
+                            functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tProcessed image " + imgUp.SplitImages.IndexOf(ig).ToString("000"), imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                            log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ": " + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
                             List<DataSummitModels.Cloud.Consolidated.Sentences> sentences = new List<DataSummitModels.Cloud.Consolidated.Sentences>();
 
                             if (res != null)
@@ -184,8 +181,8 @@ namespace AzureFunctions.RecogniseText
                                 if (ig.Sentences == null) ig.Sentences = new List<Sentence>();
                                 ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
 
-                                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ": " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
+                                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ": " + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
                             }
                         }
                         catch (OperationCanceledException e)
@@ -196,8 +193,8 @@ namespace AzureFunctions.RecogniseText
                     }));
                 }
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks started", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks started", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
 
                 List<Task> ltFailed = new List<Task>();
                 List<Task> lTPassed = new List<Task>();
@@ -212,8 +209,8 @@ namespace AzureFunctions.RecogniseText
                     lOCRTasks.RemoveAll(t => t.IsCanceled || t.IsFaulted);
                 }
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks finished", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks finished", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
 
                 //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
                 if (imgUp.Sentences == null) imgUp.Sentences = new List<DataSummitModels.DB.Sentence>();
@@ -236,7 +233,7 @@ namespace AzureFunctions.RecogniseText
                 //                                    .Select(s => s.ToModel()).ToList();
                 //imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\t'All OCR Results' uploaded", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\t'All OCR Results' uploaded", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
 
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);
                 return new OkObjectResult(jsonToReturn);

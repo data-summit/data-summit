@@ -103,5 +103,21 @@ namespace DataSummitWeb.Controllers
                 return Problem(detail: ae.Message, statusCode: 500);
             }
         }
+
+        [HttpPost("textRecoginition")]
+        public async Task<IActionResult> TextRecoginition(DocumentTextRecognitionParams textRecognitionFiles)
+        {
+            try
+            {
+                var tasks = textRecognitionFiles.BlobUrls.Select(blobUrl => _dataSummitDocuments.GetDocumentText(blobUrl));
+                var results = await Task.WhenAll(tasks);
+
+                return Ok(results);
+            }
+            catch (Exception ae)
+            {
+                return Problem(detail: ae.Message, statusCode: 500);
+            }
+        }
     }
 }

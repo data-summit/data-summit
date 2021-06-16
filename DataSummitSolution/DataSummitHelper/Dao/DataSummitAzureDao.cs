@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataSummitService.Dto;
 
 namespace DataSummitService.Dao
 {
@@ -22,11 +23,11 @@ namespace DataSummitService.Dao
             {
                 throw new Exception("DataSummit DbContext could not be created");
             }
-            //// TODO: Guard class against empty objects
-            //else if (_context.AzureCompanyResourceUrls.Count() > 0)
-            //{
-            //    throw new Exception("DataSummit DbContext contains no results");
-            //}
+            // TODO: Guard class against empty objects (TJ amended, can this TODO be removed now?)
+            else if (_context.AzureCompanyResourceUrls?.Any() ?? false)
+            {
+                throw new Exception("DataSummit DbContext contains no results");
+            }
         }
 
         public async Task DeleteTemplateAttribute(long templateAttributeId)
@@ -46,10 +47,14 @@ namespace DataSummitService.Dao
         }
 
         #region Azure URLs
-        public async Task<Tuple<string, string>> GetAzureFunctionUrlByName(string name)
+        public async Task<AzureFunctionUrlKeyDto> GetAzureFunctionUrlByName(string name)
         {
             var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name);
-            return new Tuple<string, string>(urlKey.Url, urlKey.Key);
+            return new AzureFunctionUrlKeyDto
+            {
+                Url = urlKey.Url,
+                Key = urlKey.Key
+            };
         }
         #endregion
 
@@ -70,15 +75,10 @@ namespace DataSummitService.Dao
         public async Task<List<DataSummitModels.DB.TemplateAttribute>> GetAttribtesForTemplateId(int templateId)
         {
             var templateAttributes = new List<DataSummitModels.DB.TemplateAttribute>();
-            try
-            {
-                templateAttributes = await _context.TemplateAttributes
-                    .Where(p => p.TemplateVersionId == templateId)
-                    .ToListAsync();
-            }
-            catch (Exception ae)
-            {
-            }
+
+            templateAttributes = await _context.TemplateAttributes
+                .Where(p => p.TemplateVersionId == templateId)
+                .ToListAsync();
 
             return templateAttributes;
         }
