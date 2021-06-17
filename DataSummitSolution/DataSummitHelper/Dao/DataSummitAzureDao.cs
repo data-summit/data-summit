@@ -24,10 +24,10 @@ namespace DataSummitService.Dao
                 throw new Exception("DataSummit DbContext could not be created");
             }
             // TODO: Guard class against empty objects (TJ amended, can this TODO be removed now?)
-            else if (_context.AzureCompanyResourceUrls?.Any() ?? false)
-            {
-                throw new Exception("DataSummit DbContext contains no results");
-            }
+            //else if (_context.AzureCompanyResourceUrls?.Any() ?? true)
+            //{
+            //    throw new Exception("DataSummit DbContext contains no results");
+            //}
         }
 
         public async Task DeleteTemplateAttribute(long templateAttributeId)
@@ -51,6 +51,16 @@ namespace DataSummitService.Dao
         {
             var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name);
             return new AzureFunctionUrlKeyDto
+            {
+                Url = urlKey.Url,
+                Key = urlKey.Key
+            };
+        }
+
+        public async Task<AzureResourceUrlKeyDto> GetAzureResourceKeyPairByNameAndType(string name, string type)
+        {
+            var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name && ar.ResourceType == type);
+            return new AzureResourceUrlKeyDto
             {
                 Url = urlKey.Url,
                 Key = urlKey.Key

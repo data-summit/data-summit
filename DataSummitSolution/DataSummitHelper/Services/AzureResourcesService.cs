@@ -474,7 +474,7 @@ namespace DataSummitService.Services
         {
             var blob = GetBlobByUrl(blobUrl);
 
-            // Get the blob properties
+            //Explicit cast required
             BlobProperties properties = await blob.GetPropertiesAsync();
             try
             {
@@ -492,6 +492,14 @@ namespace DataSummitService.Services
             {
                 throw new Exception("Document type & confidence could not be added to blob metadata");
             }
+        }
+        public async Task<IDictionary<string, string>> GetBlobMetadata(string blobUrl)
+        {
+            var blob = GetBlobByUrl(blobUrl);
+
+            //Explicit cast required
+            BlobProperties properties = await blob.GetPropertiesAsync();
+            return properties.Metadata;
         }
         private DocumentExtension GetDocumentExtensionEnum(string mimeType)
         {
@@ -517,7 +525,7 @@ namespace DataSummitService.Services
         }
         #endregion
 
-        #region Cognitive Functions
+        #region Cognitive Services
 
         #endregion
     }

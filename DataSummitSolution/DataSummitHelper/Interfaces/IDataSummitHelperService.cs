@@ -15,5 +15,6 @@ namespace DataSummitService.Interfaces
         #endregion
 
         Task<HttpResponseMessage> ProcessCall(Uri uri, string payload);
+        Task<HttpResponseMessage> ProcessCall(Uri uri, string payload, Dictionary<string, string> headers);
     }
 }

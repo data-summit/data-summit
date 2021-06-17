@@ -12,26 +12,31 @@ using DataSummitService.Interfaces.MachineLearning;
 using DataSummitModels.DB;
 using DataSummitModels.Enums;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Azure.Storage.Blobs.Models;
 
 namespace DataSummitService.Services
 {
     public class DataSummitDocumentsService : IDataSummitDocumentsService
     {
+        private readonly IDataSummitHelperService _dataSummitHelper;
         private readonly IDataSummitDocumentsDao _documentsDao;
         private readonly IDataSummitTemplateAttributesDao _templateAttributesDao;
-        private readonly IAzureResourcesService _azureResources;
         private readonly IDataSummitAzureUrlsDao _azureDao;
+        private readonly IAzureResourcesService _azureResourcesService;
 
-        public DataSummitDocumentsService(IDataSummitDocumentsDao documentsDao,
+        public DataSummitDocumentsService(IAzureResourcesService azureResourcesService,
+                                          IDataSummitHelperService dataSummitHelper, 
+                                          IDataSummitDocumentsDao documentsDao,
                                           IDataSummitTemplateAttributesDao templateAttributesDao,
-                                          IDataSummitAzureUrlsDao azureDao,
-                                          IAzureResourcesService azureResources)
+                                          IDataSummitAzureUrlsDao azureDao)
         {
-            _documentsDao = documentsDao;
-            _templateAttributesDao = templateAttributesDao;
-            _azureResources = azureResources;
-            _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
 
+            _dataSummitHelper = dataSummitHelper ?? throw new ArgumentNullException(nameof(dataSummitHelper));
+            _documentsDao = documentsDao ?? throw new ArgumentNullException(nameof(documentsDao)); 
+            _templateAttributesDao = templateAttributesDao ?? throw new ArgumentNullException(nameof(templateAttributesDao));
+            _azureDao = azureDao ?? throw new ArgumentNullException(nameof(azureDao));
+            _azureResourcesService = azureResourcesService ?? throw new ArgumentNullException(nameof(azureResourcesService));
         }
 
         public DocumentContentType DocumentType(string mimeType)
@@ -100,14 +105,91 @@ namespace DataSummitService.Services
             return enumComponent;
         }
 
-        public async Task<List<DocumentFeature>> GetDocumentText(string url)
+        public async Task<ImageDimensionsDto> GetDocumentImageDimensionsFromMetadata(string blobUrl)
+        {
+            var dimensions = new ImageDimensionsDto();
+            var metadata = await _azureResourcesService.GetBlobMetadata(blobUrl);    
+            
+            //Verify that blob metadata fields are populated 
+            if (metadata.Count(m => m.Key == "IsImage") > 0 &&
+                metadata.Count(m => m.Key == "Width") > 0 &&
+                metadata.Count(m => m.Key == "Height") > 0)
+            {
+                //Verify that blob 'Is an image'
+                if (metadata.Count(m => m.Key == "IsImage" && m.Value == "true") > 0)
+                {
+                    int.TryParse(metadata.Single(m => m.Key == "Width").Value, out int width);
+                    int.TryParse(metadata.Single(m => m.Key == "Height").Value, out int height);
+
+                    //Validate dimension values
+                    if (width > 0 && height > 0)
+                    {
+                        dimensions.Width = width;
+                        dimensions.Height = height;
+                    }
+                }
+            }
+
+            return dimensions;
+        }
+
+        public async Task<KeyValuePair<string, int>> GetDocumentText(string blobUrl)
         {
             var features = new List<DocumentFeature>();
-            var azureFunction = await _azureDao.GetAzureFunctionUrlByName("RecogniseTextAzure");
-            
 
+            // Find image dimensions, needed for making positions relavtive (between 0 & 1) not absolute
+            var imageDimenions = await GetDocumentImageDimensionsFromMetadata(blobUrl);
 
-            return features;
+            // Fetch resource url & key information from database
+            var azureCognitiveServiceOCR = await _azureDao.GetAzureResourceKeyPairByNameAndType("RecogniseTextAzure", "Cognitive Services");
+
+            // Subscription key required as a header, not as a url parameter
+            var headers = new Dictionary<string, string>
+            {
+                { "Ocp-Apim-Subscription-Key", azureCognitiveServiceOCR.Key }
+            };
+
+            //TODO catch error responses
+            var httpResponse = await _dataSummitHelper.ProcessCall(
+                uri: new Uri(azureCognitiveServiceOCR.Url + "?language=unk&detectOrientation=true"),
+                payload: "{ \"url\": \"" + blobUrl + "\"}", 
+                headers: headers);
+
+            var response = await httpResponse.Content.ReadAsStringAsync();
+            var detectedText = JsonConvert.DeserializeObject<DataSummitModels.Cloud.CognitiveServices.OCR.Application>(response);
+
+            // Convert OCR object to document feature object
+            foreach (var region in detectedText.Regions)
+            {
+                foreach (var line in region.Lines)
+                {
+                    foreach (var word in line.Words)
+                    {
+                        string[] dimensions = word.BoundingBox.Split(",");
+                        int.TryParse(dimensions[0], out int left);
+                        int.TryParse(dimensions[1], out int top);
+                        int.TryParse(dimensions[2], out int width);
+                        int.TryParse(dimensions[3], out int height);
+
+                        var documentFeature = new DocumentFeature
+                        {
+                            Confidence = 1,
+                            Feature = "Text",
+                            Height = Math.Round(height / (decimal)imageDimenions.Height, 5),
+                            Left = Math.Round(left / (decimal)imageDimenions.Width, 5),
+                            Top = Math.Round(top / (decimal)imageDimenions.Height, 5),
+                            Width = Math.Round(width / (decimal)imageDimenions.Width, 5),
+                            Vendor = "Azure",
+                            Value = word.Text,
+                        };
+                        features.Add(documentFeature);
+                    }
+                }
+            }
+            // Add new features to database
+            await _documentsDao.UpdateDocumentFeatures(blobUrl, features);
+
+            return new KeyValuePair<string, int>(blobUrl, features.Count);
         }
 
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)

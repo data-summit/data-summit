@@ -51,5 +51,20 @@ namespace DataSummitService.Services
             var stringTask = await client.PostAsync(uri, httpContent);
             return stringTask;
         }
+
+        public async Task<HttpResponseMessage> ProcessCall(Uri uri, string payload, Dictionary<string, string> headers)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Accept.Clear();
+            foreach (var headerPair in headers)
+            {
+                client.DefaultRequestHeaders.Add(headerPair.Key, headerPair.Value);
+            }
+
+            HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+
+            var stringTask = await client.PostAsync(uri, httpContent);
+            return stringTask;
+        }
     }
 }
