@@ -3,19 +3,20 @@ using System;
 
 namespace DataSummitModels.DTO
 {
-    public class FunctionTask : DB.FunctionTask
+    // TODO - explain this class to me
+    public class FunctionTaskDto : FunctionTask
     {
-        public FunctionTask()
+        public FunctionTaskDto()
         { ; }
 
-        public FunctionTask(string name, DateTime previous)
+        public FunctionTaskDto(string name, DateTime previous)
         {
             Name = name;
             TimeStamp = DateTime.Now;
             Duration = TimeStamp - previous;
         }
 
-        public DB.FunctionTask ToModel(FunctionTask functionTask)
+        public DB.FunctionTask ToModel(FunctionTaskDto functionTask)
         {
             DB.FunctionTask t = new DB.FunctionTask()
             {
