@@ -39,7 +39,7 @@ namespace AzureFunctions.RecogniseText
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
 
-                List<FunctionTask> Tasks = new List<FunctionTask>();
+                List<FunctionTaskDto> Tasks = new List<FunctionTaskDto>();
 
                 //Validate entry data
                 if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
@@ -66,7 +66,7 @@ namespace AzureFunctions.RecogniseText
                 if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
-                Tasks.Add(new FunctionTask("Amazon OCR\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new FunctionTaskDto("Amazon OCR\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
                 //Get Container name from input object, exit if not found
@@ -108,18 +108,18 @@ namespace AzureFunctions.RecogniseText
                         //foreach(Sentences s in )
                         ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
 
-                        Tasks.Add(new FunctionTask("Amazon OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        Tasks.Add(new FunctionTaskDto("Amazon OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                         log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ": " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
                     }
                     //}));
                 }
 
-                Tasks.Add(new FunctionTask("Amazon OCR\tAll OCR tasks started", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new FunctionTaskDto("Amazon OCR\tAll OCR tasks started", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
                 //Task.WaitAll(lOCRTasks.ToArray());
 
-                Tasks.Add(new FunctionTask("Amazon OCR\tAll OCR tasks finished", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new FunctionTaskDto("Amazon OCR\tAll OCR tasks finished", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name + ":" + imgUp.Tasks[Tasks.Count - 1].Duration.ToString());
 
                 //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
@@ -147,7 +147,7 @@ namespace AzureFunctions.RecogniseText
                 //jsonSentencesBlob = cbc.GetBlockBlobReference(sOCRRes);
                 //jsonSentencesBlob.UploadText(JsonConvert.SerializeObject(lResults));
 
-                Tasks.Add(new FunctionTask("Amazon OCR\t'All OCR Results' uploaded", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new FunctionTaskDto("Amazon OCR\t'All OCR Results' uploaded", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);
 

@@ -38,7 +38,7 @@ namespace AzureFunctions
                 ImageUpload imgUp = (ImageUpload)data;
                 //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
 
-                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
+                List<DataSummitModels.DTO.FunctionTaskDto> Tasks = new List<DataSummitModels.DTO.FunctionTaskDto>();
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.FunctionTask>();
                 if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
 
@@ -69,9 +69,9 @@ namespace AzureFunctions
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
                 if (Tasks.Count == 0)
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", DateTime.Now)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Images\tGet container", DateTime.Now)); }
                 else
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Images\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
 
                 //Get Container name from input object, exit if not found
                 CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
@@ -107,7 +107,7 @@ namespace AzureFunctions
                     }
                 } while (blobContinuationToken != null);    // Loop while the continuation token is not null.
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Fetch 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Fetch 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 if (cbbOrig == null)
                 {
@@ -184,7 +184,7 @@ namespace AzureFunctions
                         }
                     }
 
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " + imgUp.SplitImages.Count().ToString() + " adjoining images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Image\tOriginal divide into " + imgUp.SplitImages.Count().ToString() + " adjoining images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                     //Create overlap grid system
                     for (int x = 0; x < widthMod; x++)
@@ -210,7 +210,7 @@ namespace AzureFunctions
                         }
                     }
 
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " +
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Image\tOriginal divide into " +
                                                      imgUp.SplitImages.Count(d => d.Type == 2).ToString() +
                                                      " overlapping images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
@@ -233,20 +233,20 @@ namespace AzureFunctions
 
                         imgG.Image = null;
 
-                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tImage " +
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Image\tImage " +
                                                          (imgUp.SplitImages.IndexOf(imgG) + 1).ToString() + " uploaded",
                                                          imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     }
                     bmp.Dispose();
                 }
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tCreating JSON Image Structure Text", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Image\tCreating JSON Image Structure Text", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 //Write json data file to blob, containing the above information
                 CloudBlockBlob jsonBlob = cbc.GetBlockBlobReference("Split Images Data & Structure.json");
                 await jsonBlob.UploadTextAsync(JsonConvert.SerializeObject(imgUp));
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tFunction complete", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Divide Image\tFunction complete", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
 
                 string jsonToReturn = JsonConvert.SerializeObject(imgUp);
 
