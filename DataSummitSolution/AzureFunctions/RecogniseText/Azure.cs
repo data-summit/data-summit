@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace AzureFunctions.RecogniseText
 {
-    public static class Azure
+    public static class AzureTextRecognition
     {
         [FunctionName("RecogniseTextAzure")]
         public static async Task<IActionResult> Run(
