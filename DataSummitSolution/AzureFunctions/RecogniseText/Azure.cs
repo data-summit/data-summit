@@ -1,16 +1,19 @@
-using AzureFunctions.Methods;
 using AzureFunctions.Models.Azure;
+using AzureFunctions.Methods.PostProcessing;
+
 using DataSummitModels.DB;
-using DataSummitModels.DTO;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.CognitiveServices.Vision.ComputerVision.Models;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+
 using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,184 +21,228 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using DataSummitModels.DTO;
 
 namespace AzureFunctions.RecogniseText
 {
-    public static class AzureTextRecognition
+    public static class Azure
     {
         [FunctionName("RecogniseTextAzure")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest request,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-            string name = request.Query["name"];
+            string name = req.Query["name"];
 
             try
             {
-                var requestBody = await new StreamReader(request.Body).ReadToEndAsync();
-                var imageUpload = JsonConvert.DeserializeObject<ImageUpload>(requestBody,
+                string jsonContent = await new StreamReader(req.Body).ReadToEndAsync();
+                dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent,
                         new JsonSerializerSettings { DateParseHandling = DateParseHandling.DateTime });
+                ImageUpload imgUp = (ImageUpload)data;
+
+                var functionTasks = new List<DataSummitModels.DTO.FunctionTask>();
 
                 //Validate entry data
-                ValidateRequest(imageUpload);
+                if (string.IsNullOrEmpty(imgUp.FileName)) return new BadRequestObjectResult("Illegal input: File name is, less than zero.");
+                //if (string.IsNullOrEmpty(imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
+                if (string.IsNullOrEmpty(imgUp.StorageAccountName)) return new BadRequestObjectResult("Illegal input: Storage name required.");
+                if (string.IsNullOrEmpty(imgUp.StorageAccountKey)) return new BadRequestObjectResult("Illegal input: Storage key required.");
+                if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
+                if (imgUp.HeightOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have height greater than zero");
+                if (string.IsNullOrEmpty(imgUp.ContainerName)) return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
+                if (imgUp.SplitImages?.Any() ?? true) return new BadRequestObjectResult("Illegal input: 'SplitImages' list is null or empty");
+                if (imgUp.Tasks?.Any() ?? true) return new BadRequestObjectResult("Illegal input: 'Tasks' list is null or empty");
 
-                var blobOCRs = new List<BlobOCR>();
-                var document = new Document();
+                var lRes = new List<BlobOCR>();
+                var ocrRes = new Document();
 
-                string connectionString = $"DefaultEndpointsProtocol=https;AccountName={imageUpload.StorageAccountName};AccountKey={imageUpload.StorageAccountKey};EndpointSuffix=core.windows.net";
-                var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
-                var blobClient = cloudStorageAccount.CreateCloudBlobClient();
+                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
+                                           ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
 
-                var tasksIndex = 0;
-                var functionTasks = new List<FunctionTaskDto>
-                {
-                    new FunctionTaskDto("Azure OCR\tGet container", imageUpload.Tasks[tasksIndex].TimeStamp)
-                };
-                
+                CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
+                string strError = "Blob connection";
+                if (account != null) { log.LogInformation(strError + ": failed"); }
+                else { log.LogInformation(strError + ": success"); }
+
+                CloudBlobClient blobClient = account.CreateCloudBlobClient();
+                strError = "CloudBlobClient";
+                if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
+                else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
+
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tGet container", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
+
                 //Get Container name from input object, exit if not found
-                var cloudBlobContainer = blobClient.GetContainerReference(imageUpload.ContainerName);
-                if (!await cloudBlobContainer.ExistsAsync()) 
-                { 
-                    return new BadRequestObjectResult($"Illegal input: Cannot find Container with name: {imageUpload.ContainerName}"); 
-                }
+                CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
+                if (await cbc.ExistsAsync() == false) return new BadRequestObjectResult("Illegal input: Cannot find Container with name: " + imgUp.ContainerName);
 
-                var httpClient = new HttpClient();
-                //TODO: Replace with actual key from Azure Secrets
-                httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "Keys.Azure.VisionKey");  
+                //Write new or append OCR results to separete files
+                //string sOCRRes = "All OCR Results.json";
+                //CloudBlockBlob jsonSentencesBlob = cbc.GetBlockBlobReference(sOCRRes);
+
+                ////REST interface method, has been failing on v2.0 for due to Newtonsoft 10.0.3 issue
+                //ComputerVisionClient cvc = new ComputerVisionClient(
+                //    new ApiKeyServiceClientCredentials(Keys.Azure.VisionKey),
+                //    new System.Net.Http.DelegatingHandler[] { })
+                //{
+                //    Endpoint = Keys.Azure.VisionUri
+                //};
+
+                //Direct REST method if 'ComputerVisionClient' fails
+                HttpClient client = new HttpClient();
+
+                // Request headers.
+                client.DefaultRequestHeaders.Add(
+                    "Ocp-Apim-Subscription-Key", "Keys.Azure.VisionKey");  //Replace with actual key from Azure Secrets
 
                 // Request parameters. 
                 // The language parameter doesn't specify a language, so the 
                 // method detects it automatically.
                 // The detectOrientation parameter is set to true, so the method detects and
                 // and corrects text orientation before detecting text.
-                var ocrTasks = new List<Task>();
-                foreach (ImageGrids imageGrids in imageUpload.SplitImages.Where(i => i.ProcessedAzure == false))
+                string requestParameters = "language=unk&detectOrientation=true";
+
+                // Assemble the URI for the REST API method.
+                string uri = "Keys.Azure.VisionUri" + "?" + requestParameters;  //Replace with actual key from Azure Secrets
+
+                List<Task> lOCRTasks = new List<Task>();
+
+                foreach (ImageGrids ig in imgUp.SplitImages.Where(i => i.ProcessedAzure == false))
                 {
-                    ocrTasks.Add(Task.Run(async () =>
-                    RunOCRTask()));
+                    ////REST interface method, fails due to Newtonsoft 10.0.3 issue
+                    //Task<OcrResult> task = Task.Run(async () =>
+                    //        res = await cvc.RecognizePrintedTextAsync(false, ig.BlobURL)
+                    //    );
+                    //task.Wait();
+
+                    lOCRTasks.Add(Task.Run(async () =>
+                    {
+                        HttpResponseMessage response;
+
+                        OcrResult res = null;
+
+                        //REST direct method
+                        Uri uriBlob = new Uri(ig.BlobUrl);
+                        CloudBlockBlob blockBlobOrig = new CloudBlockBlob(uriBlob);
+
+                        int iTask = 0;
+                        byte[] byteData = new byte[blockBlobOrig.StreamWriteSizeInBytes];
+
+                        iTask = await blockBlobOrig.DownloadToByteArrayAsync(byteData, 0);
+                        log.LogInformation(ig.Name + " dowloaded (" + byteData.LongLength.ToString("#,###") + " bytes)");
+
+                        try
+                        {
+                            // Add the byte array as an octet stream to the request body.
+                            using (ByteArrayContent content = new ByteArrayContent(byteData))
+                            {
+                                // This example uses the "application/octet-stream" content type.
+                                // The other content types you can use are "application/json"
+                                // and "multipart/form-data".
+                                content.Headers.ContentType =
+                                    new MediaTypeHeaderValue("application/octet-stream");
+
+                                // Asynchronously call the REST API method.
+                                //response = client.PostAsync(uri, content).Result;
+                                log.LogInformation(ig.Name + " OCR requested");
+                                response = await client.PostAsync(uri, content);
+                                log.LogInformation(ig.Name + " OCR responded");
+                            }
+
+                            // Asynchronously get the JSON response.
+                            string contentString = response.Content.ReadAsStringAsync().Result;
+                            res = JsonConvert.DeserializeObject<OcrResult>(contentString);
+
+                            functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tProcessed image " + imgUp.SplitImages.IndexOf(ig).ToString("000"), imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                            log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ": " + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
+                            List<DataSummitModels.Cloud.Consolidated.Sentences> sentences = new List<DataSummitModels.Cloud.Consolidated.Sentences>();
+
+                            if (res != null)
+                            {
+                                Methods.OCRSources ocrMethods = new Methods.OCRSources();
+                                BlobOCR o = new BlobOCR();
+                                o.Results.Language = res.Language;
+                                o.Results.Orientation = res.Orientation;
+                                o.Results.TextAngle = (double)res.TextAngle;
+                                if (res.Regions != null)
+                                {
+                                    foreach (OcrRegion r in res.Regions.ToList())
+                                    {
+                                        o.Results.Regions.Add(Region.CastTo(r));
+                                    }
+                                }
+                                string sOut = string.Join(" ", o.Results.Regions.SelectMany(r => r.Lines.SelectMany(l => l.Words.Select(y => y.Text))));
+
+                                lRes.Add(o);
+                                sentences.AddRange(ocrMethods.FromAzure(o.Results));
+
+                                if (ig.Sentences == null) ig.Sentences = new List<Sentence>();
+                                ig.Sentences.AddRange(Methods.WordLocation.Corrected(sentences, ig));
+
+                                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tUnified image " + imgUp.SplitImages.IndexOf(ig).ToString("000") + " results", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ": " + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
+                            }
+                        }
+                        catch (OperationCanceledException e)
+                        {
+                            log.LogInformation(ig.Name + " task cancelled due to '" + e.Message + "'");
+                            ig.ProcessedAzure = false;
+                        }
+                    }));
                 }
 
-                functionTasks.Add(new FunctionTaskDto("Azure OCR\tAll OCR tasks started", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-                
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks started", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
+
                 List<Task> ltFailed = new List<Task>();
                 List<Task> lTPassed = new List<Task>();
                 try
                 {
-                    await Task.WhenAll(ocrTasks.ToArray());
+                    await Task.WhenAll(lOCRTasks.ToArray());
                 }
                 catch (Exception)
                 {
-                    ltFailed = ocrTasks.Where(t => t.IsCompleted).ToList();
-                    lTPassed = ocrTasks.Where(t => !t.IsCompleted).ToList();
-                    ocrTasks.RemoveAll(t => t.IsCanceled || t.IsFaulted);
+                    ltFailed = lOCRTasks.Where(t => t.IsCompleted).ToList();
+                    lTPassed = lOCRTasks.Where(t => !t.IsCompleted).ToList();
+                    lOCRTasks.RemoveAll(t => t.IsCanceled || t.IsFaulted);
                 }
 
-                functionTasks.Add(new FunctionTaskDto("Azure OCR\tAll OCR tasks finished", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\tAll OCR tasks finished", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+                log.LogInformation(imgUp.Tasks[functionTasks.Count - 1].Name + ":" + imgUp.Tasks[functionTasks.Count - 1].Duration.ToString());
 
                 //Extract sentences from each ImageGrid and consolidate into ImageUpload (technical duplicate)
-                if (imageUpload.Sentences == null) { imageUpload.Sentences = new List<Sentence>(); }
-                foreach (ImageGrids imageGrids in imageUpload.SplitImages.Where(t => t.ProcessedAzure == false))
+                if (imgUp.Sentences == null) imgUp.Sentences = new List<DataSummitModels.DB.Sentence>();
+                foreach (ImageGrids ig in imgUp.SplitImages.Where(t => t.ProcessedAzure == false))
                 {
-                    if (imageGrids.Sentences != null)
+                    if (ig.Sentences != null)
                     {
-                        imageUpload.Sentences.AddRange(imageGrids.Sentences);
-                        imageGrids.ProcessedAzure = true; 
-                        imageGrids.Sentences = null;
+                        imgUp.Sentences.AddRange(ig.Sentences);
+                        ig.ProcessedAzure = true;        //Switches state for Azure Function iterations
+                        ig.Sentences = null;
                     }
-                    
-                    //Keeps track of number attempts to OCR image
-                    imageGrids.IterationAzure = imageGrids.IterationAzure++;  
+                    ig.IterationAzure = (byte)(ig.IterationAzure + 1);  //Keeps track of number attempts to OCR image
                 }
-                
-                functionTasks.Add(new FunctionTaskDto("Azure OCR\t'All OCR Results' uploaded", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
-                var processingResult = JsonConvert.SerializeObject(imageUpload);
-                return new OkObjectResult(processingResult);
+                Self self = new Self();
+
+                //TODO correct method to remove error from this section
+                //List<DataSummitModels.Cloud.Consolidated.Sentences> lResults = self.Clean(
+                //                                     imgUp.Sentences.Select(s => s.ToModelConsolidated()).ToList())
+                //                                    .Select(s => s.ToModel()).ToList();
+                //imgUp.Sentences = lResults.Where(s => s.IsUsed == true).ToList();
+
+                functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Azure OCR\t'All OCR Results' uploaded", imgUp.Tasks[functionTasks.Count - 1].TimeStamp));
+
+                string jsonToReturn = JsonConvert.SerializeObject(imgUp);
+                return new OkObjectResult(jsonToReturn);
             }
-            catch (Exception ex)
+            catch (Exception ae)
             {
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(ex));
+                //return error generated within function code
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(ae));
             }
         }
-
-        private static async Task RunOCRTask(ImageGrids imageGrids, HttpClient httpClient, List<FunctionTaskDto> functionTasks, ImageUpload imageUpload, List<BlobOCR> blobOCRs)
-        {
-            HttpResponseMessage response;
-
-            //REST direct method
-            var blobUri = new Uri(imageGrids.BlobUrl);
-            var blockBlobOrig = new CloudBlockBlob(blobUri);
-            var byteData = new byte[blockBlobOrig.StreamWriteSizeInBytes];
-            var iTask = await blockBlobOrig.DownloadToByteArrayAsync(byteData, 0);
-            
-            try
-            {
-                // Add the byte array as an octet stream to the request body.
-                using (var content = new ByteArrayContent(byteData))
-                {
-                    // This example uses the "application/octet-stream" content type.
-                    // The other content types you can use are "application/json"
-                    // and "multipart/form-data".
-                    content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-                    // Asynchronously call the REST API method.
-                    var uri = "Keys.Azure.VisionUri?language=unk&detectOrientation=true";
-                    response = await httpClient.PostAsync(uri, content);
-                }
-                
-                functionTasks.Add(new FunctionTaskDto($"Azure OCR\tProcessed image {imageUpload.SplitImages.IndexOf(imageGrids):000}", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-
-                // Asynchronously get the JSON response.
-                var sentences = new List<Sentences>();
-                string responseContent = response.Content.ReadAsStringAsync().Result;
-                var ocrResult = JsonConvert.DeserializeObject<OcrResult>(responseContent);
-                if (ocrResult != null)
-                {
-                    var ocrMethods = new OCRSources();
-                    var blobOCR = new BlobOCR();
-                    blobOCR.Results.Language = ocrResult.Language;
-                    blobOCR.Results.Orientation = ocrResult.Orientation;
-                    blobOCR.Results.TextAngle = (double)ocrResult.TextAngle;
-                    if (ocrResult.Regions != null)
-                    {
-                        foreach (var ocrRegion in ocrResult.Regions)
-                        {
-                            blobOCR.Results.Regions.Add(Region.CastTo(ocrRegion));
-                        }
-                    }
-                    
-                    blobOCRs.Add(blobOCR);
-                    sentences.AddRange(ocrMethods.FromAzure(blobOCR.Results));
-
-                    if (imageGrids.Sentences == null) imageGrids.Sentences = new List<Sentence>();
-                    imageGrids.Sentences.AddRange(WordLocation.Corrected(sentences, imageGrids));
-
-                    functionTasks.Add(new FunctionTaskDto($"Azure OCR\tUnified image {imageUpload.SplitImages.IndexOf(imageGrids):000} results", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-                }
-            }
-            catch (OperationCanceledException e)
-            {
-                log.LogInformation($"{imageGrids.Name} task cancelled due to ' {e.Message} '");
-                imageGrids.ProcessedAzure = false;
-            }
-        }
-
-        private static BadRequestObjectResult ValidateRequest(ImageUpload imageUpload)
-        {
-            if (string.IsNullOrEmpty(imageUpload.FileName)) { return CreateBadRequestObject(nameof(imageUpload.FileName)); }
-            if (string.IsNullOrEmpty(imageUpload.StorageAccountName)) { return CreateBadRequestObject(nameof(imageUpload.StorageAccountName)); }
-            if (string.IsNullOrEmpty(imageUpload.StorageAccountKey)) { return CreateBadRequestObject(nameof(imageUpload.StorageAccountKey)); }
-            if (string.IsNullOrEmpty(imageUpload.ContainerName)) { return CreateBadRequestObject(nameof(imageUpload.ContainerName)); }
-            if (imageUpload.SplitImages?.Any() ?? true) { return CreateBadRequestObject(nameof(imageUpload.SplitImages)); }
-            if (imageUpload.Tasks?.Any() ?? true) { return CreateBadRequestObject(nameof(imageUpload.Tasks)); }
-            if (imageUpload.WidthOriginal <= 0) { return new BadRequestObjectResult("Illegal input: Image must have width greater than zero"); }
-            if (imageUpload.HeightOriginal <= 0) { new BadRequestObjectResult("Illegal input: Image must have height greater than zero"); }
-
-            return null;
-        }
-
-        private static BadRequestObjectResult CreateBadRequestObject(string parameterName) 
-            => new BadRequestObjectResult($"Illegal input: {parameterName} is null or empty.");
     }
 }

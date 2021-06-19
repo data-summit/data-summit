@@ -48,7 +48,7 @@ namespace AzureFunctions.DocumentFunctions
 
             try
             {
-                List<DataSummitModels.DTO.FunctionTaskDto> Tasks = new List<DataSummitModels.DTO.FunctionTaskDto>();
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
 
                 if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.FunctionTask>();
                 if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
@@ -75,9 +75,9 @@ namespace AzureFunctions.DocumentFunctions
                 else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
 
                 if (Tasks.Count == 0)
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Connected to storage account", DateTime.Now)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Connected to storage account", DateTime.Now)); }
                 else
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Connected to storage account", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Connected to storage account", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
 
                 //create a pdf document.
                 MemoryStream ms = new MemoryStream();
@@ -104,7 +104,7 @@ namespace AzureFunctions.DocumentFunctions
 
                     await blobContainer.SetPermissionsAsync(bcp);
 
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto($"Page {(i + 1)} of {pdfDoc.Pages.Count} : Container created", imgUp.Tasks[^1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask($"Page {(i + 1)} of {pdfDoc.Pages.Count} : Container created", imgUp.Tasks[^1].TimeStamp));
 
                     log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
                                        " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
@@ -199,13 +199,13 @@ namespace AzureFunctions.DocumentFunctions
 
                             byte[] imgBytes = rasterizer.ConvertToTiff();
 
-                            Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": pdf converted to jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                            Tasks.Add(new DataSummitModels.DTO.FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": pdf converted to jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                             log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                             await blockBlobJPG.UploadFromByteArrayAsync(imgBytes, 0, imgBytes.Length);
                         }
 
-                        Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                         log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
                                        " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
                                        imgUp.Tasks[Tasks.Count - 1].Name);
@@ -236,7 +236,7 @@ namespace AzureFunctions.DocumentFunctions
                         }
                         lLayers.Distinct().OrderBy(l => l);
 
-                        Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.pdf'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Page " + (i + 1).ToString() + " of " + pdfDoc.Pages.Count.ToString() + ": uploaded to blob as 'Original.pdf'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                         log.LogInformation("(Total: " + TimeSpan.FromTicks(Tasks.Sum(t => t.Duration.Ticks)).ToString(@"mm\:ss\.f") +
                                            " Delta: " + imgUp.Tasks[Tasks.Count - 1].Duration.ToString(@"mm\:ss\.f") + ") " +
                                            imgUp.Tasks[Tasks.Count - 1].Name);

@@ -36,7 +36,7 @@ namespace AzureFunctions
                 dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
                 ImageUpload imgUp = (ImageUpload)data;
 
-                List<DataSummitModels.DTO.FunctionTaskDto> Tasks = new List<DataSummitModels.DTO.FunctionTaskDto>();
+                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
                 List<Task> lTasks = new List<Task>();
 
                 //if (imgUp.Tasks == null) imgUp.Tasks = new List<Tasks>();
@@ -79,9 +79,9 @@ namespace AzureFunctions
 
                 //Add event checking that whether it is the first event to exist in list
                 if (Tasks.Count == 0)
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Container created", DateTime.Now)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", DateTime.Now)); }
                 else
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
+                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Container created", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
                 log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                 CloudBlockBlob cbbImage = cbc.GetBlockBlobReference("Original.jpg");
@@ -97,7 +97,7 @@ namespace AzureFunctions
                     cbbImage.Metadata.Add("Height", imgUp.HeightOriginal.ToString());
                     await cbbImage .SetMetadataAsync();
 
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image uploaded to blob", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                     log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
 
                     //Clear heavy payload content
@@ -115,7 +115,7 @@ namespace AzureFunctions
                         imgUp.WidthOriginal = bmp.Width;
                         imgUp.HeightOriginal = bmp.Height;
 
-                        Tasks.Add(new DataSummitModels.DTO.FunctionTaskDto("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Image dimensions assessed", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
                         log.LogInformation(imgUp.Tasks[Tasks.Count - 1].Name);
                     }
                 }));
