@@ -23,11 +23,7 @@ namespace DataSummitService.Dao
             {
                 throw new Exception("DataSummit DbContext could not be created");
             }
-            // TODO: Guard class against empty objects (TJ amended, can this TODO be removed now?)
-            //else if (_context.AzureCompanyResourceUrls?.Any() ?? true)
-            //{
-            //    throw new Exception("DataSummit DbContext contains no results");
-            //}
+            // TODO: Guard class against empty objects
         }
 
         public async Task DeleteTemplateAttribute(long templateAttributeId)
