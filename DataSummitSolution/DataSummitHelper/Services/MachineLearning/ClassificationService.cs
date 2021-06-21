@@ -87,7 +87,7 @@ namespace DataSummitService.Services.MachineLearning
                 };
 
                 //TODO catch error responses
-                var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Item1 + "?code=" + azureFunction.Item2),
+                var httpResponse = await _dataSummitHelper.ProcessCall(new Uri(azureFunction.Url + "?code=" + azureFunction.Key),
                     JsonConvert.SerializeObject(customVisionRequest));
                 var response = await httpResponse.Content.ReadAsStringAsync();
                 

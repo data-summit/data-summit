@@ -21,5 +21,7 @@ INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [U
 GO
 INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (9, N'ObjectDetection', N'https://datasummit-functionapps.azurewebsites.net/api/ObjectDetection', N'LHaEs9drwYz6rSvyDRR31bT7ucraq1N/rqgute6si0oGJEXoH49XSw==', N'Function', 1)
 GO
+INSERT [dbo].[AzureCompanyResourceUrls] ([AzureCompanyResourceUrlId], [Name], [URL], [Key], [ResourceType], [CompanyId]) VALUES (10, N'RecogniseTextAzure', N'https://uksouth.api.cognitive.microsoft.com/vision/v3.2/ocr', N'b3cf266972254fb7966642044b9e15d3', N'Cognitive Services', 1)
+GO
 SET IDENTITY_INSERT [dbo].[AzureCompanyResourceUrls] OFF
 GO

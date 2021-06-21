@@ -21,6 +21,7 @@ namespace DataSummitService.Interfaces
         //Block blob
         Task<FileUploadSummaryDto> UploadDataToBlob(IFormFile file);
         BlockBlobClient GetBlobByUrl(string blobUrl);
+        Task<IDictionary<string, string>> GetBlobMetadata(string blobUrl);
         Task AddMetadataToBlob(string blobUrl, List<KeyValuePair<string, string>> metadata);
     }
 }

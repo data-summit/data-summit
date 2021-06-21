@@ -1,15 +1,16 @@
-using DataSummitService.Classes;
 using DataSummitModels.DB;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DataSummitService.Dto;
 
 namespace DataSummitService.Dao.Interfaces
 {
     public interface IDataSummitAzureUrlsDao
     {
         #region Azure URLs
-        Task<Tuple<string, string>> GetAzureFunctionUrlByName(string name);
+        Task<AzureFunctionUrlKeyDto> GetAzureFunctionUrlByName(string name);
+        Task<AzureResourceUrlKeyDto> GetAzureResourceKeyPairByNameAndType(string name, string type);
         #endregion
 
         #region Machine Learning URLs

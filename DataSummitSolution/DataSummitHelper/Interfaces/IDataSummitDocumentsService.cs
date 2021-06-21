@@ -11,6 +11,7 @@ namespace DataSummitService.Interfaces
         DocumentContentType DocumentType(string mimeType);
         DocumentExtension DocumentFormat(string mimeFormat);
         DrawingLayout GetDrawingLayoutEnum(string itemName);
+        Task<KeyValuePair<string, int>> GetDocumentText(string blobUrl);
         DocumentDto GetDocumentDtoByUrl(string documentUrl);
         Document GetDocumentByUrl(string documentUrl);
         Task<List<DocumentDto>> GetDocumentsForProjectId(int projectId);
