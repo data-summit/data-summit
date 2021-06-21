@@ -524,9 +524,5 @@ namespace DataSummitService.Services
             return format;
         }
         #endregion
-
-        #region Cognitive Services
-
-        #endregion
     }
 }
