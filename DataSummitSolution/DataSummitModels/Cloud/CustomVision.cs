@@ -12,15 +12,18 @@ namespace DataSummitModels.Cloud
         public string MLProjectName { get; set; }
         public double MinThreshold { get; set; } = 0.95;
 
-        public CustomVision()
-        { ; }
-
-        public string GetIteration()
+        /// <summary>
+        /// Return the number 1323 from an example string
+        /// https://a.b.c.com/customvision/v3.1/Prediction/<GUID>/classify/iterations/Iteration1323/url
+        /// </summary>
+        public string TrainingIteration
         {
-            // Return the number 1323 from an example string http://test/Iteration1323/
-            var rgx = new Regex(@"(?!Iteration)(\d+)(?=\/)");
-            var match = rgx.Match(MLUrl);
-            return match.Value;
+            get
+            {
+                var regex = new Regex(@"(?<=\/Iteration)\d+(?=\/)");
+                var match = regex.Match(MLUrl);
+                return match.Value;
+            }
         }
     }
 }
