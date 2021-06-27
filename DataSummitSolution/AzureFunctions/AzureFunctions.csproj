@@ -5,8 +5,11 @@
     <UserSecretsId>89a326fd-d2cd-43b7-8c41-a61aa3ce5990</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Detection\**" />
     <Compile Remove="Models\Consolidated\**" />
+    <EmbeddedResource Remove="Detection\**" />
     <EmbeddedResource Remove="Models\Consolidated\**" />
+    <None Remove="Detection\**" />
     <None Remove="Models\Consolidated\**" />
   </ItemGroup>
   <ItemGroup>
@@ -36,8 +39,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Detection\" />
   </ItemGroup>
 </Project>
