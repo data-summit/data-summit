@@ -57,7 +57,7 @@ namespace AzureFunctions
 
                 var cloudBlockBlob = await FindOriginalJpeg(cloudBlobContainer, imageUpload.BlobUrl);
 
-                // functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Fetch 'Original.jpg'", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
+                // functionTasks.Add(new FunctionTaskDto("Fetch 'Original.jpg'", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
                 if (cloudBlockBlob == null)
                 {
@@ -84,24 +84,24 @@ namespace AzureFunctions
 
                 var splitImages = CreateImageSections(widthMod, heightMod, widthSpan, heightSpan, widthFinalAdjust, heightFinalAdjust, imageBitmap, cloudBlobContainer);
 
-                // functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " + imageUpload.SplitImages.Count().ToString() + " adjoining images", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
+                // functionTasks.Add(new FunctionTaskDto("Divide Image\tOriginal divide into " + imageUpload.SplitImages.Count().ToString() + " adjoining images", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
                 var overlappingImages = CreateOverlappingImageSections(widthMod, heightMod, widthSpan, heightSpan, image.Width, image.Height, imageBitmap, cloudBlobContainer);
                 splitImages.AddRange(overlappingImages);
                 imageUpload.SplitImages = splitImages;
 
-                //functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " +
+                //functionTasks.Add(new FunctionTaskDto("Divide Image\tOriginal divide into " +
                 //                                 imageUpload.SplitImages.Count(d => d.Type == 2).ToString() +
                 //                                 " overlapping images", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
-                // functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tCreating JSON Image Structure Text", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
+                // functionTasks.Add(new FunctionTaskDto("Divide Image\tCreating JSON Image Structure Text", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
                 //Write json data file to blob, containing the above information
                 var jsonBlob = cloudBlobContainer.GetBlockBlobReference("Split Images Data & Structure.json");
                 var imageUploadJson = JsonConvert.SerializeObject(imageUpload);
                 await jsonBlob.UploadTextAsync(imageUploadJson);
 
-                // functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tFunction complete", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
+                // functionTasks.Add(new FunctionTaskDto("Divide Image\tFunction complete", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
                 return new OkObjectResult(imageUploadJson);
             }
             catch (Exception ex)
@@ -164,7 +164,7 @@ namespace AzureFunctions
 
             splitImage.Image = null;
 
-            //functionTasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tImage " +
+            //functionTasks.Add(new FunctionTaskDto("Divide Image\tImage " +
             //                                    (imageUpload.SplitImages.IndexOf(splitImage) + 1).ToString() + " uploaded",
             //                                    imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
         }
