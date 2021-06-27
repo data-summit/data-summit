@@ -45,20 +45,11 @@ namespace AzureFunctions
                 var cloudStorageAccount = CloudStorageAccount.Parse(connectionString);
                 var cloudBlobClient = cloudStorageAccount?.CreateCloudBlobClient();
 
-                var functionTasks = new List<FunctionTaskDto>();
-                //if (functionTasks.Count == 0)
-                //{ functionTasks.Add(new FunctionTaskDto("Divide Images\tGet container", DateTime.Now)); }
-                //else
-                //{ functionTasks.Add(new FunctionTaskDto("Divide Images\tGet container", imgUpload.Tasks[functionTasks.Count - 1].TimeStamp)); }
-
                 var cloudBlobContainer = cloudBlobClient.GetContainerReference(imageUpload.ContainerName);
                 if (!await cloudBlobContainer.ExistsAsync())
                 { return new BadRequestObjectResult($"Illegal input: Cannot find Container: {imageUpload.ContainerName}"); }
 
                 var cloudBlockBlob = await FindOriginalJpeg(cloudBlobContainer, imageUpload.BlobUrl);
-
-                // functionTasks.Add(new FunctionTaskDto("Fetch 'Original.jpg'", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-
                 if (cloudBlockBlob == null)
                 {
                     return new BadRequestObjectResult($"Could not locate 'Original.jpg' file in container '{imageUpload.ContainerName}'.");
@@ -82,26 +73,16 @@ namespace AzureFunctions
                 using var imageBitmap = image as Bitmap;
                 imageBitmap.SetResolution(image.Width, image.Height);
 
-                var splitImages = CreateImageSections(widthMod, heightMod, widthSpan, heightSpan, widthFinalAdjust, heightFinalAdjust, imageBitmap, cloudBlobContainer);
-
-                // functionTasks.Add(new FunctionTaskDto("Divide Image\tOriginal divide into " + imageUpload.SplitImages.Count().ToString() + " adjoining images", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-
-                var overlappingImages = CreateOverlappingImageSections(widthMod, heightMod, widthSpan, heightSpan, image.Width, image.Height, imageBitmap, cloudBlobContainer);
+                var splitImages = await CreateImageSections(widthMod, heightMod, widthSpan, heightSpan, widthFinalAdjust, heightFinalAdjust, imageBitmap, cloudBlobContainer);
+                var overlappingImages = await CreateOverlappingImageSections (widthMod, heightMod, widthSpan, heightSpan, image.Width, image.Height, imageBitmap, cloudBlobContainer);
                 splitImages.AddRange(overlappingImages);
                 imageUpload.SplitImages = splitImages;
-
-                //functionTasks.Add(new FunctionTaskDto("Divide Image\tOriginal divide into " +
-                //                                 imageUpload.SplitImages.Count(d => d.Type == 2).ToString() +
-                //                                 " overlapping images", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
-
-                // functionTasks.Add(new FunctionTaskDto("Divide Image\tCreating JSON Image Structure Text", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
 
                 //Write json data file to blob, containing the above information
                 var jsonBlob = cloudBlobContainer.GetBlockBlobReference("Split Images Data & Structure.json");
                 var imageUploadJson = JsonConvert.SerializeObject(imageUpload);
                 await jsonBlob.UploadTextAsync(imageUploadJson);
 
-                // functionTasks.Add(new FunctionTaskDto("Divide Image\tFunction complete", imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
                 return new OkObjectResult(imageUploadJson);
             }
             catch (Exception ex)
@@ -143,7 +124,7 @@ namespace AzureFunctions
             } while (blobContinuationToken != null);
         }
 
-        private static async void UploadImageSectionToBlob(CloudBlobContainer cloudBlobContainer, ImageSectionDto splitImage)
+        private static async Task UploadImageSectionToBlob(CloudBlobContainer cloudBlobContainer, ImageSectionDto splitImage)
         {
             var splitImageCloudBlockBlob = cloudBlobContainer.GetBlockBlobReference(splitImage.Name);
 
@@ -159,17 +140,11 @@ namespace AzureFunctions
             splitImageCloudBlockBlob.Metadata.Add("HeightStart", splitImage.HeightStart.ToString());
             splitImageCloudBlockBlob.Metadata.Add("Width", splitImage.Width.ToString());
             splitImageCloudBlockBlob.Metadata.Add("Height", splitImage.Height.ToString());
-            //splitImageCloudBlockBlob.Metadata.Add("Type", splitImage.Type.ToString());
+            splitImageCloudBlockBlob.Metadata.Add("Type", splitImage.ImageType.ToString());
             await splitImageCloudBlockBlob.SetMetadataAsync();
-
-            splitImage.Image = null;
-
-            //functionTasks.Add(new FunctionTaskDto("Divide Image\tImage " +
-            //                                    (imageUpload.SplitImages.IndexOf(splitImage) + 1).ToString() + " uploaded",
-            //                                    imageUpload.Tasks[functionTasks.Count - 1].TimeStamp));
         }
 
-        private static List<ImageSectionDto> CreateImageSections(int widthMod, 
+        private static async Task<List<ImageSectionDto>> CreateImageSections(int widthMod, 
                                                                      int heightMod, 
                                                                      int widthSpan, 
                                                                      int heightSpan, 
@@ -212,14 +187,14 @@ namespace AzureFunctions
 
                     imageSection.Image = bitmap.Clone(new Rectangle(imageSection.WidthStart, imageSection.HeightStart, imageSection.Width, imageSection.Height), PixelFormat.Format24bppRgb);
                     standardGrid.Add(imageSection);
-                    UploadImageSectionToBlob(cloudBlobContainer, imageSection);
+                    await UploadImageSectionToBlob(cloudBlobContainer, imageSection);
                 }
             }
 
             return standardGrid;
         }
 
-        private static List<ImageSectionDto> CreateOverlappingImageSections(int widthMod, 
+        private static async Task<List<ImageSectionDto>> CreateOverlappingImageSections(int widthMod, 
                                                                            int heightMod, 
                                                                            int widthSpan, 
                                                                            int heightSpan, 
@@ -251,7 +226,7 @@ namespace AzureFunctions
                         };
 
                         overlappingSections.Add(imageGrid);
-                        UploadImageSectionToBlob(cloudBlobContainer, imageGrid);
+                        await UploadImageSectionToBlob(cloudBlobContainer, imageGrid);
                     }
                 }
             }
