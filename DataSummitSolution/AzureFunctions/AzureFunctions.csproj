@@ -6,14 +6,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Detection\**" />
-    <Compile Remove="Models\Consolidated\**" />
     <EmbeddedResource Remove="Detection\**" />
-    <EmbeddedResource Remove="Models\Consolidated\**" />
     <None Remove="Detection\**" />
-    <None Remove="Models\Consolidated\**" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Models\Sentences.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.Core" Version="3.5.3.5" />
