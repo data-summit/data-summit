@@ -58,7 +58,7 @@ namespace AzureFunctions.MachineLearning
                         new Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.ApiKeyServiceClientCredentials(customVisionData.PredictionKey));
                     predictionApi.Endpoint = ENDPOINT;
 
-                    var iteration = customVisionData.GetIteration();
+                    var iteration = customVisionData.TrainingIteration;
                     var imageUrl = new ImageUrl(customVisionData.BlobUrl);
                     var imageClassification = predictionApi.ClassifyImageUrl(project.Id, iteration, imageUrl, customVisionData.BlobUrl);
                     var predictions = imageClassification.Predictions.Where(p => p.Probability > customVisionData.MinThreshold).ToList();
