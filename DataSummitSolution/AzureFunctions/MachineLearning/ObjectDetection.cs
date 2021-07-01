@@ -64,7 +64,7 @@ namespace AzureFunctions.MachineLearning
                         Url = cvML.BlobUrl
                     };
 
-                    var iteration = cvML.GetIteration();
+                    var iteration = cvML.TrainingIteration;
                     var result = predictionApi.DetectImageUrl(project.Id, iteration, imgUrl);
 
                     foreach (var c in result.Predictions)
