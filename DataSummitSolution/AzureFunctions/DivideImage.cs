@@ -45,7 +45,7 @@ namespace AzureFunctions
                 string connectionString = $"DefaultEndpointsProtocol=https;AccountName={imageUpload.StorageAccountName};AccountKey={imageUpload.StorageAccountKey};EndpointSuffix=core.windows.net";
                 var blobServiceClient = new BlobServiceClient(connectionString);    //v12
 
-                // Get existing container and 'Original' file, which should have been created during the 'Documents.Upload' mothed
+                // Get existing container and 'Original' file, which should have been created during the 'Documents.Upload' method
                 var blobContainerClient = blobServiceClient.GetBlobContainerClient(imageUpload.ContainerName);
                 if (!await blobContainerClient.ExistsAsync())
                 { return new BadRequestObjectResult($"Illegal input: Cannot find Container: {imageUpload.ContainerName}"); }
