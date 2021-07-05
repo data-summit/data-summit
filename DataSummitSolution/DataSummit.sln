@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitService", "DataSu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitModels", "DataSummitModels\DataSummitModels.csproj", "{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataSummitFunctions", "DataSummitFunctions\DataSummitFunctions.csproj", "{578A8167-393A-4B26-8DFA-A57582D00060}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctions", "AzureFunctions\AzureFunctions.csproj", "{D709BA69-AFD8-41DB-A6C6-66C21CBE07A2}"
 EndProject
 Global
@@ -44,9 +42,6 @@ Global
 		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D7641FF-4132-4D9F-A484-0FEA3A79FCF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{578A8167-393A-4B26-8DFA-A57582D00060}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{578A8167-393A-4B26-8DFA-A57582D00060}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D709BA69-AFD8-41DB-A6C6-66C21CBE07A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D709BA69-AFD8-41DB-A6C6-66C21CBE07A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D709BA69-AFD8-41DB-A6C6-66C21CBE07A2}.Release|Any CPU.ActiveCfg = Release|Any CPU

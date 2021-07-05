@@ -3,8 +3,12 @@ using System.Collections.Generic;
 
 namespace DataSummitModels.DTO
 {
-    public class ImageUpload : DocumentBase
+    public class ImageUploadDto
     {
+        public string ContainerName { get; set; }
+        public string BlobUrl { get; set; }
+        public List<ImageSectionDto> SplitImages { get; set; }
+
         public int CompanyId { get; set; }
         public int WidthOriginal { get; set; }
         public int HeightOriginal { get; set; }
@@ -12,42 +16,25 @@ namespace DataSummitModels.DTO
         public int Height { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
-        public string Image { get; set; }
         public string StorageAccountName { get; set; }
         public string StorageAccountKey { get; set; }
         public List<TemplateAttribute> TemplateAttributes { get; set; }
-        public List<ImageGrid> SplitImages { get; set; }
         public Paper.PaperType PaperSize { get; set; }
 
-        public ImageUpload()
-        { }
-
-        public Document ToDocument()
+        public string Validate()
         {
-            Document draw = new Document
-            {
-                AmazonConfidence = AmazonConfidence,
-                AzureConfidence = AzureConfidence,
-                BlobUrl = BlobUrl,
-                ContainerName = ContainerName,
-                CreatedDate = CreatedDate,
-                DocumentId = DocumentId,
-                File = File,
-                FileName = FileName,
-                GoogleConfidence = GoogleConfidence,
-                PaperOrientationId = PaperOrientationId,
-                PaperSizeId = PaperSizeId,
-                Processed = Processed,
-                TemplateVersionId = TemplateVersionId,
-                ProjectId = ProjectId,
-                Sentences = (ICollection<Sentence>)base.Sentences,
-                ImageGrids = SplitImages,
-                Success = Success,
-                Type = Type.ToString(),
-                FunctionTasks = (ICollection<DB.FunctionTask>)base.Tasks,
-                UserId = UserId
-            };
-            return draw;
+            //if (imgUpload.Tasks == null) imgUpload.Tasks = new List<DataSummitModels.DB.FunctionTask>();
+            //if (imgUpload.Layers == null) imgUpload.Layers = new List<DocumentLayer>();
+
+            //if (imgUpload.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
+            //if (imgUpload.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
+            if (string.IsNullOrEmpty(StorageAccountName)) { return "Illegal input: Storage name required."; };
+            if (string.IsNullOrEmpty(StorageAccountKey)) { return "Illegal input: Storage key required."; };
+            if (WidthOriginal <= 0) { return "Illegal input: Image must have width greater than zero"; };
+            if (HeightOriginal <= 0) { return "Illegal input: Image must have height greater than zero"; };
+            //if (imgUpload.ContainerName == "") return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
+
+            return null;
         }
     }
 }

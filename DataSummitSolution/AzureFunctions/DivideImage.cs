@@ -1,262 +1,226 @@
-using DataSummitModels.DB;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using AzureFunctions.DTO;
+using DataSummitModels.DTO;
 using DataSummitModels.Enums;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Microsoft.WindowsAzure.Storage;
-
 using Newtonsoft.Json;
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using DataSummitModels.DTO;
 
 namespace AzureFunctions
 {
+    /// <summary>
+    /// Divides an image into smaller segments so that they can be processed
+    /// Maximum processing size is A4
+    /// </summary>
     public static class DivideImage
     {
-        public static int MaxPixelSpan = 2200;
+        private static readonly int MaxPixelSpan = 3000;
+        private static readonly string OriginalJpeg = "Original.jpg";
 
         [FunctionName("DivideImage")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        public static async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
         {
             try
             {
-                string jsonContent = await new StreamReader(req.Body).ReadToEndAsync();
-                dynamic data = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
-                ImageUpload imgUp = (ImageUpload)data;
-                //ImageUpload img = JsonConvert.DeserializeObject<ImageUpload>(jsonContent);
+                string bodyContent = await new StreamReader(req.Body).ReadToEndAsync();
+                var imageUpload = JsonConvert.DeserializeObject<ImageUploadDto>(bodyContent);
 
-                List<DataSummitModels.DTO.FunctionTask> Tasks = new List<DataSummitModels.DTO.FunctionTask>();
-                if (imgUp.Tasks == null) imgUp.Tasks = new List<DataSummitModels.DB.FunctionTask>();
-                if (imgUp.Layers == null) imgUp.Layers = new List<DocumentLayer>();
-
-                //if (imgUp.CompanyId < 0) return new BadRequestObjectResult("Illegal input: CompanyId is less than zero.");
-                //if (imgUp.ProjectId < 0) return new BadRequestObjectResult("Illegal input: ProjectId is less than zero.");
-                if (imgUp.DocumentId < 0) return new BadRequestObjectResult("Illegal input: DocumentId is less than zero.");
-                //if (imgUp.Company == "") return new BadRequestObjectResult("Illegal input: Company is blank.");
-                //if (imgUp.Project == "") return new BadRequestObjectResult("Illegal input: Project is blank.");
-                if (imgUp.FileName == "") return new BadRequestObjectResult("Illegal input: File name is ,less than zero.");
-                //if (imgUp.Type == DocumentType.Unknown) return new BadRequestObjectResult("Illegal input: Type is blank.");
-                if (imgUp.StorageAccountName == "") return new BadRequestObjectResult("Illegal input: Storage name required.");
-                if (imgUp.StorageAccountKey == "") return new BadRequestObjectResult("Illegal input: Storage key required.");
-                if (imgUp.WidthOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have width greater than zero");
-                if (imgUp.HeightOriginal <= 0) return new BadRequestObjectResult("Illegal input: Image must have height greater than zero");
-                if (imgUp.ContainerName == "") return new BadRequestObjectResult("Illegal input: Container must have a GUID name");
-
-                string connectionString = @"DefaultEndpointsProtocol=https;AccountName=" + imgUp.StorageAccountName +
-                                           ";AccountKey=" + imgUp.StorageAccountKey + ";EndpointSuffix=core.windows.net";
-
-                CloudStorageAccount account = CloudStorageAccount.Parse(connectionString);
-                string strError = "Blob connection";
-                if (account != null) { log.LogInformation(strError + ": failed"); }
-                else { log.LogInformation(strError + ": success"); }
-
-                CloudBlobClient blobClient = account.CreateCloudBlobClient();
-                strError = "CloudBlobClient";
-                if (blobClient.ToString() == "") { log.LogInformation(strError + ": failed"); }
-                else { log.LogInformation(strError + " = " + blobClient.ToString() + ": success"); }
-
-                if (Tasks.Count == 0)
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", DateTime.Now)); }
-                else
-                { Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Images\tGet container", imgUp.Tasks[Tasks.Count - 1].TimeStamp)); }
-
-                //Get Container name from input object, exit if not found
-                CloudBlobContainer cbc = blobClient.GetContainerReference(imgUp.ContainerName);
-                if (await cbc.ExistsAsync() == false)
-                { return new BadRequestObjectResult("Illegal input: Cannot find Container with name: " + imgUp.ContainerName); }
-                
-                //Find 'Original.jpg' blob
-                CloudBlockBlob cbbOrig = default(CloudBlockBlob);
-                BlobContinuationToken blobContinuationToken = null;
-                var listBlobs = await cbc.ListBlobsSegmentedAsync(null, blobContinuationToken);
-                blobContinuationToken = listBlobs.ContinuationToken;
-                do
+                var imageUploadValidationError = imageUpload.Validate();
+                if (!string.IsNullOrEmpty(imageUploadValidationError))
                 {
-                    if (listBlobs.Results.Count(b => b.Uri.ToString() == imgUp.BlobUrl) > 0)
-                    {
-                        cbbOrig = listBlobs.Results.Cast<CloudBlockBlob>().FirstOrDefault(b => b.Uri.ToString() == imgUp.BlobUrl);
-                    }
-                    else
-                    {
-                        foreach (IListBlobItem blobItem in listBlobs.Results)
-                        {
-                            if (blobItem is CloudBlockBlob)
-                            {
-                                CloudBlockBlob cbb = blobItem as CloudBlockBlob;
-
-                                if (cbb.Name == "Original.jpg")
-                                {
-                                    cbbOrig = cbb;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } while (blobContinuationToken != null);    // Loop while the continuation token is not null.
-
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Fetch 'Original.jpg'", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-
-                if (cbbOrig == null)
-                {
-                    return new BadRequestObjectResult("Could not locate 'Original.jpg' file in container '" + imgUp.ContainerName + "'.");
-                }
-                else
-                {
-                    MemoryStream ms = new MemoryStream();
-                    await cbbOrig.DownloadToStreamAsync(ms);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
-
-                    //Split images prior to upload
-                    if (imgUp.SplitImages == null) imgUp.SplitImages = new List<ImageGrid>();
-
-                    int widthMod = (int)Math.Ceiling(((double)img.Width / MaxPixelSpan));
-                    int heightMod = (int)Math.Ceiling(((double)img.Height / MaxPixelSpan));
-
-                    int widthSpan = (img.Width / widthMod);
-                    int heightSpan = (img.Height / heightMod);
-
-                    int widthFinalAdjust = img.Width % (widthSpan * widthMod);
-                    int heightFinalAdjust = img.Height % (heightSpan * heightMod);
-
-                    Bitmap bmp = img as Bitmap;
-                    bmp.SetResolution(img.Width, img.Height);
-
-                    //Create normal grid system
-                    for (int x = 0; x < widthMod; x++)
-                    {
-                        for (int y = 0; y < heightMod; y++)
-                        {
-                            ImageGrids ig = new ImageGrids
-                            {
-                                Name = "F_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
-                                WidthStart = x,
-                                HeightStart = y,
-                                ImageType = ImageType.Normal
-                            };
-                            if (x == widthMod - 1 && y != heightMod - 1)
-                            {
-                                ig.WidthStart = x * widthSpan;
-                                ig.HeightStart = y * heightSpan;
-                                ig.Width = widthSpan + widthFinalAdjust;
-                                ig.Height = heightSpan;
-                                ig.Image = bmp.Clone(new Rectangle(ig.WidthStart, ig.HeightStart, ig.Width, ig.Height), PixelFormat.Format24bppRgb);
-                            }
-                            else if (x != widthMod - 1 && y == heightMod - 1)
-                            {
-                                ig.WidthStart = x * widthSpan;
-                                ig.HeightStart = y * heightSpan;
-                                ig.Width = widthSpan;
-                                ig.Height = heightSpan + heightFinalAdjust;
-                                ig.Image = bmp.Clone(new Rectangle(ig.WidthStart, ig.HeightStart, ig.Width, ig.Height), PixelFormat.Format24bppRgb);
-                            }
-                            else if (x == widthMod - 1 && y == heightMod - 1)
-                            {
-                                ig.WidthStart = x * widthSpan;
-                                ig.HeightStart = y * heightSpan;
-                                ig.Width = widthSpan + widthFinalAdjust;
-                                ig.Height = heightSpan + heightFinalAdjust;
-                                ig.Image = bmp.Clone(new Rectangle(ig.WidthStart, ig.HeightStart, ig.Width, ig.Height), PixelFormat.Format24bppRgb);
-                            }
-                            else
-                            {
-                                ig.WidthStart = x * widthSpan;
-                                ig.HeightStart = y * heightSpan;
-                                ig.Width = widthSpan;
-                                ig.Height = heightSpan;
-                                ig.Image = bmp.Clone(new Rectangle(ig.WidthStart, ig.HeightStart, ig.Width, ig.Height), PixelFormat.Format24bppRgb);
-                            }
-
-                            imgUp.SplitImages.Add(ig);
-                        }
-                    }
-
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " + imgUp.SplitImages.Count().ToString() + " adjoining images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-
-                    //Create overlap grid system
-                    for (int x = 0; x < widthMod; x++)
-                    {
-                        for (int y = 0; y < heightMod; y++)
-                        {
-                            ImageGrids ig = new ImageGrids
-                            {
-                                Name = "O_" + x.ToString("000") + "-" + y.ToString("000") + ".jpg",
-                                WidthStart = x,
-                                HeightStart = y,
-                                ImageType = ImageType.Overlap
-                            };
-                            ig.WidthStart = (x * widthSpan) + (widthSpan / 2);
-                            ig.HeightStart = (y * heightSpan) + (heightSpan / 2);
-                            ig.Width = widthSpan;
-                            ig.Height = heightSpan;
-                            if ((ig.WidthStart + ig.Width) < img.Width && (ig.HeightStart + ig.Height) < img.Height)
-                            {
-                                ig.Image = bmp.Clone(new Rectangle(ig.WidthStart, ig.HeightStart, ig.Width, ig.Height), PixelFormat.Format24bppRgb);
-                                imgUp.SplitImages.Add(ig);
-                            }
-                        }
-                    }
-
-                    Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tOriginal divide into " +
-                                                     imgUp.SplitImages.Count(d => d.Type == 2).ToString() +
-                                                     " overlapping images", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-
-                    foreach (ImageGrids imgG in imgUp.SplitImages)
-                    {
-                        CloudBlockBlob gridBlob = cbc.GetBlockBlobReference(imgG.Name);
-                        MemoryStream msG = new MemoryStream();
-                        imgG.Image.Save(msG, ImageFormat.Jpeg);
-                        msG.Seek(0, SeekOrigin.Begin);
-                        await gridBlob.UploadFromStreamAsync(msG);
-
-                        imgG.BlobUrl = gridBlob.Uri.ToString();
-                        gridBlob.Metadata.Add("Name", imgG.Name);
-                        gridBlob.Metadata.Add("WidthStart", imgG.WidthStart.ToString());
-                        gridBlob.Metadata.Add("HeightStart", imgG.HeightStart.ToString());
-                        gridBlob.Metadata.Add("Width", imgG.Width.ToString());
-                        gridBlob.Metadata.Add("Height", imgG.Height.ToString());
-                        gridBlob.Metadata.Add("Type", imgG.Type.ToString());
-                        await gridBlob.SetMetadataAsync();
-
-                        imgG.Image = null;
-
-                        Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tImage " +
-                                                         (imgUp.SplitImages.IndexOf(imgG) + 1).ToString() + " uploaded",
-                                                         imgUp.Tasks[Tasks.Count - 1].TimeStamp));
-                    }
-                    bmp.Dispose();
+                    return new BadRequestObjectResult(imageUploadValidationError);
                 }
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tCreating JSON Image Structure Text", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                // TODO get storage account connection string data from Azure Secrets store via dependency injection
+                string connectionString = $"DefaultEndpointsProtocol=https;AccountName={imageUpload.StorageAccountName};AccountKey={imageUpload.StorageAccountKey};EndpointSuffix=core.windows.net";
+                var blobServiceClient = new BlobServiceClient(connectionString);    //v12
+
+                // Get existing container and 'Original' file, which should have been created during the 'Documents.Upload' method
+                var blobContainerClient = blobServiceClient.GetBlobContainerClient(imageUpload.ContainerName);
+                if (!await blobContainerClient.ExistsAsync())
+                { return new BadRequestObjectResult($"Illegal input: Cannot find Container: {imageUpload.ContainerName}"); }
+
+                var cloudBlockBlob = blobContainerClient.GetBlobClient(OriginalJpeg);
+
+                using var memoryStream = new MemoryStream();
+                _ = await cloudBlockBlob.DownloadToAsync(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                var image = Image.FromStream(memoryStream);
+
+                using var imageBitmap = image as Bitmap;
+                imageBitmap.SetResolution(image.Width, image.Height);
+
+                var imagePortions = ImageToPortions(image.Width, image.Height);
+                var splitImages = await CreateImageSections(imageBitmap, imagePortions, blobContainerClient);
 
                 //Write json data file to blob, containing the above information
-                CloudBlockBlob jsonBlob = cbc.GetBlockBlobReference("Split Images Data & Structure.json");
-                await jsonBlob.UploadTextAsync(JsonConvert.SerializeObject(imgUp));
+                var jsonBlob = blobContainerClient.GetBlobClient("Split Images Data & Structure.json");
+                var imageUploadJson = JsonConvert.SerializeObject(splitImages, Formatting.Indented);
 
-                Tasks.Add(new DataSummitModels.DTO.FunctionTask("Divide Image\tFunction complete", imgUp.Tasks[Tasks.Count - 1].TimeStamp));
+                using var imageUploadStream = new MemoryStream(Encoding.UTF8.GetBytes(imageUploadJson));
+                await jsonBlob.UploadAsync(imageUploadStream);
 
-                string jsonToReturn = JsonConvert.SerializeObject(imgUp);
-
-                return new OkObjectResult(jsonToReturn);
+                return new OkObjectResult(imageUploadJson);
             }
-            catch (Exception ae)
+            catch (Exception ex)
             {
-                //return error generated within function code
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(ae));
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(ex));
             }
+        }
+
+        private static async Task<string> UploadImageSectionToBlob(BlobContainerClient blobContainerClient, ImageSectionDto splitImage)
+        {
+
+            var identifier = "mysignedidentifier";
+            var readWritePermission = "rw";
+
+            var signedIdentifiers = new List<BlobSignedIdentifier>
+            {
+                new BlobSignedIdentifier
+                {
+                    Id = identifier,
+                    AccessPolicy = new BlobAccessPolicy
+                    {
+                        StartsOn = DateTimeOffset.UtcNow.AddHours(-1),
+                        ExpiresOn = DateTimeOffset.UtcNow.AddDays(1),
+                        Permissions = readWritePermission
+                    }
+                }
+            };
+            await blobContainerClient.SetAccessPolicyAsync(PublicAccessType.BlobContainer, signedIdentifiers);
+
+            // Export image to blockBlob
+            var blobUploadOptions = new BlobUploadOptions
+            {
+                Metadata = new Dictionary<string, string>
+                {
+                    { "Name", splitImage.Name },
+                    { "WidthStart", splitImage.WidthStart.ToString()},
+                    { "HeightStart", splitImage.HeightStart.ToString()},
+                    { "Width", splitImage.Width.ToString() },
+                    { "Height", splitImage.Height.ToString()},
+                    { "Type", splitImage.ImageType.ToString()}
+                }
+            };
+
+            using var memStream = new MemoryStream();
+            splitImage.Image.Save(memStream, ImageFormat.Jpeg);
+            memStream.Seek(0, SeekOrigin.Begin);
+            _ = await blobContainerClient.UploadBlobAsync(splitImage.Name, memStream);
+            
+            var blobClient = blobContainerClient.GetBlobClient(splitImage.Name);
+            await blobClient.SetMetadataAsync(blobUploadOptions.Metadata);
+            return blobClient.Uri.ToString();
+        }
+
+        private static async Task<List<ImageSectionDto>> CreateImageSections(Bitmap bitmap, List<ImagePortionDto> imagePortions, BlobContainerClient blobContainerClient)
+        {
+            var standardGrid = new List<ImageSectionDto>();
+
+            foreach (var imagePortion in imagePortions)
+            {
+                var width = imagePortion.AdjustedWith > bitmap.Width ? (bitmap.Width - imagePortion.WidthPixel) : (int)imagePortion.WidthCalculatedSpan;
+                var height = imagePortion.AdjustedHeight > bitmap.Height ? bitmap.Height - imagePortion.HeightPixel : (int)imagePortion.HeightCalculatedSpan;
+                var imageSection = new ImageSectionDto
+                {
+                    Name = imagePortion.Name,
+                    WidthStart = imagePortion.WidthPixel,
+                    HeightStart = imagePortion.HeightPixel,
+                    Width = width,
+                    Height = height,
+                    ImageType = imagePortion.ImageType,
+                    Image = bitmap.Clone(new Rectangle(imagePortion.WidthPixel, imagePortion.HeightPixel, width, height), PixelFormat.Format24bppRgb)
+                };
+
+                standardGrid.Add(imageSection);
+                imageSection.BlobUrl = await UploadImageSectionToBlob(blobContainerClient, imageSection);
+            }
+
+            return standardGrid;
+        }
+
+        private static List<ImagePortionDto> ImageToPortions(decimal width, decimal height)
+        {
+            var ImagePortions = new List<ImagePortionDto>();
+
+            // Split width and height based on 'static' MaxPixelSpan
+            decimal widthSplitSpan = Math.Ceiling(width / MaxPixelSpan);
+            decimal heightSplitSpan = Math.Ceiling(height / MaxPixelSpan);
+
+            // Reverse process to obtain approximately identically sized images
+            decimal widthCalculatedSpan = Math.Ceiling(width / widthSplitSpan);
+            decimal heightCalculatedSpan = Math.Ceiling(height / heightSplitSpan);
+
+            // Halving span allows for both overlapping & non-overlapping portions
+            int widthCalculatedHalfSpan = (int)Math.Round(widthCalculatedSpan / 2, 0);
+            int heightCalculatedHalfSpan = (int)Math.Round(heightCalculatedSpan / 2, 0);
+
+            // Max cycles in each direction
+            int widthIterations = (int)Math.Round(width / widthCalculatedHalfSpan, 0);
+            int heightIterations = (int)Math.Round(height / heightCalculatedHalfSpan, 0);
+
+            // Width positions
+            for (int i = 0; i < widthIterations; i++)
+            {
+                // height positions
+                for (int j = 0; j < heightIterations; j++)
+                {
+                    if (i % 2 == 0 && j % 2 == 0) // Even iteration values
+                    {
+                        var imagePortion = new ImagePortionDto
+                        {
+                            HeightCalculatedHalfSpan = heightCalculatedHalfSpan,
+                            HeightCalculatedSpan = heightCalculatedSpan,
+                            HeightIndex = (int)Math.Floor(j / (decimal)2),
+                            HeightIterations = heightIterations,
+                            HeightSplit = heightSplitSpan,
+                            HeightPixel = (int)Math.Floor(j * (decimal)heightCalculatedHalfSpan),
+                            ImageType = ImageType.Normal,
+                            WidthCalculatedHalfSpan = widthCalculatedHalfSpan,
+                            WidthCalculatedSpan = widthCalculatedSpan,
+                            WidthIndex = (int)Math.Floor(i / (decimal)2),
+                            WidthIterations = widthIterations,
+                            WidthPixel = (int)Math.Floor(i * (decimal)widthCalculatedHalfSpan),
+                            WidthSplit = widthSplitSpan,
+                            Name = $"{ImageType.Normal}_{Math.Floor(i/(decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
+                        };
+                        ImagePortions.Add(imagePortion);
+                    }
+                    else // Odd iteration values
+                    {
+                        var imagePortion = new ImagePortionDto
+                        {
+                            HeightCalculatedHalfSpan = heightCalculatedHalfSpan,
+                            HeightCalculatedSpan = heightCalculatedSpan,
+                            HeightIndex = (int)Math.Floor(j / (decimal)2),
+                            HeightIterations = heightIterations,
+                            HeightSplit = heightSplitSpan,
+                            HeightPixel = (int)Math.Floor(j * (decimal)heightCalculatedHalfSpan),
+                            ImageType = ImageType.Overlap,
+                            WidthCalculatedHalfSpan = widthCalculatedHalfSpan,
+                            WidthCalculatedSpan = widthCalculatedSpan,
+                            WidthIndex = (int)Math.Floor(i / (decimal)2),
+                            WidthIterations = widthIterations,
+                            WidthPixel = (int)Math.Floor(i * (decimal)widthCalculatedHalfSpan),
+                            WidthSplit = widthSplitSpan,
+                            Name = $"{ImageType.Overlap}_{Math.Floor(i / (decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
+                        };
+                        ImagePortions.Add(imagePortion);
+                    }
+                }
+            }
+
+            return ImagePortions;
         }
     }
 }
