@@ -1,6 +1,6 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs.Specialized;
+using AzureFunctions.DTO;
 using DataSummitModels.DTO;
 using DataSummitModels.Enums;
 using Microsoft.AspNetCore.Http;
@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -124,7 +123,7 @@ namespace AzureFunctions
             return blobClient.Uri.ToString();
         }
 
-        private static async Task<List<ImageSectionDto>> CreateImageSections(Bitmap bitmap, List<ImagePortion> imagePortions, BlobContainerClient blobContainerClient)
+        private static async Task<List<ImageSectionDto>> CreateImageSections(Bitmap bitmap, List<ImagePortionDto> imagePortions, BlobContainerClient blobContainerClient)
         {
             var standardGrid = new List<ImageSectionDto>();
 
@@ -139,11 +138,7 @@ namespace AzureFunctions
                     HeightStart = imagePortion.HeightPixel,
                     Width = width,
                     Height = height,
-                    ImageType = imagePortion.Prefix switch
-                    {
-                        'F' => ImageType.Normal,
-                        _ => ImageType.Overlap,
-                    },
+                    ImageType = imagePortion.ImageType,
                     Image = bitmap.Clone(new Rectangle(imagePortion.WidthPixel, imagePortion.HeightPixel, width, height), PixelFormat.Format24bppRgb)
                 };
 
@@ -154,9 +149,9 @@ namespace AzureFunctions
             return standardGrid;
         }
 
-        private static List<ImagePortion> ImageToPortions(decimal width, decimal height)
+        private static List<ImagePortionDto> ImageToPortions(decimal width, decimal height)
         {
-            var ImagePortions = new List<ImagePortion>();
+            var ImagePortions = new List<ImagePortionDto>();
 
             // Split width and height based on 'static' MaxPixelSpan
             decimal widthSplitSpan = Math.Ceiling(width / MaxPixelSpan);
@@ -182,7 +177,7 @@ namespace AzureFunctions
                 {
                     if (i % 2 == 0 && j % 2 == 0) // Even iteration values
                     {
-                        var imagePortion = new ImagePortion
+                        var imagePortion = new ImagePortionDto
                         {
                             HeightCalculatedHalfSpan = heightCalculatedHalfSpan,
                             HeightCalculatedSpan = heightCalculatedSpan,
@@ -190,20 +185,20 @@ namespace AzureFunctions
                             HeightIterations = heightIterations,
                             HeightSplit = heightSplitSpan,
                             HeightPixel = (int)Math.Floor(j * (decimal)heightCalculatedHalfSpan),
-                            Prefix = 'F',
+                            ImageType = ImageType.Normal,
                             WidthCalculatedHalfSpan = widthCalculatedHalfSpan,
                             WidthCalculatedSpan = widthCalculatedSpan,
                             WidthIndex = (int)Math.Floor(i / (decimal)2),
                             WidthIterations = widthIterations,
                             WidthPixel = (int)Math.Floor(i * (decimal)widthCalculatedHalfSpan),
                             WidthSplit = widthSplitSpan,
-                            Name = $"F_{Math.Floor(i/(decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
+                            Name = $"{ImageType.Normal}_{Math.Floor(i/(decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
                         };
                         ImagePortions.Add(imagePortion);
                     }
                     else // Odd iteration values
                     {
-                        var imagePortion = new ImagePortion
+                        var imagePortion = new ImagePortionDto
                         {
                             HeightCalculatedHalfSpan = heightCalculatedHalfSpan,
                             HeightCalculatedSpan = heightCalculatedSpan,
@@ -211,14 +206,14 @@ namespace AzureFunctions
                             HeightIterations = heightIterations,
                             HeightSplit = heightSplitSpan,
                             HeightPixel = (int)Math.Floor(j * (decimal)heightCalculatedHalfSpan),
-                            Prefix = 'O',
+                            ImageType = ImageType.Overlap,
                             WidthCalculatedHalfSpan = widthCalculatedHalfSpan,
                             WidthCalculatedSpan = widthCalculatedSpan,
                             WidthIndex = (int)Math.Floor(i / (decimal)2),
                             WidthIterations = widthIterations,
                             WidthPixel = (int)Math.Floor(i * (decimal)widthCalculatedHalfSpan),
                             WidthSplit = widthSplitSpan,
-                            Name = $"O_{Math.Floor(i / (decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
+                            Name = $"{ImageType.Overlap}_{Math.Floor(i / (decimal)2):000}-{Math.Floor(j / (decimal)2):000}.jpg",
                         };
                         ImagePortions.Add(imagePortion);
                     }
@@ -227,26 +222,5 @@ namespace AzureFunctions
 
             return ImagePortions;
         }
-    }
-
-
-    class ImagePortion
-    {
-        public char Prefix { get; set; }
-        public decimal WidthSplit { get; set; }
-        public decimal HeightSplit { get; set; }
-        public decimal WidthCalculatedSpan { get; set; }
-        public decimal HeightCalculatedSpan { get; set; }
-        public decimal WidthCalculatedHalfSpan { get; set; }
-        public decimal HeightCalculatedHalfSpan { get; set; }
-        public int WidthIterations { get; set; }
-        public int HeightIterations { get; set; }
-        public int WidthPixel { get; set; }
-        public int HeightPixel { get; set; }
-        public int WidthIndex { get; set; }
-        public int HeightIndex { get; set; }
-        public string Name { get; set; }
-        public decimal AdjustedWith { get => WidthPixel + WidthCalculatedSpan; }
-        public decimal AdjustedHeight { get => HeightPixel + HeightCalculatedSpan; }
     }
 }
