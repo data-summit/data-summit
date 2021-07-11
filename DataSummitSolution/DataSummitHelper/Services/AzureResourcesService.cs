@@ -496,9 +496,8 @@ namespace DataSummitService.Services
         {
             var blob = GetBlobByUrl(blobUrl);
 
-            //Explicit cast required
-            BlobProperties properties = await blob.GetPropertiesAsync();
-            return properties.Metadata;
+            var properties = await blob.GetPropertiesAsync();
+            return properties.Value.Metadata;
         }
         private DocumentExtension GetDocumentExtensionEnum(string mimeType)
         {
