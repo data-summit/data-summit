@@ -43,10 +43,10 @@ namespace DataSummitService.Dao
         }
 
         #region Azure URLs
-        public async Task<AzureFunctionUrlKeyDto> GetAzureFunctionUrlByName(string name)
+        public async Task<AzureFunctionEndpointDto> GetAzureFunctionUrlByName(string name)
         {
             var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name);
-            return new AzureFunctionUrlKeyDto
+            return new AzureFunctionEndpointDto
             {
                 Url = urlKey.Url,
                 Key = urlKey.Key

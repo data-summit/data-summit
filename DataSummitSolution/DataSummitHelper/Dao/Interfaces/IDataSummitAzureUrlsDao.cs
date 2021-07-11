@@ -9,7 +9,7 @@ namespace DataSummitService.Dao.Interfaces
     public interface IDataSummitAzureUrlsDao
     {
         #region Azure URLs
-        Task<AzureFunctionUrlKeyDto> GetAzureFunctionUrlByName(string name);
+        Task<AzureFunctionEndpointDto> GetAzureFunctionUrlByName(string name);
         Task<AzureResourceUrlKeyDto> GetAzureResourceKeyPairByNameAndType(string name, string type);
         #endregion
 
