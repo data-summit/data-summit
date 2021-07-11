@@ -53,10 +53,10 @@ namespace DataSummitService.Dao
             };
         }
 
-        public async Task<AzureResourceUrlKeyDto> GetAzureResourceKeyPairByNameAndType(string name, string type)
+        public async Task<AzureResourceEndpointDto> GetAzureResourceKeyPairByNameAndType(string name, string type)
         {
             var urlKey = await _context.AzureCompanyResourceUrls.SingleAsync(ar => ar.Name == name && ar.ResourceType == type);
-            return new AzureResourceUrlKeyDto
+            return new AzureResourceEndpointDto
             {
                 Url = urlKey.Url,
                 Key = urlKey.Key

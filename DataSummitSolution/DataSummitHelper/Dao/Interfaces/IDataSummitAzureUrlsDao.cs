@@ -10,7 +10,7 @@ namespace DataSummitService.Dao.Interfaces
     {
         #region Azure URLs
         Task<AzureFunctionEndpointDto> GetAzureFunctionUrlByName(string name);
-        Task<AzureResourceUrlKeyDto> GetAzureResourceKeyPairByNameAndType(string name, string type);
+        Task<AzureResourceEndpointDto> GetAzureResourceKeyPairByNameAndType(string name, string type);
         #endregion
 
         #region Machine Learning URLs
