@@ -46,7 +46,7 @@ namespace DataSummitService.Services
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
 
-            HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+            var httpContent = (HttpContent)new StringContent(payload, Encoding.UTF8, "application/json");
 
             var stringTask = await client.PostAsync(uri, httpContent);
             return stringTask;
@@ -56,12 +56,12 @@ namespace DataSummitService.Services
         {
             var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Clear();
-            foreach (var headerPair in headers)
+            foreach (var header in headers)
             {
-                client.DefaultRequestHeaders.Add(headerPair.Key, headerPair.Value);
+                client.DefaultRequestHeaders.Add(header.Key, header.Value);
             }
 
-            HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
+            var httpContent = (HttpContent)new StringContent(payload, Encoding.UTF8, "application/json");
 
             var stringTask = await client.PostAsync(uri, httpContent);
             return stringTask;
