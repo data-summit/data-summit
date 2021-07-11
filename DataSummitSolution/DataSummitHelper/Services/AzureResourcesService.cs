@@ -474,19 +474,18 @@ namespace DataSummitService.Services
         {
             var blob = GetBlobByUrl(blobUrl);
 
-            //Explicit cast required
-            BlobProperties properties = await blob.GetPropertiesAsync();
+            var properties = await blob.GetPropertiesAsync();
             try
             {
                 foreach (var pair in metadata)
                 {
-                    if (properties.Metadata.Count(k => k.Key == pair.Key) > 0)
+                    if (properties.Value.Metadata.Count(k => k.Key == pair.Key) > 0)
                     {
-                        properties.Metadata.Remove(pair.Key);
+                        properties.Value.Metadata.Remove(pair.Key);
                     }
-                    properties.Metadata.Add(pair.Key, pair.Value);
+                    properties.Value.Metadata.Add(pair.Key, pair.Value);
                 }
-                blob.SetMetadata(properties.Metadata);
+                blob.SetMetadata(properties.Value.Metadata);
             }
             catch (Exception)
             {
