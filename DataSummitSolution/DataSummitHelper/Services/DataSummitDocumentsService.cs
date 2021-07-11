@@ -133,7 +133,7 @@ namespace DataSummitService.Services
             return dimensions;
         }
 
-        public async Task<KeyValuePair<string, int>> GetDocumentText(string blobUrl)
+        public async Task<DocumentFeatureDto> GetDocumentText(string blobUrl)
         {
             var features = new List<DocumentFeature>();
 
@@ -188,8 +188,12 @@ namespace DataSummitService.Services
             }
             // Add new features to database
             await _documentsDao.UpdateDocumentFeatures(blobUrl, features);
-
-            return new KeyValuePair<string, int>(blobUrl, features.Count);
+            var documentFeatures = new DocumentFeatureDto
+            {
+                Url = blobUrl,
+                FeatureCount = features.Count
+            };
+            return documentFeatures;
         }
 
         public DocumentDto GetDocumentDtoByUrl(string documentUrl)
