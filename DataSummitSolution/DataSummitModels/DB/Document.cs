@@ -33,6 +33,8 @@ namespace DataSummitModels.DB
         public DateTime? CreatedDate { get; set; }
         public string UserId { get; set; }
         public string Type { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public byte[] File { get; set; }
         public byte DocumentTypeId { get; set; }
         public string FileExtension { get; set; }
