@@ -15,6 +15,8 @@
     [CreatedDate]         DATETIME        NULL,
     [UserId]              NVARCHAR (50)   NULL,
     [Type]                NVARCHAR (7)    NULL,
+    [Height]              INT             NOT NULL,
+    [Width]               INT             NOT NULL,
     [File]				  VARBINARY(MAX)  NULL, 
     [DocumentTypeId]      TINYINT         NOT NULL, 
     [FileExtension] NVARCHAR(8) NULL, 
