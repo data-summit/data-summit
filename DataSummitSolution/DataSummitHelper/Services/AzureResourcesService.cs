@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataSummitService.Dto;
 using System.Web;
+using System.Drawing;
 
 namespace DataSummitService.Services
 {
@@ -414,19 +415,33 @@ namespace DataSummitService.Services
                 }
             };
 
-            using (var ms = new MemoryStream())
+            var bulkDataTasks = new List<Task>();
+
+            // Get file data into stream
+            using var ms = new MemoryStream();
+            var stream = file.OpenReadStream();
+            stream.CopyTo(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+            stream.Close();
+
+            // Upload data
+            bulkDataTasks.Add(Task.Run(() =>
             {
-                var stream = file.OpenReadStream();
-                stream.CopyTo(ms);
-                ms.Seek(0, SeekOrigin.Begin);
-                stream.Close();
-                await blockBlobClient.UploadAsync(ms, blobUploadOptions);
-            }
+                blockBlobClient.UploadAsync(ms, blobUploadOptions);
+            }));
+
+            // Convert data to image to extract dimensions
+            Image image = default;
+            bulkDataTasks.Add(Task.Run(() =>
+            {
+                image = Image.FromStream(ms);
+            }));
+            await Task.WhenAll(bulkDataTasks.ToArray());
 
             var fileName = file.FileName;
             var fileExtension = Path.GetExtension(file.FileName);
 
-            //Add upload data to database
+            // Add upload data to database
             var doc = new Document()
             {
                 //Default seetings to avoid 'NOT NULL' fields from throwing errors
@@ -437,7 +452,9 @@ namespace DataSummitService.Services
                 PaperOrientationId = 1,     //Portrait
                 PaperSizeId = 9,            //A4
 
-                //Actual document specific data from upload file
+                // Actual document specific data from upload file
+                Height = image.Height,
+                Width = image.Width,
                 FileName = fileName,
                 BlobUrl = blockBlobClient.Uri.ToString(),
                 CreatedDate = DateTime.Now,
