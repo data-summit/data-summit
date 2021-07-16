@@ -137,8 +137,8 @@ namespace DataSummitService.Services
         {
             var features = new List<DocumentFeature>();
 
-            // Find image dimensions, needed for making positions relavtive (between 0 & 1) not absolute
-            var imageDimenions = await GetDocumentImageDimensionsFromMetadata(blobUrl);
+            // Fetch document, dimensions are required
+            var document = await _documentsDao.GetDocumentByUrlAsync(blobUrl);
 
             // Fetch resource url & key information from database
             var azureCognitiveServiceOCR = await _azureDao.GetAzureResourceKeyPairByNameAndType("RecogniseTextAzure", "Cognitive Services");
@@ -175,10 +175,10 @@ namespace DataSummitService.Services
                         {
                             Confidence = 1,
                             Feature = "Text",
-                            Height = Math.Round(height / (decimal)imageDimenions.Height, 5),
-                            Left = Math.Round(left / (decimal)imageDimenions.Width, 5),
-                            Top = Math.Round(top / (decimal)imageDimenions.Height, 5),
-                            Width = Math.Round(width / (decimal)imageDimenions.Width, 5),
+                            Height = Math.Round(height / (decimal)document.Height, 5),
+                            Left = Math.Round(left / (decimal)document.Width, 5),
+                            Top = Math.Round(top / (decimal)document.Height, 5),
+                            Width = Math.Round(width / (decimal)document.Width, 5),
                             Vendor = "Azure",
                             Value = word.Text,
                         };

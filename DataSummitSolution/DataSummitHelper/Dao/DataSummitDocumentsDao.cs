@@ -105,7 +105,7 @@ namespace DataSummitService.Dao
             _context.SaveChanges();
         }
 
-        public async Task<Document> GetDocumentsByUrlAsync(string documentUrl)
+        public async Task<Document> GetDocumentByUrlAsync(string documentUrl)
         {
             var document = await _context.Documents.SingleOrDefaultAsync(doc => doc.BlobUrl == documentUrl);
             return document;
